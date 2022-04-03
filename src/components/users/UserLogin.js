@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {UserLoginModal} from "./UserLoginModal";
+import {UserLoginForm} from "./UserLoginForm";
 import {Container, Row} from "react-bootstrap";
 import {useHistory} from "react-router-dom";
 
@@ -24,7 +24,7 @@ export const UserLogin = (props) => {
     return (
         <Container>
             <Row>
-                <UserLoginModal show={showLogin} handleClose={handleClose} />
+                <UserLoginForm show={showLogin} handleClose={handleClose} />
             </Row>
         </Container>
     );

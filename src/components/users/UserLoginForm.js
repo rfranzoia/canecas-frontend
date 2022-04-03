@@ -1,10 +1,10 @@
-import {Button, Modal} from "react-bootstrap";
+import {Button, Form, Modal} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
 import {ApplicationContext} from "../../context/ApplicationContext";
 
-export const UserLoginModal = (props) => {
+export const UserLoginForm = (props) => {
     const history = useHistory();
     const appCtx = useContext(ApplicationContext);
     const [showError, setShowError] = useState({
@@ -40,6 +40,7 @@ export const UserLoginModal = (props) => {
         const res = await usersApi.login(credentials.email, credentials.password);
         if (res.email) {
             appCtx.addUser({
+                userId: res._id,
                 userEmail: res.email,
                 authToken: res.authToken,
             });
@@ -55,42 +56,39 @@ export const UserLoginModal = (props) => {
     }
 
     return (
-        <Modal show={props.show} onHide={props.handleClose} backdrop="static" keyboard={false}>
+        <Modal show={props.show} onHide={props.handleClose} backdrop="static" centered keyboard={false}>
             <Modal.Header closeButton>
                 <Modal.Title>Login</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {showError.show && <h5>{showError.message}</h5>}
-                <form>
-                    <div className="form-group">
-                        <label>Email</label>
-                        <input
-                            required
-                            type="email"
-                            className="form-control"
-                            placeholder="Enter email"
-                            name="email"
-                            ref={emailRef}
-                            value={user.email}
-                            onChange={handleChange}/>
-                    </div>
-                    <div className="form-group">
-                        <label>Password</label>
-                        <input
-                            required
+                <Form>
+                    <Form.Group>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
+                        type="email"
+                        name="email"
+                        ref={emailRef}
+                        value={user.email}
+                        placeholder="Enter your e-mail address"
+                        onChange={handleChange}/>
+                    </Form.Group>
+                    <br/>
+                    <Form.Group>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
                             type="password"
-                            className="form-control"
-                            placeholder="Enter password"
                             name="password"
                             ref={passwordRef}
                             value={user.password}
+                            placeholder="Enter you password"
                             onChange={handleChange}/>
-                    </div>
+                    </Form.Group>
                     <p className="forgot-password text-right">
                         Need an account?
                         <span onClick={handleSignup}><Link to="#">Signup</Link></span>
                     </p>
-                </form>
+                </Form>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={props.handleClose}>Cancel</Button>
