@@ -4,16 +4,12 @@ export const ApplicationContext = createContext({
     userData: {},
     favorites: [],
     count: 0,
-    addFavorite: (meetup) => {},
-    removeFavorite: (id) => {},
-    isFavorite: (id) => {},
-    addUser: (user) => {},
+    addUser: () => {},
     removeUser: () => {},
     isLoggedIn: () => {}
 });
 
 export const ApplicationContextProvider = (props) => {
-    const [userFavorites, setUserFavorites] = useState([]);
     const [userData, setUserData] = useState({
         userEmail: "",
         authToken: ""
@@ -29,25 +25,6 @@ export const ApplicationContextProvider = (props) => {
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));
     }, [userData]);
-
-    const addFavorite = (meetup) => {
-        setUserFavorites(prevState => {
-            return [
-                ...prevState,
-                meetup
-            ]
-        });
-    }
-
-    const removeFavorite = (id) => {
-        setUserFavorites(prevState => {
-            return prevState.filter(meetup => meetup.id !== id);
-        })
-    }
-
-    const isFavorite = (id) => {
-        return userFavorites.some(meetup => meetup.id === id)
-    }
 
     const addUser = (user) => {
         setUserData({
@@ -67,11 +44,6 @@ export const ApplicationContextProvider = (props) => {
 
     const context = {
         userData: userData,
-        favorites: userFavorites,
-        count: userFavorites.length,
-        addFavorite: addFavorite,
-        removeFavorite: removeFavorite,
-        isFavorite: isFavorite,
         isLoggedIn: isLoggedIn,
         addUser: addUser,
         removeUser: removeUser
