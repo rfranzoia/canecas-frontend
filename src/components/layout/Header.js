@@ -1,4 +1,4 @@
-import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Button, Container, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
@@ -24,9 +24,16 @@ export const Header = () => {
 
     return (
         <header>
-            <Navbar bg="dark" variant="dark" expand="lg" style={{ marginBottom: "10px"}}>
+            <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
-                    <Navbar.Brand href="#">Canecas</Navbar.Brand>
+                    <Navbar.Brand href="#">
+                        <Image src="http://192.168.1.116:3000/canecas.jpeg"
+                               title="Canecas"
+                                roundedCircle
+                                width="55"/>
+                        &nbsp;
+                        Canecas
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
@@ -54,11 +61,11 @@ export const Header = () => {
                                 <Navbar.Collapse className="justify-content-end">
                                     <Navbar.Text> {appCtx.userData.userEmail} </Navbar.Text>
                                     &nbsp;&nbsp;
-                                    <Button variant="outline-danger" onClick={handleLogout}>Logout</Button>
+                                    <Button variant="danger" onClick={handleLogout}>Logout</Button>
                                 </Navbar.Collapse>
                             ) :
                             (
-                                <Button variant="outline-danger" onClick={handleShowLogin}>Login</Button>
+                                <Button variant="success" onClick={handleShowLogin}>Login</Button>
                             )
                         }
                     </Navbar.Collapse>
