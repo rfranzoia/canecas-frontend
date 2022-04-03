@@ -34,7 +34,7 @@ export const EditUser = (props) => {
     useEffect(() => {
         const callback = async () => {
             if (props.op === "edit" || props.op === "view") {
-                const p = await usersApi.get(props.id);
+                const p = await usersApi.withToken(appCtx.userData.authToken).get(props.id);
                 setUser(p);
             } else {
                 setUser({
@@ -51,7 +51,7 @@ export const EditUser = (props) => {
                 return undefined
             });
 
-    }, [props.id, props.op]);
+    }, [props.id, props.op, appCtx.userData.authToken]);
 
     const title = props.op === "new" ? "New" :
                     props.op === "edit" ? "Edit" : "View";
@@ -67,7 +67,7 @@ export const EditUser = (props) => {
             <Row>
                 <Col md="auto">
                     <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
-                        <Card.Header as="h2">{`${title} User`}</Card.Header>
+                        <Card.Header as="h3">{`${title} User`}</Card.Header>
                         <Card.Body>
                             <EditUserForm user={user} op={props.op} onSaveUser={handleOp} onCancel={handleCancel}/>
                         </Card.Body>
