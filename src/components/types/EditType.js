@@ -8,6 +8,7 @@ export const EditType = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [type, setType] = useState({
         description: "",
+        image: "",
     });
 
     const handleSaveType = (type) => {
@@ -35,6 +36,7 @@ export const EditType = (props) => {
             } else {
                 setType({
                     description: "",
+                    image: "",
                 })
             }
         }

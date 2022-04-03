@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {typesApi} from "../../api/TypesAPI";
-import {Button} from "react-bootstrap";
+import {Button, Image} from "react-bootstrap";
+import {imageHelper} from "../ui/ImageHelper";
 
 export const EditProductForm = (props) => {
     const product = props.product;
@@ -59,6 +60,10 @@ export const EditProductForm = (props) => {
             });
     }, []);
 
+    const findTypeImage = (typeDescription) => {
+        const type = types.find(t => t.description === typeDescription);
+        return type? type.image: "";
+    }
     const viewOnly = props.op === "view";
 
     return (
@@ -71,13 +76,13 @@ export const EditProductForm = (props) => {
                 </div>
                 <div className="form-group">
                     <label htmlFor="description">Description</label>
-                    <textarea className="form-control" id="description" name="description" required rows="5"
+                    <textarea className="form-control" id="description" name="description" required rows="4"
                               ref={descriptionRef} value={formData.description} onChange={handleChange} disabled={viewOnly}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="price">Price</label>
                     <input className="form-control" id="price" name="price" required type="number" ref={priceRef}
-                           value={formData.price} onChange={handleChange} disabled={viewOnly}/>
+                           value={formData.price?formData.price.toFixed(2):0.00} onChange={handleChange} disabled={viewOnly}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="type">Type</label>
@@ -89,6 +94,13 @@ export const EditProductForm = (props) => {
                         })}
                     </select>
                 </div>
+                {viewOnly &&
+                    <div align="center">
+                        <hr/>
+                        <Image src={imageHelper.getImageUrl(findTypeImage(formData.type))}
+                               fluid width="300" title={formData.type}/>
+                    </div>
+                }
             </form>
             <br/>
             <div className="align-content-end">

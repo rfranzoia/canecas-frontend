@@ -27,7 +27,7 @@ export const Header = () => {
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand href="#">
-                        <Image src="http://192.168.1.116:3000/canecas.jpeg"
+                        <Image src="http://192.168.1.116:3000/logo.jpg"
                                title="Canecas"
                                 roundedCircle
                                 width="55"/>

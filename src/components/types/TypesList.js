@@ -23,7 +23,8 @@ export const TypesList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th width="80%">Description</th>
+                <th width="60%">Description</th>
+                <th width="10%" align="center">Image</th>
                 <th width="10%">&nbsp;</th>
             </tr>
             </thead>
