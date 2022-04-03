@@ -1,4 +1,4 @@
-import {Button, Form, Modal} from "react-bootstrap";
+import {Alert, Button, Form, Modal} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
@@ -9,6 +9,7 @@ export const UserLoginForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [showError, setShowError] = useState({
         show: false,
+        title: "",
         message: ""
     });
     const [user, setUser] = useState({
@@ -20,10 +21,7 @@ export const UserLoginForm = (props) => {
 
     const handleChange = (event) => {
         const {name, value} = event.target;
-        setShowError({
-            show: false,
-            message: ""
-        });
+        handleHideError();
         setUser(prevState => {
             return {
                 ...prevState,
@@ -49,19 +47,33 @@ export const UserLoginForm = (props) => {
         } else {
             setShowError({
                 show: true,
-                message: `${res?.name}: ${res?.description}`
+                title: res?.name,
+                message: res?.description
             })
         }
 
     }
 
+    const handleHideError = () => {
+        setShowError({
+            show: false,
+            title: "",
+            message: ""
+        })
+    }
+
     return (
-        <Modal show={props.show} onHide={props.handleClose} backdrop="static" centered keyboard={false}>
+        <Modal show={props.show} onHide={props.handleClose} backdrop="static" keyboard={true} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Login</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {showError.show && <h5>{showError.message}</h5>}
+                {showError.show &&
+                    <Alert variant="danger" onClose={handleHideError} dismissible>
+                        <Alert.Heading>{showError.title}</Alert.Heading>
+                        <p>{showError.message}</p>
+                    </Alert>
+                }
                 <Form>
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
