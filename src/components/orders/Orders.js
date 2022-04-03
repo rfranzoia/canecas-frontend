@@ -14,7 +14,10 @@ export const OrderStatus = [
     {value: "FINISHED", id: 8},
     {value: "CANCELED", id: 9}];
 
-export const Orders = (props) => {
+export const getOrderStatusValue = (id) => {
+    return OrderStatus.find(os => os.id === id).value
+}
+export const Orders = () => {
     const history = useHistory();
     const appCtx = useContext(ApplicationContext);
     const [orders, setOrders] = useState([]);
@@ -91,9 +94,8 @@ export const Orders = (props) => {
     }
 
     const contentList = (
-        <Container fluid className="align-content-center">
+        <Container fluid style={{ display: "flex", justifyContent: "center" }}>
             <Row>
-                <Col></Col>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '70rem'}}>
                         <Card.Header as="h3">Orders</Card.Header>
@@ -104,7 +106,7 @@ export const Orders = (props) => {
                                     onClick={() => handleNewOrder("new")}>New Order
                                 </Button>
                             </Card.Title>
-                            <OrdersList orders={orders} onDelete={handleShowToast} onConfirm={handleShowToast()}
+                            <OrdersList orders={orders} onDelete={handleShowToast} onConfirm={handleShowToast}
                                         onEdit={handleShowEditModal}/>
                         </Card.Body>
                     </Card>
@@ -135,7 +137,7 @@ export const Orders = (props) => {
             </div>
             <div>
                 <Modal show={showEdit.show && showEdit.type === "modal"} onHide={handleCloseEditModal} backdrop="static"
-                       keyboard={true} size="lg" className="align-content-center">
+                       keyboard={true} size="lg" centered>
                     <Modal.Body>
                         <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
                     </Modal.Body>

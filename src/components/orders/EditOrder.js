@@ -17,7 +17,8 @@ export const EditOrder = (props) => {
         userEmail: "",
         totalPrice: 0,
         status: 0,
-        items: []
+        items: [],
+        statusHistory: []
     });
 
     const [toast, setToast] = useState({
@@ -68,7 +69,7 @@ export const EditOrder = (props) => {
     useEffect(() => {
         if (!appCtx.userData.authToken) return;
         const callback = async () => {
-            let o = {};
+            let o;
             if (op === "edit") {
                 o = await ordersApi.withToken(appCtx.userData.authToken).get(params.id);
             } else {
@@ -84,7 +85,7 @@ export const EditOrder = (props) => {
     }, [props.id, op, appCtx.userData.authToken, params.id]);
 
     const title = op === "new" ? "New" :
-        op === "edit" ? "Edit" : "View";
+                    op === "edit" ? "Edit" : "View";
 
     const handleOp = (order) => {
         if (op !== "view") {

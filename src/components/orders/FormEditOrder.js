@@ -1,9 +1,10 @@
-import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useEffect, useRef, useState} from "react";
 import {OrderStatus} from "./Orders";
 import {InformationToast} from "../ui/InformationToast";
 import {BsExclamationTriangle} from "react-icons/all";
+import {StatusChangeList} from "./history/StatusChangeList";
 
 export const FormEditOrder = (props) => {
     const order = props.order;
@@ -13,8 +14,11 @@ export const FormEditOrder = (props) => {
         userEmail: "",
         totalPrice: 0,
         status: 0,
-        items: []
+        items: [],
+        statusHistory: []
     });
+
+    const [showStatusHistory, setShowStatusHistory] = useState(false);
 
     const idRef = useRef();
     const orderDateRef = useRef();
@@ -38,7 +42,8 @@ export const FormEditOrder = (props) => {
             userEmail: order.userEmail,
             totalPrice: order.totalPrice,
             status: order.status,
-            items: order.items
+            items: order.items,
+            statusHistory: order.statusHistory
         });
     }, [order])
 
@@ -123,13 +128,20 @@ export const FormEditOrder = (props) => {
         });
     }
 
+    const handleViewStatusHistory = () => {
+        setShowStatusHistory(true);
+    }
+
+    const handleCloseViewStatusHistory = () => {
+        setShowStatusHistory(false);
+    }
+
     const viewOnly = props.op === "view";
     const lockChanges = order.status !== 0
 
     return (
-        <Container fluid className="align-content-sm-center">
+        <Container style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
             <Row>
-                <Col></Col>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
                         <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
@@ -212,14 +224,27 @@ export const FormEditOrder = (props) => {
                                             <div className="align-content-end">
                                                 {!viewOnly && (
                                                     <>
-                                                        <Button variant="primary" onClick={handleSave}>Save</Button>
+                                                        <Button variant="primary" size="sm" onClick={handleSave}>Save</Button>
                                                         <span>&nbsp;</span>
                                                     </>
                                                 )}
-                                                <Button variant="danger"
+                                                <Button variant="danger" size="sm"
                                                         onClick={handleCancel}>{viewOnly ? "Close" : "Cancel"}</Button>
+                                                <span>&nbsp;</span>
+                                                {viewOnly &&
+                                                    <Button variant="warning" size="sm"
+                                                            onClick={handleViewStatusHistory}>Status Changes</Button>
+                                                }
                                             </div>
                                         </Col>
+                                    </Row>
+                                    <Row>
+                                        <Modal show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
+                                            <StatusChangeList statusHistory={order.statusHistory}/>
+                                            <div style={{display: "flex", justifyContent: "center", padding: "0.5rem"}}>
+                                                <Button variant="danger" size="sm"  onClick={handleCloseViewStatusHistory}>Close</Button>
+                                            </div>
+                                        </Modal>
                                     </Row>
                                 </Container>
                             </form>

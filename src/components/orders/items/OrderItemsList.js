@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Card, Modal, Table} from "react-bootstrap";
+import { Modal, Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
 import {NewOrderItem} from "./NewOrderItem";
 import {BiAddToQueue} from "react-icons/all";
@@ -9,11 +9,9 @@ export const OrderItemsList = (props) => {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
-        setOrderItems(prevState => {
-            return [
-                ...props.items
-            ]
-        })
+        setOrderItems([
+            ...props.items
+        ]);
     }, [props.items]);
 
     const handleShowModal = () => {
@@ -30,10 +28,15 @@ export const OrderItemsList = (props) => {
     }
 
     return (
-        <Card border="dark">
-            <Card.Body>
-                <Card.Title as="h5">Items</Card.Title>
-                <Modal show={showModal} onHide={handleCloseModal} backdrop="static" keyboard={true} className="align-content-center">
+        <div>
+            <div><h5>Items</h5></div>
+            <div>
+                <Modal
+                    show={showModal}
+                    onHide={handleCloseModal}
+                    backdrop="static"
+                    keyboard={true}
+                    centered>
                     <Modal.Body>
                         <NewOrderItem onItemAdd={handleItemAdded} onCancelItemAdd={handleCloseModal}/>
                     </Modal.Body>
@@ -55,6 +58,8 @@ export const OrderItemsList = (props) => {
                     ))}
                     </tbody>
                 </Table>
+            </div>
+            <div>
                 <hr />
                 <BiAddToQueue
                     onClick={handleShowModal}
@@ -63,7 +68,7 @@ export const OrderItemsList = (props) => {
                     size="2em"
                     cursor="pointer"
                     color={props.viewOnly?"#a2a0a0":"blue"}/>
-            </Card.Body>
-        </Card>
+            </div>
+        </div>
     )
 }
