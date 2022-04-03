@@ -231,7 +231,7 @@ export const FormEditOrder = (props) => {
                                                 <Button variant="danger" size="sm"
                                                         onClick={handleCancel}>{viewOnly ? "Close" : "Cancel"}</Button>
                                                 <span>&nbsp;</span>
-                                                {viewOnly &&
+                                                {(viewOnly && order.status > 0) &&
                                                     <Button variant="warning" size="sm"
                                                             onClick={handleViewStatusHistory}>Status Changes</Button>
                                                 }

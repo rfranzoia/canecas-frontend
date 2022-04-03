@@ -40,8 +40,6 @@ export const OrderItemsList = (props) => {
                     <Modal.Body>
                         <NewOrderItem onItemAdd={handleItemAdded} onCancelItemAdd={handleCloseModal}/>
                     </Modal.Body>
-                    <Modal.Footer>
-                    </Modal.Footer>
                 </Modal>
                 <Table striped bordered hover size="sm">
                     <thead>
