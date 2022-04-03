@@ -11,6 +11,7 @@ export const ApplicationContext = createContext({
 
 export const ApplicationContextProvider = (props) => {
     const [userData, setUserData] = useState({
+        userId: "",
         userEmail: "",
         authToken: ""
     })
@@ -28,12 +29,14 @@ export const ApplicationContextProvider = (props) => {
 
     const addUser = (user) => {
         setUserData({
+            userId: user._id,
             userEmail: user.userEmail,
             authToken: user.authToken
         })
     }
     const removeUser = () => {
         setUserData({
+            userId: "",
             userEmail: "",
             authToken: ""
         });
