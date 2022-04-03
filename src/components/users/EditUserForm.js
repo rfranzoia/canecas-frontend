@@ -1,29 +1,31 @@
 import {useEffect, useRef, useState} from "react";
-import {typesApi} from "../../api/TypesAPI";
-import {Button} from "react-bootstrap";
+import {Button, Col, Container, Row} from "react-bootstrap";
 
 export const EditUserForm = (props) => {
     const user = props.user;
     const [formData, setFormData] = useState({
-        name: user.name,
-        description: "",
-        price: 0,
-        type: ""
+        role: "",
+        name: "",
+        email: "",
+        phone: "",
+        address: ""
     });
 
-    const [types, setTypes] = useState([]);
+    const [roles, setRoles] = useState([]);
+    const roleRef = useRef();
     const nameRef = useRef();
-    const descriptionRef = useRef();
-    const priceRef = useRef();
-    const typeRef = useRef();
+    const emailRef = useRef();
+    const phoneRef = useRef();
+    const addressRef = useRef();
 
     const handleSave = (event) => {
         event.preventDefault();
         const user = {
+            role: roleRef.current.value,
             name: nameRef.current.value,
-            description: descriptionRef.current.value,
-            price: priceRef.current.value,
-            type: typeRef.current.value
+            email: emailRef.current.value,
+            phone: phoneRef.current.value,
+            address: addressRef.current.value
         }
         props.onSaveUser(user);
     }
@@ -45,61 +47,77 @@ export const EditUserForm = (props) => {
 
     useEffect(() => {
         setFormData({
+            role: user.role,
             name: user.name,
-            description: user.description,
-            price: user.price,
-            type: user.type
+            email: user.email,
+            phone: user.phone,
+            address: user.address
         });
-    }, [user.name, user.description, user.price, user.type])
+    }, [user.role, user.name, user.email, user.phone, user.address])
 
     useEffect(() => {
-        typesApi.list()
-            .then(data => {
-                setTypes(data);
-            });
+        setRoles([
+            {id: "ADMIN", value: "ADMIN"},
+            {id: "USER", value: "USER"},
+            {id: "GUEST", value: "GUEST"}
+        ])
     }, []);
 
     const viewOnly = props.op === "view";
 
     return (
-        <>
-            <form onSubmit={handleSave}>
-                <div className="form-group">
-                    <label htmlFor="name">Name</label>
-                    <input className="form-control" id="name" name="name" required type="text" ref={nameRef}
-                           value={formData.name} onChange={handleChange} disabled={viewOnly}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <textarea className="form-control" id="description" name="description" required rows="5"
-                              ref={descriptionRef} value={formData.description} onChange={handleChange} disabled={viewOnly}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="price">Price</label>
-                    <input className="form-control" id="price" name="price" required type="number" ref={priceRef}
-                           value={formData.price} onChange={handleChange} disabled={viewOnly}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="type">Type</label>
-                    <select className="form-select" id="type" name="type" required ref={typeRef} value={formData.type}
-                            onChange={handleChange} disabled={viewOnly}>
-                        <option value="">Please Select</option>
-                        {types.map(type => {
-                            return (<option key={type._id} value={type.description}>{type.description}</option>);
-                        })}
-                    </select>
-                </div>
-            </form>
+        <Container>
+            <Row>
+                <Col>
+                    <form onSubmit={handleSave}>
+                        <div className="form-group">
+                            <label htmlFor="role">Role</label>
+                            <select className="form-select" id="role" name="role" required ref={roleRef} value={formData.role}
+                                    onChange={handleChange} disabled={viewOnly}>
+                                <option value="">Please Select</option>
+                                {roles.map(role => {
+                                    return (<option key={role.id} value={role.value}>{role.value}</option>);
+                                })}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input className="form-control" id="name" name="name" required type="text" ref={nameRef}
+                                   value={formData.name} onChange={handleChange} disabled={viewOnly}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="email">Email</label>
+                            <input className="form-control" id="email" name="email" required type="email" ref={emailRef}
+                                   value={formData.email} onChange={handleChange} disabled={viewOnly}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="phone">Phone</label>
+                            <input className="form-control" id="phone" name="phone" required type="text" ref={phoneRef}
+                                   value={formData.phone} onChange={handleChange} disabled={viewOnly}/>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="address">Address</label>
+                            <input className="form-control" id="address" name="address" required type="text" ref={addressRef}
+                                   value={formData.address} onChange={handleChange} disabled={viewOnly}/>
+                        </div>
+
+                    </form>
+                </Col>
+            </Row>
             <br/>
-            <div className="align-content-end">
-                {!viewOnly && (
-                    <>
-                        <Button variant="primary" onClick={handleSave}>Save</Button>
-                        <span>&nbsp;</span>
-                    </>
-                )}
-                <Button variant="danger" onClick={handleCancel}>{viewOnly?"Close":"Cancel"}</Button>
-            </div>
-        </>
+            <Row>
+                <Col>
+                    <div className="align-content-end">
+                        {!viewOnly && (
+                            <>
+                                <Button variant="primary" onClick={handleSave}>Save</Button>
+                                <span>&nbsp;</span>
+                            </>
+                        )}
+                        <Button variant="danger" onClick={handleCancel}>{viewOnly?"Close":"Cancel"}</Button>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }

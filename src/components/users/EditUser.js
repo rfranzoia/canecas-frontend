@@ -7,10 +7,11 @@ import {ApplicationContext} from "../../store/application-context";
 export const EditUser = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [user, setUser] = useState({
+        role: "",
         name: "",
-        description: "",
-        price: 0,
-        type: ""
+        email: "",
+        phone: "",
+        address: ""
     });
 
     const handleSaveUser = (user) => {
@@ -37,10 +38,11 @@ export const EditUser = (props) => {
                 setUser(p);
             } else {
                 setUser({
+                    role: "",
                     name: "",
-                    description: "",
-                    price: 0,
-                    type: ""
+                    email: "",
+                    phone: "",
+                    address: ""
                 })
             }
         }
@@ -61,9 +63,8 @@ export const EditUser = (props) => {
     }
 
     return (
-        <Container fluid>
+        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
             <Row>
-                <Col sm={2}></Col>
                 <Col md="auto">
                     <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
                         <Card.Header as="h2">{`${title} User`}</Card.Header>
@@ -72,7 +73,6 @@ export const EditUser = (props) => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col sm={2}></Col>
             </Row>
         </Container>
 

@@ -5,7 +5,7 @@ import {UsersList} from "./UsersList";
 import {EditUser} from "./EditUser";
 import {ApplicationContext} from "../../store/application-context";
 
-export const Users = (props) => {
+export const Users = () => {
     const appCtx = useContext(ApplicationContext);
     const [users, setUsers] = useState([]);
     const [showToast, setShowToast] = useState(false);
@@ -23,9 +23,9 @@ export const Users = (props) => {
             .then(data => {
                 setUsers(data);
             });
-    }, [showEditModal])
+    }, [showEditModal, appCtx.userData.authToken])
 
-    const handleNewUser = (id) => {
+    const handleNewUser = () => {
         handleShowEditModal("new")
     }
 
@@ -57,10 +57,8 @@ export const Users = (props) => {
     }
 
     return (
-        <>
-            <Container fluid>
+            <Container fluid style={{ padding: "0.5rem", display: "flex", justifyContent: "center" }}>
                 <Row>
-                    <Col></Col>
                     <Col>
                         <Card border="dark" className="align-content-center" style={{width: '100rem'}}>
                             <Card.Header as="h3">Users</Card.Header>
@@ -87,15 +85,17 @@ export const Users = (props) => {
                         </Toast>
                     </Col>
                 </Row>
+                <Row>
+                    <Modal show={showEditModal} onHide={handleCloseEditModal} backdrop="static" keyboard={true} size="lg"
+                           className="align-content-center">
+                        <Modal.Body>
+                            <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        </Modal.Footer>
+                    </Modal>
+                </Row>
             </Container>
-            <Modal show={showEditModal} onHide={handleCloseEditModal} backdrop="static" keyboard={true} size="lg"
-                   className="align-content-center">
-                <Modal.Body>
-                    <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
-                </Modal.Body>
-                <Modal.Footer>
-                </Modal.Footer>
-            </Modal>
-        </>
+
     );
 }

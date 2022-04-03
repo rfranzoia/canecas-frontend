@@ -3,7 +3,7 @@ import {Link, useHistory} from "react-router-dom";
 import {useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
 
-export const UserRegisterForm = (props) => {
+export const UserRegisterForm = () => {
     const history = useHistory();
     const [toast, setToast] = useState({
         show: false,
@@ -71,7 +71,6 @@ export const UserRegisterForm = (props) => {
                             <label>Role</label>
                             <select className="form-select" id="role" name="role" required ref={roleRef} value={formData.role} onChange={handleChange}>
                                 <option value="">Please Select</option>
-                                <option value="ADMIN">Admin</option>
                                 <option value="USER">User</option>
                                 <option value="GUESt">Guest</option>
                             </select>
@@ -149,8 +148,7 @@ export const UserRegisterForm = (props) => {
                 </Row>
             </Row>
             <Row className="justify-content-md-center">
-                <Col sm={2}></Col>
-                <Col sm={4}>
+                <Col>
                     <Toast show={toast.show} onClose={handleCloseToast} delay={5000} autohide>
                         <Toast.Header>
                             <img src="holder.js/20x20?text=%20" className="rounded me-2" alt="" />
