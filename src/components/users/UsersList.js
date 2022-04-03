@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import {Table} from "react-bootstrap";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {usersApi} from "../../api/UsersAPI";
 import {UserRow} from "./UserRow";
 

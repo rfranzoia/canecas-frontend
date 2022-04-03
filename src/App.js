@@ -1,7 +1,7 @@
 import {Route, Switch} from "react-router-dom";
 import {Layout} from "./components/layout/Layout";
 import {Products} from "./components/products/Products";
-import {Home} from "./pages/Home";
+import {Home} from "./Home";
 import {Types} from "./components/types/Types";
 import {UserRegisterForm} from "./components/users/UserRegisterForm";
 import {UserLogin} from "./components/users/UserLogin";

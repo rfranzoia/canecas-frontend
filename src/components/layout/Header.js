@@ -1,10 +1,10 @@
 import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {UserLogin} from "../users/UserLogin";
 
-export const Header = (props) => {
+export const Header = () => {
     const history = useHistory();
     const appCtx = useContext(ApplicationContext);
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -13,7 +13,7 @@ export const Header = (props) => {
         setShowLoginModal(false);
     }
 
-    const handleShowLogin = async (e) => {
+    const handleShowLogin = async () => {
         setShowLoginModal(true);
     }
 

@@ -3,7 +3,7 @@ import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
 import {ordersApi} from "../../api/OrdersAPI";
 import {OrdersList} from "./OrdersList";
 import {EditOrder} from "./EditOrder";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {useHistory} from "react-router-dom";
 
 export const OrderStatus = [

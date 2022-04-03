@@ -3,11 +3,11 @@ import {OrderItemsList} from "./items/OrderItemsList";
 import {useContext, useRef, useState} from "react";
 import {useHistory} from "react-router-dom";
 import {ordersApi} from "../../api/OrdersAPI";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {InformationToast} from "../ui/InformationToast";
 import {BsExclamationTriangle} from "react-icons/all";
 
-export const NewOrder = (props) => {
+export const NewOrder = () => {
     const appCtx = useContext(ApplicationContext);
     const history = useHistory();
     const [formData, setFormData] = useState({
@@ -71,7 +71,7 @@ export const NewOrder = (props) => {
         }
     }
 
-    const handleSave = (event) => {
+    const handleSave = () => {
         const order = {
             orderDate: orderDateRef.current.value,
             userEmail: userEmailRef.current.value,
@@ -107,7 +107,7 @@ export const NewOrder = (props) => {
         });
     }
 
-    const handleCancel = (event) => {
+    const handleCancel = () => {
         history.goBack();
     }
 
@@ -122,9 +122,8 @@ export const NewOrder = (props) => {
     }
 
     return (
-        <Container fluid className="align-content-sm-center">
+        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
             <Row>
-                <Col></Col>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
                         <Card.Header as="h3">New Order</Card.Header>

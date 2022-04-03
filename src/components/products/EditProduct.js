@@ -2,7 +2,7 @@ import {productsApi} from "../../api/ProductsAPI";
 import {EditProductForm} from "./EditProductForm";
 import {useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const EditProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -61,9 +61,8 @@ export const EditProduct = (props) => {
     }
 
     return (
-        <Container fluid>
+        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
             <Row>
-                <Col sm={2}></Col>
                 <Col md="auto">
                     <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
                         <Card.Header as="h2">{`${title} Product`}</Card.Header>
@@ -72,7 +71,6 @@ export const EditProduct = (props) => {
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col sm={2}></Col>
             </Row>
         </Container>
 

@@ -1,7 +1,7 @@
 import {useContext} from "react";
-import {ApplicationContext} from "../store/application-context";
+import {ApplicationContext} from "./context/ApplicationContext";
 
-export const Home = (props) => {
+export const Home = () => {
     const appCtx = useContext(ApplicationContext);
     const isLoggedIn = appCtx.isLoggedIn();
 

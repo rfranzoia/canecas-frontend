@@ -3,7 +3,7 @@ import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
 import {usersApi} from "../../api/UsersAPI";
 import {UsersList} from "./UsersList";
 import {EditUser} from "./EditUser";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);

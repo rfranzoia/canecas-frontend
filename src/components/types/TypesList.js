@@ -1,8 +1,8 @@
 import {Table} from "react-bootstrap";
 import {useContext} from "react";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {typesApi} from "../../api/TypesAPI";
-import {TypeRow} from "../types/TypeRow";
+import {TypeRow} from "./TypeRow";
 
 export const TypesList = (props) => {
     const appCtx = useContext(ApplicationContext);

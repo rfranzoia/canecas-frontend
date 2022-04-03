@@ -1,6 +1,6 @@
 import {useContext} from "react";
 import {Table} from "react-bootstrap";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {productsApi} from "../../api/ProductsAPI";
 import {ProductRow} from "./ProductRow";
 

@@ -1,6 +1,6 @@
 import {Redirect, Route} from "react-router-dom";
 import {useContext} from "react";
-import {ApplicationContext} from "../store/application-context";
+import {ApplicationContext} from "../context/ApplicationContext";
 
 export const ProtectedRoute = ({component: Component, ...rest}) => {
     const appCtx = useContext(ApplicationContext);

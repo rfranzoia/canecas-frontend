@@ -2,7 +2,7 @@ import {Button, Modal} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const UserLoginModal = (props) => {
     const history = useHistory();

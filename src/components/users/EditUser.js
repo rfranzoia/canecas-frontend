@@ -2,7 +2,7 @@ import {usersApi} from "../../api/UsersAPI";
 import {EditUserForm} from "./EditUserForm";
 import {useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
-import {ApplicationContext} from "../../store/application-context";
+import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const EditUser = (props) => {
     const appCtx = useContext(ApplicationContext);
