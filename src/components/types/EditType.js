@@ -59,7 +59,7 @@ export const EditType = (props) => {
             <Row>
                 <Col md="auto">
                     <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
-                        <Card.Header as="h2">{`${title} Type`}</Card.Header>
+                        <Card.Header as="h3">{`${title} Type`}</Card.Header>
                         <Card.Body>
                             <EditTypeForm type={type} op={props.op} onSaveType={handleOp} onCancel={handleCancel}/>
                         </Card.Body>

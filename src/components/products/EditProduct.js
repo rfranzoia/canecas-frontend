@@ -65,7 +65,7 @@ export const EditProduct = (props) => {
             <Row>
                 <Col md="auto">
                     <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
-                        <Card.Header as="h2">{`${title} Product`}</Card.Header>
+                        <Card.Header as="h3">{`${title} Product`}</Card.Header>
                         <Card.Body>
                             <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
                         </Card.Body>
