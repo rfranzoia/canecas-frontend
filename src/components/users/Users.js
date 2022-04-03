@@ -57,45 +57,43 @@ export const Users = () => {
     }
 
     return (
-            <Container fluid style={{ padding: "0.5rem", display: "flex", justifyContent: "center" }}>
-                <Row>
-                    <Col>
-                        <Card border="dark" className="align-content-center" style={{width: '100rem'}}>
-                            <Card.Header as="h3">Users</Card.Header>
-                            <Card.Body>
-                                <Card.Title>
-                                    <Button
-                                        variant="success"
-                                        onClick={() => handleNewUser("new")}>New User
-                                    </Button>
-                                </Card.Title>
-                                <UsersList users={users} onDelete={handleShowToast}
-                                              onEdit={handleShowEditModal}/>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                    <Col>
-                        <Toast show={showToast} onClose={handleCloseToast} delay={TOAST_TIMEOUT} autohide>
-                            <Toast.Header>
-                                <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
-                                <strong className="me-auto">Users</strong>
-                                <small>just now</small>
-                            </Toast.Header>
-                            <Toast.Body>{toastMessage}</Toast.Body>
-                        </Toast>
-                    </Col>
-                </Row>
-                <Row>
-                    <Modal show={showEditModal} onHide={handleCloseEditModal} backdrop="static" keyboard={true} size="lg"
-                           className="align-content-center">
-                        <Modal.Body>
-                            <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        </Modal.Footer>
-                    </Modal>
-                </Row>
-            </Container>
+        <Container fluid style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
+            <Row>
+                <Col>
+                    <Card border="dark" className="align-content-center" style={{width: '100rem'}}>
+                        <Card.Header as="h3">Users</Card.Header>
+                        <Card.Body>
+                            <Card.Title>
+                                <Button
+                                    variant="success"
+                                    onClick={() => handleNewUser("new")}>New User
+                                </Button>
+                            </Card.Title>
+                            <UsersList users={users} onDelete={handleShowToast}
+                                       onEdit={handleShowEditModal}/>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col>
+                    <Toast show={showToast} onClose={handleCloseToast} delay={TOAST_TIMEOUT} autohide>
+                        <Toast.Header>
+                            <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
+                            <strong className="me-auto">Users</strong>
+                            <small>just now</small>
+                        </Toast.Header>
+                        <Toast.Body>{toastMessage}</Toast.Body>
+                    </Toast>
+                </Col>
+            </Row>
+            <Row>
+                <Modal show={showEditModal} onHide={handleCloseEditModal} backdrop="static"
+                       centered keyboard={true} size="lg">
+                    <Modal.Body>
+                        <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                    </Modal.Body>
+                </Modal>
+            </Row>
+        </Container>
 
     );
 }
