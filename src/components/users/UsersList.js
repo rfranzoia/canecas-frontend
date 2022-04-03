@@ -23,11 +23,12 @@ export const UsersList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
+                <th width="10%">Role</th>
                 <th width="20%">Name</th>
                 <th width="20%">Email</th>
                 <th width="15%">Phone</th>
                 <th width="15%">Address</th>
-                <th width="5%">&nbsp;</th>
+                <th width="10%">&nbsp;</th>
             </tr>
             </thead>
             <tbody>

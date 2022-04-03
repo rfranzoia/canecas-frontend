@@ -24,7 +24,7 @@ export const TypesList = (props) => {
             <thead>
             <tr>
                 <th width="80%">Description</th>
-                <th>&nbsp;</th>
+                <th width="10%">&nbsp;</th>
             </tr>
             </thead>
             <tbody>
