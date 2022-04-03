@@ -34,7 +34,7 @@ export const Header = () => {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link href="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/">Home</Nav.Link>
                             {appCtx.isLoggedIn() &&
                                 (
                                     <>
