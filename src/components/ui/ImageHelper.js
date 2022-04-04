@@ -1,6 +1,7 @@
 
 class ImageHelper {
     getImageUrl = (url) => {
+        if (!url) return "";
         if (url.startsWith("http")) {
             return url;
         } else {
