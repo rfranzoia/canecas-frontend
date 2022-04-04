@@ -1,7 +1,6 @@
 import {productsApi} from "../../api/ProductsAPI";
 import {EditProductForm} from "./EditProductForm";
 import {useContext, useEffect, useState} from "react";
-import {Card, Col, Container, Row} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const EditProduct = (props) => {
@@ -10,7 +9,8 @@ export const EditProduct = (props) => {
         name: "",
         description: "",
         price: 0,
-        type: ""
+        type: "",
+        image: ""
     });
 
     const handleSaveProduct = (product) => {
@@ -40,7 +40,8 @@ export const EditProduct = (props) => {
                     name: "",
                     description: "",
                     price: 0,
-                    type: ""
+                    type: "",
+                    image: ""
                 })
             }
         }
@@ -52,7 +53,7 @@ export const EditProduct = (props) => {
     }, [props.id, props.op]);
 
     const title = props.op === "new" ? "New" :
-                    props.op === "edit" ? "Edit" : "View";
+        props.op === "edit" ? "Edit" : "View";
 
     const handleOp = (product) => {
         if (props.op !== "view") {
@@ -61,18 +62,14 @@ export const EditProduct = (props) => {
     }
 
     return (
-        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
-            <Row>
-                <Col md="auto">
-                    <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
-                        <Card.Header as="h3">{`${title} Product`}</Card.Header>
-                        <Card.Body>
-                            <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
-
+        <div style={{padding: "0.3rem", border: "solid"}}>
+            <div style={{backgroundColor: "#f1f1f1", verticalAlign: "middle", display: "flex"}}>
+                <h3>{`${title} Product`}</h3>
+                <hr/>
+            </div>
+            <div>
+                <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
+            </div>
+        </div>
     );
 }

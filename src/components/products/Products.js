@@ -54,11 +54,13 @@ export const Products = () => {
         setShowEditModal(false);
     }
 
+    const viewOnly = editViewOp.op === "view";
+
     return (
         <Container fluid style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
             <Row>
                 <Col>
-                    <Card border="dark" className="align-content-center" style={{width: '100rem'}}>
+                    <Card border="dark" className="align-content-center" style={{width: "100rem"}}>
                         <Card.Header as="h3">Products</Card.Header>
                         <Card.Body>
                             <Card.Title>
@@ -84,8 +86,10 @@ export const Products = () => {
                 </Col>
             </Row>
             <Row>
-                <Modal show={showEditModal} onHide={handleCloseEditModal} backdrop="static" keyboard={true} centered
-                       size="lg"
+                <Modal show={showEditModal}
+                       onHide={handleCloseEditModal}
+                       backdrop="static" keyboard={true} centered
+                       size={viewOnly?"xl": "lg"}
                        className="align-content-center">
                     <Modal.Body>
                         <EditProduct id={editViewOp.productId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>

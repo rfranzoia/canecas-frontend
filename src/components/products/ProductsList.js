@@ -24,9 +24,10 @@ export const ProductsList = (props) => {
             <thead>
             <tr>
                 <th width="20%">Name</th>
-                <th width="40%">Description</th>
+                <th width="35%">Description</th>
                 <th width="6%">Price</th>
                 <th width="15%">Type</th>
+                <th width="10%">Image</th>
                 <th width="6%">&nbsp;</th>
             </tr>
             </thead>

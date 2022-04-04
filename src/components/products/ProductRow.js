@@ -1,6 +1,8 @@
 import {useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
 import {BiEdit, BiTrash} from "react-icons/all";
+import {Image} from "react-bootstrap";
+import {imageHelper} from "../ui/ImageHelper";
 
 export const ProductRow = (props) => {
     const product = props.product;
@@ -25,6 +27,10 @@ export const ProductRow = (props) => {
             <td><span style={{cursor: "pointer", color: "blue"}} onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
             <td align="right">{product.price.toFixed(2)}</td>
             <td>{product.type}</td>
+            <td align="center">
+                <Image src={imageHelper.getImageUrl(product.image)}
+                       fluid width="60" title={product.image}/>
+            </td>
             <td align="center">
                 <BiEdit
                     onClick={() => props.onEdit("edit", product._id)}

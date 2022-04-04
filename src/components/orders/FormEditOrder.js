@@ -140,7 +140,7 @@ export const FormEditOrder = (props) => {
     const lockChanges = order.status !== 0
 
     return (
-        <Container style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
+        <Container style={{ padding: "1rem", display: "flex", justifyContent: "center"}}>
             <Row>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
@@ -187,7 +187,6 @@ export const FormEditOrder = (props) => {
                                                 <input className="form-control" id="totalPrice" name="totalPrice"
                                                        required type="number"
                                                        ref={totalPriceRef}
-                                                       style={{textAlign: "right"}}
                                                        value={formData.totalPrice.toFixed(2)} onChange={handleChange}
                                                        disabled/>
                                             </div>
