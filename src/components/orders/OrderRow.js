@@ -2,7 +2,7 @@ import {OverlayTrigger, Tooltip} from "react-bootstrap";
 import {BiEdit, BiFastForwardCircle, BiTrash, BiUserCheck} from "react-icons/all";
 import {useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {OrderStatus} from "./Orders";
+import {getNextOrderStatus, getCurrentOrderStatus, OrderStatus} from "./Orders";
 
 export const OrderRow = (props) => {
     const order = props.order;
@@ -15,6 +15,18 @@ export const OrderRow = (props) => {
             onCancel: () => undefined
         }
     );
+
+    const handleMoveForward = () => {
+        setConfirmationDialog({
+            show: true,
+            title: "Update Status",
+            message: `Are you sure you want to update status of the order '${order._id}
+                        from ${OrderStatus[getCurrentOrderStatus(order.status)].value} to ${OrderStatus[getNextOrderStatus(order.status)].value}'?`,
+            op: "update",
+            onConfirm: () => handleConfirmForward(),
+            onCancel: () => handleCloseDialog()
+        });
+    }
 
     const handleDelete = () => {
         setConfirmationDialog({
@@ -59,8 +71,9 @@ export const OrderRow = (props) => {
         props.onCreate(order);
         handleCloseDialog();
     }
-    const handleNextStatus = (order) => {
-
+    const handleConfirmForward = () => {
+        props.onForward(order);
+        handleCloseDialog();
     }
 
     const viewOrderTooltip = (props) => (
@@ -68,8 +81,6 @@ export const OrderRow = (props) => {
             Click to view this order details!
         </Tooltip>
     )
-
-    const nextOrderStatus = (OrderStatus.findIndex(status => status.id === order.status)) + 1;
 
     return (
         <tr key={order._id} valign="middle">
@@ -85,7 +96,7 @@ export const OrderRow = (props) => {
             <td>{order.orderDate.split("T")[0]}</td>
             <td>{order.userEmail}</td>
             <td align="right">{order.totalPrice.toFixed(2)}</td>
-            <td>{OrderStatus[order.status].value}</td>
+            <td>{OrderStatus[getCurrentOrderStatus(order.status)].value}</td>
             <td align="center">
                 <BiEdit
                         onClick={() => props.onEdit("edit", order._id)}
@@ -115,13 +126,13 @@ export const OrderRow = (props) => {
                         color={order.status !== 0?"#a2a0a0":"green"}/>
                 <span> | </span>
                 <BiFastForwardCircle
-                        onClick={() => handleNextStatus(order)}
+                        onClick={handleMoveForward}
                         disabled={order.status === 0}
-                        style={order.status === 0 && { pointerEvents: "none" }}
+                        style={(order.status === 0 || order.status >= 8) && { pointerEvents: "none" }}
                         size="2em"
-                        title={`Move Order to next Status (${OrderStatus[nextOrderStatus].value})`}
+                        title={`Move Order to next Status (${OrderStatus[getNextOrderStatus(order.status)].value})`}
                         cursor="pointer"
-                        color={order.status === 0?"#a2a0a0":"orange"}/>
+                        color={(order.status === 0 || order.status >= 8)?"#a2a0a0":"orange"}/>
             </td>
             <ConfirmModal
                 show={confirmationDialog.show}

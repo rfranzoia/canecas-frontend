@@ -1,5 +1,5 @@
 import {Badge, ListGroup} from "react-bootstrap";
-import {getOrderStatusValue} from "../Orders";
+import {getCurrentOrderStatus, OrderStatus} from "../Orders";
 import {DefaultCard} from "../../ui/DefaultCard";
 
 export const StatusChangeList = (props) => {
@@ -17,7 +17,8 @@ export const StatusChangeList = (props) => {
                                             {history.changeDate.split("T")[0]} {history.changeDate.split("T")[1].substring(0, 8)}
                                         </Badge>
                                     </div>
-                                    from: {getOrderStatusValue(history.prevStatus)} to: {getOrderStatusValue(history.currStatus)}
+                                    from: {OrderStatus[getCurrentOrderStatus(history.prevStatus)].value}
+                                    to: {OrderStatus[getCurrentOrderStatus(history.currStatus)].value}
                                     <br/>
                                     {history.reason}
                                 </div>

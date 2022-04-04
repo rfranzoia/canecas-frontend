@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
+import {Button, Card, Modal, Toast} from "react-bootstrap";
 import {ordersApi} from "../../api/OrdersAPI";
 import {OrdersList} from "./OrdersList";
 import {EditOrder} from "./EditOrder";
@@ -14,9 +14,14 @@ export const OrderStatus = [
     {value: "FINISHED", id: 8},
     {value: "CANCELED", id: 9}];
 
-export const getOrderStatusValue = (id) => {
-    return OrderStatus.find(os => os.id === id).value
+
+export const getCurrentOrderStatus = (statusId) => {
+    return (OrderStatus.findIndex(status => status.id === statusId));
 }
+export const getNextOrderStatus = (statusId) => {
+    return (OrderStatus.findIndex(status => status.id === statusId)) + 1;
+}
+
 export const Orders = () => {
     const history = useHistory();
     const appCtx = useContext(ApplicationContext);
@@ -94,37 +99,43 @@ export const Orders = () => {
     }
 
     const contentList = (
-        <Container fluid style={{ display: "flex", justifyContent: "center" }}>
-            <Row>
-                <Col>
-                    <Card border="dark" className="align-content-center" style={{width: '70rem'}}>
-                        <Card.Header as="h3">Orders</Card.Header>
-                        <Card.Body>
-                            <Card.Title>
+        <div>
+            <div>
+                <Card border="dark" style={{justifyContent: "center", alignContent: "center", margin: "2rem"}}>
+                    <Card.Header as="h3">Orders</Card.Header>
+                    <Card.Body>
+                        <div>
+                            <div>
                                 <Button
                                     variant="success"
                                     onClick={() => handleNewOrder("new")}>New Order
                                 </Button>
-                            </Card.Title>
-                            <OrdersList orders={orders} onDelete={handleShowToast} onConfirm={handleShowToast}
-                                        onEdit={handleShowEditModal}/>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col>
-                    <Toast show={showToast} onClose={handleCloseToast} delay={TOAST_TIMEOUT} autohide>
-                        <Toast.Header>
-                            <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
-                            <strong className="me-auto">Orders</strong>
-                            <small>just now</small>
-                        </Toast.Header>
-                        <Toast.Body>{toastMessage}</Toast.Body>
-                    </Toast>
-                </Col>
-            </Row>
+                            </div>
+                            <br/>
+                            <div>
+                                <OrdersList orders={orders}
+                                            onDelete={handleShowToast}
+                                            onConfirm={handleShowToast}
+                                            onForward={handleShowToast}
+                                            onEdit={handleShowEditModal}/>
+                            </div>
 
-        </Container>
-    )
+                        </div>
+                    </Card.Body>
+                </Card>
+            </div>
+            <div>
+                <Toast show={showToast} onClose={handleCloseToast} delay={TOAST_TIMEOUT} autohide>
+                    <Toast.Header>
+                        <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
+                        <strong className="me-auto">Orders</strong>
+                        <small>just now</small>
+                    </Toast.Header>
+                    <Toast.Body>{toastMessage}</Toast.Body>
+                </Toast>
+            </div>
+        </div>
+    );
 
     const contentEdit = (
         <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
@@ -136,7 +147,7 @@ export const Orders = () => {
                 {(showEdit.show && showEdit.type !== "modal") ? contentEdit : contentList}
             </div>
             <div>
-                <Modal show={showEdit.show && showEdit.type === "modal"} size="xl"
+                <Modal show={showEdit.show && showEdit.type === "modal"} size="lg"
                        onHide={handleCloseEditModal} backdrop="static" centered keyboard={true}>
                     <Modal.Body>
                         <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>

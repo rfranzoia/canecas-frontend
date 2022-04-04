@@ -3,6 +3,7 @@ import {Table} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {ordersApi} from "../../api/OrdersAPI";
 import {OrderRow} from "./OrderRow";
+import {getNextOrderStatus, OrderStatus} from "./Orders";
 
 export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -17,6 +18,18 @@ export const OrdersList = (props) => {
         } else {
             props.onDelete(false);
         }
+    }
+
+    const handleOnForward = async (order) => {
+        const o = {
+            status: OrderStatus[getNextOrderStatus(order)].id
+        }
+        ordersApi.update(order._id, o)
+            .then((o) => {
+                if (o) {
+                    props.onForward(true, `Order '${order._id}' status updated successfully`)
+                }
+            });
     }
 
     const handleOnCreate = (order) => {
@@ -45,7 +58,11 @@ export const OrdersList = (props) => {
             </thead>
             <tbody>
             {props.orders.length > 0 && props.orders.map(order => (
-                <OrderRow key={order._id} order={order} onEdit={handleOnEdit} onCreate={handleOnCreate} onDelete={handleOnDelete}/>
+                <OrderRow key={order._id} order={order}
+                          onEdit={handleOnEdit}
+                          onCreate={handleOnCreate}
+                          onDelete={handleOnDelete}
+                          onForward={handleOnForward}/>
             ))}
             </tbody>
         </Table>
