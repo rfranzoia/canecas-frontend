@@ -136,8 +136,8 @@ export const Orders = () => {
                 {(showEdit.show && showEdit.type !== "modal") ? contentEdit : contentList}
             </div>
             <div>
-                <Modal show={showEdit.show && showEdit.type === "modal"} onHide={handleCloseEditModal} backdrop="static" centered
-                       keyboard={true} size="lg">
+                <Modal show={showEdit.show && showEdit.type === "modal"} size="xl"
+                       onHide={handleCloseEditModal} backdrop="static" centered keyboard={true}>
                     <Modal.Body>
                         <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
                     </Modal.Body>
