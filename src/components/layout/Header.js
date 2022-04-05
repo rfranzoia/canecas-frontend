@@ -26,13 +26,13 @@ export const Header = () => {
         <header>
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
-                    <Navbar.Brand href="#">
-                        <Image src="http://192.168.1.116:3000/logo.jpg"
-                               title="Canecas"
-                                roundedCircle
-                                width="55"/>
-                        &nbsp;
-                        Canecas
+                    <Navbar.Brand as={Link} to="#">
+                        <Nav.Link as={Link} to="/">
+                            <Image src="http://192.168.1.116:3000/logo.jpg"
+                                   title="Canecas"
+                                   roundedCircle
+                                   width="55"/>
+                        </Nav.Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -41,7 +41,6 @@ export const Header = () => {
                             style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
                             {appCtx.isLoggedIn() &&
                                 (
                                     <>

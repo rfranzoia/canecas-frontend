@@ -6,7 +6,7 @@ export const Layout = (props) => {
         <div>
             <Header />
             <main>{props.children}</main>
-            <Footer />
         </div>
     )
 }
+//<Footer />

@@ -22,6 +22,17 @@ export class ProductsAPI {
 
     }
 
+    listByType = async (type) => {
+
+        try {
+            const res = await axios.get(`${PRODUCTS_URL}/type/${type}`);
+            return res.data;
+        } catch (error) {
+            processRequestError(error);
+        }
+
+    }
+
     get = async (id) => {
         try {
             const res = await axios.get(`${PRODUCTS_URL}/${id}`);
