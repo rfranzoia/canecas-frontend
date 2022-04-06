@@ -18,6 +18,7 @@ export class ProductsAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
 
     }
@@ -28,6 +29,7 @@ export class ProductsAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
     }
 
@@ -41,6 +43,7 @@ export class ProductsAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
 
     }
@@ -55,6 +58,7 @@ export class ProductsAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
     }
 

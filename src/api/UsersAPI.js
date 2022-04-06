@@ -22,6 +22,7 @@ export class UsersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
 
     }
@@ -36,6 +37,7 @@ export class UsersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
     }
 
@@ -63,6 +65,7 @@ export class UsersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
     }
 
@@ -73,10 +76,10 @@ export class UsersAPI {
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
-            return true;
+            return null;
         } catch (error) {
             processRequestError(error);
-            return false
+            return error?.response?.data
         }
     }
 

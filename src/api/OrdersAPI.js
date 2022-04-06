@@ -22,6 +22,7 @@ export class OrdersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
 
     }
@@ -37,6 +38,7 @@ export class OrdersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
+            return error?.response?.data
         }
     }
 
@@ -51,7 +53,7 @@ export class OrdersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
-            return error;
+            return error?.response?.data
         }
 
     }
@@ -67,7 +69,7 @@ export class OrdersAPI {
             return res.data;
         } catch (error) {
             processRequestError(error);
-            return error;
+            return error?.response?.data;
         }
     }
 
