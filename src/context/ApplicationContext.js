@@ -2,19 +2,25 @@ import {createContext, useEffect, useState} from "react";
 
 export const ApplicationContext = createContext({
     userData: {},
-    favorites: [],
-    count: 0,
+    error: {},
     addUser: () => {},
     removeUser: () => {},
-    isLoggedIn: () => {}
+    isLoggedIn: () => {},
+    showErrorAlert: () => {},
+    hideErrorAlert: () => {}
 });
 
 export const ApplicationContextProvider = (props) => {
+    const [error, setError] = useState({
+        show: false,
+        title: "",
+        message: ""
+    });
     const [userData, setUserData] = useState({
         userId: "",
         userEmail: "",
         authToken: ""
-    })
+    });
 
     useEffect(() => {
         const userData = JSON.parse(localStorage.getItem("userData"));
@@ -34,6 +40,7 @@ export const ApplicationContextProvider = (props) => {
             authToken: user.authToken
         })
     }
+
     const removeUser = () => {
         setUserData({
             userId: "",
@@ -41,15 +48,35 @@ export const ApplicationContextProvider = (props) => {
             authToken: ""
         });
     }
+
     const isLoggedIn = () => {
         return (userData.userEmail !== "" && userData.authToken !== "");
     }
 
+    const showErrorAlert = (title, message) => {
+        setError({
+            show: true,
+            title: title,
+            message: message
+        });
+    }
+
+    const hideErrorAlert = () => {
+        setError({
+            show: false,
+            title: "",
+            message: ""
+        });
+    }
+
     const context = {
         userData: userData,
+        error: error,
         isLoggedIn: isLoggedIn,
         addUser: addUser,
-        removeUser: removeUser
+        removeUser: removeUser,
+        showErrorAlert: showErrorAlert,
+        hideErrorAlert: hideErrorAlert
     }
 
     return (
