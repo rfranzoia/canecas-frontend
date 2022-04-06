@@ -1,0 +1,28 @@
+
+.AutoCompleteText ul {
+    list-style-type: none;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid grey;
+    position: absolute;
+    display: block;
+    background-color: white;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+}
+
+.AutoCompleteText ul::before {
+    content: "";
+}
+
+.AutoCompleteText li {
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+}
+
+.AutoCompleteText li:hover {
+    text-decoration: underline;
+    background-color: lightgrey;
+}
