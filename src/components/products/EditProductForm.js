@@ -1,7 +1,9 @@
 import {useEffect, useRef, useState} from "react";
 import {typesApi} from "../../api/TypesAPI";
-import {Button, Col, Container, Image, Row} from "react-bootstrap";
+import {Col, Container, Image, Row} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
+import {AutoCompleteInput} from "../ui/AutoCompleteInput";
+import {Button} from "../ui/Button";
 
 export const EditProductForm = (props) => {
     const product = props.product;
@@ -17,7 +19,6 @@ export const EditProductForm = (props) => {
     const nameRef = useRef();
     const descriptionRef = useRef();
     const priceRef = useRef();
-    const typeRef = useRef();
     const imageRef = useRef();
 
     const handleSave = (event) => {
@@ -26,7 +27,7 @@ export const EditProductForm = (props) => {
             name: nameRef.current.value,
             description: descriptionRef.current.value,
             price: priceRef.current.value,
-            type: typeRef.current.value,
+            type: formData.type,
             image: imageRef.current.value
         }
         props.onSaveProduct(product);
@@ -56,6 +57,15 @@ export const EditProductForm = (props) => {
             image: product.image
         });
     }, [product])
+
+    const handleSelectType = (type) => {
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                type: type
+            }
+        })
+    }
 
     useEffect(() => {
         typesApi.list()
@@ -103,15 +113,14 @@ export const EditProductForm = (props) => {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="type">Type</label>
-                                    <select className="form-select" id="type" name="type" required ref={typeRef}
-                                            value={formData.type}
-                                            onChange={handleChange} disabled={viewOnly}>
-                                        <option value="">Please Select</option>
-                                        {types.map(type => {
-                                            return (<option key={type._id}
-                                                            value={type.description}>{type.description}</option>);
-                                        })}
-                                    </select>
+                                    <AutoCompleteInput
+                                        data={types}
+                                        value={formData.type}
+                                        disabled={viewOnly}
+                                        onFieldSelected={handleSelectType}
+                                        className="form-control"
+                                        required
+                                        placeholder="Please select a type"/>
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="image">Image</label>
@@ -131,11 +140,11 @@ export const EditProductForm = (props) => {
             <div className="align-content-end">
                 {!viewOnly && (
                     <>
-                        <Button variant="primary" onClick={handleSave}>Save</Button>
+                        <Button caption="Save" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <Button variant="danger" onClick={handleCancel}>{viewOnly ? "Close" : "Cancel"}</Button>
+                <Button caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
             </div>
         </>
     );

@@ -22,7 +22,7 @@ export const OrdersList = (props) => {
 
     const handleOnForward = async (order) => {
         const o = {
-            status: OrderStatus[getNextOrderStatus(order)].id
+            status: OrderStatus[getNextOrderStatus(order.status)].id
         }
         ordersApi.update(order._id, o)
             .then((o) => {

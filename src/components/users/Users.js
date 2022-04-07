@@ -1,9 +1,11 @@
 import {useContext, useEffect, useState} from "react";
-import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
+import {Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
 import {usersApi} from "../../api/UsersAPI";
 import {UsersList} from "./UsersList";
 import {EditUser} from "./EditUser";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {StatusCodes} from "http-status-codes";
+import {Button} from "../ui/Button";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);
@@ -18,25 +20,24 @@ export const Users = () => {
 
     const TOAST_TIMEOUT = 3 * 1000;
 
-    useEffect(() => {
-        usersApi.withToken(appCtx.userData.authToken).list()
-            .then(data => {
-                setUsers(data);
-            });
-    }, [showEditModal, appCtx.userData.authToken])
-
-    const handleNewUser = () => {
-        handleShowEditModal("new")
-    }
-
     const handleShowToast = (show, message = "") => {
         if (show) {
             setToastMessage(message);
-            usersApi.withToken(appCtx.userData.authToken).list()
-                .then(data => {
-                    setUsers(data);
-                    setShowToast(show);
-                });
+            const data = loadData();
+            if (data.length > 0) {
+                setShowToast(show);
+            }
+            setUsers(data);
+        }
+    }
+
+    const loadData = async () => {
+        const result = await usersApi.withToken(appCtx.userData.authToken).list();
+        if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+            appCtx.showErrorAlert(result.name, result.description);
+            setUsers([]);
+        } else {
+            setUsers(result);
         }
     }
 
@@ -56,6 +57,21 @@ export const Users = () => {
         setShowEditModal(false);
     }
 
+    useEffect(() => {
+
+        usersApi.withToken(appCtx.userData.authToken).list()
+            .then(result => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
+                    setUsers([]);
+                } else {
+                    setUsers(result);
+                }
+            });
+    }, [appCtx]);
+
+    const customButtonType = {type: "add-user", class: "fa fa-user-plus", color: "#008000", hover: "#005d00"}
+
     return (
         <Container fluid style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
             <Row>
@@ -64,10 +80,7 @@ export const Users = () => {
                         <Card.Header as="h3">Users</Card.Header>
                         <Card.Body>
                             <Card.Title>
-                                <Button
-                                    variant="success"
-                                    onClick={() => handleNewUser("new")}>New User
-                                </Button>
+                                <Button caption="New User" onClick={() => handleShowEditModal("new")} customType={customButtonType}/>
                             </Card.Title>
                             <UsersList users={users} onDelete={handleShowToast}
                                        onEdit={handleShowEditModal}/>

@@ -3,6 +3,7 @@ import {EditUserForm} from "./EditUserForm";
 import {useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {StatusCodes} from "http-status-codes";
 
 export const EditUser = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -16,10 +17,18 @@ export const EditUser = (props) => {
 
     const handleSaveUser = (user) => {
         const callback = async (user) => {
+            let result;
             if (props.op === "edit") {
-                await usersApi.withToken(appCtx.userData.authToken).update(props.id, user)
+                result = await usersApi
+                    .withToken(appCtx.userData.authToken)
+                    .update(props.id, user)
             } else if (props.op === "new") {
-                await usersApi.withToken(appCtx.userData.authToken).create(user);
+                result = await usersApi
+                    .withToken(appCtx.userData.authToken)
+                    .create(user);
+            }
+            if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+                appCtx.showErrorAlert(result.name, result.description);
             }
         }
         callback(user)
@@ -34,8 +43,11 @@ export const EditUser = (props) => {
     useEffect(() => {
         const callback = async () => {
             if (props.op === "edit" || props.op === "view") {
-                const p = await usersApi.withToken(appCtx.userData.authToken).get(props.id);
-                setUser(p);
+                const result = await usersApi.withToken(appCtx.userData.authToken).get(props.id);
+                if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
+                }
+                setUser(result);
             } else {
                 setUser({
                     role: "",
@@ -51,7 +63,7 @@ export const EditUser = (props) => {
                 return undefined
             });
 
-    }, [props.id, props.op, appCtx.userData.authToken]);
+    }, [props.id, props.op, appCtx]);
 
     const title = props.op === "new" ? "New" :
                     props.op === "edit" ? "Edit" : "View";

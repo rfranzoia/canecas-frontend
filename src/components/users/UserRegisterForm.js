@@ -1,8 +1,9 @@
-import {Button, Col, Container, Row, Toast} from "react-bootstrap";
+import {Col, Container, Row, Toast} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
 import {DefaultCard} from "../ui/DefaultCard";
+import {Button} from "../ui/Button";
 
 export const UserRegisterForm = () => {
     const history = useHistory();
@@ -112,20 +113,14 @@ export const UserRegisterForm = () => {
                                 </div>
                                 <br/>
                             </form>
-                        </DefaultCard>
-                    </div>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <DefaultCard border="light">
-                            <p className="forgot-password text-right">
+                            <p className="forgot-password text-right" align="center">
                                 Already registered <Link to="/users/login">sign in?</Link>
                             </p>
-                            <Button variant="primary" onClick={handleSignUp}>Sign Up</Button>
-                            &nbsp;
-                            <Button variant="danger" onClick={handleCancel}>Cancel</Button>
+                            <div align="center">
+                                <Button caption="Cancel" onClick={handleCancel} type="close"/>
+                                &nbsp;
+                                <Button caption="Sign Up" onClick={handleSignUp} type="sign-up"/>
+                            </div>
                         </DefaultCard>
                     </div>
                 </Col>

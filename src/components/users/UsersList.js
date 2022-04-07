@@ -3,17 +3,23 @@ import {Table} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {usersApi} from "../../api/UsersAPI";
 import {UserRow} from "./UserRow";
+import {StatusCodes} from "http-status-codes";
 
 export const UsersList = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const appCtx = useContext(ApplicationContext)
 
     const handleOnEdit = (op, id) => {
         props.onEdit(op, id);
     }
 
     const handleOnDelete = async (user) => {
-        if (await usersApi.withToken(appCtx.userData.authToken).delete(user._id)) {
+        const result = await usersApi.withToken(appCtx.userData.authToken).delete(user._id);
+        if (result === null) {
             props.onDelete(true, `User '${user.name}' deleted successfully`);
+
+        } else if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+            appCtx.showErrorAlert(result.name, result.description);
+
         } else {
             props.onDelete(false);
         }

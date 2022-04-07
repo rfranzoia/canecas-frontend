@@ -1,8 +1,9 @@
-import {Button, Container, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Alert, Container, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {UserLogin} from "../users/UserLogin";
+import {Button} from "../ui/Button";
 
 export const Header = () => {
     const history = useHistory();
@@ -22,11 +23,17 @@ export const Header = () => {
         history.replace("/");
     }
 
+    const handleDismissAlert = () => {
+        appCtx.hideErrorAlert();
+        appCtx.removeUser();
+        history.replace("/")
+    }
+
     return (
         <header>
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
-                    <Navbar.Brand href="#">
+                    <Navbar.Brand as={Link} to="/">
                         <Image src="http://192.168.1.116:3000/logo.jpg"
                                title="Canecas"
                                 roundedCircle
@@ -61,11 +68,11 @@ export const Header = () => {
                                 <Navbar.Collapse className="justify-content-end">
                                     <Navbar.Text> {appCtx.userData.userEmail} </Navbar.Text>
                                     &nbsp;&nbsp;
-                                    <Button variant="danger" onClick={handleLogout}>Logout</Button>
+                                    <Button size="small" caption="Sign Out" onClick={handleLogout} type="logout"/>
                                 </Navbar.Collapse>
                             ) :
                             (
-                                <Button variant="success" onClick={handleShowLogin}>Login</Button>
+                                <Button size="small" caption="Sign In" onClick={handleShowLogin} type="login"/>
                             )
                         }
                     </Navbar.Collapse>
@@ -73,6 +80,12 @@ export const Header = () => {
             </Navbar>
             {showLoginModal &&
                 <UserLogin show={showLoginModal} handleClose={handleClose}/>}
+            {appCtx.error.show &&
+                <Alert variant="danger" onClose={handleDismissAlert} dismissible>
+                    <Alert.Heading>{appCtx.error.title}</Alert.Heading>
+                    <p>{appCtx.error.message}</p>
+                </Alert>
+            }
         </header>
     );
 }

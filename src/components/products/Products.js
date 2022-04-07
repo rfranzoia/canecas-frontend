@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
-import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
+import {Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
 import {productsApi} from "../../api/ProductsAPI";
 import {ProductsList} from "./ProductsList";
 import {EditProduct} from "./EditProduct";
+import {Button} from "../ui/Button";
 
 export const Products = () => {
     const [products, setProducts] = useState([]);
@@ -64,10 +65,7 @@ export const Products = () => {
                         <Card.Header as="h3">Products</Card.Header>
                         <Card.Body>
                             <Card.Title>
-                                <Button
-                                    variant="success"
-                                    onClick={() => handleNewProduct("new")}>New Product
-                                </Button>
+                                <Button caption="New Product" onClick={() => handleNewProduct("new")} type="new"/>
                             </Card.Title>
                             <ProductsList products={products} onDelete={handleShowToast}
                                           onEdit={handleShowEditModal}/>

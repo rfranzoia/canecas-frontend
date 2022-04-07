@@ -1,10 +1,11 @@
-import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
+import {Card, Col, Container, Modal, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useEffect, useRef, useState} from "react";
 import {OrderStatus} from "./Orders";
 import {InformationToast} from "../ui/InformationToast";
 import {BsExclamationTriangle} from "react-icons/all";
 import {StatusChangeList} from "./history/StatusChangeList";
+import {Button} from "../ui/Button";
 
 export const FormEditOrder = (props) => {
     const order = props.order;
@@ -223,26 +224,23 @@ export const FormEditOrder = (props) => {
                                             <div className="align-content-end">
                                                 {!viewOnly && (
                                                     <>
-                                                        <Button variant="primary" size="sm" onClick={handleSave}>Save</Button>
+                                                        <Button caption="Save" onClick={handleSave} type="save"/>
                                                         <span>&nbsp;</span>
                                                     </>
                                                 )}
-                                                <Button variant="danger" size="sm"
-                                                        onClick={handleCancel}>{viewOnly ? "Close" : "Cancel"}</Button>
+                                                <Button caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
                                                 <span>&nbsp;</span>
                                                 {(viewOnly && order.status > 0) &&
-                                                    <Button variant="warning" size="sm"
-                                                            onClick={handleViewStatusHistory}>Status Changes</Button>
+                                                    <Button caption="Status Changes"
+                                                            onClick={handleViewStatusHistory}
+                                                            type="list"/>
                                                 }
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Modal show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
-                                            <StatusChangeList statusHistory={order.statusHistory}/>
-                                            <div style={{display: "flex", justifyContent: "center", padding: "0.5rem"}}>
-                                                <Button variant="danger" size="sm"  onClick={handleCloseViewStatusHistory}>Close</Button>
-                                            </div>
+                                        <Modal size="lg" show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
+                                            <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
                                         </Modal>
                                     </Row>
                                 </Container>

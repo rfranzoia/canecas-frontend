@@ -1,8 +1,9 @@
-import {Alert, Button, Form, Modal} from "react-bootstrap";
+import {Alert, Form, Modal} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useRef, useState} from "react";
 import {usersApi} from "../../api/UsersAPI";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {Button} from "../ui/Button";
 
 export const UserLoginForm = (props) => {
     const history = useHistory();
@@ -65,7 +66,7 @@ export const UserLoginForm = (props) => {
     return (
         <Modal show={props.show} onHide={props.handleClose} backdrop="static" keyboard={true} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Login</Modal.Title>
+                <Modal.Title>Sign In</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {showError.show &&
@@ -78,12 +79,12 @@ export const UserLoginForm = (props) => {
                     <Form.Group>
                         <Form.Label>Email</Form.Label>
                         <Form.Control
-                        type="email"
-                        name="email"
-                        ref={emailRef}
-                        value={user.email}
-                        placeholder="Enter your e-mail address"
-                        onChange={handleChange}/>
+                            type="email"
+                            name="email"
+                            ref={emailRef}
+                            value={user.email}
+                            placeholder="Enter your e-mail address"
+                            onChange={handleChange}/>
                     </Form.Group>
                     <br/>
                     <Form.Group>
@@ -93,18 +94,18 @@ export const UserLoginForm = (props) => {
                             name="password"
                             ref={passwordRef}
                             value={user.password}
-                            placeholder="Enter you password"
+                            placeholder="Please enter your password"
                             onChange={handleChange}/>
                     </Form.Group>
                     <p className="forgot-password text-right">
-                        Need an account?
+                        Need an account?&nbsp;
                         <span onClick={handleSignup}><Link to="#">Signup</Link></span>
                     </p>
                 </Form>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="danger" onClick={props.handleClose}>Cancel</Button>
-                <Button variant="primary" onClick={() => handleLogin(user)}>Login</Button>
+                <Button caption="Cancel" onClick={props.handleClose} type="close"/>
+                <Button caption="Sign In" onClick={() => handleLogin(user)} type="sign-in"/>
             </Modal.Footer>
         </Modal>
     );

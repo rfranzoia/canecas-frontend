@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
-import {Button, Image} from "react-bootstrap";
+import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
+import {Button} from "../ui/Button";
 
 export const EditTypeForm = (props) =>  {
     const type = props.type;
@@ -72,11 +73,11 @@ export const EditTypeForm = (props) =>  {
             <div className="align-content-end">
                 {!viewOnly && (
                     <>
-                        <Button variant="primary" onClick={handleSave}>Save</Button>
+                        <Button caption="Save" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <Button variant="danger" onClick={handleCancel}>{viewOnly?"Close":"Cancel"}</Button>
+                <Button caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
             </div>
         </>
     );

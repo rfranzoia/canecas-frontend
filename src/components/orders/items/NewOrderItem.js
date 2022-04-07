@@ -1,16 +1,17 @@
 import {useEffect, useRef, useState} from "react";
 import {productsApi} from "../../../api/ProductsAPI";
-import {Button, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {Card, Col, Container, Form, Row} from "react-bootstrap";
+import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
+import {Button} from "../../ui/Button";
 
 export const NewOrderItem = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
-        product: {},
+        product: "",
         price: 0,
         amount: 0
     });
 
-    const productRef = useRef();
     const priceRef = useRef();
     const amountRef = useRef();
 
@@ -18,7 +19,14 @@ export const NewOrderItem = (props) => {
         const load = async () => {
             const res = await productsApi.list();
             if (res) {
-                setProducts(res);
+                setProducts(
+                    res.map(r => {
+                        return {
+                            ...r,
+                            label: r.name
+                        }
+                    })
+                );
             } else {
                 setProducts([]);
             }
@@ -28,10 +36,10 @@ export const NewOrderItem = (props) => {
 
     }, []);
 
-    const handleAdd = (event) => {
-        const selectedProduct = products.find(product => product.name === productRef.current.value);
+    const handleAdd = () => {
+        const selectedProduct = products.find(product => product.name === formData.product);
         const item = {
-            product: productRef.current.value,
+            product: formData.product,
             price: Number(priceRef.current.value),
             amount: Number(amountRef.current.value),
             _id: selectedProduct._id
@@ -53,6 +61,15 @@ export const NewOrderItem = (props) => {
         });
     }
 
+    const handleSelectProduct = (product) => {
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                product: product
+            }
+        })
+    }
+
     return (
         <Card border="dark" className="align-content-center" style={{width: '29.2rem'}}>
             <Card.Body>
@@ -62,19 +79,14 @@ export const NewOrderItem = (props) => {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Product</Form.Label>
-                                    <Form.Select aria-label="products"
-                                                 name="product"
-                                                 ref={productRef}
-
-                                                 value={formData.product}
-                                                 onChange={handleChange}>
-                                        <option>-- Select a Product --</option>
-                                        {products.map(product => {
-                                            return (
-                                                <option key={product._id} value={product.name}>{product.name}</option>
-                                            )
-                                        })}
-                                    </Form.Select>
+                                    <AutoCompleteInput
+                                        data={products}
+                                        displayField="name"
+                                        value={formData.product}
+                                        onFieldSelected={handleSelectProduct}
+                                        className="form-control"
+                                        required
+                                        placeholder="Please select a product"/>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -110,9 +122,9 @@ export const NewOrderItem = (props) => {
                     <br/>
                     <Row>
                         <Col>
-                            <Button variant="primary" onClick={handleAdd} size="sm">Add</Button>
+                            <Button caption="Add" onClick={handleAdd} type="add" size="small"/>
                             &nbsp;
-                            <Button variant="danger" onClick={handleCancel} size="sm">Cancel</Button>
+                            <Button caption="Cancel" onClick={handleCancel} type="close" size="small"/>
                         </Col>
                     </Row>
                 </Container>

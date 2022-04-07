@@ -4,6 +4,7 @@ import {ApplicationContext} from "../../context/ApplicationContext";
 import {FormEditOrder} from "./FormEditOrder";
 import {useHistory, useParams} from "react-router-dom";
 import {InformationToast} from "../ui/InformationToast";
+import {StatusCodes} from "http-status-codes";
 
 export const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -69,20 +70,21 @@ export const EditOrder = (props) => {
     useEffect(() => {
         if (!appCtx.userData.authToken) return;
         const callback = async () => {
-            let o;
+            let result;
             if (op === "edit") {
-                o = await ordersApi.withToken(appCtx.userData.authToken).get(params.id);
+                result = await ordersApi.withToken(appCtx.userData.authToken).get(params.id);
             } else {
-                o = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
+                result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
             }
-            setOrder(o);
+            if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+                appCtx.showErrorAlert(result.name, result.description);
+            } else {
+                setOrder(result);
+            }
         }
-        callback()
-            .then(() => {
-                return undefined
-            });
+        callback().then(() => undefined);
 
-    }, [props.id, op, appCtx.userData.authToken, params.id]);
+    }, [props.id, op, appCtx, params.id]);
 
     const title = op === "new" ? "New" :
                     op === "edit" ? "Edit" : "View";

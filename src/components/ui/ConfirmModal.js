@@ -1,4 +1,5 @@
-import {Button, Modal} from "react-bootstrap";
+import {Modal} from "react-bootstrap";
+import {Button} from "./Button";
 
 export const ConfirmModal = (props) => {
     return (
@@ -8,8 +9,8 @@ export const ConfirmModal = (props) => {
             </Modal.Header>
             <Modal.Body>{props.message}</Modal.Body>
             <Modal.Footer>
-                <Button variant="danger" onClick={props.handleClose}>No</Button>
-                <Button variant="primary" onClick={props.handleConfirm}>Yes</Button>
+                <Button caption="No" onClick={props.handleClose} type="close"/>
+                <Button caption="Yes" onClick={props.handleConfirm} type="confirm"/>
             </Modal.Footer>
         </Modal>
     );

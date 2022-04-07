@@ -1,10 +1,12 @@
 import {useContext, useEffect, useState} from "react";
-import {Button, Card, Modal, Toast} from "react-bootstrap";
+import {Card, Modal, Toast} from "react-bootstrap";
 import {ordersApi} from "../../api/OrdersAPI";
 import {OrdersList} from "./OrdersList";
 import {EditOrder} from "./EditOrder";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {useHistory} from "react-router-dom";
+import {StatusCodes} from "http-status-codes";
+import {Button} from "../ui/Button";
 
 export const OrderStatus = [
     {value: "NEW", id: 0},
@@ -39,18 +41,32 @@ export const Orders = () => {
 
     const TOAST_TIMEOUT = 3 * 1000;
 
+    const load = async () => {
+        const result = await ordersApi.withToken(appCtx.userData.authToken).list();
+        if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+            appCtx.showErrorAlert(result.name, result.description);
+            setOrders([]);
+        } else {
+            setOrders(result)
+        }
+    }
+
     useEffect(() => {
-        if (!appCtx.userData.authToken) return;
+        if (!appCtx.userData.authToken) {
+            appCtx.showErrorAlert("Invalid request!", "Unauthorized access");
+            return;
+        }
 
         ordersApi.withToken(appCtx.userData.authToken).list()
-            .then(data => {
-                if (!data) {
+            .then(result => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
                     setOrders([]);
                 } else {
-                    setOrders(data);
+                    setOrders(result)
                 }
             });
-    }, [showEdit, appCtx.userData.authToken])
+    }, [appCtx])
 
     const handleNewOrder = (id) => {
         history.push(`/orders/${id}`);
@@ -59,11 +75,7 @@ export const Orders = () => {
     const handleShowToast = (show, message = "") => {
         if (show) {
             setToastMessage(message);
-            ordersApi.withToken(appCtx.userData.authToken).list()
-                .then(data => {
-                    setOrders(data);
-                    setShowToast(show);
-                });
+            load().then(() => setShowToast(show));
         }
     }
 
@@ -106,10 +118,7 @@ export const Orders = () => {
                     <Card.Body>
                         <div>
                             <div>
-                                <Button
-                                    variant="success"
-                                    onClick={() => handleNewOrder("new")}>New Order
-                                </Button>
+                                <Button caption="New Order" onClick={() => handleNewOrder("new")} type="new"/>
                             </div>
                             <br/>
                             <div>

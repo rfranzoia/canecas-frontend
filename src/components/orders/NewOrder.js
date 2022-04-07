@@ -1,4 +1,4 @@
-import {Button, Card, Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useContext, useRef, useState} from "react";
 import {useHistory} from "react-router-dom";
@@ -6,6 +6,7 @@ import {ordersApi} from "../../api/OrdersAPI";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {InformationToast} from "../ui/InformationToast";
 import {BsExclamationTriangle} from "react-icons/all";
+import {Button} from "../ui/Button";
 
 export const NewOrder = () => {
     const appCtx = useContext(ApplicationContext);
@@ -171,9 +172,9 @@ export const NewOrder = () => {
                                     <br/>
                                     <Row>
                                         <Col>
-                                            <Button variant="primary" onClick={handleSave}>Save</Button>
+                                            <Button caption="Save" onClick={handleSave} type="save"/>
                                             <span>&nbsp;</span>
-                                            <Button variant="danger" onClick={handleCancel}>Cancel</Button>
+                                            <Button caption="Cancel" onClick={handleCancel} type="close"/>
                                         </Col>
                                     </Row>
 

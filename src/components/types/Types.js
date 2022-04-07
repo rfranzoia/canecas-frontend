@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
-import {Button, Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
+import {Card, Col, Container, Modal, Row, Toast} from "react-bootstrap";
 import {typesApi} from "../../api/TypesAPI";
 import {TypesList} from "./TypesList";
 import {EditType} from "./EditType";
+import {Button} from "../ui/Button";
 
 export const Types = () => {
     const [types, setTypes] = useState([]);
@@ -62,10 +63,7 @@ export const Types = () => {
                         <Card.Header as="h3">Types</Card.Header>
                         <Card.Body>
                             <Card.Title>
-                                <Button
-                                    variant="success"
-                                    onClick={() => handleNewType("new")}>New Type
-                                </Button>
+                                <Button caption="New type" onClick={() => handleNewType("new")} type="new"/>
                             </Card.Title>
                             <TypesList types={types} onDelete={handleShowToast} onEdit={handleShowEditModal}/>
                         </Card.Body>
