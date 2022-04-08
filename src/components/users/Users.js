@@ -6,6 +6,7 @@ import {EditUser} from "./EditUser";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 import {Button} from "../ui/Button";
+import {ChangeUserPassword} from "./ChangeUserPassword";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);
@@ -13,8 +14,10 @@ export const Users = () => {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showChangePassword, setShowChangePassword] = useState(false);
     const [editViewOp, setEditViewOp] = useState({
         userId: "",
+        email: "",
         op: ""
     });
 
@@ -48,6 +51,7 @@ export const Users = () => {
     const handleShowEditModal = (op, id) => {
         setEditViewOp({
             userId: id,
+            email: "",
             op: op
         })
         setShowEditModal(true);
@@ -57,8 +61,20 @@ export const Users = () => {
         setShowEditModal(false);
     }
 
-    useEffect(() => {
+    const handleShowChangePasswordModal = (email) => {
+        setEditViewOp({
+            userId: "",
+            email: email,
+            op: "change-password"
+        });
+        setShowChangePassword(true);
+    }
 
+    const handleClosePasswordModal = () => {
+        setShowChangePassword(false);
+    }
+
+    useEffect(() => {
         usersApi.withToken(appCtx.userData.authToken).list()
             .then(result => {
                 if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
@@ -83,7 +99,7 @@ export const Users = () => {
                                 <Button caption="New User" onClick={() => handleShowEditModal("new")} customType={customButtonType}/>
                             </Card.Title>
                             <UsersList users={users} onDelete={handleShowToast}
-                                       onEdit={handleShowEditModal}/>
+                                       onEdit={handleShowEditModal} onChangePassword={handleShowChangePasswordModal}/>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -103,6 +119,14 @@ export const Users = () => {
                        centered keyboard={true} size="lg">
                     <Modal.Body>
                         <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                    </Modal.Body>
+                </Modal>
+            </Row>
+            <Row>
+                <Modal show={showChangePassword} onHide={handleClosePasswordModal} backdrop="static"
+                       centered keyboard={true} size="md">
+                    <Modal.Body>
+                        <ChangeUserPassword email={editViewOp.email} onSaveCancel={handleClosePasswordModal}/>
                     </Modal.Body>
                 </Modal>
             </Row>

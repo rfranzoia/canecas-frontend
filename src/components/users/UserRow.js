@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {BiEdit, BiTrash} from "react-icons/all";
+import {BiEdit, BiLockOpen, BiTrash} from "react-icons/all";
 
 export const UserRow = (props) => {
     const user = props.user;
@@ -17,6 +17,10 @@ export const UserRow = (props) => {
     const handleConfirm = () => {
         setShowConfirmation(false);
         props.onDelete(user);
+    }
+
+    const handleChangePassword = () => {
+        props.onChangePassword(user.email);
     }
 
     return (
@@ -40,6 +44,12 @@ export const UserRow = (props) => {
                     size="2em"
                     cursor="pointer"
                     color="red"/>
+                <BiLockOpen
+                    onClick={handleChangePassword}
+                    title="Update Password"
+                    size="2em"
+                    cursor="pointer"
+                    color="green"/>
             </td>
             <ConfirmModal show={showConfirmation} handleClose={handleClose} handleConfirm={handleConfirm}
                 title="Delete User"  message={`Are you sure you want to delete the user '${user.name}'?`}/>

@@ -100,6 +100,26 @@ export class UsersAPI {
         }
     }
 
+    updatePassword = async (email, password, newPassword) => {
+        const credentials = {
+            email: email,
+            currentPassword: password,
+            newPassword: newPassword
+        }
+        try {
+            const res = await axios.post(`${USERS_URL}/password`, JSON.stringify(credentials), {
+                mode: "cors",
+                headers: { "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.authToken}`
+                }
+            });
+            return res.data;
+        } catch (error) {
+            processRequestError(error);
+            return error?.response?.data;
+        }
+    }
+
 }
 
 export const usersApi = new UsersAPI();

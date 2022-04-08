@@ -12,6 +12,10 @@ export const UsersList = (props) => {
         props.onEdit(op, id);
     }
 
+    const handleChangePassword = (email) => {
+        props.onChangePassword(email);
+    }
+
     const handleOnDelete = async (user) => {
         const result = await usersApi.withToken(appCtx.userData.authToken).delete(user._id);
         if (result === null) {
@@ -39,7 +43,11 @@ export const UsersList = (props) => {
             </thead>
             <tbody>
             {props.users.length > 0 && props.users.map(user => (
-                <UserRow key={user._id} user={user} onEdit={handleOnEdit} onDelete={handleOnDelete}/>
+                <UserRow key={user._id}
+                         user={user}
+                         onEdit={handleOnEdit}
+                         onDelete={handleOnDelete}
+                         onChangePassword={handleChangePassword}/>
             ))}
             </tbody>
         </Table>
