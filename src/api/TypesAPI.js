@@ -1,6 +1,6 @@
 import axios, {processRequestError} from "./axios";
 
-const TYPES_URL = "/productTypes";
+const TYPES_URL = "/types";
 
 export class TypesAPI {
 
