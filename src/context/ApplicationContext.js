@@ -19,6 +19,7 @@ export const ApplicationContextProvider = (props) => {
     const [userData, setUserData] = useState({
         userId: "",
         userEmail: "",
+        role: "",
         authToken: ""
     });
 
@@ -37,6 +38,7 @@ export const ApplicationContextProvider = (props) => {
         setUserData({
             userId: user._id,
             userEmail: user.userEmail,
+            role: user.role,
             authToken: user.authToken
         })
     }
@@ -45,6 +47,7 @@ export const ApplicationContextProvider = (props) => {
         setUserData({
             userId: "",
             userEmail: "",
+            role: "",
             authToken: ""
         });
     }
