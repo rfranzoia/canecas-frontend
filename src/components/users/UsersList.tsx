@@ -33,7 +33,7 @@ export const UsersList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th style={{ width: "10%" }}>Role</th>
+                <th style={{ width: "5%" }}>Role</th>
                 <th style={{ width: "20%" }}>Name</th>
                 <th style={{ width: "20%" }}>Email</th>
                 <th style={{ width: "15%" }}>Phone</th>

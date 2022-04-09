@@ -24,7 +24,7 @@ export const ProductsList = (props) => {
             <thead>
             <tr>
                 <th style={{ width: "20%" }}>Name</th>
-                <th style={{ width: "35%" }}>Description</th>
+                <th style={{ width: "30%" }}>Description</th>
                 <th style={{ width: "7%" }}>Price</th>
                 <th style={{ width: "15%" }}>Type</th>
                 <th style={{ width: "10%" }}>Image</th>
