@@ -80,7 +80,7 @@ export const Header = () => {
             {showLoginModal &&
                 <UserLogin show={showLoginModal} handleClose={handleClose}/>}
             {appCtx.error.show &&
-                <Alert variant="danger" onClose={handleDismissAlert} dismissible>
+                <Alert variant="danger" onClose={handleDismissAlert} dismissible transition  className="alert-top">
                     <Alert.Heading>{appCtx.error.title}</Alert.Heading>
                     <p>{appCtx.error.message}</p>
                 </Alert>
