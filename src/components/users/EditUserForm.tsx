@@ -126,6 +126,7 @@ export const EditUserForm = (props) => {
                                     name="role"
                                     required
                                     value={formData.role}
+                                    disabled={viewOnly}
                                     onChange={handleChange}>
                                     <option value="">Please Select</option>
                                     <option value="ADMIN">Admin</option>
@@ -142,6 +143,7 @@ export const EditUserForm = (props) => {
                                     placeholder="Enter your name here"
                                     name="name"
                                     value={formData.name}
+                                    disabled={viewOnly}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -154,6 +156,7 @@ export const EditUserForm = (props) => {
                                     placeholder="Enter email for login"
                                     name="email"
                                     value={formData.email}
+                                    disabled={viewOnly}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -200,6 +203,7 @@ export const EditUserForm = (props) => {
                                     placeholder="Phone"
                                     name="phone"
                                     value={formData.phone}
+                                    disabled={viewOnly}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -211,6 +215,7 @@ export const EditUserForm = (props) => {
                                     placeholder="Address"
                                     name="address"
                                     value={formData.address}
+                                    disabled={viewOnly}
                                     onChange={handleChange}
                                 />
                             </div>

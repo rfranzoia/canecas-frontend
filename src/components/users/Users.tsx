@@ -51,23 +51,13 @@ export const Users = () => {
 
     const handleDelete = () => {
         loadData().then(() => undefined);
-        setAlert({
-            show: true,
-            type: "danger",
-            title: "Delete User!",
-            message: "User has been deleted successfuly"
-        });
+        handleAlert(true, "warning", "Delete User!", "User has been deleted successfully")
     }
 
     const handlePasswordChanged = () => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
-        setAlert({
-            show: true,
-            type: "success",
-            title: "Password update!",
-            message: "User password has been updated successfuly"
-        });
+        handleAlert(true, "success", "Password Update", "User password has been updated successfully")
     }
 
     const handleShowEditModal = (op: string, id?: string) => {

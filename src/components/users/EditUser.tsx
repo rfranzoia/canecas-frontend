@@ -25,10 +25,10 @@ export const EditUser = (props) => {
             }
             if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
                 appCtx.showErrorAlert(result.name, result.description);
-                handleCancel();
             } else if (result?.statusCode === StatusCodes.BAD_REQUEST) {
                 handleCancel(result);
             }
+            handleCancel();
         };
         save(user).then(() => undefined);
     };
