@@ -29,7 +29,8 @@ export const OrderItemsList = (props) => {
 
     return (
         <div>
-            <div><h5>Items</h5></div>
+            <div><h5>Items<span aria-hidden="true"
+                                className="required">*</span></h5></div>
             <div>
                 <Modal
                     show={showModal}
