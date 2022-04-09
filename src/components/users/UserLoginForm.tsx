@@ -70,7 +70,7 @@ export const UserLoginForm = (props) => {
             </Modal.Header>
             <Modal.Body>
                 {showError.show &&
-                    <Alert variant="danger" onClose={handleHideError} dismissible>
+                    <Alert variant="danger" onClose={handleHideError} dismissible transition  className="alert-top">
                         <Alert.Heading>{showError.title}</Alert.Heading>
                         <p>{showError.message}</p>
                     </Alert>

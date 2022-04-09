@@ -1,7 +1,6 @@
 import { usersApi } from "../../api/UsersAPI";
 import { EditUserForm } from "./EditUserForm";
 import { useContext, useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
 import { ApplicationContext } from "../../context/ApplicationContext";
 import { StatusCodes } from "http-status-codes";
 
@@ -17,7 +16,7 @@ export const EditUser = (props) => {
     });
 
     const handleSaveUser = (user) => {
-        const callback = async (user) => {
+        const save = async (user) => {
             let result;
             if (props.op === "edit") {
                 result = await usersApi.withToken(appCtx.userData.authToken).update(props.id, user);
@@ -26,13 +25,16 @@ export const EditUser = (props) => {
             }
             if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
                 appCtx.showErrorAlert(result.name, result.description);
+                handleCancel();
+            } else if (result?.statusCode === StatusCodes.BAD_REQUEST) {
+                handleCancel(result);
             }
         };
-        callback(user).then(() => props.onSaveCancel());
+        save(user).then(() => undefined);
     };
 
-    const handleCancel = () => {
-        props.onSaveCancel();
+    const handleCancel = (error?) => {
+        props.onSaveCancel(error);
     };
 
     useEffect(() => {
@@ -59,8 +61,6 @@ export const EditUser = (props) => {
         });
     }, [props.id, props.op, appCtx]);
 
-    const title = props.op === "new" ? "New" : props.op === "edit" ? "Edit" : "View";
-
     const handleOp = (user) => {
         if (props.op !== "view") {
             handleSaveUser(user);
@@ -69,12 +69,7 @@ export const EditUser = (props) => {
 
     return (
         <>
-            <Card border="dark">
-                <Card.Header as="h3">{`${title} User`}</Card.Header>
-                <Card.Body>
-                    <EditUserForm user={user} op={props.op} onSaveUser={handleOp} onCancel={handleCancel} />
-                </Card.Body>
-            </Card>
+            <EditUserForm user={user} op={props.op} onSaveUser={handleOp} onCancel={handleCancel} />
         </>
     );
 };

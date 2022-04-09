@@ -3,7 +3,7 @@ import { Alert, Card, Modal} from "react-bootstrap";
 import { usersApi } from "../../api/UsersAPI";
 import { UsersList } from "./UsersList";
 import { EditUser } from "./EditUser";
-import { ApplicationContext } from "../../context/ApplicationContext";
+import {ALERT_TIMEOUT, ApplicationContext} from "../../context/ApplicationContext";
 import { StatusCodes } from "http-status-codes";
 import { CustomButton } from "../ui/CustomButton";
 import { ChangeUserPassword } from "./ChangeUserPassword";
@@ -35,7 +35,7 @@ export const Users = () => {
         if (show) {
             setTimeout(() => {
                 handleAlert(false);
-        }, 3000)}
+        }, ALERT_TIMEOUT)}
     };
 
     const loadData = async () => {
@@ -79,8 +79,11 @@ export const Users = () => {
         setShowEditModal(true);
     };
 
-    const handleCloseEditModal = () => {
+    const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
+        if (error) {
+            handleAlert(true, "danger", error.name, error.description);
+        }
     };
 
     const handleShowChangePasswordModal = (email) => {
@@ -119,7 +122,7 @@ export const Users = () => {
             {alert.show && 
             (
                 <div className="alert-top">
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible>
+                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
                         <Alert.Heading>{alert.title}</Alert.Heading>
                         <p>{alert.message}</p>
                     </Alert>

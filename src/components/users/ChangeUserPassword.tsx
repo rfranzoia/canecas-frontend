@@ -86,10 +86,10 @@ export const ChangeUserPassword = (props) => {
 
     return (
         <>
-            <Card style={{ width: "29.3rem", justifyContent: "center"}}>
+            <Card>
                 <Card.Header as="h3">Change Password</Card.Header>
                 {showError.show &&
-                    <Alert variant="danger" onClose={handleHideError} dismissible transition>
+                    <Alert variant="danger" onClose={handleHideError} dismissible transition  className="alert-top">
                         <Alert.Heading>{showError.title}</Alert.Heading>
                         <p>{showError.message}</p>
                     </Alert>
