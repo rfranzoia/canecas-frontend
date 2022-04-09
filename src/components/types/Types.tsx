@@ -60,8 +60,8 @@ export const Types = () => {
     return (
         <div className="container4">
             {alert.show && (
-                <div className="alert-top">
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible>
+                <div>
+                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
                         <Alert.Heading>{alert.title}</Alert.Heading>
                         <p>{alert.message}</p>
                     </Alert>
