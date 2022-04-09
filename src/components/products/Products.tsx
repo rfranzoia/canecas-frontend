@@ -53,7 +53,7 @@ export const Products = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            const errorDescription = error.statusCode == StatusCodes.INTERNAL_SERVER_ERROR ?
+            const errorDescription = error.statusCode === StatusCodes.INTERNAL_SERVER_ERROR ?
                     error.description.message:
                     error.description
             handleAlert(true, "danger", error.name, errorDescription);
