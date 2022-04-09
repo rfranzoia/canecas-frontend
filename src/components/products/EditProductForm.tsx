@@ -103,6 +103,20 @@ export const EditProductForm = (props) => {
         })
     }
 
+    const handleNumberInput = (e) => {
+        let {name, value} = e.target;
+        value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
+        if (isNaN(value)) {
+            value = 0;
+        }
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                [name]: Number(value).toFixed(2)
+            }
+        });
+    }
+
     useEffect(() => {
         typesApi.list()
             .then(data => {
@@ -157,9 +171,16 @@ export const EditProductForm = (props) => {
                                     <div className="form-group">
                                         <label htmlFor="price">Price<span aria-hidden="true"
                                                                           className="required">*</span></label>
-                                        <input className="form-control" id="price" name="price" required
-                                               type="number"
-                                               value={formData.price} onChange={handleChange} disabled={viewOnly}/>
+                                        <input
+                                            className="form-control"
+                                            required
+                                            type="text"
+                                            name="price"
+                                            value={formData.price}
+                                            onChange={handleChange}
+                                            style={{textAlign: "right"}}
+                                            disabled={viewOnly}
+                                            onInput={handleNumberInput}/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="type">Type<span aria-hidden="true"
