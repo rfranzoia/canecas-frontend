@@ -18,8 +18,7 @@ export class TypesAPI {
             const res = await axios.get(TYPES_URL);
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "type:list");
-            return error?.response?.data
+            return processRequestError(error, "type:list");
         }
 
     }
@@ -29,8 +28,7 @@ export class TypesAPI {
             const res = await axios.get(`${TYPES_URL}/${id}`);
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "type:get");
-            return error?.response?.data
+            return processRequestError(error, "type:get");
         }
     }
 
@@ -43,8 +41,7 @@ export class TypesAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "type:create");
-            return error?.response?.data
+            return processRequestError(error, "type:create");
         }
 
     }
@@ -59,8 +56,7 @@ export class TypesAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "type:update");
-            return error?.response?.data
+            return processRequestError(error, "type:update");
         }
     }
 
@@ -71,10 +67,9 @@ export class TypesAPI {
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
-            return true;
+            return null;
         } catch (error: any) {
-            processRequestError(error, "type:delete");
-            return false
+            return processRequestError(error, "type:delete");
         }
     }
 

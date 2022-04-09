@@ -22,8 +22,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "user:list");
-            return error?.response?.data
+            return processRequestError(error, "user:list");
         }
 
     }
@@ -37,8 +36,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "user:get");
-            return error?.response?.data
+            return processRequestError(error, "user:get");
         }
     }
 
@@ -50,8 +48,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "user:create");
-            return error?.response?.data;
+            return processRequestError(error, "user:create");
         }
 
     }
@@ -65,8 +62,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "user:update");
-            return error?.response?.data
+            return processRequestError(error, "user:update");
         }
     }
 
@@ -79,8 +75,7 @@ export class UsersAPI {
             });
             return null;
         } catch (error: any) {
-            processRequestError(error, "user:delete");
-            return error?.response?.data
+            return processRequestError(error, "user:delete");
         }
     }
 
@@ -95,8 +90,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error);
-            return error?.response?.data;
+            return processRequestError(error);
         }
     }
 
@@ -114,8 +108,7 @@ export class UsersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error);
-            return error?.response?.data;
+            return processRequestError(error);
         }
     }
 

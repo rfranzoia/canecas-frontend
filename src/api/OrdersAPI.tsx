@@ -22,8 +22,7 @@ export class OrdersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "order:list");
-            return error?.response?.data
+            return processRequestError(error, "order:list");
         }
 
     }
@@ -38,8 +37,7 @@ export class OrdersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "order:get");
-            return error?.response?.data
+            return processRequestError(error, "order:get");
         }
     }
 
@@ -53,8 +51,7 @@ export class OrdersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error);
-            return error?.response?.data
+            return processRequestError(error);
         }
 
     }
@@ -69,8 +66,7 @@ export class OrdersAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "order:update");
-            return error?.response?.data;
+            return processRequestError(error, "order:update");
         }
     }
 
@@ -84,8 +80,7 @@ export class OrdersAPI {
             });
             return null;
         } catch (error: any) {
-            processRequestError(error, "order:delete");
-            return error?.response?.data
+            return processRequestError(error, "order:delete");
         }
     }
 

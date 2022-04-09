@@ -18,8 +18,7 @@ export class ProductsAPI {
             const res = await axios.get(PRODUCTS_URL);
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "product:list");
-            return error?.response?.data
+            return processRequestError(error, "product:list");
         }
 
     }
@@ -29,8 +28,7 @@ export class ProductsAPI {
             const res = await axios.get(`${PRODUCTS_URL}/productType/${type}`);
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "product:get");
-            return error?.response?.data
+            return processRequestError(error, "product:get");
         }
     }
 
@@ -39,8 +37,7 @@ export class ProductsAPI {
             const res = await axios.get(`${PRODUCTS_URL}/${id}`);
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "product:get");
-            return error?.response?.data
+            return processRequestError(error, "product:get");
         }
     }
 
@@ -53,8 +50,7 @@ export class ProductsAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "product:create");
-            return error?.response?.data
+            return processRequestError(error, "product:create");
         }
 
     }
@@ -68,8 +64,7 @@ export class ProductsAPI {
             });
             return res.data;
         } catch (error: any) {
-            processRequestError(error, "product:update");
-            return error?.response?.data
+            return processRequestError(error, "product:update");
         }
     }
 

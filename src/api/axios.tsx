@@ -5,7 +5,7 @@ export default axios.create({
     baseURL: 'http://192.168.1.116:3500/api'
 });
 
-export const processRequestError = (error: any, method: string = "", callback = () => undefined) => {
+export const processRequestError = (error: any, method: string = "") => {
     if (error?.response?.status === StatusCodes.UNAUTHORIZED) {
         console.error(`Unauthorized access from ${method}`, error?.response?.data);
 
@@ -21,6 +21,6 @@ export const processRequestError = (error: any, method: string = "", callback = 
     } else {
         console.error(`Error from ${method}`, error);
     }
-    callback();
+    return error?.response?.data;
 }
 
