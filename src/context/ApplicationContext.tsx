@@ -41,6 +41,9 @@ const defaultValue: AppCtx = {
     showErrorAlert: () => {},
     hideErrorAlert: () => {}
 }
+
+export const ALERT_TIMEOUT = 3 * 1000;
+
 export const ApplicationContext = createContext(defaultValue);
 
 export const ApplicationContextProvider = (props) => {
