@@ -2,6 +2,7 @@ import {productsApi} from "../../api/ProductsAPI";
 import {EditProductForm} from "./EditProductForm";
 import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {StatusCodes} from "http-status-codes";
 
 export const EditProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -14,20 +15,30 @@ export const EditProduct = (props) => {
     });
 
     const handleSaveProduct = (product) => {
-        const callback = async (product) => {
+        const save = async (product) => {
+            let result;
             if (props.op === "edit") {
-                await productsApi.withToken(appCtx.userData.authToken).update(props.id, product)
+                result = await productsApi.withToken(appCtx.userData.authToken).update(props.id, product)
             } else if (props.op === "new") {
-                await productsApi.withToken(appCtx.userData.authToken).create(product);
+                result = await productsApi.withToken(appCtx.userData.authToken).create(product);
+            }
+            if (result.statusCode) {
+                if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
+                    handleCancel();
+                } else if (result.statusCode === StatusCodes.BAD_REQUEST) {
+                    handleCancel(result)
+                } else if (result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
+                    handleCancel(result);
+                }
             }
         }
-        callback(product)
-            .then(() => props.onSaveCancel());
-
+        save(product)
+            .then(() => undefined);
     }
 
-    const handleCancel = () => {
-        props.onSaveCancel();
+    const handleCancel = (error?) => {
+        props.onSaveCancel(error);
     }
 
     useEffect(() => {
@@ -52,9 +63,6 @@ export const EditProduct = (props) => {
 
     }, [props.id, props.op]);
 
-    const title = props.op === "new" ? "New" :
-        props.op === "edit" ? "Edit" : "View";
-
     const handleOp = (product) => {
         if (props.op !== "view") {
             handleSaveProduct(product);
@@ -62,14 +70,8 @@ export const EditProduct = (props) => {
     }
 
     return (
-        <div style={{padding: "0.3rem", border: "solid"}}>
-            <div style={{backgroundColor: "#f1f1f1", verticalAlign: "middle", display: "flex"}}>
-                <h3>{`${title} Product`}</h3>
-                <hr/>
-            </div>
-            <div>
-                <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
-            </div>
-        </div>
+        <>
+            <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
+        </>
     );
 }

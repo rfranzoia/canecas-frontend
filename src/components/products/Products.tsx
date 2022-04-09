@@ -4,6 +4,8 @@ import {productsApi} from "../../api/ProductsAPI";
 import {ProductsList} from "./ProductsList";
 import {EditProduct} from "./EditProduct";
 import {CustomButton} from "../ui/CustomButton";
+import {StatusCodes} from "http-status-codes";
+import {ALERT_TIMEOUT} from "../../context/ApplicationContext";
 
 export const Products = () => {
     const [products, setProducts] = useState([]);
@@ -30,14 +32,14 @@ export const Products = () => {
         if (show) {
             setTimeout(() => {
                 handleAlert(false);
-        }, 3000)}
+        }, ALERT_TIMEOUT)}
     };
 
     const handleDelete = () => {
         productsApi.list().then((data) => {
             setProducts(data);
         });
-        handleAlert(true, "danger", "Delete Product", "Product has been deleted successfuly")
+        handleAlert(true, "danger", "Delete Product", "Product has been deleted successfully");
     }
 
     const handleShowEditModal = (op: string, id?: string) => {
@@ -48,8 +50,14 @@ export const Products = () => {
         setShowEditModal(true);
     }
 
-    const handleCloseEditModal = () => {
+    const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
+        if (error) {
+            const errorDescription = error.statusCode == StatusCodes.INTERNAL_SERVER_ERROR ?
+                    error.description.message:
+                    error.description
+            handleAlert(true, "danger", error.name, errorDescription);
+        }
     }
 
     useEffect(() => {
@@ -65,8 +73,8 @@ export const Products = () => {
     return (
         <div className="container4">
             {alert.show && (
-                <div className="alert-top">
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible>
+                <div>
+                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
                         <Alert.Heading>{alert.title}</Alert.Heading>
                         <p>{alert.message}</p>
                     </Alert>
