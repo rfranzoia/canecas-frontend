@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import { Alert, Card, Modal } from "react-bootstrap";
-import { typesApi } from "../../api/TypesAPI";
-import { TypesList } from "./TypesList";
-import { EditType } from "./EditType";
-import { CustomButton } from "../ui/CustomButton";
+import {useEffect, useState} from "react";
+import {Alert, Card, Modal} from "react-bootstrap";
+import {typesApi} from "../../api/TypesAPI";
+import {TypesList} from "./TypesList";
+import {EditType} from "./EditType";
+import {CustomButton} from "../ui/CustomButton";
 
 export const Types = () => {
     const [types, setTypes] = useState([]);
@@ -29,7 +29,8 @@ export const Types = () => {
         if (show) {
             setTimeout(() => {
                 handleAlert(false);
-        }, 3000)}
+            }, 3000)
+        }
     };
 
     const handleDelete = () => {
@@ -61,7 +62,8 @@ export const Types = () => {
         <div className="container4">
             {alert.show && (
                 <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
+                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition
+                           className="alert-top">
                         <Alert.Heading>{alert.title}</Alert.Heading>
                         <p>{alert.message}</p>
                     </Alert>
@@ -76,11 +78,11 @@ export const Types = () => {
                                 caption="New Type"
                                 type="new"
                                 customClass="fa fa-industry"
-                                onClick={() => handleShowEditModal("new")} />
+                                onClick={() => handleShowEditModal("new")}/>
                         </Card.Title>
-                        <TypesList 
-                            types={types} 
-                            onDelete={handleDelete} 
+                        <TypesList
+                            types={types}
+                            onDelete={handleDelete}
                             onEdit={handleShowEditModal}/>
                     </Card.Body>
                 </Card>
@@ -91,7 +93,7 @@ export const Types = () => {
                     onHide={handleCloseEditModal}
                     backdrop="static"
                     centered
-                    style={{ justifyItems: "center", margin: "auto"}}
+                    style={{justifyItems: "center", margin: "auto"}}
                     size="lg"
                     keyboard={true}>
                     <Modal.Body>
