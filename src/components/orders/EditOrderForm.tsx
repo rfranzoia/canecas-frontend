@@ -7,7 +7,7 @@ import {StatusChangeList} from "./history/StatusChangeList";
 import {CustomButton} from "../ui/CustomButton";
 import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
 
-export const FormEditOrder = (props) => {
+export const EditOrderForm = (props) => {
     const order = props.order;
     const [formData, setFormData] = useState({
         _id: "",

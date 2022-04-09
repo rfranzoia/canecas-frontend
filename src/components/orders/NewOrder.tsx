@@ -73,6 +73,7 @@ export const NewOrder = () => {
 
     const handleSave = (event) => {
         event.preventDefault();
+        if (!isValidData()) return;
         const order: Order = {
             orderDate: new Date(formData.orderDate),
             userEmail: formData.userEmail,
@@ -84,11 +85,21 @@ export const NewOrder = () => {
                 if (result._id) {
                     handleCancel();
                 } else {
-                    const error = result?.response?.data
+                    const error = result?.response?.data;
                     appCtx.showErrorAlert(error.name, error.description);
                 }
             })
 
+    }
+
+    const isValidData = (): boolean => {
+        const { userEmail, orderDate, items } = formData;
+        if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
+            items.length === 0) {
+            handleAlert(true, "danger", "Validation Error!", "The customer email, order date and items must be provided");
+            return false;
+        }
+        return true;
     }
 
     const handleCancel = () => {
@@ -111,7 +122,7 @@ export const NewOrder = () => {
                 <Col>
                     {alert.show && (
                         <div>
-                            <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible>
+                            <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
                                 <Alert.Heading>{alert.title}</Alert.Heading>
                                 <p>{alert.message}</p>
                             </Alert>
@@ -127,16 +138,18 @@ export const NewOrder = () => {
                                     <Row>
                                         <Col>
                                             <div className="form-group">
-                                                <label htmlFor="userEmail">Customer Email</label>
+                                                <label htmlFor="userEmail">Customer Email<span aria-hidden="true"
+                                                                                               className="required">*</span></label>
                                                 <input className="form-control" id="userEmail" name="userEmail" required type="text"
-                                                       value={formData.userEmail} onChange={handleChange}/>
+                                                       value={formData.userEmail} onChange={handleChange} placeholder="Enter the Customer Email"/>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col>
                                             <div className="form-group">
-                                                <label htmlFor="orderDate">Date</label>
+                                                <label htmlFor="orderDate">Date<span aria-hidden="true"
+                                                                                     className="required">*</span></label>
                                                 <input className="form-control" id="orderDate" name="orderDate" required type="date"
                                                        value={formData.orderDate} onChange={handleChange}/>
                                             </div>
@@ -166,6 +179,9 @@ export const NewOrder = () => {
                                             <CustomButton caption="Save" type="save" onClick={handleSave}/>
                                             <span>&nbsp;</span>
                                             <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                                            <p aria-hidden="true" id="required-description">
+                                                <span aria-hidden="true" className="required">*</span>Required field(s)
+                                            </p>
                                         </Col>
                                     </Row>
 

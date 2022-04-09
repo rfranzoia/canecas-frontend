@@ -1,7 +1,7 @@
 import {ordersApi} from "../../api/OrdersAPI";
 import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
-import {FormEditOrder} from "./FormEditOrder";
+import {EditOrderForm} from "./EditOrderForm";
 import {useHistory, useParams} from "react-router-dom";
 import {InformationToast} from "../ui/InformationToast";
 import {StatusCodes} from "http-status-codes";
@@ -97,7 +97,7 @@ export const EditOrder = (props) => {
     return (
         <>
             <div>
-                <FormEditOrder title={title} order={order} op={op} onSaveOrder={handleOp} onCancel={handleCancel}/>
+                <EditOrderForm title={title} order={order} op={op} onSaveOrder={handleOp} onCancel={handleCancel}/>
             </div>
             <div>
                 <InformationToast
