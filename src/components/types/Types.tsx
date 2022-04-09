@@ -54,8 +54,11 @@ export const Types = () => {
         setShowEditModal(true);
     };
 
-    const handleCloseEditModal = () => {
+    const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
+        if (error) {
+            handleAlert(true, "danger", error.name, error.description);
+        }
     };
 
     return (

@@ -3,6 +3,7 @@ import {EditTypeForm} from "./EditTypeForm";
 import {useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {StatusCodes} from "http-status-codes";
 
 export const EditType = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -13,19 +14,30 @@ export const EditType = (props) => {
 
     const handleSaveType = (type) => {
         const callback = async (type) => {
+            let result;
             if (props.op === "edit") {
-                await typesApi.withToken(appCtx.userData.authToken).update(props.id, type)
+                result = await typesApi.withToken(appCtx.userData.authToken).update(props.id, type)
             } else if (props.op === "new") {
-                await typesApi.withToken(appCtx.userData.authToken).create(type);
+                result = await typesApi.withToken(appCtx.userData.authToken).create(type);
+            }
+            if (result.statusCode) {
+                if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
+                    handleCancel();
+                } else if (result.statusCode === StatusCodes.BAD_REQUEST) {
+                    handleCancel(result)
+                } else if (result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
+                    handleCancel(result);
+                }
             }
         }
         callback(type)
-            .then(() => props.onSaveCancel());
+            .then(() => undefined);
 
     }
 
-    const handleCancel = () => {
-        props.onSaveCancel();
+    const handleCancel = (error?) => {
+        props.onSaveCancel(error);
     }
 
     useEffect(() => {
