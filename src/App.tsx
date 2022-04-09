@@ -7,9 +7,9 @@ import { Users } from "./components/users/Users";
 import { Layout } from "./components/layout/Layout";
 import { Products } from "./components/products/Products";
 import { Orders } from "./components/orders/Orders";
-import { Home } from "./Home";
 import { NewOrder } from "./components/orders/NewOrder";
 import { EditOrder } from "./components/orders/EditOrder";
+import {Home} from "./components/layout/Home";
 
 function App() {
     return (
