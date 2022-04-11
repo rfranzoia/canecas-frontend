@@ -24,25 +24,15 @@ export const MasterDetail = () => {
         if (!appCtx.userData.authToken) {
             return;
         }
-        ordersApi
-            .withToken(appCtx.userData.authToken)
-            .list()
-            .then((result) => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                    setOrders([]);
-                } else {
-                    setOrders(result);
-                }
-            });
+        loadOrders();
     }, [appCtx]);
 
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
+            loadOrders();
         }
-    },[appCtx.alert.show])
+    }, [appCtx.alert.show])
 
     const handleEdit = (op: string, orderId: string) => {
         setEdit({
@@ -62,7 +52,6 @@ export const MasterDetail = () => {
                     setShowAlert(true);
                     setOrders([]);
                 } else {
-                    console.log("loading...")
                     setOrders(result);
                 }
             });
@@ -86,6 +75,61 @@ export const MasterDetail = () => {
         });
     }
 
+    const updateOrder = async (orderId: string, order) => {
+        const result = await ordersApi.withToken(appCtx.userData.authToken).update(orderId, order);
+        if (result._id === orderId) {
+            // do nothing
+        } else if (result.statusCode) {
+            if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+                appCtx.showErrorAlert(result.name, result.description);
+
+            } else if (result.statusCode === StatusCodes.BAD_REQUEST ||
+                result.statusCode === StatusCodes.NOT_FOUND ||
+                result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
+                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+            }
+            handleEditCancel();
+        }
+    }
+
+    const handleConfirmOrder = (orderId) => {
+        const o = {
+            status: OrderStatus.CONFIRMED
+        }
+        updateOrder(orderId, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm Order", `Order '${orderId}' updated successfully`);
+                setShowAlert(true);
+                loadOrders();
+            });
+    }
+
+    const handleCancelOrder = (orderId, cancelReason) => {
+        const o = {
+            status: OrderStatus.CANCELED,
+            statusReason: cancelReason
+        }
+        updateOrder(orderId, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
+                setShowAlert(true);
+                loadOrders();
+            });
+    }
+
+    const handleForwardOrder = (order, forwardReason) => {
+        const o = {
+            status: findNextOrderStatus(order.status),
+            statusReason: forwardReason
+        }
+        updateOrder(order._id, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+                setShowAlert(true);
+                loadOrders();
+            });
+    }
+
     const handleDeleteOrder = async (orderId) => {
         if (!appCtx.userData.authToken) return;
         ordersApi.withToken(appCtx.userData.authToken).delete(orderId)
@@ -101,66 +145,12 @@ export const MasterDetail = () => {
             })
     }
 
-    const handleConfirmOrder = (orderId) => {
-        const o = {
-            status: OrderStatus.CONFIRMED
-        }
-        ordersApi.update(orderId, o)
-            .then((o) => {
-                if (o) {
-                    appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm Order", `Order '${orderId}' updated successfully`);
-                    setShowAlert(true);
-                    loadOrders();
-                }
-            });
-    }
-
-    const handleCancelOrder = (orderId, cancelReason) => {
-        console.log("md 119", cancelReason)
-        const o = {
-            status: OrderStatus.CANCELED,
-            statusReason: cancelReason
-        }
-        console.log("order being sent", o)
-        ordersApi.update(orderId, o)
-            .then((result) => {
-                loadOrders();
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    handleEditCancel();
-                } else if (result.statusCode && result.statusCode === StatusCodes.BAD_REQUEST) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    handleEditCancel();
-                } else if (result.statusCode && result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    handleEditCancel();
-                } else {
-                    appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
-                    setShowAlert(true);
-                }
-            });
-    }
-
-    const handleForwardOrder = (order) => {
-        const o = {
-            status: findNextOrderStatus(order.status)
-        }
-        ordersApi.update(order._id, o)
-            .then((o) => {
-                if (o) {
-                    appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
-                    setShowAlert(true);
-                    loadOrders();
-                }
-            });
-    }
-
     const listing = (
         <div>
             {showAlert &&
-                <AlertToast />
+                <AlertToast/>
             }
-            <Card border="dark" style={{ margin: "1rem"}}>
+            <Card border="dark" style={{margin: "1rem"}}>
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
                     <div>
@@ -168,13 +158,13 @@ export const MasterDetail = () => {
                             caption="New Order"
                             type="new"
                             customClass="fa fa-file-invoice"
-                            onClick={() => handleEdit("new", "")} />
+                            onClick={() => handleEdit("new", "")}/>
                     </div>
                     {orders.map(order => {
                         return (
                             <Master key={order._id} order={order} onEditOrder={handleEdit}
-                                onDelete={handleDeleteOrder} onConfirm={handleConfirmOrder}
-                                    onForward={handleForwardOrder} onCancelOrder={handleCancelOrder}/>
+                                    onDelete={handleDeleteOrder} onConfirm={handleConfirmOrder}
+                                    onForwardOrder={handleForwardOrder} onCancelOrder={handleCancelOrder}/>
                         );
                     })}
                 </Card.Body>
@@ -192,8 +182,8 @@ export const MasterDetail = () => {
                 centered
                 keyboard={true}>
                 <Modal.Body>
-                    {edit.op === "new"?
-                        <NewOrder onSave={handleEditSave} onCancel={handleEditCancel} />:
+                    {edit.op === "new" ?
+                        <NewOrder onSave={handleEditSave} onCancel={handleEditCancel}/> :
                         <EditOrder id={edit.orderId} op={edit.op} onSave={handleEditSave} onCancel={handleEditCancel}/>
                     }
                 </Modal.Body>

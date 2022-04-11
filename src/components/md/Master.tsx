@@ -1,5 +1,5 @@
 import classes from "./MasterDetail.module.css";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {ButtonAction, getActionIcon} from "./Actions";
 import {Details} from "./Details";
@@ -9,16 +9,25 @@ import {ConfirmModal} from "../ui/ConfirmModal";
 
 export const Master = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const [order, setOrder] = useState(props.order);
+    const [order, setOrder] = useState({
+        _id: "",
+        orderDate: "",
+        userEmail: "",
+        status: 0,
+        statusReason: "",
+        totalPrice: 0,
+        items: [],
+        statusHistory: []
+    });
     const [showItems, setShowItems] = useState(false);
-    const [cancelReason, setCancelReason] = useState("");
+    const [updateReason, setUpdateReason] = useState("");
     const [confirmationDialog, setConfirmationDialog] = useState({
             show: false,
             title: "",
             message: "",
             hasData: false,
             op: "",
-            onConfirm: () => undefined,
+            onConfirm: (param: string) => undefined,
             onCancel: () => undefined
         }
     );
@@ -55,17 +64,17 @@ export const Master = (props) => {
                         from ${OrderStatus[order.status]} to ${OrderStatus[findNextOrderStatus(order.status)]}'?`,
             hasData: true,
             op: "update",
-            onConfirm: () => handleConfirmForward(),
+            onConfirm: (param) => handleConfirmForward(param),
             onCancel: () => handleCloseDialog()
         });
     }
 
     const handleChangeReason = (event) => {
-        setCancelReason(event.target.value);
+        setUpdateReason(event.target.value);
         setOrder(prevStatus => {
             return {
                 ...prevStatus,
-                statusReason: cancelReason
+                statusReason: updateReason
             }
         })
     }
@@ -85,10 +94,11 @@ export const Master = (props) => {
             setConfirmationDialog({
                 show: true,
                 title: "Cancel Order",
-                message: "",
+                message: `Are you sure you want to CANCEL the order # '${order._id}'?,
+                            this action cannot be undone`,
                 hasData: true,
                 op: "cancel",
-                onConfirm: () => handleConfirmCancel(cancelReason),
+                onConfirm: (param) => handleConfirmCancel(param),
                 onCancel: () => handleCloseDialog()
             });
         }
@@ -117,16 +127,14 @@ export const Master = (props) => {
         props.onConfirm(order._id);
         handleCloseDialog();
     }
-    const handleConfirmForward = () => {
-        props.onForward(order);
+    const handleConfirmForward = (updateReason) => {
+        props.onForwardOrder(order, updateReason);
         handleCloseDialog();
     }
-    const handleConfirmCancel = (param) => {
-        console.log("master 125", param)
-        props.onCancelOrder(order._id, param);
+    const handleConfirmCancel = (cancelReason) => {
+        props.onCancelOrder(order._id, cancelReason);
         handleCloseDialog();
     }
-
 
     const canCancelOrder =
         (appCtx.userData.role === Role.ADMIN && order.status > OrderStatus.NEW && order.status < OrderStatus.FINISHED) ||
@@ -134,14 +142,14 @@ export const Master = (props) => {
 
     const actions =
             <td width="15%" align="right">
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail == appCtx.userData.userEmail) &&
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.EDIT,
                         "Edit Order",
                         order.status === OrderStatus.NEW,
                         () => handleEditOrder(order._id))
                 }
                 <span>&nbsp;</span>
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail == appCtx.userData.userEmail) &&
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                         getActionIcon(order.status === OrderStatus.NEW?
                                 ButtonAction.DELETE:
                                 ButtonAction.CANCEL_ITEM,
@@ -150,7 +158,7 @@ export const Master = (props) => {
                             () => handleDeleteOrCancel())
                 }
                 <span>&nbsp;</span>
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail == appCtx.userData.userEmail) &&
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.USER_CHECK,
                     "Confirm Order",
                     order.status === OrderStatus.NEW,
@@ -162,6 +170,10 @@ export const Master = (props) => {
                     (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
                     () => handleMoveForward())}
             </td>
+
+    useEffect(() => {
+        setOrder(props.order);
+    }, [props.order]);
 
     return (
         <div className={classes.card}>
@@ -190,20 +202,19 @@ export const Master = (props) => {
             {showItems && (
                 <Details items={order.items}/>
             )}
-            {confirmationDialog.op === "cancel" && (
+            {(confirmationDialog.op === "cancel" || confirmationDialog.op === "update") && (
                 <ConfirmModal show={confirmationDialog.show} handleClose={confirmationDialog.onCancel}
-                    handleConfirm={() => handleConfirmCancel(cancelReason)} hasData={confirmationDialog.hasData}>
+                    handleConfirm={() => confirmationDialog.onConfirm(updateReason)} hasData={confirmationDialog.hasData}>
                     <form>
-                        <p>`Are you sure you want to CANCEL the order # '${order._id}'?,
-                            this action cannot be undone`</p>
+                        <p>{confirmationDialog.message}</p>
                         <div className="form-group">
                             <label>Reason</label>
-                            <input className="form-control" value={cancelReason} onChange={handleChangeReason} />
+                            <input className="form-control" value={updateReason} onChange={handleChangeReason} />
                         </div>
                     </form>
                 </ConfirmModal>
             )}
-            {confirmationDialog.op !== "cancel" && (
+            {(confirmationDialog.op !== "cancel" && confirmationDialog.op !== "update") && (
                 <ConfirmModal
                     show={confirmationDialog.show}
                     handleClose={confirmationDialog.onCancel}
