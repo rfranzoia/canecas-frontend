@@ -14,6 +14,19 @@ body {
     flex-direction: column;
 }
 
+.floating {
+    background-color: white;
+    height: auto;
+    position: absolute;
+    z-index: 9;
+    margin: 3rem 3rem;
+    padding: 0.5rem;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
 .alert-top {
     position: absolute;
     width: 40rem;
@@ -24,6 +37,10 @@ body {
     flex-direction: column;
     margin: auto;
     box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
+.centered-text {
+    text-align: center;
 }
 
 .shadowed {
@@ -59,4 +76,25 @@ textarea {
 .required {
     color: red;
 }
+
+.local-card {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.75);
+    padding: 1rem;
+    width: auto;
+    margin: 0.5rem auto;
+}
+.local-container:hover {
+    background-color: #f1f1f1;
+}
+
+.local-container {
+    width: auto;
+    margin: 0.5rem auto;
+    background-color: white;
+    border-radius: 4px;
+}
+
+
 
