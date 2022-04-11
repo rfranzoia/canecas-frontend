@@ -27,6 +27,7 @@ export const orderStatusAsArray = (): number[] => {
 }
 
 export interface Order {
+    _id?: string,
     orderDate?: Date,
     userEmail?: string,
     status?: number,
