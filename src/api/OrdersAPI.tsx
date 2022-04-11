@@ -3,6 +3,10 @@ import {Order, OrderItem} from "../domain/Order";
 
 const ORDERS_URL = "/orders";
 
+export const DEFAULT_PAGE_SIZE = 7;
+export const DEFAULT_BOUNDARIES = 1;
+export const DEFAULT_AROUND = 1;
+
 export class OrdersAPI {
 
     authToken: string = "";
@@ -12,9 +16,24 @@ export class OrdersAPI {
         return this;
     }
 
-    list = async () => {
+    count = async () => {
         try {
-            const res = await axios.get(ORDERS_URL, {
+            const res = await axios.get(`${ORDERS_URL}/count`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.authToken}`
+                }
+            });
+            return res.data;
+        } catch (error: any) {
+            return processRequestError(error, "order:list");
+        }
+
+    }
+
+    list = async (currPage: number = 1) => {
+        try {
+            const res = await axios.get(`${ORDERS_URL}?pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
