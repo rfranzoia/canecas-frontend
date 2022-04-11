@@ -6,10 +6,10 @@ import { UserRegisterForm } from "./components/users/UserRegisterForm";
 import { Users } from "./components/users/Users";
 import { Layout } from "./components/layout/Layout";
 import { Products } from "./components/products/Products";
-import { Orders } from "./components/orders/Orders";
 import { NewOrder } from "./components/orders/NewOrder";
 import { EditOrder } from "./components/orders/EditOrder";
 import {Home} from "./components/layout/Home";
+import {MasterDetail} from "./components/md/MasterDetail";
 
 function App() {
     return (
@@ -19,7 +19,7 @@ function App() {
                 <ProtectedRoute exact path="/types" component={Types} />
                 <ProtectedRoute exact path="/products" component={Products} />
                 <ProtectedRoute exact path="/users" component={Users} />
-                <ProtectedRoute exact path="/orders" component={Orders} />
+                <ProtectedRoute exact path="/orders" component={MasterDetail} />
                 <ProtectedRoute exact path="/orders/new" component={NewOrder} />
                 <ProtectedRoute exact path="/orders/:id" component={EditOrder} />
                 <Route path="/users/create" exact><UserRegisterForm/></Route>
