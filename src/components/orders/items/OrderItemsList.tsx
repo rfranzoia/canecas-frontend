@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import { Modal, Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
 import {NewOrderItem} from "./NewOrderItem";
-import {BiAddToQueue} from "react-icons/all";
+import {MdPostAdd} from "react-icons/all";
 
 export const OrderItemsList = (props) => {
     const [orderItems, setOrderItems] = useState([]);
@@ -58,16 +58,18 @@ export const OrderItemsList = (props) => {
                     </tbody>
                 </Table>
             </div>
-            <div>
-                <hr />
-                <BiAddToQueue
-                    onClick={handleShowModal}
-                    style={props.viewOnly && { pointerEvents: "none" }}
-                    title="Add Item"
-                    size="2em"
-                    cursor="pointer"
-                    color={props.viewOnly?"#a2a0a0":"blue"}/>
-            </div>
+            {!props.viewOnly &&
+                <div>
+                    <hr />
+                    <MdPostAdd
+                        onClick={handleShowModal}
+                        style={props.viewOnly && { pointerEvents: "none" }}
+                        title="Add Item"
+                        size="2em"
+                        cursor="pointer"
+                        color={props.viewOnly?"#a2a0a0":"blue"}/>
+                </div>
+            }
         </div>
     )
 }

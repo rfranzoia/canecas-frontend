@@ -1,37 +1,19 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {productsApi} from "../../../api/ProductsAPI";
-import {Alert, Card, Col, Container, Form, Row} from "react-bootstrap";
+import {Card, Col, Container, Form, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {CustomButton} from "../../ui/CustomButton";
+import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
+import {AlertToast} from "../../ui/AlertToast";
 
 export const NewOrderItem = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
         amount: 0
     });
-
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: "",
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message,
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, 3000);
-        }
-    };
 
     useEffect(() => {
         const load = async () => {
@@ -70,15 +52,15 @@ export const NewOrderItem = (props) => {
         const { product, price, amount } = formData;
         if (product.trim().length === 0 || price.toString().trim().length === 0 ||
             amount.toString().trim().length === 0) {
-            handleAlert(true, "danger", "Validation Error!", "Product, price and amount must be provided!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, price and amount must be provided!");
             return false;
         }
         if (isNaN(price) || isNaN(amount)) {
-            handleAlert(true, "danger", "Validation Error!", "Price and Amount must be valid numbers!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Price and Amount must be valid numbers!");
             return false;
         }
         if (price <= 0 || amount <= 0) {
-            handleAlert(true, "danger", "Validation Error!", "Product, price and amount must be greater than zero!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, price and amount must be greater than zero!");
             return false;
         }
         return true;
@@ -122,14 +104,7 @@ export const NewOrderItem = (props) => {
 
     return (
         <>
-            {alert.show && (
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            )}
+            <AlertToast />
             <Card border="dark" className="align-content-center" style={{width: '29.2rem'}}>
                 <Card.Body>
                     <Container>
