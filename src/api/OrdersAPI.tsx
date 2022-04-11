@@ -1,5 +1,5 @@
 import axios, {processRequestError} from "./axios";
-import { Order } from "../domain/Order";
+import {Order, OrderItem} from "../domain/Order";
 
 const ORDERS_URL = "/orders";
 
@@ -82,6 +82,12 @@ export class OrdersAPI {
         } catch (error: any) {
             return processRequestError(error, "order:delete");
         }
+    }
+
+    evaluateTotalPrice = (items: OrderItem[]) => {
+        return items.reduce((acc, item) => {
+            return acc + (item.price * item.amount);
+        }, 0);
     }
 
 }
