@@ -42,6 +42,7 @@ export const UserLoginForm = (props) => {
                 userId: res._id,
                 userEmail: res.email,
                 authToken: res.authToken,
+                role: res.role
             });
             props.handleClose();
             history.replace("/");

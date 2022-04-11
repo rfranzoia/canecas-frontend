@@ -1,43 +1,28 @@
-import {useEffect, useState} from "react";
-import {Alert, Card, Modal} from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import {Card, Modal} from "react-bootstrap";
 import {typesApi} from "../../api/TypesAPI";
 import {TypesList} from "./TypesList";
 import {EditType} from "./EditType";
 import {CustomButton} from "../ui/CustomButton";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertToast} from "../ui/AlertToast";
 
 export const Types = () => {
+    const appCtx = useContext(ApplicationContext);
     const [types, setTypes] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     const [editViewOp, setEditViewOp] = useState({
         typeId: "",
         op: "",
     });
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: "",
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message,
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, 3000)
-        }
-    };
 
     const handleDelete = () => {
         typesApi.list().then((data) => {
             setTypes(data);
         });
-        handleAlert(true, "danger", "Delete Type", "Type has been deleted successfuly")
+        appCtx.handleAlert(true, AlertType.WARNING, "Delete Type", "Type has been deleted successfully")
+        setShowAlert(true);
     }
 
     useEffect(() => {
@@ -45,6 +30,12 @@ export const Types = () => {
             setTypes(data);
         });
     }, [showEditModal]);
+
+    useEffect(() => {
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+    },[appCtx.alert.show])
 
     const handleShowEditModal = (op: string, id?: string) => {
         setEditViewOp({
@@ -57,21 +48,14 @@ export const Types = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            handleAlert(true, "danger", error.name, error.description);
+            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+            setShowAlert(true);
         }
     };
 
     return (
         <div className="container4">
-            {alert.show && (
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition
-                           className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            )}
+            {showAlert && <AlertToast/>}
             <div>
                 <Card border="dark" className="align-content-center">
                     <Card.Header as="h3">Types</Card.Header>

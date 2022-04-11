@@ -1,9 +1,11 @@
-import {useEffect, useState} from "react";
-import {Alert, Card} from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import {Card} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
-import {ALERT_TIMEOUT} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertToast} from "../ui/AlertToast";
 
 export const EditUserForm = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const user = props.user;
     const viewOnly = props.op === "view";
     const isEdit = props.op === "edit";
@@ -16,13 +18,6 @@ export const EditUserForm = (props) => {
         confirmPassword: "",
         phone: "",
         address: "",
-    });
-
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: ""
     });
 
     const handleSave = (event) => {
@@ -46,32 +41,18 @@ export const EditUserForm = (props) => {
 
         if (role.trim().length === 0 || name.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
-            handleAlert(true, "danger", "Validation Error", "Role, Name, Email and Password are required!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Role, Name, Email and Password are required!");
             return false;
         }
 
         if (!isEdit) {
             if (password !== confirmPassword) {
-                handleAlert(true, "danger", "Validation Error", "Password and Password confirmation don't match!");
+                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
                 return false;
             }
         }
 
         return true;
-    }
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, ALERT_TIMEOUT)
-        }
     }
 
     const handleCancel = (event) => {
@@ -106,14 +87,7 @@ export const EditUserForm = (props) => {
     return (
         <>
             <div>
-                {alert.show &&
-                    <div>
-                        <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                            <Alert.Heading>{alert.title}</Alert.Heading>
-                            <p>{alert.message}</p>
-                        </Alert>
-                    </div>
-                }
+                <AlertToast />
                 <Card border="dark">
                     <Card.Header as="h3">{`${title} User`}</Card.Header>
                     <Card.Body>

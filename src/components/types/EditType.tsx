@@ -13,7 +13,7 @@ export const EditType = (props) => {
     });
 
     const handleSaveType = (type) => {
-        const callback = async (type) => {
+        const save = async (type) => {
             let result;
             if (props.op === "edit") {
                 result = await typesApi.withToken(appCtx.userData.authToken).update(props.id, type)
@@ -29,9 +29,11 @@ export const EditType = (props) => {
                 } else if (result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
                     handleCancel(result);
                 }
+            } else {
+                handleCancel();
             }
         }
-        callback(type)
+        save(type)
             .then(() => undefined);
 
     }

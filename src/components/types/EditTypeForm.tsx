@@ -1,36 +1,17 @@
-import {useEffect, useState} from "react";
-import {Alert, Image} from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {CustomButton} from "../ui/CustomButton";
-import {ALERT_TIMEOUT} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertToast} from "../ui/AlertToast";
 
-export const EditTypeForm = (props) =>  {
+export const EditTypeForm = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const type = props.type;
     const [formData, setFormData] = useState({
         description: "",
         image: "",
     });
-
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: ""
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, ALERT_TIMEOUT)
-        }
-    }
 
     const handleSave = (event) => {
         event.preventDefault();
@@ -47,7 +28,7 @@ export const EditTypeForm = (props) =>  {
         const {description, image} = formData;
 
         if (description.trim().length === 0 || image.trim().length === 0) {
-            handleAlert(true, "danger", "Validation Error", "All fields are required to save!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
             return false;
         }
 
@@ -80,25 +61,18 @@ export const EditTypeForm = (props) =>  {
 
     return (
         <>
-            {alert.show &&
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            }
+            <AlertToast />
             <form onSubmit={handleSave}>
                 <div className="form-group">
                     <label htmlFor="description">Name<span aria-hidden="true"
                                                            className="required">*</span></label>
-                    <input className="form-control" id="name" name="description" required type="text" 
+                    <input className="form-control" id="name" name="description" required type="text"
                            value={formData.description} onChange={handleChange} disabled={viewOnly}/>
                 </div>
                 <div className="form-group">
                     <label htmlFor="image">Image<span aria-hidden="true"
                                                       className="required">*</span></label>
-                    <input className="form-control" id="image" name="image" required type="url" 
+                    <input className="form-control" id="image" name="image" required type="url"
                            value={formData.image} onChange={handleChange} disabled={viewOnly}/>
                     {viewOnly &&
                         <div className="container4">

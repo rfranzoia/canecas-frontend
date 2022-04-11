@@ -1,12 +1,14 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {typesApi} from "../../api/TypesAPI";
-import {Alert, Card, Col, Container, Image, Row} from "react-bootstrap";
+import {Card, Col, Container, Image, Row} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
-import {ALERT_TIMEOUT} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertToast} from "../ui/AlertToast";
 
 export const EditProductForm = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const product = props.product;
     const [formData, setFormData] = useState({
         name: product.name,
@@ -16,28 +18,7 @@ export const EditProductForm = (props) => {
         image: ""
     });
 
-    const [types, setTypes] = useState([]);
-
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: ""
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, ALERT_TIMEOUT)
-        }
-    }
+    const [types, setTypes] = useState([])
 
     const handleSave = (event) => {
         event.preventDefault();
@@ -58,12 +39,12 @@ export const EditProductForm = (props) => {
 
         if (name.trim().length === 0 || description.trim().length === 0 ||
             type.trim().length === 0 || image.trim().length === 0) {
-            handleAlert(true, "danger", "Validation Error", "All fields are required to save!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
             return false;
         }
 
         if (Number(price) <= 0) {
-            handleAlert(true, "danger", "Validation Error", "Product price must be greater than zero!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Product price must be greater than zero!");
             return false;
         }
         return true;
@@ -130,14 +111,7 @@ export const EditProductForm = (props) => {
 
     return (
         <>
-            {alert.show &&
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            }
+            <AlertToast />
             <Card border="dark">
                 <Card.Header as="h3">{`${title} Product`}</Card.Header>
                 <form onSubmit={handleSave}>

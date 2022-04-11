@@ -1,45 +1,29 @@
-import {useEffect, useState} from "react";
-import {Alert, Card, Modal} from "react-bootstrap";
+import {useContext, useEffect, useState} from "react";
+import {Card, Modal} from "react-bootstrap";
 import {productsApi} from "../../api/ProductsAPI";
 import {ProductsList} from "./ProductsList";
 import {EditProduct} from "./EditProduct";
 import {CustomButton} from "../ui/CustomButton";
 import {StatusCodes} from "http-status-codes";
-import {ALERT_TIMEOUT} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertToast} from "../ui/AlertToast";
 
 export const Products = () => {
+    const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
     const [editViewOp, setEditViewOp] = useState({
         productId: "",
         op: ""
     });
 
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: "",
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message,
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-        }, ALERT_TIMEOUT)}
-    };
-
     const handleDelete = () => {
         productsApi.list().then((data) => {
             setProducts(data);
         });
-        handleAlert(true, "danger", "Delete Product", "Product has been deleted successfully");
+        appCtx.handleAlert(true, AlertType.DANGER, "Delete Product", "Product has been deleted successfully");
+        setShowAlert(true);
     }
 
     const handleShowEditModal = (op: string, id?: string) => {
@@ -56,7 +40,8 @@ export const Products = () => {
             const errorDescription = error.statusCode === StatusCodes.INTERNAL_SERVER_ERROR ?
                     error.description.message:
                     error.description
-            handleAlert(true, "danger", error.name, errorDescription);
+            appCtx.handleAlert(true, AlertType.DANGER, error.name, errorDescription);
+            setShowAlert(true);
         }
     }
 
@@ -67,19 +52,18 @@ export const Products = () => {
             });
     }, [showEditModal])
 
+    useEffect(() => {
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+    },[appCtx.alert.show])
+
     const viewOnly = editViewOp.op === "view";
 
 
     return (
         <div className="container4">
-            {alert.show && (
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            )}
+            {showAlert && <AlertToast/>}
             <div>
                 <Card border="dark" className="align-content-center">
                     <Card.Header as="h3">Products</Card.Header>
