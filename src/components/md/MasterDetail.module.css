@@ -1,0 +1,12 @@
+.card {
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.75);
+    padding: 1rem;
+    width: auto;
+    margin: 0.5rem auto;
+}
+.card:hover {
+    background-color: #f1f1f1;
+}
+
