@@ -1,13 +1,14 @@
-import { useContext, useEffect, useState } from "react";
-import { Alert, Card, Modal } from "react-bootstrap";
-import { ordersApi } from "../../api/OrdersAPI";
-import { OrdersList } from "./OrdersList";
-import { EditOrder } from "./EditOrder";
-import { ApplicationContext } from "../../context/ApplicationContext";
-import { useHistory } from "react-router-dom";
-import { StatusCodes } from "http-status-codes";
-import { CustomButton } from "../ui/CustomButton";
-import { OrderAction } from "../../domain/Order";
+import {useContext, useEffect, useState} from "react";
+import {Card, Modal} from "react-bootstrap";
+import {ordersApi} from "../../api/OrdersAPI";
+import {OrdersList} from "./OrdersList";
+import {EditOrder} from "./EditOrder";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {useHistory} from "react-router-dom";
+import {StatusCodes} from "http-status-codes";
+import {CustomButton} from "../ui/CustomButton";
+import {OrderAction} from "../../domain/Order";
+import {AlertToast} from "../ui/AlertToast";
 
 export const Orders = () => {
     const history = useHistory();
@@ -22,27 +23,6 @@ export const Orders = () => {
         orderId: "",
         op: "",
     });
-
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: "",
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message,
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-            }, 3000);
-        }
-    };
 
     const load = async () => {
         const result = await ordersApi.withToken(appCtx.userData.authToken).list();
@@ -75,11 +55,11 @@ export const Orders = () => {
 
     const handleAction = (action: OrderAction) => {
         if (action === OrderAction.DELETE) {
-            handleAlert(true, "danger", "Order Delete", "Order deleted successfully");
+            appCtx.handleAlert(true, AlertType.DANGER, "Order Delete", "Order deleted successfully");
         } else if (action === OrderAction.CONFIRM) {
-            handleAlert(true, "success", "Order Confirm", "The order has been confirmed");
+            appCtx.handleAlert(true, AlertType.SUCCESS, "Order Confirm", "The order has been confirmed");
         } else if (action === OrderAction.FORWARD) {
-            handleAlert(true, "warning", "Order Status Change", "The Order status has been updated successfully");
+            appCtx.handleAlert(true, AlertType.WARNING, "Order Status Change", "The Order status has been updated successfully");
         }
         load().then(() => undefined);
     };
@@ -117,14 +97,7 @@ export const Orders = () => {
 
     const contentList = (
         <>
-            {alert.show && (
-                <div>
-                    <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                        <Alert.Heading>{alert.title}</Alert.Heading>
-                        <p>{alert.message}</p>
-                    </Alert>
-                </div>
-            )}
+            <AlertToast />
             <Card border="dark">
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
@@ -134,9 +107,9 @@ export const Orders = () => {
                                 caption="New Order"
                                 type="new"
                                 customClass="fa fa-file-invoice"
-                                onClick={() => handleNewOrder("new")} />
+                                onClick={() => handleNewOrder("new")}/>
                         </div>
-                        <br />
+                        <br/>
                         <div>
                             <OrdersList
                                 orders={orders}
@@ -152,7 +125,7 @@ export const Orders = () => {
         </>
     );
 
-    const contentEdit = <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal} />;
+    const contentEdit = <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>;
 
     return (
         <div className="container4">
@@ -165,7 +138,7 @@ export const Orders = () => {
                 centered
                 keyboard={true}>
                 <Modal.Body>
-                    <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal} />
+                    <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
                 </Modal.Body>
             </Modal>
         </div>

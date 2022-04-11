@@ -1,52 +1,27 @@
-import {Alert, Card, Col, Container, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
-import {useContext, useState} from "react";
-import {useHistory} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
 import {ordersApi} from "../../api/OrdersAPI";
-import {ApplicationContext} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import { Order } from "../../domain/Order";
+import {AlertToast} from "../ui/AlertToast";
+import {Role} from "../../domain/User";
 
-export const NewOrder = () => {
+export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const history = useHistory();
+    const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         orderDate: "",
-        userEmail: "",
+        userEmail: appCtx.userData.role === Role.ADMIN? "": appCtx.userData.userEmail,
         totalPrice: 0,
         items: []
     });
 
-    const [alert, setAlert] = useState({
-        show: false,
-        type: "",
-        title: "",
-        message: "",
-    });
-
-    const handleAlert = (show: boolean, type: string = "", title: string = "", message: string = "") => {
-        setAlert({
-            show: show,
-            type: type,
-            title: title,
-            message: message,
-        });
-        if (show) {
-            setTimeout(() => {
-                handleAlert(false);
-        }, 3000)}
-    };
-
-    const evaluateTotalPrice = (items) => {
-        return items.reduce((acc, item) => {
-            return acc + (item.price * item.amount);
-        }, 0);
-    }
-
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
-            const totalPrice = evaluateTotalPrice(items);
+            const totalPrice = ordersApi.evaluateTotalPrice(items);
             return {
                 ...prevState,
                 items: items,
@@ -61,7 +36,7 @@ export const NewOrder = () => {
         } else {
             setFormData(prevState => {
                 const items = [...prevState.items, item];
-                const totalPrice = evaluateTotalPrice(items);
+                const totalPrice = ordersApi.evaluateTotalPrice(items);
                 return {
                     ...prevState,
                     items: items,
@@ -83,10 +58,11 @@ export const NewOrder = () => {
         ordersApi.withToken(appCtx.userData.authToken).create(order)
             .then(result => {
                 if (result._id) {
-                    handleCancel();
+                    props.onSave();
                 } else {
                     const error = result?.response?.data;
-                    appCtx.showErrorAlert(error.name, error.description);
+                    appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+                    setShowAlert(true);
                 }
             })
 
@@ -96,14 +72,15 @@ export const NewOrder = () => {
         const { userEmail, orderDate, items } = formData;
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
-            handleAlert(true, "danger", "Validation Error!", "The customer email, order date and items must be provided");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
+            setShowAlert(true);
             return false;
         }
         return true;
     }
 
     const handleCancel = () => {
-        history.goBack();
+       props.onCancel();
     }
 
     const handleChange = (event) => {
@@ -116,18 +93,17 @@ export const NewOrder = () => {
         });
     }
 
+    useEffect(() => {
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+    },[appCtx.alert.show])
+
     return (
         <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
             <Row>
                 <Col>
-                    {alert.show && (
-                        <div>
-                            <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible transition  className="alert-top">
-                                <Alert.Heading>{alert.title}</Alert.Heading>
-                                <p>{alert.message}</p>
-                            </Alert>
-                        </div>
-                    )}      
+                    {showAlert && <AlertToast/>}
                 </Col>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
@@ -138,10 +114,18 @@ export const NewOrder = () => {
                                     <Row>
                                         <Col>
                                             <div className="form-group">
-                                                <label htmlFor="userEmail">Customer Email<span aria-hidden="true"
-                                                                                               className="required">*</span></label>
-                                                <input className="form-control" id="userEmail" name="userEmail" required type="text"
-                                                       value={formData.userEmail} onChange={handleChange} placeholder="Enter the Customer Email"/>
+                                                <label htmlFor="userEmail">
+                                                    Customer Email<span aria-hidden="true" className="required">*</span>
+                                                </label>
+                                                <input className="form-control"
+                                                       id="userEmail"
+                                                       name="userEmail"
+                                                       required
+                                                       type="text"
+                                                       value={formData.userEmail}
+                                                       onChange={handleChange}
+                                                       disabled={appCtx.userData.role !== Role.ADMIN}
+                                                       placeholder="Enter the Customer Email"/>
                                             </div>
                                         </Col>
                                     </Row>

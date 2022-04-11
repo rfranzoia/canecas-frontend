@@ -2,16 +2,12 @@ import {ordersApi} from "../../api/OrdersAPI";
 import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {EditOrderForm} from "./EditOrderForm";
-import {useHistory, useParams} from "react-router-dom";
 import {InformationToast} from "../ui/InformationToast";
 import {StatusCodes} from "http-status-codes";
 
 export const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const history = useHistory();
-    const params = useParams();
 
-    const op = params["id"] ? "edit" : "view";
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",
@@ -35,7 +31,7 @@ export const EditOrder = (props) => {
             .then(result => {
                 if (result._id) {
                     handleCloseToast();
-                    history.goBack();
+                    handleSave(result._id);
                 } else {
                     const error = result?.response?.data
                     setToast({
@@ -50,11 +46,11 @@ export const EditOrder = (props) => {
     }
 
     const handleCancel = () => {
-        if (op === "edit") {
-            history.goBack()
-        } else {
-            props.onSaveCancel();
-        }
+        props.onCancel();
+    }
+
+    const handleSave = (orderId: string) => {
+        props.onSave(orderId);
     }
 
     const handleCloseToast = () => {
@@ -69,27 +65,28 @@ export const EditOrder = (props) => {
 
     useEffect(() => {
         if (!appCtx.userData.authToken) return;
-        const callback = async () => {
-            let result;
-            if (op === "edit") {
-                result = await ordersApi.withToken(appCtx.userData.authToken).get(params["id"]);
-            } else {
-                result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
-            }
+        const loadData = async () => {
+            const result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
+
             if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
                 appCtx.showErrorAlert(result.name, result.description);
             } else {
-                setOrder(result);
+                if (result && !Array.isArray(result)) {
+                    setOrder({
+                        ...result,
+                        orderDate: result.orderDate.split("T")[0]
+                    });
+                }
             }
         }
-        callback().then(() => undefined);
+        loadData().then(() => undefined);
 
-    }, [props.id, op, appCtx, params]);
+    }, [props.id, props.op, appCtx]);
 
-    const title = op === "edit" ? "Edit" : "View";
+    const title = props.op === "edit" ? "Edit" : "View";
 
     const handleOp = (order) => {
-        if (op !== "view") {
+        if (props.op !== "view") {
             handleSaveOrder(order);
         }
     }
@@ -97,7 +94,8 @@ export const EditOrder = (props) => {
     return (
         <>
             <div>
-                <EditOrderForm title={title} order={order} op={op} onSaveOrder={handleOp} onCancel={handleCancel}/>
+                <EditOrderForm title={title} order={order} op={props.op} onSaveOrder={handleOp}
+                               onCancel={handleCancel}/>
             </div>
             <div>
                 <InformationToast
