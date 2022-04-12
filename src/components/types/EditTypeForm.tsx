@@ -28,7 +28,7 @@ export const EditTypeForm = (props) => {
         const {description, image} = formData;
 
         if (description.trim().length === 0 || image.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "Todos os campos são obrigatórios");
             return false;
         }
 
@@ -58,29 +58,40 @@ export const EditTypeForm = (props) => {
     }, [type.description, type.image])
 
     const viewOnly = props.op === "view";
-    const title = props.op === "new" ? "New" :
-        props.op === "edit" ? "Edit" : "View";
+    const title = props.op === "new" ? "Novo" :
+        props.op === "edit" ? "Editar" : "Visualizar";
 
     return (
         <>
             <AlertToast/>
             <Card border="dark">
-                <Card.Header as="h3">{`${title} Type`}</Card.Header>
+                <Card.Header as="h3">{`${title} Tipo`}</Card.Header>
                 <Card.Body>
                     <form onSubmit={handleSave}>
                         <div>
                             <div className="form-group spaced-form-group">
-                                <label htmlFor="description">Name<span aria-hidden="true"
-                                                                       className="required">*</span></label>
-                                <input className="form-control bigger-input" id="name" name="description" required
+                                <label htmlFor="description">Nome
+                                    <span aria-hidden="true" className="required">*</span></label>
+                                <input className="form-control bigger-input"
+                                       id="name"
+                                       name="description"
+                                       required
                                        type="text"
-                                       value={formData.description} onChange={handleChange} disabled={viewOnly}/>
+                                       value={formData.description}
+                                       onChange={handleChange}
+                                       disabled={viewOnly}/>
                             </div>
                             <div className="form-group spaced-form-group">
-                                <label htmlFor="image">Image<span aria-hidden="true"
-                                                                  className="required">*</span></label>
-                                <input className="form-control bigger-input" id="image" name="image" required type="url"
-                                       value={formData.image} onChange={handleChange} disabled={viewOnly}/>
+                                <label htmlFor="image">Imagem
+                                    <span aria-hidden="true" className="required">*</span></label>
+                                <input className="form-control bigger-input"
+                                       id="image"
+                                       name="image"
+                                       required
+                                       type="url"
+                                       value={formData.image}
+                                       onChange={handleChange}
+                                       disabled={viewOnly}/>
                             </div>
                         </div>
                         {viewOnly &&
@@ -96,13 +107,13 @@ export const EditTypeForm = (props) => {
             <div className="default-margin">
                 {!viewOnly && (
                     <>
-                        <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                        <CustomButton caption="Salvar" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
+                <CustomButton caption={viewOnly ? "Fechar" : "Cancelar"} onClick={handleCancel} type="close"/>
                 <p aria-hidden="true" id="required-description">
-                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                    <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)
                 </p>
             </div>
         </>

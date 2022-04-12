@@ -17,12 +17,16 @@ export const Types = () => {
         op: "",
     });
 
-    const handleDelete = () => {
+    const handleDelete = (sucess: boolean, result?) => {
+        if (sucess) {
+            appCtx.handleAlert(true, AlertType.WARNING, "Remover Tipo", `Tipo '${result.description}' removido com sucesso`)
+        } else {
+            appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+        }
+        setShowAlert(true);
         typesApi.list().then((data) => {
             setTypes(data);
         });
-        appCtx.handleAlert(true, AlertType.WARNING, "Delete Type", "Type has been deleted successfully")
-        setShowAlert(true);
     }
 
     useEffect(() => {
@@ -57,11 +61,11 @@ export const Types = () => {
         <div className="default-margin">
             {showAlert && <AlertToast/>}
             <Card border="dark" className="align-content-center">
-                <Card.Header as="h3">Types</Card.Header>
+                <Card.Header as="h3">Tipos de Produto</Card.Header>
                 <Card.Body>
                     <Card.Title>
                         <CustomButton
-                            caption="New Type"
+                            caption="Novo Tipo"
                             type="new"
                             customClass="fa fa-industry"
                             onClick={() => handleShowEditModal("new")}/>
@@ -83,7 +87,9 @@ export const Types = () => {
                     keyboard={true}>
                     <Modal.Body>
                         <div className="container4">
-                            <EditType id={editViewOp.typeId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                            <EditType id={editViewOp.typeId}
+                                      op={editViewOp.op}
+                                      onSaveCancel={handleCloseEditModal}/>
                         </div>
                     </Modal.Body>
                 </Modal>

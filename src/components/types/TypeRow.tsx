@@ -31,20 +31,23 @@ export const TypeRow = (props) => {
             <td align="center">
                 <BiEdit
                     onClick={() => props.onEdit("edit", type._id)}
-                    title="Edit Type"
+                    title="Editar Tipo"
                     size="2em"
                     cursor="pointer"
                     color="blue"/>
                 <span> | </span>
                 <BiTrash
                     onClick={handleDelete}
-                    title="Delete Type"
+                    title="Remover Tipo"
                     size="2em"
                     cursor="pointer"
                     color="red"/>
             </td>
-            <ConfirmModal show={showConfirmation} handleClose={handleClose} handleConfirm={handleConfirm}
-                          title="Delete Type"  message={`Are you sure you want to delete the type '${type.description}'?`}/>
+            <ConfirmModal show={showConfirmation}
+                          handleClose={handleClose}
+                          handleConfirm={handleConfirm}
+                          title="Remover Tipo"
+                          message={`Você tem certeza que deseja REMOVER o Tipo '${type.description}'?`}/>
         </tr>
     );
 }

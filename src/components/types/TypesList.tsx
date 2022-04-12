@@ -12,10 +12,11 @@ export const TypesList = (props) => {
     }
 
     const handleOnDelete = async (type) => {
-        if (await typesApi.withToken(appCtx.userData.authToken).delete(type._id)) {
-            props.onDelete(true, `Type '${type.name}' deleted successfully`);
+        const result = await typesApi.withToken(appCtx.userData.authToken).delete(type._id);
+        if (!result) {
+            props.onDelete(true, type);
         } else {
-            props.onDelete(false);
+            props.onDelete(false, result);
         }
     }
 
@@ -23,14 +24,17 @@ export const TypesList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th style={{ width: "60%" }}>Description</th>
-                <th style={{ width: "10%" }}>Image</th>
+                <th style={{ width: "60%" }}>Nome</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Imagem</th>
                 <th style={{ width: "10%" }}>&nbsp;</th>
             </tr>
             </thead>
             <tbody>
             {props.types.length > 0 && props.types.map(type => (
-                <TypeRow key={type._id} type={type} onEdit={handleOnEdit} onDelete={handleOnDelete}/>
+                <TypeRow key={type._id}
+                         type={type}
+                         onEdit={handleOnEdit}
+                         onDelete={handleOnDelete}/>
             ))}
             </tbody>
         </Table>
