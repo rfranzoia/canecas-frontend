@@ -1,21 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
-
-body {
-    background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-
-    min-height: 100vh;
-    margin: 0;
-}
-
-h1 {
-    text-align: center;
-}
-
 .timelineContainer {
     display: flex;
     flex-direction: column;
@@ -33,6 +17,7 @@ h1 {
 }
 
 .timelineItem {
+    font-weight: bolder;
     display: flex;
     justify-content: flex-end;
     padding-right: 30px;
@@ -87,7 +72,7 @@ h1 {
 
 .timelineItemContent .tag {
     color: #fff;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     top: 5px;
     left: 5px;
@@ -104,12 +89,12 @@ h1 {
 
 .timelineItemContent time {
     color: #777;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .timelineItemContent p {
-    font-size: 16px;
+    font-size: 18px;
     line-height: 24px;
     margin: 15px 0;
     max-width: 250px;
