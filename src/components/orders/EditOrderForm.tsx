@@ -85,7 +85,7 @@ export const EditOrderForm = (props) => {
         try {
             const d = new Date(orderDate);
             const today = new Date();
-            if (d.getDate().valueOf() > today.valueOf()) {
+            if (d.valueOf() > today.valueOf()) {
                 appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "A data do pedido não pode ser superior a Hoje");
                 setShowAlert(true);
                 return false;
