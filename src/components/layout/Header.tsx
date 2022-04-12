@@ -3,7 +3,7 @@ import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import { ApplicationContext } from "../../context/ApplicationContext";
 import { CustomButton } from "../ui/CustomButton";
-import { UserLogin } from "../users/UserLogin";
+import {ShowType, UserRegistration} from "../users/UserRegistration";
 
 export const Header = () => {
     const history = useHistory();
@@ -78,7 +78,8 @@ export const Header = () => {
                 </Container>
             </Navbar>
             {showLoginModal &&
-                <UserLogin show={showLoginModal} handleClose={handleClose}/>}
+                <UserRegistration show={showLoginModal} handleClose={handleClose} showType={ShowType.SIGN_IN}/>
+            }
             {appCtx.error.show &&
                 <Alert variant="danger" onClose={handleDismissAlert} dismissible transition  className="alert-top">
                     <Alert.Heading>{appCtx.error.title}</Alert.Heading>
