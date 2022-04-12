@@ -47,16 +47,16 @@ export const Header = () => {
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
                             navbarScroll>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+                            <Nav.Link as={Link} to="/">Início</Nav.Link>
                             {appCtx.isLoggedIn() &&
                                 (
                                     <>
-                                        <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
-                                        <NavDropdown title="Manage" id="navbarScrollingDropdown">
-                                            <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
-                                            <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
+                                        <Nav.Link as={Link} to="/orders">Pedidos</Nav.Link>
+                                        <NavDropdown title="Gerenciar" id="navbarScrollingDropdown">
+                                            <NavDropdown.Item as={Link} to="/types">Tipos de Produto</NavDropdown.Item>
+                                            <NavDropdown.Item as={Link} to="/products">Produtos</NavDropdown.Item>
                                             <NavDropdown.Divider />
-                                            <NavDropdown.Item as={Link} to="/users">Users</NavDropdown.Item>
+                                            <NavDropdown.Item as={Link} to="/users">Usuários/Clientes</NavDropdown.Item>
                                         </NavDropdown>
                                     </>
                                 )
@@ -67,11 +67,11 @@ export const Header = () => {
                                 <Navbar.Collapse className="justify-content-end">
                                     <Navbar.Text> {appCtx.userData.userEmail} </Navbar.Text>
                                     &nbsp;&nbsp;
-                                    <CustomButton size="small" caption="Sign Out" onClick={handleLogout} type="logout"/>
+                                    <CustomButton size="small" caption="Logout" onClick={handleLogout} type="logout"/>
                                 </Navbar.Collapse>
                             ) :
                             (
-                                <CustomButton size="small" caption="Sign In" onClick={handleShowLogin} type="login"/>
+                                <CustomButton size="small" caption="Login" onClick={handleShowLogin} type="login"/>
                             )
                         }
                     </Navbar.Collapse>

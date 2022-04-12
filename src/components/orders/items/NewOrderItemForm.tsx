@@ -52,15 +52,15 @@ export const NewOrderItemForm = (props) => {
         const { product, price, amount } = formData;
         if (product.trim().length === 0 || price.toString().trim().length === 0 ||
             amount.toString().trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, price and amount must be provided!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "O produto, preço e quantidade devem ser informados!");
             return false;
         }
         if (isNaN(price) || isNaN(amount)) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Price and Amount must be valid numbers!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "Preço e Quantidade devem ser números!");
             return false;
         }
         if (price <= 0 || amount <= 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, price and amount must be greater than zero!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "Preço e Quantidade devem ter valores maiores que zero!");
             return false;
         }
         return true;
@@ -112,7 +112,7 @@ export const NewOrderItemForm = (props) => {
                             <Row>
                                 <Col>
                                     <Form.Group className="spaced-form-group">
-                                        <Form.Label>Product<span aria-hidden="true"
+                                        <Form.Label>Produto<span aria-hidden="true"
                                                                  className="required">*</span></Form.Label>
                                         <AutoCompleteInput
                                             data={products}
@@ -121,14 +121,15 @@ export const NewOrderItemForm = (props) => {
                                             onFieldSelected={handleSelectProduct}
                                             className="form-control bigger-input"
                                             required
-                                            placeholder="Please select a product"/>
+                                            placeholder="Por favor selecione um produto"/>
+                                        <small>Para exibir os produtos comece digitando o nome do produto</small>
                                     </Form.Group>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
                                     <Form.Group className="spaced-form-group">
-                                        <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
+                                        <Form.Label>Preço<span aria-hidden="true" className="required">*</span></Form.Label>
                                         <input
                                             className="form-control bigger-input"
                                             required
@@ -144,7 +145,7 @@ export const NewOrderItemForm = (props) => {
                             <Row>
                                 <Col>
                                     <Form.Group className="spaced-form-group">
-                                        <Form.Label>Amount<span aria-hidden="true"
+                                        <Form.Label>Quantidade<span aria-hidden="true"
                                                                 className="required">*</span></Form.Label>
                                         <input
                                             className="form-control bigger-input"
@@ -162,11 +163,11 @@ export const NewOrderItemForm = (props) => {
                         <br/>
                         <Row>
                             <Col>
-                                <CustomButton caption="Add" onClick={handleAdd} type="add" size="small"/>
+                                <CustomButton caption="Incluir" onClick={handleAdd} type="add" size="small"/>
                                 &nbsp;
-                                <CustomButton caption="Cancel" onClick={handleCancel} type="close" size="small"/>
+                                <CustomButton caption="Cancelar" onClick={handleCancel} type="close" size="small"/>
                                 <p aria-hidden="true" id="required-description">
-                                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                                    <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)
                                 </p>
                             </Col>
                         </Row>

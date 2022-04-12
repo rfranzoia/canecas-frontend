@@ -72,7 +72,7 @@ export const NewOrder = (props) => {
         const { userEmail, orderDate, items } = formData;
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "O Email do cliente, a data do Pedido e os Items devem ser informados");
             setShowAlert(true);
             return false;
         }
@@ -107,7 +107,7 @@ export const NewOrder = (props) => {
                 </Col>
                 <Col>
                     <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
-                        <Card.Header as="h3">New Order</Card.Header>
+                        <Card.Header as="h3">Novo Pedido</Card.Header>
                         <Card.Body>
                             <form>
                                 <Container>
@@ -115,7 +115,7 @@ export const NewOrder = (props) => {
                                         <Col>
                                             <div className="form-group spaced-form-group">
                                                 <label htmlFor="userEmail">
-                                                    Customer Email<span aria-hidden="true" className="required">*</span>
+                                                    Email Cliente<span aria-hidden="true" className="required">*</span>
                                                 </label>
                                                 <input className="form-control bigger-input"
                                                        id="userEmail"
@@ -125,26 +125,35 @@ export const NewOrder = (props) => {
                                                        value={formData.userEmail}
                                                        onChange={handleChange}
                                                        disabled={appCtx.userData.role !== Role.ADMIN}
-                                                       placeholder="Enter the Customer Email"/>
+                                                       placeholder="Informe o Email do cliente"/>
                                             </div>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col>
                                             <div className="form-group spaced-form-group">
-                                                <label htmlFor="orderDate">Date<span aria-hidden="true"
-                                                                                     className="required">*</span></label>
-                                                <input className="form-control bigger-input" id="orderDate" name="orderDate" required type="date"
-                                                       value={formData.orderDate} onChange={handleChange}/>
+                                                <label htmlFor="orderDate">
+                                                    Data<span aria-hidden="true" className="required">*</span></label>
+                                                <input className="form-control bigger-input"
+                                                       id="orderDate"
+                                                       name="orderDate"
+                                                       required type="date"
+                                                       value={formData.orderDate}
+                                                       onChange={handleChange}/>
                                             </div>
 
                                         </Col>
                                         <Col>
                                             <div className="form-group spaced-form-group">
-                                                <label htmlFor="totalPrice">Total Price</label>
-                                                <input className="form-control bigger-input" id="totalPrice" name="totalPrice" required type="number"
+                                                <label htmlFor="totalPrice">Valor Total</label>
+                                                <input className="form-control bigger-input"
+                                                       id="totalPrice"
+                                                       name="totalPrice"
+                                                       type="number"
                                                        style={{textAlign: "right"}}
-                                                       value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
+                                                       value={formData.totalPrice.toFixed(2)}
+                                                       onChange={handleChange}
+                                                       disabled/>
                                             </div>
                                         </Col>
                                     </Row>
@@ -161,9 +170,9 @@ export const NewOrder = (props) => {
                                         <Col>
                                             <CustomButton caption="Save" type="save" onClick={handleSave}/>
                                             <span>&nbsp;</span>
-                                            <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                                            <CustomButton caption="Cancelar" onClick={handleCancel} type="close"/>
                                             <p aria-hidden="true" id="required-description">
-                                                <span aria-hidden="true" className="required">*</span>Required field(s)
+                                                <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)
                                             </p>
                                         </Col>
                                     </Row>

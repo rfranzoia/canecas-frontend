@@ -162,7 +162,7 @@ export const OrdersList = (props) => {
                 <Card.Body>
                     <div>
                         <CustomButton
-                            caption="New Order"
+                            caption="Novo Pedido"
                             type="new"
                             customClass="fa fa-file-invoice"
                             onClick={() => handleEditOrder("new", "")}/>

@@ -83,7 +83,7 @@ export const EditOrder = (props) => {
 
     }, [props.id, props.op, appCtx]);
 
-    const title = props.op === "edit" ? "Edit" : "View";
+    const title = props.op === "edit" ? "Editar" : "Visualizar";
 
     const handleOp = (order) => {
         if (props.op !== "view") {

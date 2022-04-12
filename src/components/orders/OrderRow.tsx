@@ -59,9 +59,9 @@ export const OrderRow = (props) => {
     const handleMoveForward = () => {
         setConfirmationDialog({
             show: true,
-            title: "Update Status",
-            message: `Are you sure you want to update status of the order '${order._id}
-                        from ${OrderStatus[order.status]} to ${OrderStatus[findNextOrderStatus(order.status)]}'?`,
+            title: "Atualizar Status",
+            message: `Você tem certeza que quer atualizar o status do Pedido '${order._id}
+                        de ${OrderStatus[order.status]} para ${OrderStatus[findNextOrderStatus(order.status)]}'?`,
             hasData: true,
             op: "update",
             onConfirm: (param) => handleConfirmForward(param),
@@ -83,8 +83,8 @@ export const OrderRow = (props) => {
         if (order.status === OrderStatus.NEW) {
             setConfirmationDialog({
                 show: true,
-                title: "Delete OrderRow",
-                message: `Are you sure you want to delete the order '${order._id}'?`,
+                title: "Apagar Pedido",
+                message: `Você tem certeza que quer apagar o Pedido '${order._id}'?`,
                 op: "delete",
                 hasData: false,
                 onConfirm: () => handleConfirmDelete(),
@@ -93,9 +93,9 @@ export const OrderRow = (props) => {
         } else {
             setConfirmationDialog({
                 show: true,
-                title: "Cancel OrderRow",
-                message: `Are you sure you want to CANCEL the order # '${order._id}'?,
-                            this action cannot be undone`,
+                title: "Cancelar Pedido",
+                message: `Você tem certeza que quer CANCELAR o Pedido # '${order._id}'?,
+                            esta ação não pode ser desfeita`,
                 hasData: true,
                 op: "cancel",
                 onConfirm: (param) => handleConfirmCancel(param),
@@ -108,9 +108,9 @@ export const OrderRow = (props) => {
     const handleConfirmOrderDialog = () => {
         setConfirmationDialog({
             show: true,
-            title: "Confirm OrderRow",
-            message: `Are you sure you want to confirm the order # '${order._id}', 
-                           you wont be able to make changes after that?`,
+            title: "Confirmar Pedido",
+            message: `Você tem certeza que quer confirmar o Pedido # '${order._id}'? 
+                           você não poderá mais modificá-lo após isso.`,
             hasData: false,
             op: "confirm",
             onConfirm: () => handleConfirmCreate(),
@@ -144,7 +144,7 @@ export const OrderRow = (props) => {
             <td width="15%" align="right">
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.EDIT,
-                        "Edit OrderRow",
+                        "Editar Pedido",
                         order.status === OrderStatus.NEW,
                         () => handleEditOrder(order._id))
                 }
@@ -153,20 +153,20 @@ export const OrderRow = (props) => {
                         getActionIcon(order.status === OrderStatus.NEW?
                                 ButtonAction.DELETE:
                                 ButtonAction.CANCEL_ITEM,
-                            order.status === OrderStatus.NEW?"Delete OrderRow":"Cancel OrderRow",
+                            order.status === OrderStatus.NEW?"Apagar Pedido":"Cancelar Pedido",
                             canCancelOrder,
                             () => handleDeleteOrCancel())
                 }
                 <span>&nbsp;</span>
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.USER_CHECK,
-                    "Confirm OrderRow",
+                    "Confirmar Pedido",
                     order.status === OrderStatus.NEW,
                     () => handleConfirmOrderDialog())}
                 <span>&nbsp;</span>
                 {appCtx.userData.role === Role.ADMIN &&
                     getActionIcon(ButtonAction.ACTION_FORWARD,
-                    `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
+                    `Mover para próximo Status do Pedido (${OrderStatus[findNextOrderStatus(order.status)]})`,
                     (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
                     () => handleMoveForward())}
             </td>
@@ -182,8 +182,8 @@ export const OrderRow = (props) => {
                 <tr>
                     <td width="1%">
                         {!showItems ?
-                            getActionIcon(ButtonAction.EXPAND, "Expand", false, () => handleClickMaster()) :
-                            getActionIcon(ButtonAction.COLLAPSE, "Collapse", false, () => handleClickMaster())
+                            getActionIcon(ButtonAction.EXPAND, "Expandir", false, () => handleClickMaster()) :
+                            getActionIcon(ButtonAction.COLLAPSE, "Reduzir", false, () => handleClickMaster())
                         }
                     </td>
                     <td width="15%">

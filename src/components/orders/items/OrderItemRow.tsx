@@ -25,7 +25,7 @@ export const OrderItemRow = (props) => {
                 <BiTrash
                     onClick={props.onDelete}
                     style={props.viewOnly && { pointerEvents: "none" }}
-                    title="Delete Item"
+                    title="Remover Item"
                     size="2em"
                     cursor="pointer"
                     color={props.viewOnly?"#a2a0a0":"red"}/>

@@ -1,7 +1,7 @@
-import { OrderStatus } from "../../domain/Order";
+import { OrderStatus } from "../../../domain/Order";
 import classes from "./Timeline.module.css";
 
-export const TimelineItem = ({ data }) => (
+export const StatusTimelineItem = ({ data }) => (
     <div className={classes.timelineItem}>
         <div className={classes.timelineItemContent}>
             <span className={classes.tag} style={{ background: '#e17b77' }}>

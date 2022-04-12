@@ -44,7 +44,7 @@ export const EditOrderForm = (props) => {
     const handleItemAdd = (item) => {
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
+            appCtx.handleAlert(true, AlertType.DANGER, "Error de Validação", "O produto selecionado já está em uso");
             setShowAlert(true);
         } else {
             handleCloseToast();
@@ -78,19 +78,20 @@ export const EditOrderForm = (props) => {
         const { userEmail, orderDate } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "OrderRow Date and Customer Email must be provided!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "A data do Pedido e o Email do cliente devem ser informados!");
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
-            if (d.getDate() > Date.now()) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "OrderRow Date cannot be after today");
+            const today = new Date();
+            if (d.getDate().valueOf() > today.valueOf()) {
+                appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "A data do pedido não pode ser superior a Hoje");
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", `"A data do Pedido não é valida!\n${error.message}`);
             setShowAlert(true);
             return false;
         }
@@ -148,22 +149,31 @@ export const EditOrderForm = (props) => {
         <>
             {showAlert && <AlertToast/>}
             <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
-                <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
+                <Card.Header as="h3">{`${props.title} Pedido`}</Card.Header>
                 <Card.Body>
                     <form onSubmit={handleSave}>
                         <Container>
                             <Row>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="_id">ID #</label>
-                                        <input className="form-control bigger-input" id="_id" name="_id" required type="text"
-                                               value={formData._id} onChange={handleChange} disabled/>
+                                        <label htmlFor="_id">Pedido #</label>
+                                        <input className="form-control bigger-input"
+                                               id="_id"
+                                               name="_id"
+                                               required
+                                               type="text"
+                                               value={formData._id}
+                                               onChange={handleChange}
+                                               disabled/>
                                     </div>
                                 </Col>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="orderDate">Date</label>
-                                        <input className="form-control bigger-input" id="orderDate" name="orderDate" required
+                                        <label htmlFor="orderDate">Data</label>
+                                        <input className="form-control bigger-input"
+                                               id="orderDate"
+                                               name="orderDate"
+                                               required
                                                type="date"
                                                value={formData.orderDate}
                                                onChange={handleChange}
@@ -174,10 +184,14 @@ export const EditOrderForm = (props) => {
                             <Row>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="userEmail">Customer Email</label>
-                                        <input className="form-control bigger-input" id="userEmail" name="userEmail" required
+                                        <label htmlFor="userEmail">Email Cliente</label>
+                                        <input className="form-control bigger-input"
+                                               id="userEmail"
+                                               name="userEmail"
+                                               required
                                                type="text"
-                                               value={formData.userEmail} onChange={handleChange}
+                                               value={formData.userEmail}
+                                               onChange={handleChange}
                                                disabled={viewOnly || lockChanges}/>
                                     </div>
                                 </Col>
@@ -185,8 +199,10 @@ export const EditOrderForm = (props) => {
                             <Row>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="totalPrice">Total Price</label>
-                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
+                                        <label htmlFor="totalPrice">Valor Total</label>
+                                        <input className="form-control bigger-input"
+                                               id="totalPrice"
+                                               name="totalPrice"
                                                required type="number"
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange}
                                                disabled/>
@@ -196,10 +212,14 @@ export const EditOrderForm = (props) => {
                                 <Col>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="status">Status</label>
-                                        <select className="form-select" id="status" name="status" required
+                                        <select className="form-select"
+                                                id="status"
+                                                name="status"
+                                                required
                                                 value={formData.status}
-                                                onChange={handleChange} disabled>
-                                            <option value="">Please Select</option>
+                                                onChange={handleChange}
+                                                disabled>
+                                            <option value="">--- Selecione ---</option>
                                             {orderStatusAsArray().map((status, idx) => {
                                                 return (<option key={idx}
                                                                 value={status}>{OrderStatus[status]}</option>);
@@ -222,14 +242,14 @@ export const EditOrderForm = (props) => {
                                     <div className="align-content-end">
                                         {!viewOnly && (
                                             <>
-                                                <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                                                <CustomButton caption="Salvar" onClick={handleSave} type="save"/>
                                                 <span>&nbsp;</span>
                                             </>
                                         )}
-                                        <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
+                                        <CustomButton caption={viewOnly ? "Fechar" : "Cancelar"} onClick={() => props.onCancel()} type="close"/>
                                         <span>&nbsp;</span>
                                         {(viewOnly && order.status > 0) &&
-                                            <CustomButton caption="Status Changes"
+                                            <CustomButton caption="Atualizações de Status"
                                                           onClick={handleViewStatusHistory}
                                                           type="list"/>
                                         }
@@ -237,8 +257,15 @@ export const EditOrderForm = (props) => {
                                 </Col>
                             </Row>
                             <Row>
-                                <Modal size="lg" show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
-                                    <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
+                                <Modal size="lg"
+                                       show={showStatusHistory}
+                                       onHide={handleCloseViewStatusHistory}
+                                       backdrop="static"
+                                       keyboard={true}
+                                       centered>
+                                    <StatusChangeList
+                                        statusHistory={order.statusHistory}
+                                        onClick={handleCloseViewStatusHistory}/>
                                 </Modal>
                             </Row>
                         </Container>

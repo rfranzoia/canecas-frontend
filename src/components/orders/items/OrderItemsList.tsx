@@ -64,7 +64,7 @@ export const OrderItemsList = (props) => {
                     <MdPostAdd
                         onClick={handleShowModal}
                         style={props.viewOnly && { pointerEvents: "none" }}
-                        title="Add Item"
+                        title="Incluir Item"
                         size="2em"
                         cursor="pointer"
                         color={props.viewOnly?"#a2a0a0":"blue"}/>
