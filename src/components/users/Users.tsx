@@ -100,27 +100,25 @@ export const Users = () => {
     },[appCtx.alert.show])
 
     return (
-        <div className="container4">
+        <div className="default-margin">
             {showAlert && <AlertToast/>}
-            <div>
-                <Card border="dark" className="align-content-center">
-                    <Card.Header as="h3">Users</Card.Header>
-                    <Card.Body>
-                        <Card.Title>
-                            <CustomButton
-                                caption="New User"
-                                type="new"
-                                customClass="fa fa-user-plus"
-                                onClick={() => handleShowEditModal("new")} />
-                        </Card.Title>
-                        <UsersList
-                            users={users}
-                            onDelete={handleDelete}
-                            onEdit={handleShowEditModal}
-                            onChangePassword={handleShowChangePasswordModal}/>
-                    </Card.Body>
-                </Card>
-            </div>
+            <Card border="dark" className="align-content-center">
+                <Card.Header as="h3">Users</Card.Header>
+                <Card.Body>
+                    <Card.Title>
+                        <CustomButton
+                            caption="New User"
+                            type="new"
+                            customClass="fa fa-user-plus"
+                            onClick={() => handleShowEditModal("new")} />
+                    </Card.Title>
+                    <UsersList
+                        users={users}
+                        onDelete={handleDelete}
+                        onEdit={handleShowEditModal}
+                        onChangePassword={handleShowChangePasswordModal}/>
+                </Card.Body>
+            </Card>
             <div>
                 <Modal
                     show={showEditModal}

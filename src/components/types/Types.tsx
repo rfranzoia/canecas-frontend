@@ -54,26 +54,24 @@ export const Types = () => {
     };
 
     return (
-        <div className="container4">
+        <div className="default-margin">
             {showAlert && <AlertToast/>}
-            <div>
-                <Card border="dark" className="align-content-center">
-                    <Card.Header as="h3">Types</Card.Header>
-                    <Card.Body>
-                        <Card.Title>
-                            <CustomButton
-                                caption="New Type"
-                                type="new"
-                                customClass="fa fa-industry"
-                                onClick={() => handleShowEditModal("new")}/>
-                        </Card.Title>
-                        <TypesList
-                            types={types}
-                            onDelete={handleDelete}
-                            onEdit={handleShowEditModal}/>
-                    </Card.Body>
-                </Card>
-            </div>
+            <Card border="dark" className="align-content-center">
+                <Card.Header as="h3">Types</Card.Header>
+                <Card.Body>
+                    <Card.Title>
+                        <CustomButton
+                            caption="New Type"
+                            type="new"
+                            customClass="fa fa-industry"
+                            onClick={() => handleShowEditModal("new")}/>
+                    </Card.Title>
+                    <TypesList
+                        types={types}
+                        onDelete={handleDelete}
+                        onEdit={handleShowEditModal}/>
+                </Card.Body>
+            </Card>
             <div>
                 <Modal
                     show={showEditModal}

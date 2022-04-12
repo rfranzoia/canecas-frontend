@@ -1,7 +1,6 @@
 import {typesApi} from "../../api/TypesAPI";
 import {EditTypeForm} from "./EditTypeForm";
 import {useContext, useEffect, useState} from "react";
-import {Card, Col, Container, Row} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 
@@ -61,9 +60,6 @@ export const EditType = (props) => {
 
     }, [props.id, props.op]);
 
-    const title = props.op === "new" ? "New" :
-        props.op === "edit" ? "Edit" : "View";
-
     const handleOp = (type) => {
         if (props.op !== "view") {
             handleSaveType(type);
@@ -71,18 +67,9 @@ export const EditType = (props) => {
     }
 
     return (
-        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
-            <Row>
-                <Col md="auto">
-                    <Card border="dark" className="align-content-center" style={{ width: '46.5rem'}}>
-                        <Card.Header as="h3">{`${title} Type`}</Card.Header>
-                        <Card.Body>
-                            <EditTypeForm type={type} op={props.op} onSaveType={handleOp} onCancel={handleCancel}/>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+        <>
+            <EditTypeForm type={type} op={props.op} onSaveType={handleOp} onCancel={handleCancel}/>
+        </>
 
     );
 }

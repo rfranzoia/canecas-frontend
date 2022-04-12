@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {Image} from "react-bootstrap";
+import {Card, Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
@@ -58,33 +58,40 @@ export const EditTypeForm = (props) => {
     }, [type.description, type.image])
 
     const viewOnly = props.op === "view";
+    const title = props.op === "new" ? "New" :
+        props.op === "edit" ? "Edit" : "View";
 
     return (
         <>
-            <AlertToast />
-            <form onSubmit={handleSave}>
-                <div className="form-group">
-                    <label htmlFor="description">Name<span aria-hidden="true"
-                                                           className="required">*</span></label>
-                    <input className="form-control" id="name" name="description" required type="text"
-                           value={formData.description} onChange={handleChange} disabled={viewOnly}/>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="image">Image<span aria-hidden="true"
-                                                      className="required">*</span></label>
-                    <input className="form-control" id="image" name="image" required type="url"
-                           value={formData.image} onChange={handleChange} disabled={viewOnly}/>
-                    {viewOnly &&
-                        <div className="container4">
-                            <hr/>
-                            <Image src={imageHelper.getImageUrl(type.image)}
-                                   fluid width="400" title={type.image}/>
+            <AlertToast/>
+            <Card border="dark">
+                <Card.Header as="h3">{`${title} Type`}</Card.Header>
+                <Card.Body>
+                    <form onSubmit={handleSave}>
+                        <div className="form-group">
+                            <label htmlFor="description">Name<span aria-hidden="true"
+                                                                   className="required">*</span></label>
+                            <input className="form-control" id="name" name="description" required type="text"
+                                   value={formData.description} onChange={handleChange} disabled={viewOnly}/>
                         </div>
-                    }
-                </div>
-            </form>
-            <br/>
-            <div className="align-content-end">
+                        <div className="form-group">
+                            <label htmlFor="image">Image<span aria-hidden="true"
+                                                              className="required">*</span></label>
+                            <input className="form-control" id="image" name="image" required type="url"
+                                   value={formData.image} onChange={handleChange} disabled={viewOnly}/>
+                            {viewOnly &&
+                                <div className="container4">
+                                    <hr/>
+                                    <Image src={imageHelper.getImageUrl(type.image)}
+                                           fluid width="400" title={type.image}/>
+                                </div>
+                            }
+                        </div>
+                    </form>
+                </Card.Body>
+
+            </Card>
+            <div className="default-margin">
                 {!viewOnly && (
                     <>
                         <CustomButton caption="Save" onClick={handleSave} type="save"/>

@@ -181,8 +181,7 @@ export const EditProductForm = (props) => {
                     </Container>
                 </form>
             </Card>
-            <br/>
-            <div className="align-content-end">
+            <div className="default-margin">
                 {!viewOnly && (
                     <>
                         <CustomButton caption="Save" onClick={handleSave} type="save"/>
@@ -197,83 +196,3 @@ export const EditProductForm = (props) => {
         </>
     );
 }
-
-/*
-
-
-
-<Container>
-                <Row>
-                    {alert.show &&
-                        <div className="alert-top">
-                            <Alert variant={alert.type} onClose={() => handleAlert(false)} dismissible>
-                                <Alert.Heading>{alert.title}</Alert.Heading>
-                                <p>{alert.message}</p>
-                            </Alert>
-                        </div>
-                    }
-                </Row>
-                <Row>
-                    <form onSubmit={handleSave}>
-                        <Container>
-                            <Row>
-                                {viewOnly &&
-                                    <Col>
-                                        <div className="container4">
-                                            <hr/>
-                                            <Image src={imageHelper.getImageUrl(product.image)}
-                                                   fluid width="350" title={product.image}/>
-                                        </div>
-                                    </Col>
-                                }
-                                <Col>
-                                    <div>
-                                        <div className="form-group">
-                                            <label htmlFor="name">Name<span aria-hidden="true"
-                                                                            className="required">*</span></label>
-                                            <input className="form-control" id="name" name="name" required type="text"
-                                                   value={formData.name} onChange={handleChange} disabled={viewOnly}/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="description">Description<span aria-hidden="true"
-                                                                                          className="required">*</span></label>
-                                            <textarea className="form-control" id="description" name="description"
-                                                      required
-                                                      rows={3}
-                                                      value={formData.description} onChange={handleChange}
-                                                      disabled={viewOnly}/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="price">Price<span aria-hidden="true"
-                                                                              className="required">*</span></label>
-                                            <input className="form-control" id="price" name="price" required
-                                                   type="number"
-                                                   value={formData.price} onChange={handleChange} disabled={viewOnly}/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="type">Type<span aria-hidden="true"
-                                                                            className="required">*</span></label>
-                                            <AutoCompleteInput
-                                                data={types}
-                                                value={formData.type}
-                                                disabled={viewOnly}
-                                                onFieldSelected={handleSelectType}
-                                                className="form-control"
-                                                required
-                                                placeholder="Please select a type"/>
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor="image">Image<span aria-hidden="true"
-                                                                              className="required">*</span></label>
-                                            <input className="form-control" id="image" name="image" required type="url"
-                                                   value={formData.image} onChange={handleChange} disabled={viewOnly}/>
-
-                                        </div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </form>
-                </Row>
-            </Container>
- */

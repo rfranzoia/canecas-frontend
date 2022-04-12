@@ -62,26 +62,24 @@ export const Products = () => {
 
 
     return (
-        <div className="container4">
+        <div className="default-margin">
             {showAlert && <AlertToast/>}
-            <div>
-                <Card border="dark" className="align-content-center">
-                    <Card.Header as="h3">Products</Card.Header>
-                    <Card.Body>
-                        <Card.Title>
-                            <CustomButton
-                                caption="New Product"
-                                type="new"
-                                customClass="fa fa-box-open"
-                                onClick={() => handleShowEditModal("new")} />
-                        </Card.Title>
-                        <ProductsList 
-                            products={products} 
-                            onDelete={handleDelete} 
-                            onEdit={handleShowEditModal}/>
-                    </Card.Body>
-                </Card>
-            </div>
+            <Card border="dark">
+                <Card.Header as="h3">Products</Card.Header>
+                <Card.Body>
+                    <Card.Title>
+                        <CustomButton
+                            caption="New Product"
+                            type="new"
+                            customClass="fa fa-box-open"
+                            onClick={() => handleShowEditModal("new")} />
+                    </Card.Title>
+                    <ProductsList
+                        products={products}
+                        onDelete={handleDelete}
+                        onEdit={handleShowEditModal}/>
+                </Card.Body>
+            </Card>
             <div>
                 <Modal
                     show={showEditModal}
@@ -101,45 +99,3 @@ export const Products = () => {
         </div>
     );
 }
-
-/*
-
-<Container fluid style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
-    <Row>
-        <Col>
-            <Card border="dark" className="align-content-center" style={{width: "100rem"}}>
-                <Card.Header as="h3">Products</Card.Header>
-                <Card.Body>
-                    <Card.Title>
-                        <Button caption="New Product" onClick={() => handleShowEditModal("new")} type="new"/>
-                    </Card.Title>
-                    <ProductsList products={products} onDelete={handleShowToast}
-                                    onEdit={handleShowEditModal}/>
-                </Card.Body>
-            </Card>
-        </Col>
-        <Col>
-            <Toast show={showToast} onClose={handleCloseToast} delay={TOAST_TIMEOUT} autohide>
-                <Toast.Header>
-                    <img src="holder.js/20x20?text=%20" className="rounded me-2" alt=""/>
-                    <strong className="me-auto">Products</strong>
-                    <small>just now</small>
-                </Toast.Header>
-                <Toast.Body>{toastMessage}</Toast.Body>
-            </Toast>
-        </Col>
-    </Row>
-    <Row>
-        <Modal show={showEditModal}
-                onHide={handleCloseEditModal}
-                backdrop="static" keyboard={true} centered
-                size={viewOnly?"xl": "lg"}
-                className="align-content-center">
-            <Modal.Body>
-                <EditProduct id={editViewOp.productId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
-            </Modal.Body>
-        </Modal>
-    </Row>
-</Container>
-
-*/
