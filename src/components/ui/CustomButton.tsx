@@ -50,7 +50,7 @@ export const CustomButton = (props: any) => {
     }, [props]);
 
     return (
-        <Button onClick={props.onClick} variant={buttonType.variant}>
+        <Button onClick={props.onClick} variant={buttonType.variant} className="bigger-input">
             <i className={buttonType.class}>&nbsp;</i>
             {props.caption}
         </Button>
