@@ -17,7 +17,7 @@ export const CustomButton = (props: any) => {
     const findButtonType = (type: string): ButtonType => {
         const buttonTypes: ButtonType[] = [
             { type: "save", class: "fa fa-save", variant: "primary" },
-            { type: "confirm", class: "fa fa-confirm", variant: "primary" },
+            { type: "confirm", class: "fa fa-check", variant: "primary" },
             { type: "sign-in", class: "fa fa-user-lock", variant: "primary" },
             { type: "sign-up", class: "fa fa-user-pen", variant: "primary" },
             { type: "custom-primary", class: "fa fa-user-check", variant: "primary" },

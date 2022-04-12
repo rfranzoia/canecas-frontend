@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
-import {TimelineItem} from "./TimelineItem";
-import classes from "./Timeline.module.css";
+import {StatusTimelineItem} from "./StatusTimelineItem";
+import classes from "./StatusTimeline.module.css";
 
 export const Timeline = (props) => {
     const [timelineData, setTimelineData] = useState([]);
@@ -12,7 +12,7 @@ export const Timeline = (props) => {
     return timelineData.length > 0 && (
         <div className={classes.timelineContainer}>
             {timelineData.map((data, idx) => (
-                <TimelineItem data={data} key={idx} />
+                <StatusTimelineItem data={data} key={idx} />
             ))}
         </div>
     );

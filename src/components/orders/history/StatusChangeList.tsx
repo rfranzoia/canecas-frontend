@@ -1,5 +1,5 @@
 import {DefaultCard} from "../../ui/DefaultCard";
-import {Timeline} from "../../ui/Timeliine";
+import {Timeline} from "./StatusTimeliine";
 import {CustomButton} from "../../ui/CustomButton";
 
 export const StatusChangeList = (props) => {
