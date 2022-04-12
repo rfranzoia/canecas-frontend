@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import { Modal, Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
-import {NewOrderItem} from "./NewOrderItem";
+import {NewOrderItemForm} from "./NewOrderItemForm";
 import {MdPostAdd} from "react-icons/all";
 
 export const OrderItemsList = (props) => {
@@ -39,7 +39,7 @@ export const OrderItemsList = (props) => {
                     keyboard={true}
                     centered>
                     <Modal.Body>
-                        <NewOrderItem onItemAdd={handleItemAdded} onCancelItemAdd={handleCloseModal}/>
+                        <NewOrderItemForm onItemAdd={handleItemAdded} onCancelItemAdd={handleCloseModal}/>
                     </Modal.Body>
                 </Modal>
                 <Table striped bordered hover size="sm">

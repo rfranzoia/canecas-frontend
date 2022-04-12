@@ -207,7 +207,7 @@ export const OrderRow = (props) => {
                     handleConfirm={() => confirmationDialog.onConfirm(updateReason)} hasData={confirmationDialog.hasData}>
                     <form>
                         <p>{confirmationDialog.message}</p>
-                        <div className="form-group">
+                        <div className="form-group spaced-form-group">
                             <label>Reason</label>
                             <input className="form-control" value={updateReason} onChange={handleChangeReason} />
                         </div>

@@ -6,7 +6,7 @@ import {CustomButton} from "../../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {AlertToast} from "../../ui/AlertToast";
 
-export const NewOrderItem = (props) => {
+export const NewOrderItemForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -111,7 +111,7 @@ export const NewOrderItem = (props) => {
                         <Form onSubmit={handleAdd}>
                             <Row>
                                 <Col>
-                                    <Form.Group>
+                                    <Form.Group className="spaced-form-group">
                                         <Form.Label>Product<span aria-hidden="true"
                                                                  className="required">*</span></Form.Label>
                                         <AutoCompleteInput
@@ -119,7 +119,7 @@ export const NewOrderItem = (props) => {
                                             displayField="name"
                                             value={formData.product}
                                             onFieldSelected={handleSelectProduct}
-                                            className="form-control"
+                                            className="form-control bigger-input"
                                             required
                                             placeholder="Please select a product"/>
                                     </Form.Group>
@@ -127,10 +127,10 @@ export const NewOrderItem = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Group>
+                                    <Form.Group className="spaced-form-group">
                                         <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
                                         <input
-                                            className="form-control"
+                                            className="form-control bigger-input"
                                             required
                                             type="text"
                                             name="price"
@@ -143,11 +143,11 @@ export const NewOrderItem = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Form.Group>
+                                    <Form.Group className="spaced-form-group">
                                         <Form.Label>Amount<span aria-hidden="true"
                                                                 className="required">*</span></Form.Label>
                                         <input
-                                            className="form-control"
+                                            className="form-control bigger-input"
                                             required
                                             type="text"
                                             name="amount"

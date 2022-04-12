@@ -113,11 +113,11 @@ export const NewOrder = (props) => {
                                 <Container>
                                     <Row>
                                         <Col>
-                                            <div className="form-group">
+                                            <div className="form-group spaced-form-group">
                                                 <label htmlFor="userEmail">
                                                     Customer Email<span aria-hidden="true" className="required">*</span>
                                                 </label>
-                                                <input className="form-control"
+                                                <input className="form-control bigger-input"
                                                        id="userEmail"
                                                        name="userEmail"
                                                        required
@@ -131,24 +131,23 @@ export const NewOrder = (props) => {
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <div className="form-group">
+                                            <div className="form-group spaced-form-group">
                                                 <label htmlFor="orderDate">Date<span aria-hidden="true"
                                                                                      className="required">*</span></label>
-                                                <input className="form-control" id="orderDate" name="orderDate" required type="date"
+                                                <input className="form-control bigger-input" id="orderDate" name="orderDate" required type="date"
                                                        value={formData.orderDate} onChange={handleChange}/>
                                             </div>
 
                                         </Col>
                                         <Col>
-                                            <div className="form-group">
+                                            <div className="form-group spaced-form-group">
                                                 <label htmlFor="totalPrice">Total Price</label>
-                                                <input className="form-control" id="totalPrice" name="totalPrice" required type="number"
+                                                <input className="form-control bigger-input" id="totalPrice" name="totalPrice" required type="number"
                                                        style={{textAlign: "right"}}
                                                        value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
                                             </div>
                                         </Col>
                                     </Row>
-                                    <br/>
                                     <Row>
                                         <Col>
                                             <OrderItemsList items={formData.items}

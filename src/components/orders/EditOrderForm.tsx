@@ -154,16 +154,16 @@ export const EditOrderForm = (props) => {
                         <Container>
                             <Row>
                                 <Col>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="_id">ID #</label>
-                                        <input className="form-control" id="_id" name="_id" required type="text"
+                                        <input className="form-control bigger-input" id="_id" name="_id" required type="text"
                                                value={formData._id} onChange={handleChange} disabled/>
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="orderDate">Date</label>
-                                        <input className="form-control" id="orderDate" name="orderDate" required
+                                        <input className="form-control bigger-input" id="orderDate" name="orderDate" required
                                                type="date"
                                                value={formData.orderDate}
                                                onChange={handleChange}
@@ -173,9 +173,9 @@ export const EditOrderForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="userEmail">Customer Email</label>
-                                        <input className="form-control" id="userEmail" name="userEmail" required
+                                        <input className="form-control bigger-input" id="userEmail" name="userEmail" required
                                                type="text"
                                                value={formData.userEmail} onChange={handleChange}
                                                disabled={viewOnly || lockChanges}/>
@@ -184,9 +184,9 @@ export const EditOrderForm = (props) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="totalPrice">Total Price</label>
-                                        <input className="form-control" id="totalPrice" name="totalPrice"
+                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
                                                required type="number"
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange}
                                                disabled/>
@@ -194,7 +194,7 @@ export const EditOrderForm = (props) => {
 
                                 </Col>
                                 <Col>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="status">Status</label>
                                         <select className="form-select" id="status" name="status" required
                                                 value={formData.status}
@@ -208,7 +208,6 @@ export const EditOrderForm = (props) => {
                                     </div>
                                 </Col>
                             </Row>
-                            <br/>
                             <Row>
                                 <Col>
                                     <OrderItemsList items={formData.items}
