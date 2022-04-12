@@ -1,7 +1,7 @@
 import {CustomButton} from "../ui/CustomButton";
 import {Card, Col, Container, Image, Modal, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
-import {FormCotacao} from "./FormCotacao";
+import {QuoteRequestForm} from "./QuoteRequestForm";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
@@ -47,19 +47,19 @@ export const Presentation = () => {
                     let product: Product;
                     for (let i = 0; i < result.length; i++) {
                         product = result[i];
-                        if (product.type !== mapped[mapped.length-1].type) {
+                        if (product.type !== mapped[mapped.length - 1].type) {
                             mapped.push({
                                 product: product,
                                 type: product.type,
                                 price: 999999
                             })
                         }
-                        if (product.price < mapped[mapped.length-1].price) {
-                            mapped[mapped.length-1].price = product.price;
+                        if (product.price < mapped[mapped.length - 1].price) {
+                            mapped[mapped.length - 1].price = product.price;
                         }
                     }
-                    if (product.price < mapped[mapped.length-1].price) {
-                        mapped[mapped.length-1].price = product.price;
+                    if (product.price < mapped[mapped.length - 1].price) {
+                        mapped[mapped.length - 1].price = product.price;
                     }
                     setProducts(mapped);
                 }
@@ -77,12 +77,14 @@ export const Presentation = () => {
             {(appCtx.alert.show && showAlert) &&
                 <AlertToast/>
             }
-            <div style={{margin: "auto",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        width: "30rem",
-                        position: "relative"}}>
+            <div style={{
+                margin: "auto",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "30rem",
+                position: "relative"
+            }}>
                 <h1>Caricanecas Manauara</h1>
                 <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>
                     ✏️ Usamos a arte para encantar com um produto que é a sua cara!
@@ -90,28 +92,28 @@ export const Presentation = () => {
                     Gostou da ideia? Faça seu pedido com a gente!👇
                 </p>
                 <div>
-                    <CustomButton caption="Solicitar Cotação" onClick={handleShowCotacao} type="login"/>
+                    <CustomButton caption="Solicitar Cotação" customClass="fa fa-money-check-dollar"
+                                  onClick={handleShowCotacao} type="login"/>
                 </div>
             </div>
             <br/>
-            <div className="div-center-image">
+            <div className="flex-centered-container">
                 <Image src={imageHelper.getImageUrl("perfil-caricanecas.jpeg")}
-                       fluid width="800" title="perfil caricanecas" />
+                       fluid width="800" title="perfil caricanecas"/>
             </div>
-            <Card border="dark" className="flex-card">
-                    <Card.Header as="h3">Nossos Produtos</Card.Header>
-                    <Card.Body>
-                        <table width="100%">
-                            <tbody>
-                            {products.map(p => {
-                                return (
-                                    <ProductShowCaseRow key={p.product._id} product={p}/>
-                                )
-                            })}
-                            </tbody>
-                        </table>
-                    </Card.Body>
-                </Card>
+            <Card border="dark" style={{ width: "80%", margin: "auto"}}>
+                <Card.Header as="h3">Nossos Produtos</Card.Header>
+                <Card.Body>
+                    <div className="flex-card">
+                        {products.map(p => {
+                            return (
+                                <ProductShowCaseRow key={p.product._id} product={p}/>
+                            )
+                        })}
+                    </div>
+                    <p style={{textAlign: "center"}}>Clique na imagem para saber mais</p>
+                </Card.Body>
+            </Card>
             <Modal
                 show={showFormCotacao}
                 onHide={handleCancel}
@@ -120,10 +122,11 @@ export const Presentation = () => {
                 style={{justifyItems: "center", margin: "auto"}}
                 keyboard={true}>
                 <Modal.Body>
-                    <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center", width: "auto" }}>
+                    <Container fluid
+                               style={{padding: "1rem", display: "flex", justifyContent: "center", width: "auto"}}>
                         <Row>
                             <Col md="auto">
-                                <FormCotacao onConfirm={handleConfirm} onCancel={handleCancel}/>
+                                <QuoteRequestForm onConfirm={handleConfirm} onCancel={handleCancel}/>
                             </Col>
                         </Row>
                     </Container>
