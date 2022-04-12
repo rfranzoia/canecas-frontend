@@ -16,7 +16,7 @@ export const ProductShowCaseRow = (props) => {
     }, [props.product]);
 
     return (
-        <td>
+        <div>
             <div className="flex-container">
                 <div className="flex-item-image">
                     <Image src={imageHelper.getImageUrl(product.image)}
@@ -29,6 +29,6 @@ export const ProductShowCaseRow = (props) => {
                     <p>à partir de R$ {props.product.price.toFixed(2)}</p>
                 </div>
             </div>
-        </td>
+        </div>
     );
 }
