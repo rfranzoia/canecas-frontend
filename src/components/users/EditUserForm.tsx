@@ -70,6 +70,7 @@ export const EditUserForm = (props) => {
         });
     };
 
+
     useEffect(() => {
         setFormData({
             role: user.role,
@@ -92,7 +93,7 @@ export const EditUserForm = (props) => {
                     <Card.Header as="h3">{`${title} User`}</Card.Header>
                     <Card.Body>
                         <form>
-                            <div style={{margin: "0 0 1rem"}}>
+                            <div className="form-group spaced-form-group" >
                                 <label>Role<span aria-hidden="true" className="required">*</span></label>
                                 <select
                                     className="form-select"
@@ -108,12 +109,12 @@ export const EditUserForm = (props) => {
                                     <option value="GUEST">Guest</option>
                                 </select>
                             </div>
-                            <div>
+                            <div className="form-group spaced-form-group" >
                                 <label>Name<span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     required
                                     type="text"
-                                    className="form-control"
+                                    className="form-control bigger-input"
                                     placeholder="Enter your name here"
                                     name="name"
                                     value={formData.name}
@@ -121,12 +122,12 @@ export const EditUserForm = (props) => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group spaced-form-group" >
                                 <label>Email address<span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     required
                                     type="email"
-                                    className="form-control"
+                                    className="form-control bigger-input"
                                     placeholder="Enter email for login"
                                     name="email"
                                     value={formData.email}
@@ -136,13 +137,13 @@ export const EditUserForm = (props) => {
                             </div>
                             {(!viewOnly && !isEdit) &&
                                 (
-                                    <div className="form-group" style={{display: "flex"}}>
+                                    <div className="form-group spaced-form-group" style={{display: "flex"}}>
                                         <div style={{float: "left", width: "20rem"}}>
                                             <label>Password<span aria-hidden="true" className="required">*</span></label>
                                             <input
                                                 required
                                                 type="password"
-                                                className="form-control"
+                                                className="form-control bigger-input"
                                                 placeholder="Enter a password"
                                                 name="password"
                                                 disabled={viewOnly || isEdit}
@@ -157,7 +158,7 @@ export const EditUserForm = (props) => {
                                             <input
                                                 required
                                                 type="password"
-                                                className="form-control"
+                                                className="form-control bigger-input"
                                                 placeholder="Confirm your password"
                                                 name="confirmPassword"
                                                 disabled={viewOnly || isEdit}
@@ -166,14 +167,13 @@ export const EditUserForm = (props) => {
                                             />
                                         </div>
                                     </div>
-
                                 )
                             }
-                            <div>
+                            <div className="form-group spaced-form-group" >
                                 <label>Phone</label>
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control bigger-input"
                                     placeholder="Phone"
                                     name="phone"
                                     value={formData.phone}
@@ -181,11 +181,11 @@ export const EditUserForm = (props) => {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group spaced-form-group" >
                                 <label>Address</label>
                                 <input
                                     type="address"
-                                    className="form-control"
+                                    className="form-control bigger-input"
                                     placeholder="Address"
                                     name="address"
                                     value={formData.address}

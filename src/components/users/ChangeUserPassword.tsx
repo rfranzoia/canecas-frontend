@@ -96,7 +96,7 @@ export const ChangeUserPassword = (props) => {
                 }
                 <Form>
                     <div style={{margin: "0.5rem"}}>
-                        <Form.Group>
+                        <Form.Group className="spaced-form-group">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
                                 type="email"
@@ -107,7 +107,7 @@ export const ChangeUserPassword = (props) => {
                         </Form.Group>
                     </div>
                     <div style={{margin: "0.5rem"}}>
-                        <Form.Group>
+                        <Form.Group className="spaced-form-group">
                             <Form.Label>Current Password</Form.Label>
                             <Form.Control
                                 type="password"
@@ -118,7 +118,7 @@ export const ChangeUserPassword = (props) => {
                         </Form.Group>
                     </div>
                     <div style={{margin: "0.5rem"}}>
-                        <Form.Group>
+                        <Form.Group className="spaced-form-group">
                             <Form.Label>New Password</Form.Label>
                             <Form.Control
                                 type="password"
@@ -129,7 +129,7 @@ export const ChangeUserPassword = (props) => {
                         </Form.Group>
                     </div>
                     <div style={{margin: "0.5rem"}}>
-                        <Form.Group>
+                        <Form.Group className="spaced-form-group">
                             <Form.Label>Confirm New Password</Form.Label>
                             <Form.Control
                                 type="password"
