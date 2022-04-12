@@ -31,6 +31,8 @@ export const EditProduct = (props) => {
                 } else if (result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
                     handleCancel(result);
                 }
+            } else {
+                handleCancel();
             }
         }
         save(product)

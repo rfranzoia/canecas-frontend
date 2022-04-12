@@ -22,7 +22,7 @@ export const Products = () => {
         productsApi.list().then((data) => {
             setProducts(data);
         });
-        appCtx.handleAlert(true, AlertType.DANGER, "Delete Product", "Product has been deleted successfully");
+        appCtx.handleAlert(true, AlertType.WARNING, "Delete Product", "Product has been deleted successfully");
         setShowAlert(true);
     }
 

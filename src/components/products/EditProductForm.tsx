@@ -119,44 +119,44 @@ export const EditProductForm = (props) => {
                         <Row>
                             {viewOnly &&
                                 <Col>
-                                    <div className="container4">
+                                    <div className="flex-item-image-auto">
                                         <Image src={imageHelper.getImageUrl(product.image)}
-                                               fluid width="350" title={product.image}/>
+                                               fluid width="600" title={product.image}/>
                                     </div>
                                 </Col>
                             }
                             <Col>
                                 <div>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="name">Name<span aria-hidden="true"
                                                                         className="required">*</span></label>
-                                        <input className="form-control" id="name" name="name" required type="text"
+                                        <input className="form-control bigger-input" id="name" name="name" required type="text"
                                                value={formData.name} onChange={handleChange} disabled={viewOnly}/>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="description">Description<span aria-hidden="true"
                                                                                       className="required">*</span></label>
-                                        <textarea className="form-control" id="description" name="description"
+                                        <textarea className="form-control bigger-input" id="description" name="description"
                                                   required
                                                   rows={3}
                                                   value={formData.description} onChange={handleChange}
                                                   disabled={viewOnly}/>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="price">Price<span aria-hidden="true"
                                                                           className="required">*</span></label>
                                         <input
-                                            className="form-control"
+                                            className="form-control bigger-input"
                                             required
                                             type="text"
                                             name="price"
-                                            value={formData.price}
+                                            value={viewOnly? formData.price.toFixed(2): formData.price}
                                             onChange={handleChange}
                                             style={{textAlign: "right"}}
                                             disabled={viewOnly}
                                             onInput={handleNumberInput}/>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="type">Type<span aria-hidden="true"
                                                                         className="required">*</span></label>
                                         <AutoCompleteInput
@@ -164,14 +164,14 @@ export const EditProductForm = (props) => {
                                             value={formData.type}
                                             disabled={viewOnly}
                                             onFieldSelected={handleSelectType}
-                                            className="form-control"
+                                            className="form-control bigger-input"
                                             required
                                             placeholder="Please select a type"/>
                                     </div>
-                                    <div className="form-group">
+                                    <div className="form-group spaced-form-group">
                                         <label htmlFor="image">Image<span aria-hidden="true"
                                                                           className="required">*</span></label>
-                                        <input className="form-control" id="image" name="image" required type="url"
+                                        <input className="form-control bigger-input" id="image" name="image" required type="url"
                                                value={formData.image} onChange={handleChange} disabled={viewOnly}/>
 
                                     </div>
