@@ -23,7 +23,7 @@ export const TypeRow = (props) => {
 
     return (
         <tr key={type._id} style={{ verticalAlign: "middle" }}>
-            <td><span style={{cursor: "pointer"}} onClick={() => props.onEdit("view", type._id)}>{type.description}</span></td>
+            <td><span style={{cursor: "pointer", color: "blue"}} onClick={() => props.onEdit("view", type._id)}>{type.description}</span></td>
             <td align="center">
                 <Image src={imageHelper.getImageUrl(type.image)}
                         fluid width="60" title={type.image}/>

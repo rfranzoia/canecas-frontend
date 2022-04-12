@@ -68,25 +68,27 @@ export const EditTypeForm = (props) => {
                 <Card.Header as="h3">{`${title} Type`}</Card.Header>
                 <Card.Body>
                     <form onSubmit={handleSave}>
-                        <div className="form-group">
-                            <label htmlFor="description">Name<span aria-hidden="true"
-                                                                   className="required">*</span></label>
-                            <input className="form-control" id="name" name="description" required type="text"
-                                   value={formData.description} onChange={handleChange} disabled={viewOnly}/>
+                        <div>
+                            <div className="form-group spaced-form-group">
+                                <label htmlFor="description">Name<span aria-hidden="true"
+                                                                       className="required">*</span></label>
+                                <input className="form-control bigger-input" id="name" name="description" required
+                                       type="text"
+                                       value={formData.description} onChange={handleChange} disabled={viewOnly}/>
+                            </div>
+                            <div className="form-group spaced-form-group">
+                                <label htmlFor="image">Image<span aria-hidden="true"
+                                                                  className="required">*</span></label>
+                                <input className="form-control bigger-input" id="image" name="image" required type="url"
+                                       value={formData.image} onChange={handleChange} disabled={viewOnly}/>
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="image">Image<span aria-hidden="true"
-                                                              className="required">*</span></label>
-                            <input className="form-control" id="image" name="image" required type="url"
-                                   value={formData.image} onChange={handleChange} disabled={viewOnly}/>
-                            {viewOnly &&
-                                <div className="container4">
-                                    <hr/>
-                                    <Image src={imageHelper.getImageUrl(type.image)}
-                                           fluid width="400" title={type.image}/>
-                                </div>
-                            }
-                        </div>
+                        {viewOnly &&
+                            <div className="flex-centered-container">
+                                <Image src={imageHelper.getImageUrl(type.image)}
+                                       fluid width="400" title={type.image}/>
+                            </div>
+                        }
                     </form>
                 </Card.Body>
 
