@@ -1,9 +1,9 @@
 
-export const Details = (props) => {
+export const OrderItems = (props) => {
 
     const items = props.items.map(item => {
         return (
-            <tr key={item._id}>
+            <tr key={item._id} className="tr-item">
                 <td width="40%">{item.product}</td>
                 <td width="10%" align="left">{item.amount}</td>
                 <td width="20%" align="right">{item.price.toFixed(2)}</td>

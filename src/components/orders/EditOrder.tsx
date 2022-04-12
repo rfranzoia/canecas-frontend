@@ -37,7 +37,7 @@ export const EditOrder = (props) => {
                     setToast({
                         show: true,
                         onClose: () => handleCloseToast(),
-                        title: "Create Order",
+                        title: "Create OrderRow",
                         message: error.description,
                         when: error.name
                     })

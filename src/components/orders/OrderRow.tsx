@@ -1,54 +1,47 @@
-import {OverlayTrigger, Tooltip} from "react-bootstrap";
-import {BiEdit, BiFastForwardCircle, BiTrash, BiUserCheck} from "react-icons/all";
-import {useState} from "react";
+import classes from "./Orders.module.css";
+import {useContext, useEffect, useState} from "react";
+import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
+import {ButtonAction, getActionIcon} from "../ui/Actions";
+import {OrderItems} from "./OrderItems";
+import {ApplicationContext} from "../../context/ApplicationContext";
+import {Role} from "../../domain/User";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import { findNextOrderStatus, OrderStatus } from "../../domain/Order";
 
 export const OrderRow = (props) => {
-    const order = props.order;
+    const appCtx = useContext(ApplicationContext);
+    const [order, setOrder] = useState({
+        _id: "",
+        orderDate: "",
+        userEmail: "",
+        status: 0,
+        statusReason: "",
+        totalPrice: 0,
+        items: [],
+        statusHistory: []
+    });
+    const [showItems, setShowItems] = useState(false);
+    const [updateReason, setUpdateReason] = useState("");
     const [confirmationDialog, setConfirmationDialog] = useState({
             show: false,
             title: "",
             message: "",
+            hasData: false,
             op: "",
-            onConfirm: () => undefined,
+            onConfirm: (param: string) => undefined,
             onCancel: () => undefined
         }
     );
 
-    const handleMoveForward = () => {
-        setConfirmationDialog({
-            show: true,
-            title: "Update Status",
-            message: `Are you sure you want to update status of the order '${order._id}
-                        from ${OrderStatus[order.status]} to ${OrderStatus[findNextOrderStatus(order.status)]}'?`,
-            op: "update",
-            onConfirm: () => handleConfirmForward(),
-            onCancel: () => handleCloseDialog()
-        });
+    const handleClickMaster = () => {
+        setShowItems(!showItems);
     }
 
-    const handleDelete = () => {
-        setConfirmationDialog({
-            show: true,
-            title: "Delete Order",
-            message: `Are you sure you want to delete the order '${order._id}'?`,
-            op: "delete",
-            onConfirm: () => handleConfirmDelete(),
-            onCancel: () => handleCloseDialog()
-        });
+    const handleEditOrder = (orderId: string) => {
+        props.onEditOrder("edit", orderId);
     }
 
-    const handleConfirmOrderDialog = () => {
-        setConfirmationDialog({
-            show: true,
-            title: "Confirm Order",
-            message: `Are you sure you want to confirm the order # '${order._id}', 
-                           you wont be able to make changes after that?`,
-            op: "confirm",
-            onConfirm: () => handleConfirmCreate(),
-            onCancel: () => handleCloseDialog()
-        });
+    const handleViewOrder = (orderId: string) => {
+        props.onEditOrder("view", orderId);
     }
 
     const handleCloseDialog = () => {
@@ -56,86 +49,179 @@ export const OrderRow = (props) => {
             show: false,
             title: "",
             message: "",
+            hasData: false,
             op: "",
             onConfirm: () => undefined,
             onCancel: () => undefined
         });
     }
 
+    const handleMoveForward = () => {
+        setConfirmationDialog({
+            show: true,
+            title: "Update Status",
+            message: `Are you sure you want to update status of the order '${order._id}
+                        from ${OrderStatus[order.status]} to ${OrderStatus[findNextOrderStatus(order.status)]}'?`,
+            hasData: true,
+            op: "update",
+            onConfirm: (param) => handleConfirmForward(param),
+            onCancel: () => handleCloseDialog()
+        });
+    }
+
+    const handleChangeReason = (event) => {
+        setUpdateReason(event.target.value);
+        setOrder(prevStatus => {
+            return {
+                ...prevStatus,
+                statusReason: updateReason
+            }
+        })
+    }
+
+    const handleDeleteOrCancel = () => {
+        if (order.status === OrderStatus.NEW) {
+            setConfirmationDialog({
+                show: true,
+                title: "Delete OrderRow",
+                message: `Are you sure you want to delete the order '${order._id}'?`,
+                op: "delete",
+                hasData: false,
+                onConfirm: () => handleConfirmDelete(),
+                onCancel: () => handleCloseDialog()
+            });
+        } else {
+            setConfirmationDialog({
+                show: true,
+                title: "Cancel OrderRow",
+                message: `Are you sure you want to CANCEL the order # '${order._id}'?,
+                            this action cannot be undone`,
+                hasData: true,
+                op: "cancel",
+                onConfirm: (param) => handleConfirmCancel(param),
+                onCancel: () => handleCloseDialog()
+            });
+        }
+
+    }
+
+    const handleConfirmOrderDialog = () => {
+        setConfirmationDialog({
+            show: true,
+            title: "Confirm OrderRow",
+            message: `Are you sure you want to confirm the order # '${order._id}', 
+                           you wont be able to make changes after that?`,
+            hasData: false,
+            op: "confirm",
+            onConfirm: () => handleConfirmCreate(),
+            onCancel: () => handleCloseDialog()
+        });
+    }
+
     const handleConfirmDelete = () => {
-        props.onDelete(order);
+        props.onDelete(order._id);
         handleCloseDialog();
     }
 
     const handleConfirmCreate = () => {
-        props.onCreate(order);
+        props.onConfirm(order._id);
         handleCloseDialog();
     }
-    const handleConfirmForward = () => {
-        props.onForward(order);
+    const handleConfirmForward = (updateReason) => {
+        props.onForwardOrder(order, updateReason);
+        handleCloseDialog();
+    }
+    const handleConfirmCancel = (cancelReason) => {
+        props.onCancelOrder(order._id, cancelReason);
         handleCloseDialog();
     }
 
-    const viewOrderTooltip = (props) => (
-        <Tooltip id="view-order-tooltip" {...props}>
-            Click to view this order details!
-        </Tooltip>
-    )
+    const canCancelOrder =
+        (appCtx.userData.role === Role.ADMIN && order.status > OrderStatus.NEW && order.status < OrderStatus.FINISHED) ||
+        (order.status === OrderStatus.NEW || order.status === OrderStatus.CONFIRMED);
+
+    const actions =
+            <td width="15%" align="right">
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                    getActionIcon(ButtonAction.EDIT,
+                        "Edit OrderRow",
+                        order.status === OrderStatus.NEW,
+                        () => handleEditOrder(order._id))
+                }
+                <span>&nbsp;</span>
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                        getActionIcon(order.status === OrderStatus.NEW?
+                                ButtonAction.DELETE:
+                                ButtonAction.CANCEL_ITEM,
+                            order.status === OrderStatus.NEW?"Delete OrderRow":"Cancel OrderRow",
+                            canCancelOrder,
+                            () => handleDeleteOrCancel())
+                }
+                <span>&nbsp;</span>
+                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                    getActionIcon(ButtonAction.USER_CHECK,
+                    "Confirm OrderRow",
+                    order.status === OrderStatus.NEW,
+                    () => handleConfirmOrderDialog())}
+                <span>&nbsp;</span>
+                {appCtx.userData.role === Role.ADMIN &&
+                    getActionIcon(ButtonAction.ACTION_FORWARD,
+                    `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
+                    (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
+                    () => handleMoveForward())}
+            </td>
+
+    useEffect(() => {
+        setOrder(props.order);
+    }, [props.order]);
 
     return (
-        <tr key={order._id} style={{ verticalAlign: "middle"}}>
-            <td>
-                <OverlayTrigger
-                    delay={{show: 250, hide: 500}}
-                    placement="top"
-                    overlay={viewOrderTooltip}>
-                    <span style={{cursor: "pointer", color: "blue"}}
-                        onClick={() => props.onEdit("view", order._id)}>{order._id}</span>
-                </OverlayTrigger>
-            </td>
-            <td>{order.orderDate.split("T")[0]}</td>
-            <td>{order.userEmail}</td>
-            <td align="right">{order.totalPrice.toFixed(2)}</td>
-            <td>{OrderStatus[order.status]}</td>
-            <td align="center">
-                <BiEdit
-                        onClick={() => props.onEdit("edit", order._id)}
-                        style={order.status !== 0 && { pointerEvents: "none" }}
-                        title="Edit Order"
-                        size="2em"
-                        cursor="pointer"
-                        color={order.status !== 0?"#a2a0a0":"blue"}/>
-                <span> | </span>
-                <BiTrash
-                    onClick={handleDelete}
-                    style={order.status !== 0 && { pointerEvents: "none" }}
-                    title="Delete Order"
-                    size="2em"
-                    cursor="pointer"
-                    color={order.status !== 0?"#a2a0a0":"red"}/>
-                <span> | </span>
-                <BiUserCheck
-                        onClick={handleConfirmOrderDialog}
-                        style={order.status !== 0 && { pointerEvents: "none" }}
-                        title="Confirm Order"
-                        size="2em"
-                        cursor="pointer"
-                        color={order.status !== 0?"#a2a0a0":"green"}/>
-                <span> | </span>
-                <BiFastForwardCircle
-                        onClick={handleMoveForward}
-                        style={(order.status === 0 || order.status >= 8) && { pointerEvents: "none" }}
-                        size="2em"
-                        title={`Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`}
-                        cursor="pointer"
-                        color={(order.status === 0 || order.status >= 8)?"#a2a0a0":"orange"}/>
-            </td>
-            <ConfirmModal
-                show={confirmationDialog.show}
-                handleClose={confirmationDialog.onCancel}
-                handleConfirm={confirmationDialog.onConfirm}
-                title={confirmationDialog.title}
-                message={confirmationDialog.message}/>
-        </tr>
-    );
+        <div className={classes.card}>
+            <table width="100%">
+                <tbody>
+                <tr>
+                    <td width="1%">
+                        {!showItems ?
+                            getActionIcon(ButtonAction.EXPAND, "Expand", false, () => handleClickMaster()) :
+                            getActionIcon(ButtonAction.COLLAPSE, "Collapse", false, () => handleClickMaster())
+                        }
+                    </td>
+                    <td width="15%">
+                            <span style={{cursor: "pointer", color: "blue"}} onClick={() => handleViewOrder(order._id)}>
+                                Order#: {order._id}
+                            </span>
+                    </td>
+                    <td width="12%" align="center">Date: {order.orderDate.split("T")[0]}</td>
+                    <td width="21%">Customer: {order.userEmail}</td>
+                    <td width="16%">Status: {OrderStatus[order.status]}</td>
+                    <td width="8%" align="right">Total: {order.totalPrice.toFixed(2)}</td>
+                    {actions}
+                </tr>
+                </tbody>
+            </table>
+            {showItems && (
+                <OrderItems items={order.items}/>
+            )}
+            {(confirmationDialog.op === "cancel" || confirmationDialog.op === "update") && (
+                <ConfirmModal show={confirmationDialog.show} handleClose={confirmationDialog.onCancel}
+                    handleConfirm={() => confirmationDialog.onConfirm(updateReason)} hasData={confirmationDialog.hasData}>
+                    <form>
+                        <p>{confirmationDialog.message}</p>
+                        <div className="form-group">
+                            <label>Reason</label>
+                            <input className="form-control" value={updateReason} onChange={handleChangeReason} />
+                        </div>
+                    </form>
+                </ConfirmModal>
+            )}
+            {(confirmationDialog.op !== "cancel" && confirmationDialog.op !== "update") && (
+                <ConfirmModal
+                    show={confirmationDialog.show}
+                    handleClose={confirmationDialog.onCancel}
+                    handleConfirm={confirmationDialog.onConfirm}
+                    title={confirmationDialog.title}
+                    message={confirmationDialog.message}/>
+            )}
+        </div>
+    )
 }

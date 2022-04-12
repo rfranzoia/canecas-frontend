@@ -1,146 +1,197 @@
 import {useContext, useEffect, useState} from "react";
-import {Card, Modal} from "react-bootstrap";
-import {ordersApi} from "../../api/OrdersAPI";
-import {OrdersList} from "./OrdersList";
-import {EditOrder} from "./EditOrder";
+import {DEFAULT_PAGE_SIZE, ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
-import {useHistory} from "react-router-dom";
 import {StatusCodes} from "http-status-codes";
-import {CustomButton} from "../ui/CustomButton";
-import {OrderAction} from "../../domain/Order";
+import {Modal} from "react-bootstrap";
+import {EditOrder} from "./EditOrder";
+import {NewOrder} from "./NewOrder";
+import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
+import {OrdersList} from "./OrdersList";
 import {AlertToast} from "../ui/AlertToast";
 
 export const Orders = () => {
-    const history = useHistory();
-    const appCtx = useContext(ApplicationContext);
     const [orders, setOrders] = useState([]);
-    const [showEdit, setShowEdit] = useState({
-        type: "",
+    const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
+    const [pageControl, setPageControl] = useState({
+        currPage: 1,
+        totalPages: 0
+    });
+    const [edit, setEdit] = useState({
         show: false,
-    });
-
-    const [editViewOp, setEditViewOp] = useState({
-        orderId: "",
         op: "",
-    });
-
-    const load = async () => {
-        const result = await ordersApi.withToken(appCtx.userData.authToken).list();
-        if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-            appCtx.showErrorAlert(result.name, result.description);
-            setOrders([]);
-        } else {
-            setOrders(result);
-        }
-    };
+        orderId: ""
+    })
 
     useEffect(() => {
         if (!appCtx.userData.authToken) {
-            appCtx.showErrorAlert("Invalid request!", "Unauthorized access");
             return;
         }
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+        loadOrders(pageControl.currPage);
+    }, [appCtx, pageControl]);
 
+    useEffect(() => {
+        ordersApi.withToken(appCtx.userData.authToken).count()
+            .then(result => {
+                setPageControl({
+                    currPage: 1,
+                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                });
+                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+            })
+    }, [appCtx])
+
+    const handleEdit = (op: string, orderId: string) => {
+        setEdit({
+            show: true,
+            op: op,
+            orderId: orderId
+        });
+    }
+
+    const loadOrders = (currPage: number) => {
         ordersApi
             .withToken(appCtx.userData.authToken)
-            .list()
+            .list(currPage)
             .then((result) => {
                 if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.showErrorAlert(result.name, result.description);
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
                     setOrders([]);
                 } else {
                     setOrders(result);
                 }
             });
-    }, [appCtx]);
+    }
 
-    const handleAction = (action: OrderAction) => {
-        if (action === OrderAction.DELETE) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Order Delete", "Order deleted successfully");
-        } else if (action === OrderAction.CONFIRM) {
-            appCtx.handleAlert(true, AlertType.SUCCESS, "Order Confirm", "The order has been confirmed");
-        } else if (action === OrderAction.FORWARD) {
-            appCtx.handleAlert(true, AlertType.WARNING, "Order Status Change", "The Order status has been updated successfully");
-        }
-        load().then(() => undefined);
-    };
-
-    const handleNewOrder = (id: string) => {
-        history.push(`/orders/${id}`);
-    };
-
-    const handleShowEditModal = (op, id) => {
-        setEditViewOp({
-            orderId: id,
-            op: op,
-        });
-
-        if (op === "view") {
-            setShowEdit({
-                type: "modal",
-                show: true,
-            });
-        } else {
-            history.push(`/orders/${id}`);
-            setShowEdit({
-                type: op,
-                show: true,
-            });
-        }
-    };
-
-    const handleCloseEditModal = () => {
-        setShowEdit({
-            type: "",
+    const handleEditSave = () => {
+        loadOrders(pageControl.currPage);
+        setEdit({
             show: false,
+            op: "",
+            orderId: ""
         });
-    };
+    }
 
-    const contentList = (
-        <>
-            <AlertToast />
-            <Card border="dark">
-                <Card.Header as="h3">Orders</Card.Header>
-                <Card.Body>
-                    <div>
-                        <div>
-                            <CustomButton
-                                caption="New Order"
-                                type="new"
-                                customClass="fa fa-file-invoice"
-                                onClick={() => handleNewOrder("new")}/>
-                        </div>
-                        <br/>
-                        <div>
-                            <OrdersList
-                                orders={orders}
-                                onDelete={() => handleAction(OrderAction.DELETE)}
-                                onConfirm={() => handleAction(OrderAction.CONFIRM)}
-                                onForward={() => handleAction(OrderAction.FORWARD)}
-                                onEdit={handleShowEditModal}
-                            />
-                        </div>
-                    </div>
-                </Card.Body>
-            </Card>
-        </>
-    );
+    const handleEditCancel = () => {
+        loadOrders(pageControl.currPage);
+        setEdit({
+            show: false,
+            op: "",
+            orderId: ""
+        });
+    }
 
-    const contentEdit = <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>;
+    const updateOrder = async (orderId: string, order) => {
+        const result = await ordersApi.withToken(appCtx.userData.authToken).update(orderId, order);
+        if (result.statusCode) {
+            if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+                appCtx.showErrorAlert(result.name, result.description);
+
+            } else if (result.statusCode === StatusCodes.BAD_REQUEST ||
+                result.statusCode === StatusCodes.NOT_FOUND ||
+                result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
+                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+            }
+            handleEditCancel();
+        }
+    }
+
+    const handleConfirmOrder = (orderId: string) => {
+        const o = {
+            status: OrderStatus.CONFIRMED
+        }
+        updateOrder(orderId, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm OrderRow", `Order '${orderId}' updated successfully`);
+                setShowAlert(true);
+                loadOrders(pageControl.currPage);
+            });
+    }
+
+    const handleCancelOrder = (orderId: string, cancelReason: string) => {
+        const o = {
+            status: OrderStatus.CANCELED,
+            statusReason: cancelReason
+        }
+        updateOrder(orderId, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.WARNING, "Cancel OrderRow", `Order '${orderId}' has been canceled`);
+                setShowAlert(true);
+                loadOrders(pageControl.currPage);
+            });
+    }
+
+    const handleForwardOrder = (order, forwardReason: string) => {
+        const o = {
+            status: findNextOrderStatus(order.status),
+            statusReason: forwardReason
+        }
+        updateOrder(order._id, o)
+            .then(() => {
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Update OrderRow Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+                setShowAlert(true);
+                loadOrders(pageControl.currPage);
+            });
+    }
+
+    const handleDeleteOrder = async (orderId: string) => {
+        if (!appCtx.userData.authToken) return;
+        ordersApi.withToken(appCtx.userData.authToken).delete(orderId)
+            .then(result => {
+                if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                } else {
+                    appCtx.handleAlert(true, AlertType.WARNING, "Delete OrderRow", `Order '${orderId}' deleted successfully`);
+                    setShowAlert(true);
+                }
+                loadOrders(pageControl.currPage);
+            })
+    }
 
     return (
-        <div className="container4">
-            {showEdit.show && showEdit.type !== "modal" ? contentEdit : contentList}
-            <Modal
-                show={showEdit.show && showEdit.type === "modal"}
-                size="lg"
-                onHide={handleCloseEditModal}
-                backdrop="static"
-                centered
-                keyboard={true}>
-                <Modal.Body>
-                    <EditOrder id={editViewOp.orderId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
-                </Modal.Body>
-            </Modal>
-        </div>
-    );
-};
+        <>
+            <div>
+                {showAlert &&
+                    <AlertToast/>
+                }
+                <OrdersList
+                    orders={orders}
+                    totalPages={totalPages}
+                    loadOrders={loadOrders}
+                    onEditOrder={handleEdit}
+                    onDeleteOrder={handleDeleteOrder}
+                    onCancelOrder={handleCancelOrder}
+                    onConfirmOrder={handleConfirmOrder}
+                    onForwardOrder={handleForwardOrder}/>
+            </div>
+            <div>
+                <Modal
+                    show={edit.show}
+                    size="lg"
+                    onHide={handleEditCancel}
+                    backdrop="static"
+                    centered
+                    keyboard={true}>
+                    <Modal.Body>
+                        {edit.op === "new" ?
+                            <NewOrder
+                                onSave={handleEditSave}
+                                onCancel={handleEditCancel}/> :
+                            <EditOrder
+                                id={edit.orderId}
+                                op={edit.op}
+                                onSave={handleEditSave}
+                                onCancel={handleEditCancel}/>
+                        }
+                    </Modal.Body>
+                </Modal>
+            </div>
+        </>
+    )
+}

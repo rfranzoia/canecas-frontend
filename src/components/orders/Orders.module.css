@@ -6,7 +6,11 @@
     width: auto;
     margin: 0.5rem auto;
 }
-.card:hover {
+
+.card:nth-child(odd) {
     background-color: #f1f1f1;
+}
+.card:hover {
+    background-color: #e1e1e1;
 }
 
