@@ -101,7 +101,7 @@ export const Presentation = () => {
                 <Image src={imageHelper.getImageUrl("perfil-caricanecas.jpeg")}
                        fluid width="800" title="perfil caricanecas"/>
             </div>
-            <Card border="dark" style={{ width: "80%", margin: "auto"}}>
+            <Card border="dark" style={{ margin: "auto"}}>
                 <Card.Header as="h3">Nossos Produtos</Card.Header>
                 <Card.Body>
                     <div className="flex-card">
@@ -111,7 +111,7 @@ export const Presentation = () => {
                             )
                         })}
                     </div>
-                    <p style={{textAlign: "center"}}>Clique na imagem para saber mais</p>
+                    <p style={{textAlign: "center", fontSize: "16px"}}>Clique na imagem para saber mais</p>
                 </Card.Body>
             </Card>
             <Modal

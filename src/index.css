@@ -96,18 +96,28 @@ h4 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    align-content: space-between;
     align-items: stretch;
     padding: 1rem;
 }
 
 .flex-container {
     display: flex;
-    justify-content: center;
     padding: 1rem;
-    margin: auto;
-    width: 80%;
-    height: 100%;
+    margin: 1rem;
+    align-content: stretch;
+    height: auto;
+    border: 1px solid;
     box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
+.flex-item-image {
+    display: flex;
+    padding: 0.5rem;
+    background-color: white;
+    justify-content: center;
+    width: auto;
+    height: auto;
 }
 
 .flex-centered-container {
@@ -115,13 +125,6 @@ h4 {
     justify-content: center;
     padding: 1rem;
     margin: auto;
-}
-
-.flex-item-image {
-    padding: 0.5rem;
-    background-color: white;
-    width: auto;
-    height: auto;
 }
 
 .flex-item-data {
