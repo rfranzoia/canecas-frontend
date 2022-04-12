@@ -34,20 +34,23 @@ export const ProductRow = (props) => {
             <td align="center">
                 <BiEdit
                     onClick={() => props.onEdit("edit", product._id)}
-                    title="Edit Product"
+                    title="Editar Produto"
                     size="2em"
                     cursor="pointer"
                     color="blue"/>
                 <span> | </span>
                 <BiTrash
                     onClick={handleDelete}
-                    title="Delete Product"
+                    title="Remover Produto"
                     size="2em"
                     cursor="pointer"
                     color="red"/>
             </td>
-            <ConfirmModal show={showConfirmation} handleClose={handleClose} handleConfirm={handleConfirm}
-                title="Delete Product"  message={`Are you sure you want to delete the product '${product.name}'?`}/>
+            <ConfirmModal show={showConfirmation}
+                          handleClose={handleClose}
+                          handleConfirm={handleConfirm}
+                          title="Remover Produto"
+                          message={`Você tem certeza que deseja REMOVER o Produto '${product.name}'?`}/>
         </tr>
     );
 }

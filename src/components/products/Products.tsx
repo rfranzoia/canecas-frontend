@@ -22,7 +22,7 @@ export const Products = () => {
         productsApi.list().then((data) => {
             setProducts(data);
         });
-        appCtx.handleAlert(true, AlertType.WARNING, "Delete Product", "Product has been deleted successfully");
+        appCtx.handleAlert(true, AlertType.WARNING, "Remover Produto", "O Produto foi removido com sucesso");
         setShowAlert(true);
     }
 
@@ -65,11 +65,11 @@ export const Products = () => {
         <div className="default-margin">
             {showAlert && <AlertToast/>}
             <Card border="dark">
-                <Card.Header as="h3">Products</Card.Header>
+                <Card.Header as="h3">Produtos</Card.Header>
                 <Card.Body>
                     <Card.Title>
                         <CustomButton
-                            caption="New Product"
+                            caption="Novo Produto"
                             type="new"
                             customClass="fa fa-box-open"
                             onClick={() => handleShowEditModal("new")} />
@@ -91,7 +91,9 @@ export const Products = () => {
                     keyboard={true}>
                     <Modal.Body>
                         <div className="container4">
-                            <EditProduct id={editViewOp.productId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                            <EditProduct id={editViewOp.productId}
+                                         op={editViewOp.op}
+                                         onSaveCancel={handleCloseEditModal}/>
                         </div>
                     </Modal.Body>
                 </Modal>

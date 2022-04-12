@@ -13,7 +13,7 @@ export const ProductsList = (props) => {
 
     const handleOnDelete = async (product) => {
         if (await productsApi.withToken(appCtx.userData.authToken).delete(product._id)) {
-            props.onDelete(true, `Product '${product.name}' deleted successfully`);
+            props.onDelete(true, `O Produto '${product.name}' foi removido com sucesso`);
         } else {
             props.onDelete(false);
         }
@@ -23,17 +23,20 @@ export const ProductsList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th style={{ width: "20%" }}>Name</th>
-                <th style={{ width: "30%" }}>Description</th>
-                <th style={{ width: "7%" }}>Price</th>
-                <th style={{ width: "15%" }}>Type</th>
-                <th style={{ width: "10%" }}>Image</th>
+                <th style={{ width: "20%" }}>Nome</th>
+                <th style={{ width: "30%" }}>Descrição</th>
+                <th style={{ width: "7%", textAlign: "right" }}>Preço</th>
+                <th style={{ width: "15%" }}>Tipo</th>
+                <th style={{ width: "10%", textAlign: "center" }}>Imagem</th>
                 <th style={{ width: "8%" }}>&nbsp;</th>
             </tr>
             </thead>
             <tbody>
             {props.products.length > 0 && props.products.map(product => (
-                <ProductRow key={product._id} product={product} onEdit={handleOnEdit} onDelete={handleOnDelete}/>
+                <ProductRow key={product._id}
+                            product={product}
+                            onEdit={handleOnEdit}
+                            onDelete={handleOnDelete}/>
             ))}
             </tbody>
         </Table>

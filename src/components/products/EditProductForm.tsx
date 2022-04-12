@@ -39,12 +39,12 @@ export const EditProductForm = (props) => {
 
         if (name.trim().length === 0 || description.trim().length === 0 ||
             type.trim().length === 0 || image.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "Todos os campos são obrigatórios!");
             return false;
         }
 
         if (Number(price) <= 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Product price must be greater than zero!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação", "O preço do Produto deve ser maior que zero!");
             return false;
         }
         return true;
@@ -106,14 +106,14 @@ export const EditProductForm = (props) => {
     }, []);
 
     const viewOnly = props.op === "view";
-    const title = props.op === "new" ? "New" :
-                    props.op === "edit" ? "Edit" : "View";
+    const title = props.op === "new" ? "Novo" :
+                    props.op === "edit" ? "Editar" : "Visualizar";
 
     return (
         <>
             <AlertToast />
             <Card border="dark">
-                <Card.Header as="h3">{`${title} Product`}</Card.Header>
+                <Card.Header as="h3">{`${title} Produto`}</Card.Header>
                 <form onSubmit={handleSave}>
                     <Container>
                         <Row>
@@ -128,23 +128,31 @@ export const EditProductForm = (props) => {
                             <Col>
                                 <div>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="name">Name<span aria-hidden="true"
-                                                                        className="required">*</span></label>
-                                        <input className="form-control bigger-input" id="name" name="name" required type="text"
-                                               value={formData.name} onChange={handleChange} disabled={viewOnly}/>
+                                        <label htmlFor="name">Nome
+                                            <span aria-hidden="true" className="required">*</span></label>
+                                        <input className="form-control bigger-input"
+                                               id="name"
+                                               name="name"
+                                               required
+                                               type="text"
+                                               value={formData.name}
+                                               onChange={handleChange}
+                                               disabled={viewOnly}/>
                                     </div>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="description">Description<span aria-hidden="true"
-                                                                                      className="required">*</span></label>
-                                        <textarea className="form-control bigger-input" id="description" name="description"
+                                        <label htmlFor="description">Descrição
+                                            <span aria-hidden="true" className="required">*</span></label>
+                                        <textarea className="form-control bigger-input" id="description"
+                                                  name="description"
                                                   required
                                                   rows={3}
-                                                  value={formData.description} onChange={handleChange}
+                                                  value={formData.description}
+                                                  onChange={handleChange}
                                                   disabled={viewOnly}/>
                                     </div>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="price">Price<span aria-hidden="true"
-                                                                          className="required">*</span></label>
+                                        <label htmlFor="price">Preço
+                                            <span aria-hidden="true" className="required">*</span></label>
                                         <input
                                             className="form-control bigger-input"
                                             required
@@ -157,8 +165,8 @@ export const EditProductForm = (props) => {
                                             onInput={handleNumberInput}/>
                                     </div>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="type">Type<span aria-hidden="true"
-                                                                        className="required">*</span></label>
+                                        <label htmlFor="type">Tipo de Produto
+                                            <span aria-hidden="true" className="required">*</span></label>
                                         <AutoCompleteInput
                                             data={types}
                                             value={formData.type}
@@ -166,13 +174,20 @@ export const EditProductForm = (props) => {
                                             onFieldSelected={handleSelectType}
                                             className="form-control bigger-input"
                                             required
-                                            placeholder="Please select a type"/>
+                                            placeholder="Selecione o Tipo"/>
+                                        <small>Digite o nome do tipo para exibir a lista</small>
                                     </div>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="image">Image<span aria-hidden="true"
-                                                                          className="required">*</span></label>
-                                        <input className="form-control bigger-input" id="image" name="image" required type="url"
-                                               value={formData.image} onChange={handleChange} disabled={viewOnly}/>
+                                        <label htmlFor="image">Imagem do Produto
+                                            <span aria-hidden="true" className="required">*</span></label>
+                                        <input className="form-control bigger-input"
+                                               id="image"
+                                               name="image"
+                                               required
+                                               type="url"
+                                               value={formData.image}
+                                               onChange={handleChange}
+                                               disabled={viewOnly}/>
 
                                     </div>
                                 </div>
@@ -184,13 +199,13 @@ export const EditProductForm = (props) => {
             <div className="default-margin">
                 {!viewOnly && (
                     <>
-                        <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                        <CustomButton caption="Salvar" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
+                <CustomButton caption={viewOnly ? "Fechar" : "Cancelar"} onClick={handleCancel} type="close"/>
                 <p aria-hidden="true" id="required-description">
-                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                    <span aria-hidden="true" className="required">*</span>Campo(s) obrigatórios(s)
                 </p>
             </div>
         </>
