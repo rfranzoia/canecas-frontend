@@ -1,8 +1,6 @@
 import { Route, Switch } from "react-router-dom";
 import { ProtectedRoute } from "./api/ProtectedRouter";
 import { Types } from "./components/types/Types";
-import { UserLogin } from "./components/users/UserLogin";
-import { UserRegisterForm } from "./components/users/UserRegisterForm";
 import { Users } from "./components/users/Users";
 import { Layout } from "./components/layout/Layout";
 import { Products } from "./components/products/Products";
@@ -22,8 +20,6 @@ function App() {
                 <ProtectedRoute exact path="/orders" component={Orders} />
                 <ProtectedRoute exact path="/orders/new" component={NewOrder} />
                 <ProtectedRoute exact path="/orders/:id" component={EditOrder} />
-                <Route path="/users/create" exact><UserRegisterForm/></Route>
-                <Route path="/users/login" exact><UserLogin/></Route>
             </Switch>
         </Layout>
     );
