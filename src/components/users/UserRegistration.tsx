@@ -224,7 +224,7 @@ export const UserRegistration = (props) => {
                         <input
                             type="text"
                             className="form-control bigger-input"
-                            placeholder="Phone"
+                            placeholder="Informe seu telefone"
                             name="phone"
                             value={userRegister.phone}
                             onChange={handleChangeRegister}

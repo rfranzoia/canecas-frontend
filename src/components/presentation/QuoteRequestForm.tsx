@@ -47,7 +47,7 @@ export const QuoteRequestForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação!", "Todos os campos são obrigatórios");
             return false;
         }
         return true;
@@ -70,13 +70,13 @@ export const QuoteRequestForm = (props) => {
                         <DefaultCard title="Request Quote" style={{width: "30rem"}}>
                             <form>
                                 <div className="form-group spaced-form-group">
-                                    <label>Name<span aria-hidden="true"
+                                    <label>Nome<span aria-hidden="true"
                                                      className="required">*</span></label>
                                     <input
                                         required
                                         type="text"
                                         className="form-control bigger-input"
-                                        placeholder="Enter your name here"
+                                        placeholder="Informe seu nome completo"
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}/>
@@ -88,32 +88,32 @@ export const QuoteRequestForm = (props) => {
                                         required
                                         type="email"
                                         className="form-control bigger-input"
-                                        placeholder="Enter email for login"
+                                        placeholder="Informe seu Email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}/>
-                                    <small>This will be your login information</small>
+                                    <small>O Email será utilizado como Login</small>
                                 </div>
                                 <div className="form-group spaced-form-group">
-                                    <label>Phone<span aria-hidden="true"
+                                    <label>Telefone<span aria-hidden="true"
                                                       className="required">*</span></label>
                                     <input
                                         type="text"
                                         className="form-control bigger-input"
-                                        placeholder="Please enter you Phone number"
+                                        placeholder="Informe seu telefone"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}/>
-                                    <small>This is how we'll mainly contact you</small>
+                                    <small>Seu telefone será nossa forma principal de contato com você</small>
                                 </div>
                                 <br/>
                             </form>
                             <div className="align-content-end">
-                                <CustomButton caption="Request" onClick={handleConfirm} type="save"/>
+                                <CustomButton caption="Solicitar" onClick={handleConfirm} type="save"/>
                                 <span>&nbsp;</span>
-                                <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                                <CustomButton caption="Cancelar" onClick={handleCancel} type="close"/>
                                 <p aria-hidden="true" id="required-description">
-                                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                                    <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)
                                 </p>
                             </div>
                         </DefaultCard>
