@@ -33,26 +33,26 @@ export const UserRow = (props) => {
             <td align="center">
                 <BiEdit
                     onClick={() => props.onEdit("edit", user._id)}
-                    title="Edit User"
+                    title="Editar Usuário"
                     size="2em"
                     cursor="pointer"
                     color="blue"/>
                 <span> | </span>
                 <BiTrash
                     onClick={handleDelete}
-                    title="Delete User"
+                    title="Remover Usuário"
                     size="2em"
                     cursor="pointer"
                     color="red"/>
                 <BiLockOpen
                     onClick={handleChangePassword}
-                    title="Update Password"
+                    title="Atualizar Senha"
                     size="2em"
                     cursor="pointer"
                     color="green"/>
             </td>
             <ConfirmModal show={showConfirmation} handleClose={handleClose} handleConfirm={handleConfirm}
-                title="Delete User"  message={`Are you sure you want to delete the user '${user.name}'?`}/>
+                title="Remover Usuário"  message={`Tem certeza que deseja REMOVER o Usuário '${user.name}'?`}/>
         </tr>
     );
 }

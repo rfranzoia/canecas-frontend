@@ -37,17 +37,17 @@ export const EditUserForm = (props) => {
     };
 
     const isDataValid = (): boolean => {
-        const {role, name, email, password, confirmPassword} = formData;
+        const {role, name, email, password, confirmPassword, phone} = formData;
 
-        if (role.trim().length === 0 || name.trim().length === 0 ||
+        if (role.trim().length === 0 || name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Role, Name, Email and Password are required!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação!", "Perfil, nome, email, senha e telefone são obrigatórios!");
             return false;
         }
 
         if (!isEdit) {
             if (password !== confirmPassword) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+                appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação!", "A senha e a confirmação não são iguais!");
                 return false;
             }
         }
@@ -83,7 +83,7 @@ export const EditUserForm = (props) => {
         });
     }, [user]);
 
-    const title = props.op === "new" ? "New" : props.op === "edit" ? "Edit" : "View";
+    const title = props.op === "new" ? "Novo" : props.op === "edit" ? "Editar" : "Visualizar";
 
     return (
         <>
@@ -94,28 +94,30 @@ export const EditUserForm = (props) => {
                     <Card.Body>
                         <form>
                             <div className="form-group spaced-form-group" >
-                                <label>Role<span aria-hidden="true" className="required">*</span></label>
+                                <label>Perfil
+                                    <span aria-hidden="true" className="required">*</span></label>
                                 <select
-                                    className="form-select"
+                                    className="form-select bigger-input"
                                     id="role"
                                     name="role"
                                     required
                                     value={formData.role}
                                     disabled={viewOnly}
                                     onChange={handleChange}>
-                                    <option value="">Please Select</option>
+                                    <option value="">--- Selecione um Perfil ---</option>
                                     <option value="ADMIN">Admin</option>
                                     <option value="USER">User</option>
                                     <option value="GUEST">Guest</option>
                                 </select>
                             </div>
                             <div className="form-group spaced-form-group" >
-                                <label>Name<span aria-hidden="true" className="required">*</span></label>
+                                <label>Nome
+                                    <span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     required
                                     type="text"
                                     className="form-control bigger-input"
-                                    placeholder="Enter your name here"
+                                    placeholder="Informe seu Nome completo"
                                     name="name"
                                     value={formData.name}
                                     disabled={viewOnly}
@@ -123,28 +125,31 @@ export const EditUserForm = (props) => {
                                 />
                             </div>
                             <div className="form-group spaced-form-group" >
-                                <label>Email address<span aria-hidden="true" className="required">*</span></label>
+                                <label>Email
+                                    <span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     required
                                     type="email"
                                     className="form-control bigger-input"
-                                    placeholder="Enter email for login"
+                                    placeholder="Informe seu Email"
                                     name="email"
                                     value={formData.email}
                                     disabled={viewOnly}
                                     onChange={handleChange}
                                 />
+                                <small>O Email será utilizado como Login</small>
                             </div>
                             {(!viewOnly && !isEdit) &&
                                 (
                                     <div className="form-group spaced-form-group" style={{display: "flex"}}>
                                         <div style={{float: "left", width: "20rem"}}>
-                                            <label>Password<span aria-hidden="true" className="required">*</span></label>
+                                            <label>Senha
+                                                <span aria-hidden="true" className="required">*</span></label>
                                             <input
                                                 required
                                                 type="password"
                                                 className="form-control bigger-input"
-                                                placeholder="Enter a password"
+                                                placeholder="Informe uma senha"
                                                 name="password"
                                                 disabled={viewOnly || isEdit}
                                                 value={formData.password}
@@ -153,13 +158,13 @@ export const EditUserForm = (props) => {
                                         </div>
                                         &nbsp;
                                         <div style={{float: "left", width: "20rem"}}>
-                                            <label>Confirm Password<span aria-hidden="true"
-                                                                         className="required">*</span></label>
+                                            <label>Coonfirmação de Senha
+                                                <span aria-hidden="true" className="required">*</span></label>
                                             <input
                                                 required
                                                 type="password"
                                                 className="form-control bigger-input"
-                                                placeholder="Confirm your password"
+                                                placeholder="Confirme sua senha"
                                                 name="confirmPassword"
                                                 disabled={viewOnly || isEdit}
                                                 value={formData.confirmPassword}
@@ -170,23 +175,25 @@ export const EditUserForm = (props) => {
                                 )
                             }
                             <div className="form-group spaced-form-group" >
-                                <label>Phone</label>
+                                <label>Telefone
+                                    <span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     type="text"
                                     className="form-control bigger-input"
-                                    placeholder="Phone"
+                                    placeholder="Informe seu telefone"
                                     name="phone"
                                     value={formData.phone}
                                     disabled={viewOnly}
                                     onChange={handleChange}
                                 />
+                                <small>Seu telefone será nossa forma principal de contato com você</small>
                             </div>
                             <div className="form-group spaced-form-group" >
-                                <label>Address</label>
+                                <label>Endereço</label>
                                 <input
                                     type="address"
                                     className="form-control bigger-input"
-                                    placeholder="Address"
+                                    placeholder="Informe seu endereço"
                                     name="address"
                                     value={formData.address}
                                     disabled={viewOnly}
@@ -201,13 +208,13 @@ export const EditUserForm = (props) => {
                 <div className="align-content-end">
                     {!viewOnly && (
                         <>
-                            <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                            <CustomButton caption="Salvar" onClick={handleSave} type="save"/>
                             <span>&nbsp;</span>
                         </>
                     )}
-                    <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
+                    <CustomButton caption={viewOnly ? "Fechar" : "Cancelar"} onClick={handleCancel} type="close"/>
                     <p aria-hidden="true" id="required-description">
-                        <span aria-hidden="true" className="required">*</span>Required field(s)
+                        <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)
                     </p>
                 </div>
             </div>

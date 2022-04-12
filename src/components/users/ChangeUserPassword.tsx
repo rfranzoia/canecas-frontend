@@ -42,8 +42,8 @@ export const ChangeUserPassword = (props) => {
         if (user.newPassword.trim().length === 0 || user.confirmNewPassword.trim().length === 0) {
             setShowError({
                 show: true,
-                title: "Validation Error!",
-                message: "New Password can't be empty"
+                title: "Erro de Validação!",
+                message: "A nova senha e/confirmação não pode(m) ser vazia(s)"
             });
             return;
         }
@@ -51,8 +51,8 @@ export const ChangeUserPassword = (props) => {
         if (user.newPassword !== user.confirmNewPassword) {
             setShowError({
                 show: true,
-                title: "Validation Error!",
-                message: "New password and confirmation don't match"
+                title: "Erro de Validação!",
+                message: "A nova senha e a confirmação não são iguais"
             });
             return;
         }
@@ -87,7 +87,7 @@ export const ChangeUserPassword = (props) => {
     return (
         <>
             <Card>
-                <Card.Header as="h3">Change Password</Card.Header>
+                <Card.Header as="h3">Mudar Senha</Card.Header>
                 {showError.show &&
                     <Alert variant="danger" onClose={handleHideError} dismissible transition  className="alert-top">
                         <Alert.Heading>{showError.title}</Alert.Heading>
@@ -108,43 +108,43 @@ export const ChangeUserPassword = (props) => {
                     </div>
                     <div style={{margin: "0.5rem"}}>
                         <Form.Group className="spaced-form-group">
-                            <Form.Label>Current Password</Form.Label>
+                            <Form.Label>Senha Atual</Form.Label>
                             <Form.Control
                                 type="password"
                                 name="password"
                                 value={user.password}
-                                placeholder="Enter your current password"
+                                placeholder="Informe sua senha atual"
                                 onChange={handleChange}/>
                         </Form.Group>
                     </div>
                     <div style={{margin: "0.5rem"}}>
                         <Form.Group className="spaced-form-group">
-                            <Form.Label>New Password</Form.Label>
+                            <Form.Label>Nova Senha</Form.Label>
                             <Form.Control
                                 type="password"
                                 name="newPassword"
                                 value={user.newPassword}
-                                placeholder="Enter a new password"
+                                placeholder="Informe uma nova senha"
                                 onChange={handleChange}/>
                         </Form.Group>
                     </div>
                     <div style={{margin: "0.5rem"}}>
                         <Form.Group className="spaced-form-group">
-                            <Form.Label>Confirm New Password</Form.Label>
+                            <Form.Label>Confirmação de Senha</Form.Label>
                             <Form.Control
                                 type="password"
                                 name="confirmNewPassword"
                                 value={user.confirmNewPassword}
-                                placeholder="Please re-enter your new password"
+                                placeholder="Por favor confirme sua nova senha"
                                 onChange={handleChange}/>
                         </Form.Group>
                     </div>
                 </Form>
             </Card>
             <div style={{padding: "0.5rem"}}>
-                <CustomButton caption="Cancel" onClick={props.onCancel} type="close"/>
+                <CustomButton caption="Cancelar" onClick={props.onCancel} type="close"/>
                 &nbsp;
-                <CustomButton caption="Confirm" onClick={handleConfirm} type="confirm"/>
+                <CustomButton caption="Confirmar" onClick={handleConfirm} type="confirm"/>
             </div>
         </>
 

@@ -75,12 +75,12 @@ export const UserRegistration = (props) => {
 
         if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 ||
             phone.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Name, Email, Phone and Password are required!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação!", "Nome, email, senha e telefone são obrigatórios!");
             return false;
         }
 
         if (password !== confirmPassword) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Erro de Validação!", "A senha e a confirmação não são iguais!");
             return false;
         }
 
@@ -114,7 +114,7 @@ export const UserRegistration = (props) => {
 
     const formSignIn = (
         <Card>
-            <Card.Header>Sign In</Card.Header>
+            <Card.Header>Login</Card.Header>
             <Card.Body>
                 {appCtx.alert.show && <AlertToast/>}
                 <Form>
@@ -125,27 +125,27 @@ export const UserRegistration = (props) => {
                             name="email"
                             className="bigger-input"
                             value={user.email}
-                            placeholder="Enter your e-mail address"
+                            placeholder="Informe o seu Email"
                             onChange={handleChangeLogin}/>
                     </Form.Group>
                     <Form.Group className="spaced-form-group">
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Senha</Form.Label>
                         <Form.Control
                             type="password"
                             name="password"
                             className="bigger-input"
                             value={user.password}
-                            placeholder="Please enter your password"
+                            placeholder="Informe sua senha"
                             onChange={handleChangeLogin}/>
                     </Form.Group>
                 </Form>
                 <div>
-                    <CustomButton caption="Cancel" onClick={props.handleClose} type="close"/>
+                    <CustomButton caption="Cancelar" onClick={props.handleClose} type="close"/>
                     &nbsp;
-                    <CustomButton caption="Sign In" onClick={() => handleSignIn(user)} type="sign-in"/>
+                    <CustomButton caption="Login" onClick={() => handleSignIn(user)} type="sign-in"/>
                     <p className="forgot-password text-right">
-                        Need an account?&nbsp;
-                        <span onClick={() => handleShowType(ShowType.SIGN_UP)}><Link to="#">Sign Up</Link></span>
+                        Não tem conta?&nbsp;
+                        <span onClick={() => handleShowType(ShowType.SIGN_UP)}><Link to="#">Registre-se</Link></span>
                     </p>
                 </div>
             </Card.Body>
@@ -163,38 +163,41 @@ export const UserRegistration = (props) => {
                 {appCtx.alert.show && <AlertToast/>}
                 <form>
                     <div className="form-group spaced-form-group">
-                        <label>Name<span aria-hidden="true" className="required">*</span></label>
+                        <label>Nome
+                            <span aria-hidden="true" className="required">*</span></label>
                         <input
                             required
                             type="text"
                             className="form-control bigger-input"
-                            placeholder="Enter your name here"
+                            placeholder="Informe seu nome completo"
                             name="name"
                             value={userRegister.name}
                             onChange={handleChangeRegister}
                         />
                     </div>
                     <div className="form-group spaced-form-group">
-                        <label>Email address<span aria-hidden="true" className="required">*</span></label>
+                        <label>Email
+                            <span aria-hidden="true" className="required">*</span></label>
                         <input
                             required
                             type="email"
                             className="form-control bigger-input"
-                            placeholder="Enter email for login"
+                            placeholder="Informe seu Email"
                             name="email"
                             value={userRegister.email}
                             onChange={handleChangeRegister}
                         />
-                        <small>This will be your login information</small>
+                        <small>O Email será utilizado como Login</small>
                     </div>
                     <div className="form-group spaced-form-group" style={{display: "flex", marginBottom: "1rem"}}>
                         <div style={{float: "left", width: "20rem"}}>
-                            <label>Password<span aria-hidden="true" className="required">*</span></label>
+                            <label>Senha
+                                <span aria-hidden="true" className="required">*</span></label>
                             <input
                                 required
                                 type="password"
                                 className="form-control bigger-input"
-                                placeholder="Enter a password"
+                                placeholder="Informe uma senha"
                                 name="password"
                                 value={userRegister.password}
                                 onChange={handleChangeRegister}
@@ -202,13 +205,13 @@ export const UserRegistration = (props) => {
                         </div>
                         &nbsp;
                         <div style={{float: "left", width: "20rem"}}>
-                            <label>Confirm Password<span aria-hidden="true"
-                                                         className="required">*</span></label>
+                            <label>Confirmação de Senha
+                                <span aria-hidden="true" className="required">*</span></label>
                             <input
                                 required
                                 type="password"
                                 className="form-control bigger-input"
-                                placeholder="Confirm your password"
+                                placeholder="Confirme sua senha"
                                 name="confirmPassword"
                                 value={userRegister.confirmPassword}
                                 onChange={handleChangeRegister}
@@ -216,7 +219,7 @@ export const UserRegistration = (props) => {
                         </div>
                     </div>
                     <div className="form-group spaced-form-group">
-                        <label>Phone<span aria-hidden="true"
+                        <label>Telefone<span aria-hidden="true"
                                           className="required">*</span></label>
                         <input
                             type="text"
@@ -226,14 +229,14 @@ export const UserRegistration = (props) => {
                             value={userRegister.phone}
                             onChange={handleChangeRegister}
                         />
-                        <small>This is how we'll mainly contact you</small>
+                        <small>Seu telefone será nossa forma principal de contato com você</small>
                     </div>
                     <div className="form-group spaced-form-group">
-                        <label>Address</label>
+                        <label>Endereço</label>
                         <input
                             type="address"
                             className="form-control bigger-input"
-                            placeholder="Address"
+                            placeholder="Informe seu endereço"
                             name="address"
                             value={userRegister.address}
                             onChange={handleChangeRegister}
@@ -242,14 +245,14 @@ export const UserRegistration = (props) => {
                     <br/>
                 </form>
                 <div>
-                    <CustomButton caption="Cancel" onClick={props.handleClose} type="close"/>
+                    <CustomButton caption="Cancelar" onClick={props.handleClose} type="close"/>
                     &nbsp;
-                    <CustomButton caption="Sign Up" onClick={handleSignUp} type="sign-up"/>
+                    <CustomButton caption="Registrar" onClick={handleSignUp} type="sign-up"/>
                 </div>
                 <p aria-hidden="true" id="required-description">
-                    <span aria-hidden="true" className="required">*</span>Required field(s)<br/>
-                    Already registered&nbsp;
-                    <span onClick={() => handleShowType(ShowType.SIGN_IN)}><Link to="#">Sign In</Link></span>
+                    <span aria-hidden="true" className="required">*</span>Campo(s) obrigatório(s)<br/>
+                    Já se registrou?&nbsp;
+                    <span onClick={() => handleShowType(ShowType.SIGN_IN)}><Link to="#">Faça Login</Link></span>
                 </p>
             </Card.Body>
         </Card>

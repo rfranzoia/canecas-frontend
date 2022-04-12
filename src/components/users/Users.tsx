@@ -34,14 +34,14 @@ export const Users = () => {
 
     const handleDelete = () => {
         loadData().then(() => undefined);
-        appCtx.handleAlert(true, AlertType.WARNING, "Delete User!", "User has been deleted successfully")
+        appCtx.handleAlert(true, AlertType.WARNING, "Remover Usuário!", "Usuário removido com sucesso")
         setShowAlert(true);
     }
 
     const handlePasswordChanged = () => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
-        appCtx.handleAlert(true, AlertType.SUCCESS, "Password Update", "User password has been updated successfully");
+        appCtx.handleAlert(true, AlertType.SUCCESS, "Atualizar Senha", "Senha atualizada com sucesso");
         setShowAlert(true);
     }
 
@@ -103,11 +103,11 @@ export const Users = () => {
         <div className="default-margin">
             {showAlert && <AlertToast/>}
             <Card border="dark" className="align-content-center">
-                <Card.Header as="h3">Users</Card.Header>
+                <Card.Header as="h3">Usuários/Clientes</Card.Header>
                 <Card.Body>
                     <Card.Title>
                         <CustomButton
-                            caption="New User"
+                            caption="Novo Usuário"
                             type="new"
                             customClass="fa fa-user-plus"
                             onClick={() => handleShowEditModal("new")} />
@@ -130,7 +130,9 @@ export const Users = () => {
                     keyboard={true}>
                     <Modal.Body>
                         <div className="container4">
-                            <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                            <EditUser id={editViewOp.userId}
+                                      op={editViewOp.op}
+                                      onSaveCancel={handleCloseEditModal}/>
                         </div>
                     </Modal.Body>
                 </Modal>
@@ -145,7 +147,9 @@ export const Users = () => {
                     style={{ margin: "auto", alignContent: "center", justifyItems: "center" }}>
                     <Modal.Body>
                         <div className="container4">
-                            <ChangeUserPassword email={editViewOp.email} onCancel={handleClosePasswordModal} onSave={handlePasswordChanged}/>
+                            <ChangeUserPassword email={editViewOp.email}
+                                                onCancel={handleClosePasswordModal}
+                                                onSave={handlePasswordChanged}/>
                         </div>
                     </Modal.Body>
                 </Modal>
