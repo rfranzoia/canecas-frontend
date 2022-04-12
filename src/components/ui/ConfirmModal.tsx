@@ -9,8 +9,8 @@ export const ConfirmModal = (props) => {
             </Modal.Header>
             <Modal.Body>{!props.hasData?props.message:props.children}</Modal.Body>
             <Modal.Footer>
-                <CustomButton caption="No" onClick={props.handleClose} type="close"/>
-                <CustomButton caption="Yes" onClick={props.handleConfirm} type="confirm"/>
+                <CustomButton caption="Não" onClick={props.handleClose} type="close"/>
+                <CustomButton caption="Sim" onClick={props.handleConfirm} type="confirm"/>
             </Modal.Footer>
         </Modal>
     );
