@@ -4,6 +4,7 @@ import {useContext, useState} from "react";
 import { ApplicationContext } from "../../context/ApplicationContext";
 import { CustomButton } from "../ui/CustomButton";
 import {ShowType, UserRegistration} from "../users/UserRegistration";
+import {Role} from "../../domain/User";
 
 export const Header = () => {
     const history = useHistory();
@@ -29,49 +30,59 @@ export const Header = () => {
         history.replace("/")
     }
 
+    const adminUser = (
+        <>
+            <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
+            <NavDropdown title="Manage" id="navbarScrollingDropdown">
+                <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item as={Link} to="/users">Users</NavDropdown.Item>
+            </NavDropdown>
+        </>
+    )
+
+    const simpleUser = (
+        <>
+            <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
+            <NavDropdown title="Manage" id="navbarScrollingDropdown">
+                <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
+            </NavDropdown>
+        </>
+    )
+
     return (
         <header>
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
-                        <Nav.Link as={Link} to="/">
                             <Image src="http://192.168.1.116:3000/logo.jpg"
                                    title="Caricanecas Manauara"
                                     roundedCircle
                                     width="55"/>
-                        </Nav.Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
-                            navbarScroll>
+                            >
 
-                            {appCtx.isLoggedIn() &&
-                                (
-                                    <>
-                                        <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
-                                        <NavDropdown title="Manage" id="navbarScrollingDropdown">
-                                            <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
-                                            <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
-                                            <NavDropdown.Divider />
-                                            <NavDropdown.Item as={Link} to="/users">Users</NavDropdown.Item>
-                                        </NavDropdown>
-                                    </>
-                                )
-                            }
+                            {appCtx.isLoggedIn() && appCtx.userData.role === Role.ADMIN && adminUser }
+                            {appCtx.isLoggedIn() && appCtx.userData.role !== Role.ADMIN && simpleUser }
+
                         </Nav>
                         {appCtx.isLoggedIn() ?
                             (
                                 <Navbar.Collapse className="justify-content-end">
                                     <Navbar.Text> {appCtx.userData.userEmail} </Navbar.Text>
                                     &nbsp;&nbsp;
-                                    <CustomButton size="small" caption="Sign Out" onClick={handleLogout} type="logout"/>
+                                    <CustomButton caption="Sign Out" onClick={handleLogout} type="logout"/>
                                 </Navbar.Collapse>
                             ) :
                             (
-                                <CustomButton size="small" caption="Sign In" onClick={handleShowLogin} type="login"/>
+                                <CustomButton caption="Sign In" onClick={handleShowLogin} type="login"/>
                             )
                         }
                     </Navbar.Collapse>
