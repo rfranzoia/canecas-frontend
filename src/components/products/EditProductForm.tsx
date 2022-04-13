@@ -65,25 +65,6 @@ export const EditProductForm = (props) => {
         });
     }
 
-    useEffect(() => {
-        setFormData({
-            name: product.name,
-            description: product.description,
-            price: product.price,
-            type: product.type,
-            image: product.image
-        });
-    }, [product])
-
-    const handleSelectType = (type) => {
-        setFormData(prevState => {
-            return {
-                ...prevState,
-                type: type
-            }
-        })
-    }
-
     const handleNumberInput = (e) => {
         let {name, value} = e.target;
         value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
@@ -97,6 +78,25 @@ export const EditProductForm = (props) => {
             }
         });
     }
+
+    const handleSelectType = (type) => {
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                type: type
+            }
+        })
+    }
+
+    useEffect(() => {
+        setFormData({
+            name: product.name,
+            description: product.description,
+            price: product.price,
+            type: product.type,
+            image: product.image
+        });
+    }, [product]);
 
     useEffect(() => {
         typesApi.list()
