@@ -37,6 +37,7 @@ export const UserRegistration = (props) => {
         if (res.email) {
             appCtx.addUser({
                 userId: res._id,
+                name: res.name,
                 userEmail: res.email,
                 authToken: res.authToken,
                 role: res.role

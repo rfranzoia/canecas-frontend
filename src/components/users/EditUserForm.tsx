@@ -3,6 +3,7 @@ import {Card} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {Role} from "../../domain/User";
 
 export const EditUserForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -101,7 +102,7 @@ export const EditUserForm = (props) => {
                                     name="role"
                                     required
                                     value={formData.role}
-                                    disabled={viewOnly}
+                                    disabled={viewOnly || formData.role !== Role.ADMIN}
                                     onChange={handleChange}>
                                     <option value="">Please Select</option>
                                     <option value="ADMIN">Admin</option>
