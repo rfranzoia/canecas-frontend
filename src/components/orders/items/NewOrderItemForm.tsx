@@ -162,9 +162,9 @@ export const NewOrderItemForm = (props) => {
                         <br/>
                         <Row>
                             <Col>
-                                <CustomButton caption="Add" onClick={handleAdd} type="add" size="small"/>
+                                <CustomButton caption="Add" onClick={handleAdd} type="add"/>
                                 &nbsp;
-                                <CustomButton caption="Cancel" onClick={handleCancel} type="close" size="small"/>
+                                <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
                                 <p aria-hidden="true" id="required-description">
                                     <span aria-hidden="true" className="required">*</span>Required field(s)
                                 </p>
