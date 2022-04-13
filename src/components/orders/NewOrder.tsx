@@ -7,10 +7,13 @@ import {CustomButton} from "../ui/CustomButton";
 import { Order } from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
+import {usersApi} from "../../api/UsersAPI";
+import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 
 export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
+    const [users, setUsers] = useState([]);
     const [formData, setFormData] = useState({
         orderDate: "",
         userEmail: appCtx.userData.role === Role.ADMIN? "": appCtx.userData.userEmail,
@@ -93,11 +96,28 @@ export const NewOrder = (props) => {
         });
     }
 
+    const handleSelectUser = (user) => {
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                type: user
+            }
+        })
+    }
+
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
         }
     },[appCtx.alert.show])
+
+    useEffect(() => {
+        if (!appCtx.isLoggedIn()) return;
+        usersApi.withToken(appCtx.userData.authToken).list()
+            .then(result => {
+                setUsers(result);
+            })
+    }, []);
 
     return (
         <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
@@ -117,15 +137,14 @@ export const NewOrder = (props) => {
                                                 <label htmlFor="userEmail">
                                                     Customer Email<span aria-hidden="true" className="required">*</span>
                                                 </label>
-                                                <input className="form-control bigger-input"
-                                                       id="userEmail"
-                                                       name="userEmail"
-                                                       required
-                                                       type="text"
-                                                       value={formData.userEmail}
-                                                       onChange={handleChange}
-                                                       disabled={appCtx.userData.role !== Role.ADMIN}
-                                                       placeholder="Enter the Customer Email"/>
+                                                <AutoCompleteInput
+                                                    data={users}
+                                                    value={formData.userEmail}
+                                                    displayField="email"
+                                                    onFieldSelected={handleSelectUser}
+                                                    className="form-control bigger-input"
+                                                    required
+                                                    placeholder="Please select an user email"/>
                                             </div>
                                         </Col>
                                     </Row>

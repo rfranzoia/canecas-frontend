@@ -192,8 +192,8 @@ export const OrderRow = (props) => {
                             </span>
                     </td>
                     <td width="12%" align="center">Date: {order.orderDate.split("T")[0]}</td>
-                    <td width="21%">Customer: {order.userEmail}</td>
-                    <td width="16%">Status: {OrderStatus[order.status]}</td>
+                    <td width="20%">Customer: {order.userEmail}</td>
+                    <td width="15%">Status: {OrderStatus[order.status]}</td>
                     <td width="8%" align="right">Total: {order.totalPrice.toFixed(2)}</td>
                     {actions}
                 </tr>

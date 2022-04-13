@@ -6,10 +6,13 @@ import {CustomButton} from "../ui/CustomButton";
 import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {AutoCompleteInput} from "../ui/AutoCompleteInput";
+import {usersApi} from "../../api/UsersAPI";
 
 export const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const order = props.order;
+    const [users, setUsers] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         _id: "",
@@ -58,7 +61,6 @@ export const EditOrderForm = (props) => {
                 };
             });
         }
-
     }
 
     const handleSave = (event) => {
@@ -121,8 +123,14 @@ export const EditOrderForm = (props) => {
         setShowStatusHistory(false);
     }
 
-    const viewOnly = props.op === "view";
-    const lockChanges = order.status !== 0
+    const handleSelectUser = (user) => {
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                type: user
+            }
+        })
+    }
 
     useEffect(() => {
         setFormData({
@@ -141,6 +149,17 @@ export const EditOrderForm = (props) => {
             setShowAlert(false)
         }
     },[appCtx.alert.show])
+
+    useEffect(() => {
+        if (!appCtx.isLoggedIn()) return;
+        usersApi.withToken(appCtx.userData.authToken).list()
+            .then(result => {
+                setUsers(result);
+            })
+    }, []);
+
+    const viewOnly = props.op === "view";
+    const lockChanges = order.status !== 0
 
     if (!formData._id) return (<></>);
 
@@ -175,10 +194,14 @@ export const EditOrderForm = (props) => {
                                 <Col>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="userEmail">Customer Email</label>
-                                        <input className="form-control bigger-input" id="userEmail" name="userEmail" required
-                                               type="text"
-                                               value={formData.userEmail} onChange={handleChange}
-                                               disabled={viewOnly || lockChanges}/>
+                                        <AutoCompleteInput
+                                            data={users}
+                                            value={formData.userEmail}
+                                            displayField="email"
+                                            onFieldSelected={handleSelectUser}
+                                            className="form-control bigger-input"
+                                            required
+                                            placeholder="Please select an user email"/>
                                     </div>
                                 </Col>
                             </Row>

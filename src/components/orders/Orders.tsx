@@ -54,7 +54,6 @@ export const Orders = () => {
     }
 
     const loadOrders = (currPage: number) => {
-        console.log("this one now", currPage, pageControl.currPage)
         setPageControl(prevState => ({
             ...prevState,
             currPage: currPage
