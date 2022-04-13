@@ -43,8 +43,12 @@ export const OrdersList = (props) => {
         let res: number[] = [];
         let printDot = false;
 
+        const isTooShort = (end - start) <= 4;
         for (let page = 1; page <= totalPages; page++) {
-            if (page <= start || page >= end || page === currPage ||
+            if (isTooShort) {
+                res.push(page);
+
+            } else if (page <= start || page >= end || page === currPage ||
                 (page >= aroundBefore && page <= aroundAfter)) {
                 res.push(page);
                 printDot = true;
