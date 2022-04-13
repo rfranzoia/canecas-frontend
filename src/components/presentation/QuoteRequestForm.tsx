@@ -67,7 +67,7 @@ export const QuoteRequestForm = (props) => {
             <Row>
                 <Col>
                     <div style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
-                        <DefaultCard title="Request Quote" style={{width: "30rem"}}>
+                        <DefaultCard title="Solicitar Orçamento" style={{width: "30rem"}}>
                             <form>
                                 <div className="form-group spaced-form-group">
                                     <label>Nome<span aria-hidden="true"

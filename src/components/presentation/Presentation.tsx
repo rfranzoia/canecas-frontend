@@ -22,7 +22,7 @@ export const Presentation = () => {
 
     const handleConfirm = () => {
         appCtx.handleAlert(true, AlertType.SUCCESS, "Request Quote",
-            "Congratulations! Your quote has been sent. You'll be hearing from us soon");
+            "Parabéns! Seu pedido de cotação foi enviado. Em breve entraremos em contato para confirmar umas coisinhas.");
         setShowAlert(true);
         handleCancel();
     }
