@@ -3,7 +3,7 @@ import {
     BiFastForwardCircle,
     BiTrash,
     BiUserCheck,
-    MdPostAdd, RiDeleteBin2Line,
+    MdPostAdd, RiDeleteBin2Line, SiWhatsapp,
     VscCollapseAll, VscExpandAll
 } from "react-icons/all";
 
@@ -15,7 +15,8 @@ export enum ButtonAction {
     ADD_ITEM,
     EXPAND,
     COLLAPSE,
-    CANCEL_ITEM
+    CANCEL_ITEM,
+    WHATSAPP
 }
 
 export const getActionIcon = (action: ButtonAction, title: string, canClick: boolean = false, onClick = () => undefined) => {
@@ -98,6 +99,16 @@ export const getActionIcon = (action: ButtonAction, title: string, canClick: boo
                     color={!canClick ? "#a2a0a0" : "red"}
                     onClick={onClick}
                     size="2em"
+                    cursor="pointer"/>
+            )
+        case ButtonAction.WHATSAPP:
+            return (
+                <SiWhatsapp
+                    title={title}
+                    style={!canClick && {pointerEvents: "none"}}
+                    color={!canClick ? "#a2a0a0" : "green"}
+                    onClick={onClick}
+                    size="1.3em"
                     cursor="pointer"/>
             )
     }

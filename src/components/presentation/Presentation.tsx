@@ -9,6 +9,7 @@ import {productsApi} from "../../api/ProductsAPI";
 import {StatusCodes} from "http-status-codes";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
 import {Product} from "../../domain/Product";
+import {ButtonAction, getActionIcon} from "../ui/Actions";
 
 export const Presentation = () => {
     const appCtx = useContext(ApplicationContext);
@@ -72,6 +73,13 @@ export const Presentation = () => {
         }
     }, [appCtx.alert.show])
 
+    const handleWhatsappClick = () => {
+        const link = "https://api.whatsapp.com/send/?phone=351912558878&text=";
+        const message = `Olá,\neu gostaria de mais informações sobre os produtos de vocês`
+
+        window.location.href=link.concat(message);
+    }
+
     return (
         <div className="default-margin">
             {(appCtx.alert.show && showAlert) &&
@@ -92,9 +100,12 @@ export const Presentation = () => {
                     Gostou da ideia? Faça seu pedido com a gente!👇
                 </p>
                 <div>
-                    <CustomButton caption="Solicitar Cotação" customClass="fa fa-money-check-dollar"
-                                  onClick={handleShowCotacao} type="login"/>
+                    <CustomButton caption="Request Quote" customClass="fa fa-money-check-dollar"
+                                  onClick={handleShowCotacao} type="custom-success"/>
                 </div>
+                <p style={{textAlign: "center"}}>You can also send us a message on &nbsp;
+                    <span style={{cursor: "pointer"}} onClick={handleWhatsappClick}>{getActionIcon(ButtonAction.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
+                </p>
             </div>
             <br/>
             <div className="flex-centered-container">

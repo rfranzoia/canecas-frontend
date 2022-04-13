@@ -34,12 +34,12 @@ export const Header = () => {
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
-                        <Image src="http://192.168.1.116:3000/logo.jpg"
-                               title="Canecas"
-                                roundedCircle
-                                width="55"/>
-                        &nbsp;
-                        Canecas
+                        <Nav.Link as={Link} to="/">
+                            <Image src="http://192.168.1.116:3000/logo.jpg"
+                                   title="Caricanecas Manauara"
+                                    roundedCircle
+                                    width="55"/>
+                        </Nav.Link>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
@@ -47,7 +47,7 @@ export const Header = () => {
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
                             navbarScroll>
-                            <Nav.Link as={Link} to="/">Home</Nav.Link>
+
                             {appCtx.isLoggedIn() &&
                                 (
                                     <>

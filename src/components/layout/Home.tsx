@@ -10,9 +10,8 @@ export const Home = () => {
             <div className="container4">
                 {appCtx.isLoggedIn() &&
                     (
-                        <p style={{textAlign: "center"}}>Welcome Back </p>
+                        <p style={{textAlign: "center"}}>Welcome Back {appCtx.userData.userEmail}</p>
                     )}
-                <h1>Home</h1>
             </div>
             <div>
                 <Presentation />
