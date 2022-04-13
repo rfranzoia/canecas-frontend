@@ -15,6 +15,7 @@ export interface GlobalAlert {
 
 export interface UserData {
     userId: string,
+    name: string,
     userEmail: string,
     role: string,
     authToken: string
@@ -35,6 +36,7 @@ export interface AppCtx {
 const defaultValue: AppCtx = {
     userData: {
         userId: "",
+        name: "",
         userEmail: "",
         role: "",
         authToken: ""
@@ -76,6 +78,7 @@ export const ApplicationContextProvider = (props) => {
     const [userData, setUserData] = useState({
         userId: "",
         userEmail: "",
+        name: "",
         role: "",
         authToken: ""
     });
@@ -100,7 +103,8 @@ export const ApplicationContextProvider = (props) => {
 
     const addUser = (user) => {
         setUserData({
-            userId: user._id,
+            userId: user.userId,
+            name: user.name,
             userEmail: user.userEmail,
             role: user.role,
             authToken: user.authToken
@@ -111,6 +115,7 @@ export const ApplicationContextProvider = (props) => {
         setUserData({
             userId: "",
             userEmail: "",
+            name: "",
             role: "",
             authToken: ""
         });
