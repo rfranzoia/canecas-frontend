@@ -16,18 +16,16 @@ export const ProductShowCaseRow = (props) => {
     }, [props.product]);
 
     return (
-        <div>
-            <div className="flex-container">
-                <div className="flex-item-image">
-                    <Image src={imageHelper.getImageUrl(product.image)}
-                           fluid width="250" title={product.name}/>
-                </div>
-                <div className="flex-item-data">
-                    <h3>{product.type}</h3>
-                    <h4>{product.name}</h4>
-                    <p>{product.description}</p>
-                    <p>à partir de R$ {props.product.price.toFixed(2)}</p>
-                </div>
+        <div className="flex-container">
+            <div className="flex-item-image">
+                <Image src={imageHelper.getImageUrl(product.image)}
+                       fluid width="250" title={product.name}/>
+            </div>
+            <div className="flex-item-data">
+                <h3>{product.type}</h3>
+                <h4>{product.name}</h4>
+                <p>{product.description}</p>
+                <p>à partir de R$ {props.product.price.toFixed(2)}</p>
             </div>
         </div>
     );
