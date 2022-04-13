@@ -1,9 +1,9 @@
 import {ordersApi} from "../../api/OrdersAPI";
 import {useContext, useEffect, useState} from "react";
-import {ApplicationContext} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {EditOrderForm} from "./EditOrderForm";
-import {InformationToast} from "../ui/InformationToast";
 import {StatusCodes} from "http-status-codes";
+import {AlertToast} from "../ui/AlertToast";
 
 export const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -18,29 +18,14 @@ export const EditOrder = (props) => {
         statusHistory: []
     });
 
-    const [toast, setToast] = useState({
-        show: false,
-        onClose: () => undefined,
-        title: "",
-        message: "",
-        when: ""
-    });
-
     const handleSaveOrder = (order) => {
         ordersApi.withToken(appCtx.userData.authToken).update(order._id, order)
             .then(result => {
                 if (result._id) {
-                    handleCloseToast();
+                    appCtx.handleAlert(false);
                     handleSave(result._id);
                 } else {
-                    const error = result?.response?.data
-                    setToast({
-                        show: true,
-                        onClose: () => handleCloseToast(),
-                        title: "Create OrderRow",
-                        message: error.description,
-                        when: error.name
-                    })
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
                 }
             });
     }
@@ -53,15 +38,6 @@ export const EditOrder = (props) => {
         props.onSave(orderId);
     }
 
-    const handleCloseToast = () => {
-        setToast({
-            show: false,
-            onClose: () => undefined,
-            title: "",
-            message: "",
-            when: ""
-        });
-    }
 
     useEffect(() => {
         if (!appCtx.userData.authToken) return;
@@ -93,17 +69,12 @@ export const EditOrder = (props) => {
 
     return (
         <>
+            {appCtx.alert.show &&
+                <AlertToast/>
+            }
             <div>
                 <EditOrderForm title={title} order={order} op={props.op} onSaveOrder={handleOp}
                                onCancel={handleCancel}/>
-            </div>
-            <div>
-                <InformationToast
-                    show={toast.show}
-                    onClose={toast.onClose}
-                    title={toast.title}
-                    message={toast.message}
-                    when={toast.when}/>
             </div>
         </>
     );

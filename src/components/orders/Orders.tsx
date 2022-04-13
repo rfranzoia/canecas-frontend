@@ -32,7 +32,7 @@ export const Orders = () => {
             setShowAlert(false)
         }
         loadOrders(pageControl.currPage);
-    }, [appCtx, pageControl]);
+    }, [appCtx.userData.authToken, appCtx.alert.show]);
 
     useEffect(() => {
         ordersApi.withToken(appCtx.userData.authToken).count()
@@ -43,7 +43,7 @@ export const Orders = () => {
                 });
                 setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
             })
-    }, [appCtx])
+    }, [appCtx.userData.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setEdit({
@@ -54,6 +54,11 @@ export const Orders = () => {
     }
 
     const loadOrders = (currPage: number) => {
+        console.log("this one now", currPage, pageControl.currPage)
+        setPageControl(prevState => ({
+            ...prevState,
+            currPage: currPage
+        }));
         ordersApi
             .withToken(appCtx.userData.authToken)
             .list(currPage)
