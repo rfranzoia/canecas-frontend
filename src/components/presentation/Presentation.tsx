@@ -2,7 +2,7 @@ import {CustomButton} from "../ui/CustomButton";
 import {Card, Col, Container, Image, Modal, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {QuoteRequestForm} from "./QuoteRequestForm";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {ALERT_TIMEOUT, AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
 import {productsApi} from "../../api/ProductsAPI";
@@ -20,11 +20,14 @@ export const Presentation = () => {
         setShowFormCotacao(true);
     }
 
-    const handleConfirm = () => {
+    const handleConfirm = (zapLink: string) => {
         appCtx.handleAlert(true, AlertType.SUCCESS, "Request Quote",
             "Parabéns! Seu pedido de cotação foi enviado. Em breve entraremos em contato para confirmar umas coisinhas.");
         setShowAlert(true);
         handleCancel();
+        setTimeout(() => {
+            window.location.href=zapLink
+        }, ALERT_TIMEOUT);
     }
 
     const handleCancel = () => {
@@ -101,7 +104,7 @@ export const Presentation = () => {
                 <Image src={imageHelper.getImageUrl("perfil-caricanecas.jpeg")}
                        fluid width="800" title="perfil caricanecas"/>
             </div>
-            <Card border="dark" style={{ width: "99%", margin: "auto"}}>
+            <Card border="dark" style={{ width: "90%", margin: "auto"}}>
                 <Card.Header as="h3">Nossos Produtos</Card.Header>
                 <Card.Body>
                     <div className="flex-card">

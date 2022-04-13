@@ -37,7 +37,10 @@ export const QuoteRequestForm = (props) => {
         }
         const res = await usersApi.create(user);
         if (res.email && res.email === formData.email) {
-            props.onConfirm();
+            const link = "https://api.whatsapp.com/send/?phone=351912558878&text=";
+            const message = `Olá,\nmeu nome é *${user.name}* e gostaria de mais informações sobre os produtos de vocês`
+            const zapLink = link.concat(message);
+            props.onConfirm(zapLink);
         } else {
             appCtx.handleAlert(true, AlertType.DANGER, res.name, res.description);
         }
