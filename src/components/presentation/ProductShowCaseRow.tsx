@@ -10,15 +10,25 @@ export const ProductShowCaseRow = (props) => {
         type: "",
         image: ""
     })
+    const [image, setImage] = useState(null);
+
+    const getImage = (name) => {
+        const load = async () => {
+            setImage(await imageHelper.getImageFromServer(product.image));
+        }
+
+        load().then(() => null);
+    }
 
     useEffect(() => {
         setProduct(props.product.product);
+        getImage(props.product.product.image)
     }, [props.product]);
 
     return (
         <div className="flex-container">
             <div className="flex-item-image">
-                <Image src={imageHelper.getImageUrl(product.image)}
+                <Image src={image}
                        fluid width="250" title={product.name}/>
             </div>
             <div className="flex-item-data">

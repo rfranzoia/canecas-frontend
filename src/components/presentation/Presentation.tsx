@@ -35,6 +35,7 @@ export const Presentation = () => {
     useEffect(() => {
         productsApi.listOrderByType()
             .then((result) => {
+                if (!result) return;
                 if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
                     setShowAlert(true);
@@ -109,7 +110,7 @@ export const Presentation = () => {
             </div>
             <br/>
             <div className="flex-centered-container">
-                <Image src={imageHelper.getImageUrl("perfil-caricanecas.jpeg")}
+                <Image src={imageHelper.getImageFromClient("perfil-caricanecas.jpeg")}
                        fluid width="800" title="perfil caricanecas"/>
             </div>
             <Card border="dark" style={{ margin: "auto"}}>
