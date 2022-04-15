@@ -32,6 +32,13 @@ export const Presentation = () => {
         setShowFormCotacao(false);
     }
 
+    const handleWhatsappClick = () => {
+        const link = "https://api.whatsapp.com/send/?phone=5592996317532&text=";
+        const message = `Olá,\neu gostaria de mais informações sobre os produtos de vocês`
+
+        window.location.href=link.concat(message);
+    }
+
     useEffect(() => {
         productsApi.listOrderByType()
             .then((result) => {
@@ -74,12 +81,12 @@ export const Presentation = () => {
         }
     }, [appCtx.alert.show])
 
-    const handleWhatsappClick = () => {
-        const link = "https://api.whatsapp.com/send/?phone=351912558878&text=";
-        const message = `Olá,\neu gostaria de mais informações sobre os produtos de vocês`
-
-        window.location.href=link.concat(message);
-    }
+    useEffect(() => {
+        const check = async () => {
+            await appCtx.checkValidLogin();
+        }
+        check();
+    }, [])
 
     return (
         <div className="default-margin">
