@@ -1,21 +1,44 @@
 import {useContext, useEffect, useState} from "react";
 import {Card, Image} from "react-bootstrap";
-import {imageHelper} from "../ui/ImageHelper";
+import {imageHelper, ImageOpType} from "../ui/ImageHelper";
 import {CustomButton} from "../ui/CustomButton";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {servicesApi} from "../../api/ServicesAPI";
+import {StatusCodes} from "http-status-codes";
+import {ButtonAction, getActionIcon} from "../ui/Actions";
 
 export const EditTypeForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const type = props.type;
+    const [image, setImage] = useState(null);
+    const [imageOpType, setImageOpType] = useState(ImageOpType.VIEW);
     const [formData, setFormData] = useState({
         description: "",
         image: "",
     });
+    const [file, setFile] = useState({
+        selectedFile: null
+    });
 
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault();
+        await appCtx.checkValidLogin();
+
         if (!isDataValid()) return;
+
+        if (imageOpType === ImageOpType.NEW) {
+            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile);
+
+            if (sendResult instanceof Error) {
+                appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                return;
+
+            } else if (sendResult.statusCode !== StatusCodes.OK) {
+                appCtx.handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                return;
+            }
+        }
 
         const type = {
             description: formData.description,
@@ -35,9 +58,28 @@ export const EditTypeForm = (props) => {
         return true;
     }
 
+    const load = async (name) => {
+        setImage(await imageHelper.getImageFromServer(name));
+    }
+
     const handleCancel = (event) => {
         event.preventDefault();
         props.onCancel();
+    }
+
+    const handleChangeFile = (event) => {
+        event.preventDefault();
+        setFile({selectedFile: event.target.files[0]});
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                image: event.target.files[0].name
+            }
+        })
+    };
+
+    const handleFileClick = () => {
+        document.getElementById("file").click();
     }
 
     const handleChange = (event) => {
@@ -55,7 +97,16 @@ export const EditTypeForm = (props) => {
             description: type.description,
             image: type.image,
         });
+        imageHelper.getImage(load, type.image);
     }, [type.description, type.image])
+
+    useEffect(() => {
+        setImageOpType(props.op === OpType.VIEW?
+            ImageOpType.VIEW:
+            props.op === OpType.EDIT?
+                ImageOpType.EDIT:
+                ImageOpType.NEW);
+    }, [])
 
     const viewOnly = props.op === "view";
     const title = props.op === "new" ? "New" :
@@ -79,13 +130,33 @@ export const EditTypeForm = (props) => {
                             <div className="form-group spaced-form-group">
                                 <label htmlFor="image">Image<span aria-hidden="true"
                                                                   className="required">*</span></label>
-                                <input className="form-control bigger-input" id="image" name="image" required type="url"
-                                       value={formData.image} onChange={handleChange} disabled={viewOnly}/>
+                                <div className="flex-control">
+                                    <input className="form-control bigger-input"
+                                           id="image"
+                                           name="image"
+                                           required type="url"
+                                           value={formData.image}
+                                           onChange={handleChange}
+                                           disabled
+                                    />
+                                    <input
+                                        type="file"
+                                        id="file"
+                                        className="form-control bigger-input"
+                                        placeholder="Enter your name here"
+                                        name="file"
+                                        onChange={handleChangeFile}
+                                        style={{display: 'none'}}
+                                    />
+                                    {props.op !== OpType.VIEW &&
+                                        getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleFileClick)
+                                    }
+                                </div>
                             </div>
                         </div>
                         {viewOnly &&
                             <div className="flex-centered-container">
-                                <Image src={imageHelper.getImageUrl(type.image)}
+                                <Image src={image}
                                        fluid width="400" title={type.image}/>
                             </div>
                         }

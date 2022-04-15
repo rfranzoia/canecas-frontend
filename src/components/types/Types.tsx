@@ -25,18 +25,6 @@ export const Types = () => {
         setShowAlert(true);
     }
 
-    useEffect(() => {
-        typesApi.list().then((data) => {
-            setTypes(data);
-        });
-    }, [showEditModal]);
-
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-    },[appCtx.alert.show])
-
     const handleShowEditModal = (op: string, id?: string) => {
         setEditViewOp({
             typeId: id,
@@ -53,6 +41,25 @@ export const Types = () => {
         }
     };
 
+    const handleNewType = () => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+
+        handleShowEditModal("new");
+    }
+
+    useEffect(() => {
+        typesApi.list().then((data) => {
+            setTypes(data);
+        });
+    }, [showEditModal]);
+
+    useEffect(() => {
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+    },[appCtx.alert.show])
+
     return (
         <div className="default-margin">
             {showAlert && <AlertToast/>}
@@ -64,7 +71,7 @@ export const Types = () => {
                             caption="New Type"
                             type="new"
                             customClass="fa fa-industry"
-                            onClick={() => handleShowEditModal("new")}/>
+                            onClick={handleNewType}/>
                     </Card.Title>
                     <TypesList
                         types={types}

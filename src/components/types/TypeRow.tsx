@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
 import {BiEdit, BiTrash} from "react-icons/all";
 import {Image} from "react-bootstrap";
@@ -6,6 +6,7 @@ import {imageHelper} from "../ui/ImageHelper";
 
 export const TypeRow = (props) => {
     const type = props.type;
+    const [image, setImage] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     const handleDelete = () => {
@@ -21,11 +22,19 @@ export const TypeRow = (props) => {
         props.onDelete(type);
     }
 
+    const loadImage = async (name) => {
+        setImage(await imageHelper.getImageFromServer(name));
+    }
+
+    useEffect(() => {
+        imageHelper.getImage(loadImage, props.type.image);
+    },[props]);
+
     return (
         <tr key={type._id} style={{ verticalAlign: "middle" }}>
             <td><span style={{cursor: "pointer", color: "blue"}} onClick={() => props.onEdit("view", type._id)}>{type.description}</span></td>
             <td align="center">
-                <Image src={imageHelper.getImageUrl(type.image)}
+                <Image src={image}
                         fluid width="60" title={type.image}/>
             </td>
             <td align="center">
