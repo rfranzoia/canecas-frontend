@@ -182,8 +182,8 @@ export const OrderRow = (props) => {
                 <tr>
                     <td width="1%">
                         {!showItems ?
-                            getActionIcon(ButtonAction.EXPAND, "Expand", false, () => handleClickMaster()) :
-                            getActionIcon(ButtonAction.COLLAPSE, "Collapse", false, () => handleClickMaster())
+                            getActionIcon(ButtonAction.EXPAND, "Expand", true, () => handleClickMaster()) :
+                            getActionIcon(ButtonAction.COLLAPSE, "Collapse", true, () => handleClickMaster())
                         }
                     </td>
                     <td width="15%">

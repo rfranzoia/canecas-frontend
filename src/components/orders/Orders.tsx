@@ -24,40 +24,17 @@ export const Orders = () => {
         orderId: ""
     })
 
-    useEffect(() => {
+    const loadOrders = (currPage: number) => {
         if (!appCtx.userData.authToken) {
+            setOrders([]);
             return;
         }
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-        loadOrders(pageControl.currPage);
-    }, [appCtx.userData.authToken, appCtx.alert.show]);
 
-    useEffect(() => {
-        ordersApi.withToken(appCtx.userData.authToken).count()
-            .then(result => {
-                setPageControl({
-                    currPage: 1,
-                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
-                });
-                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
-            })
-    }, [appCtx.userData.authToken])
-
-    const handleEdit = (op: string, orderId: string) => {
-        setEdit({
-            show: true,
-            op: op,
-            orderId: orderId
-        });
-    }
-
-    const loadOrders = (currPage: number) => {
         setPageControl(prevState => ({
             ...prevState,
             currPage: currPage
         }));
+
         ordersApi
             .withToken(appCtx.userData.authToken)
             .list(currPage)
@@ -70,6 +47,30 @@ export const Orders = () => {
                     setOrders(result);
                 }
             });
+    }
+
+    const updateOrder = async (orderId: string, order) => {
+        if (!appCtx.userData.authToken) {
+            return;
+        }
+
+        const result = await ordersApi.withToken(appCtx.userData.authToken).update(orderId, order);
+        if (result.statusCode) {
+            if (result.statusCode === StatusCodes.BAD_REQUEST ||
+                result.statusCode === StatusCodes.NOT_FOUND ||
+                result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
+                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+            }
+            handleEditCancel();
+        }
+    }
+
+    const handleEdit = (op: string, orderId: string) => {
+        setEdit({
+            show: true,
+            op: op,
+            orderId: orderId
+        });
     }
 
     const handleEditSave = () => {
@@ -88,21 +89,6 @@ export const Orders = () => {
             op: "",
             orderId: ""
         });
-    }
-
-    const updateOrder = async (orderId: string, order) => {
-        const result = await ordersApi.withToken(appCtx.userData.authToken).update(orderId, order);
-        if (result.statusCode) {
-            if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-                appCtx.showErrorAlert(result.name, result.description);
-
-            } else if (result.statusCode === StatusCodes.BAD_REQUEST ||
-                result.statusCode === StatusCodes.NOT_FOUND ||
-                result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
-                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-            }
-            handleEditCancel();
-        }
     }
 
     const handleConfirmOrder = (orderId: string) => {
@@ -157,6 +143,29 @@ export const Orders = () => {
                 loadOrders(pageControl.currPage);
             })
     }
+
+    useEffect(() => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+    },[]);
+
+    useEffect(() => {
+        if (!appCtx.alert.show) {
+            setShowAlert(false)
+        }
+        loadOrders(pageControl.currPage);
+    }, [appCtx.alert.show]);
+
+    useEffect(() => {
+        ordersApi.withToken(appCtx.userData.authToken).count()
+            .then(result => {
+                setPageControl({
+                    currPage: 1,
+                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                });
+                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+            })
+    }, [])
 
     return (
         <>
