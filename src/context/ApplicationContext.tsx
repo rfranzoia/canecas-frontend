@@ -1,4 +1,7 @@
 import {createContext, useEffect, useState} from "react";
+import {usersApi} from "../api/UsersAPI";
+import {StatusCodes} from "http-status-codes";
+import {useHistory} from "react-router-dom";
 
 export interface GlobalError {
     show: boolean,
@@ -30,7 +33,8 @@ export interface AppCtx {
     isLoggedIn: Function,
     showErrorAlert: Function,
     hideErrorAlert: Function,
-    handleAlert: Function
+    handleAlert: Function,
+    checkValidLogin: Function
 }
 
 const defaultValue: AppCtx = {
@@ -57,18 +61,21 @@ const defaultValue: AppCtx = {
     isLoggedIn: () => {},
     showErrorAlert: () => {},
     hideErrorAlert: () => {},
-    handleAlert: () => {}
+    handleAlert: () => {},
+    checkValidLogin: () => {}
 }
 
 export const ALERT_TIMEOUT = 3 * 1000;
 
 export enum AlertType { NONE = "", DANGER = "danger", SUCCESS = "success", WARNING = "warning", INFO = "info" }
 
-export enum OpType { EDIT = "edit", VIEW = "view", DELETE = "delete", UPDATE = "update", CANCEL = "cancel" }
+export enum OpType { NEW = "new", EDIT = "edit", VIEW = "view", DELETE = "delete", UPDATE = "update", CANCEL = "cancel" }
 
 export const ApplicationContext = createContext(defaultValue);
 
 export const ApplicationContextProvider = (props) => {
+    const history = useHistory();
+
     const [error, setError] = useState({
         show: false,
         title: "",
@@ -90,16 +97,7 @@ export const ApplicationContextProvider = (props) => {
         message: "",
     });
 
-    useEffect(() => {
-        const storage = JSON.parse(localStorage.getItem("userData"));
-        if (storage) {
-            setUserData(storage)
-        }
-    }, []);
 
-    useEffect(() => {
-        localStorage.setItem("userData", JSON.stringify(userData));
-    }, [userData]);
 
     const addUser = (user) => {
         setUserData({
@@ -131,6 +129,9 @@ export const ApplicationContextProvider = (props) => {
             title: title,
             message: message
         });
+        setTimeout(() => {
+            hideErrorAlert();
+        }, ALERT_TIMEOUT * 2);
     }
 
     const hideErrorAlert = () => {
@@ -155,6 +156,35 @@ export const ApplicationContextProvider = (props) => {
         }
     };
 
+    const checkValidLogin = async () => {
+        if (!userData || !userData.userId || !userData.authToken) {
+            removeUser();
+        } else if (userData.userId && userData.authToken) {
+            const result = await usersApi.withToken(userData.authToken).get(userData.userId);
+            if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                handleAlert(true, AlertType.DANGER, "Session Expired", "User Session has expired, please login again!");
+                removeUser();
+            }
+        }
+    }
+
+    useEffect(() => {
+        const storage = JSON.parse(localStorage.getItem("userData"));
+        if (storage) {
+            addUser(storage);
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("userData", JSON.stringify(userData));
+        if (!userData.userId || !userData.authToken) {
+            setTimeout(() => {
+                handleAlert(false);
+                if (history) history.replace("/");
+            }, ALERT_TIMEOUT * 2);
+        }
+    }, [userData]);
+
     const context: AppCtx = {
         userData: userData,
         error: error,
@@ -164,7 +194,8 @@ export const ApplicationContextProvider = (props) => {
         removeUser: removeUser,
         showErrorAlert: showErrorAlert,
         hideErrorAlert: hideErrorAlert,
-        handleAlert: handleAlert
+        handleAlert: handleAlert,
+        checkValidLogin: checkValidLogin
     }
 
     return (
