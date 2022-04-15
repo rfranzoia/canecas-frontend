@@ -140,7 +140,7 @@ export const NewOrder = (props) => {
                                                 <AutoCompleteInput
                                                     data={users}
                                                     value={formData.userEmail}
-                                                    displayField="email"
+                                                    displayFields="email,name"
                                                     onFieldSelected={handleSelectUser}
                                                     className="form-control bigger-input"
                                                     required

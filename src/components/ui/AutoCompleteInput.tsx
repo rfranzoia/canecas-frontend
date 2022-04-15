@@ -5,35 +5,55 @@ export const AutoCompleteInput = (props) => {
     const [suggestions, setSuggestions] = useState([]);
     const [data, setData] = useState([]);
     const [field, setField] = useState("");
-    const [displayField, setDisplayField] = useState("");
+    const [displayFields, setDisplayFields] = useState([]);
 
     useEffect(() => {
         setData(props.data);
         setField(props.value);
-        setDisplayField(props.displayField?props.displayField:"description");
-    },[props.data, props.value, props.displayField]);
+
+        if (props.displayFields) {
+            setDisplayFields(props.displayFields.split(","));
+        } else {
+            setDisplayFields([props.displayField])
+        }
+
+    },[props.data, props.value, props.displayField, props.displayFields]);
 
     const handleChange = (event) => {
         const value = event.target.value;
+
+        suggestionsFilter(value);
+
+        setField(value);
+    }
+
+    const suggestionsFilter = (value) => {
         let s = [];
-        if (value.length > 0) {
+        if (value) {
             s = data.filter(d => {
-                return d[displayField].toLowerCase().includes(value.toLowerCase());
-            });
+                return displayFields.filter(df => d[df].toLowerCase().includes(value.toLowerCase())).length > 0
+            })
         }
         setSuggestions(s);
-        setField(value);
     }
 
     const renderSuggestions = () => {
         if (suggestions.length === 0) {
             return null
         }
+
+        const arr = suggestions.map(s => {
+            const inner = displayFields.map(df => {
+                return s[df];
+            })
+            return { _id: s._id, value: inner.join((" - "))}
+        })
+
         return (
             <ul>
-                {suggestions.map(s => {
+                {arr.map(a => {
                     return (
-                        <li key={s._id} onClick={() => handleFieldSelected(s[displayField])}>{s[displayField]}</li>
+                        <li key={a._id} onClick={() => handleFieldSelected(a.value.split(" - ")[0])}>{a.value}</li>
                     )
                 })}
             </ul>

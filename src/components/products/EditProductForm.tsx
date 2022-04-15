@@ -209,6 +209,7 @@ export const EditProductForm = (props) => {
                                                                         className="required">*</span></label>
                                         <AutoCompleteInput
                                             data={types}
+                                            displayFields="description"
                                             value={formData.type}
                                             disabled={viewOnly}
                                             onFieldSelected={handleSelectType}

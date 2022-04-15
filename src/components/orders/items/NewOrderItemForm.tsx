@@ -116,7 +116,7 @@ export const NewOrderItemForm = (props) => {
                                                                  className="required">*</span></Form.Label>
                                         <AutoCompleteInput
                                             data={products}
-                                            displayField="name"
+                                            displayFields="name"
                                             value={formData.product}
                                             onFieldSelected={handleSelectProduct}
                                             className="form-control bigger-input"
