@@ -39,6 +39,9 @@ export const ChangeUserPassword = (props) => {
     }
 
     const handleConfirm = () => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+
         if (user.newPassword.trim().length === 0 || user.confirmNewPassword.trim().length === 0) {
             setShowError({
                 show: true,
@@ -57,12 +60,10 @@ export const ChangeUserPassword = (props) => {
             return;
         }
 
-        usersApi.updatePassword(props.email, user.password, user.newPassword)
+        usersApi.withToken(appCtx.userData.authToken)
+            .updatePassword(props.email, user.password, user.newPassword)
             .then(result => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.showErrorAlert(result.name, result.description);
-
-                } else if (result.statusCode && result.statusCode === StatusCodes.BAD_REQUEST) {
+                if (result.statusCode && result.statusCode === StatusCodes.BAD_REQUEST) {
                     setShowError({
                         show: true,
                         title: result.name,
@@ -70,7 +71,7 @@ export const ChangeUserPassword = (props) => {
                     });
 
                 } else {
-                    props.onSave();
+                    props.onSave(true, "User password has been changed successfully");
                 }
             })
     }

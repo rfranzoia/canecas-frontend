@@ -6,15 +6,15 @@ export const UserRow = (props) => {
     const user = props.user;
     const [showConfirmation, setShowConfirmation] = useState(false);
 
-    const handleDelete = () => {
+    const handleShowDeleteConfirmation = () => {
         setShowConfirmation(true);
     }
 
-    const handleClose = () => {
+    const handleHideDeleteConfirmation = () => {
         setShowConfirmation(false);
     }
 
-    const handleConfirm = () => {
+    const handleConfirmDelete = () => {
         setShowConfirmation(false);
         props.onDelete(user);
     }
@@ -39,7 +39,7 @@ export const UserRow = (props) => {
                     color="blue"/>
                 <span> | </span>
                 <BiTrash
-                    onClick={handleDelete}
+                    onClick={handleShowDeleteConfirmation}
                     title="Delete User"
                     size="2em"
                     cursor="pointer"
@@ -51,7 +51,7 @@ export const UserRow = (props) => {
                     cursor="pointer"
                     color="green"/>
             </td>
-            <ConfirmModal show={showConfirmation} handleClose={handleClose} handleConfirm={handleConfirm}
+            <ConfirmModal show={showConfirmation} handleClose={handleHideDeleteConfirmation} handleConfirm={handleConfirmDelete}
                 title="Delete User"  message={`Are you sure you want to delete the user '${user.name}'?`}/>
         </tr>
     );

@@ -32,18 +32,38 @@ export const Users = () => {
         }
     };
 
-    const handleDelete = () => {
+    const handleDelete = (success, message?) => {
         loadData().then(() => undefined);
-        appCtx.handleAlert(true, AlertType.WARNING, "Delete User!", "User has been deleted successfully")
-        setShowAlert(true);
+        if (success) {
+            appCtx.handleAlert(true, AlertType.WARNING, "Delete User!", message);
+            setShowAlert(true);
+        }
     }
 
-    const handlePasswordChanged = () => {
+    const handleChangePasswordSave = (success, message?) => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
-        appCtx.handleAlert(true, AlertType.SUCCESS, "Password Update", "User password has been updated successfully");
-        setShowAlert(true);
+        if (success) {
+            appCtx.handleAlert(true, AlertType.SUCCESS, "Password Change", message);
+            setShowAlert(true);
+        }
     }
+
+    const handleEditUserSave = () => {
+        setShowEditModal(false);
+    }
+
+    const handleEditUserCancel = () => {
+        setShowEditModal(false);
+    }
+
+    const handleCloseEditModal = (error?) => {
+        setShowEditModal(false);
+        if (error) {
+            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+            setShowAlert(true);
+        }
+    };
 
     const handleShowEditModal = (op: string, id?: string) => {
         setEditViewOp({
@@ -52,14 +72,6 @@ export const Users = () => {
             op: op,
         });
         setShowEditModal(true);
-    };
-
-    const handleCloseEditModal = (error?) => {
-        setShowEditModal(false);
-        if (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
-            setShowAlert(true);
-        }
     };
 
     const handleShowChangePasswordModal = (email) => {
@@ -71,9 +83,14 @@ export const Users = () => {
         setShowChangePassword(true);
     };
 
-    const handleClosePasswordModal = () => {
+    const handleChangePasswordCancel = () => {
         setShowChangePassword(false);
     };
+
+    useEffect(() => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+    },[]);
 
     useEffect(() => {
         if (!appCtx.userData.authToken) {
@@ -130,7 +147,12 @@ export const Users = () => {
                     keyboard={true}>
                     <Modal.Body>
                         <div className="container4">
-                            <EditUser id={editViewOp.userId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                            <EditUser id={editViewOp.userId}
+                                      op={editViewOp.op}
+                                      onSaveCancel={handleCloseEditModal}
+                                      onSave={handleEditUserSave}
+                                      onCancel={handleEditUserCancel}
+                            />
                         </div>
                     </Modal.Body>
                 </Modal>
@@ -138,14 +160,16 @@ export const Users = () => {
             <div>
                 <Modal
                     show={showChangePassword}
-                    onHide={handleClosePasswordModal}
+                    onHide={handleChangePasswordCancel}
                     backdrop="static"
                     centered
                     keyboard={true}
                     style={{ margin: "auto", alignContent: "center", justifyItems: "center" }}>
                     <Modal.Body>
                         <div className="container4">
-                            <ChangeUserPassword email={editViewOp.email} onCancel={handleClosePasswordModal} onSave={handlePasswordChanged}/>
+                            <ChangeUserPassword email={editViewOp.email}
+                                                onCancel={handleChangePasswordCancel}
+                                                onSave={handleChangePasswordSave}/>
                         </div>
                     </Modal.Body>
                 </Modal>

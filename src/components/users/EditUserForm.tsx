@@ -102,7 +102,7 @@ export const EditUserForm = (props) => {
                                     name="role"
                                     required
                                     value={formData.role}
-                                    disabled={viewOnly || formData.role !== Role.ADMIN}
+                                    disabled={viewOnly || appCtx.userData.role !== Role.ADMIN}
                                     onChange={handleChange}>
                                     <option value="">Please Select</option>
                                     <option value="ADMIN">Admin</option>
