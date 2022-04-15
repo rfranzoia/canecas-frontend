@@ -127,6 +127,12 @@ h4 {
     margin: auto;
 }
 
+.flex-control {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+}
+
 .flex-item-data {
     padding: 0.5rem;
     width: 25rem;
@@ -138,4 +144,17 @@ h4 {
     background-color: white;
     width: auto;
     height: auto;
+}
+
+.black-shadow {
+    box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
+}
+
+.transparent-btn {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
 }

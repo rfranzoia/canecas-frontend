@@ -1,11 +1,3 @@
-import {
-    BiEdit,
-    BiFastForwardCircle,
-    BiTrash,
-    BiUserCheck,
-    MdPostAdd, RiDeleteBin2Line, SiWhatsapp,
-    VscCollapseAll, VscExpandAll
-} from "react-icons/all";
 
 export enum ButtonAction {
     EDIT,
@@ -16,100 +8,35 @@ export enum ButtonAction {
     EXPAND,
     COLLAPSE,
     CANCEL_ITEM,
-    WHATSAPP
+    WHATSAPP,
+    UNDO,
+    IMAGE_EDIT
 }
 
+const matrix = [
+    { type: ButtonAction.EDIT, class: "fa fa-pen-to-square", color: "blue", size: "2rem" },
+    { type: ButtonAction.DELETE, class: "fa fa-trash-can", color: "red", size: "2rem" },
+    { type: ButtonAction.USER_CHECK, class: "fa fa-user-check", color: "green", size: "2rem" },
+    { type: ButtonAction.ACTION_FORWARD, class: "fa fa-forward", color: "orange", size: "2rem" },
+    { type: ButtonAction.ADD_ITEM, class: "fa fa-cart-circle-plus", color: "blue", size: "2rem" },
+    { type: ButtonAction.EXPAND, class: "fa fa-square-plus", color: "black", size: "1.5rem" },
+    { type: ButtonAction.COLLAPSE, class: "fa fa-square-minus", color: "black", size: "1.5rem" },
+    { type: ButtonAction.CANCEL_ITEM, class: "fa fa-trash", color: "red", size: "2rem" },
+    { type: ButtonAction.IMAGE_EDIT, class: "fa fa-file-image", color: "blue", size: "2rem" },
+    { type: ButtonAction.UNDO, class: "fa fa-rotate-left", color: "red", size: "2rem" },
+    { type: ButtonAction.WHATSAPP, class: "fa-brands fa-whatsapp", color: "green", size: "2rem" },
+]
+
+
 export const getActionIcon = (action: ButtonAction, title: string, canClick: boolean = false, onClick = () => undefined) => {
-    switch (action) {
-        case ButtonAction.EDIT:
-            return (
-                <BiEdit
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "blue"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.DELETE:
-            return (
-                <BiTrash
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "red"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.USER_CHECK:
-            return (
-                <BiUserCheck
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "green"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.ACTION_FORWARD:
-            return (
-                <BiFastForwardCircle
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "orange"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.ADD_ITEM:
-            return (
-                <MdPostAdd
-                    title={title}
-                    style={canClick && {pointerEvents: "none"}}
-                    color={canClick ? "#a2a0a0" : "green"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.EXPAND:
-            return (
-                <VscExpandAll
-                    title={title}
-                    style={canClick && {pointerEvents: "none"}}
-                    color={canClick ? "#a2a0a0" : "green"}
-                    onClick={onClick}
-                    size="1.5em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.COLLAPSE:
-            return (
-                <VscCollapseAll
-                    title={title}
-                    style={canClick && {pointerEvents: "none"}}
-                    color={canClick ? "#a2a0a0" : "green"}
-                    onClick={onClick}
-                    size="1.5em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.CANCEL_ITEM:
-            return (
-                <RiDeleteBin2Line
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "red"}
-                    onClick={onClick}
-                    size="2em"
-                    cursor="pointer"/>
-            )
-        case ButtonAction.WHATSAPP:
-            return (
-                <SiWhatsapp
-                    title={title}
-                    style={!canClick && {pointerEvents: "none"}}
-                    color={!canClick ? "#a2a0a0" : "green"}
-                    onClick={onClick}
-                    size="1.3em"
-                    cursor="pointer"/>
-            )
-    }
+    const icon = matrix.find(icon => icon.type === action)
+    return (
+        <button type="button" className="transparent-btn" onClick={onClick} title={title} disabled={!canClick}>
+            <i className={icon.class}
+               style={{
+                   color: !canClick?"#a2a0a0":icon.color,
+                   fontSize: icon.size}}
+            />
+        </button>
+    )
 }
