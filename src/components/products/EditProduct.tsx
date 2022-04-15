@@ -15,6 +15,8 @@ export const EditProduct = (props) => {
     });
 
     const handleSaveProduct = (product) => {
+        if (!appCtx.userData.authToken) return;
+
         const save = async (product) => {
             let result;
             if (props.op === "edit") {
@@ -23,24 +25,15 @@ export const EditProduct = (props) => {
                 result = await productsApi.withToken(appCtx.userData.authToken).create(product);
             }
             if (result.statusCode) {
-                if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.showErrorAlert(result.name, result.description);
-                    handleCancel();
-                } else if (result.statusCode === StatusCodes.BAD_REQUEST) {
-                    handleCancel(result)
-                } else if (result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
-                    handleCancel(result);
+                if (result.statusCode in [StatusCodes.UNAUTHORIZED, StatusCodes.BAD_REQUEST, StatusCodes.INTERNAL_SERVER_ERROR]) {
+                    props.onSave(result);
                 }
             } else {
-                handleCancel();
+                props.onSave();
             }
         }
         save(product)
             .then(() => undefined);
-    }
-
-    const handleCancel = (error?) => {
-        props.onSaveCancel(error);
     }
 
     useEffect(() => {
@@ -65,15 +58,9 @@ export const EditProduct = (props) => {
 
     }, [props.id, props.op]);
 
-    const handleOp = (product) => {
-        if (props.op !== "view") {
-            handleSaveProduct(product);
-        }
-    }
-
     return (
         <>
-            <EditProductForm product={product} op={props.op} onSaveProduct={handleOp} onCancel={handleCancel}/>
+            <EditProductForm product={product} op={props.op} onSave={handleSaveProduct} onCancel={props.onCancel}/>
         </>
     );
 }

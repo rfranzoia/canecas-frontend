@@ -18,12 +18,22 @@ export const Products = () => {
         op: ""
     });
 
-    const handleDelete = () => {
-        productsApi.list().then((data) => {
-            setProducts(data);
-        });
-        appCtx.handleAlert(true, AlertType.WARNING, "Delete Product", "Product has been deleted successfully");
-        setShowAlert(true);
+    const handleDelete = async (product) => {
+        if (!appCtx.userData.authToken) return;
+
+        const result = await productsApi.withToken(appCtx.userData.authToken).delete(product._id);
+        if (!result) {
+            appCtx.handleAlert(true, AlertType.WARNING, "Delete Product", `Product '${product.name}' deleted successfully`);
+            setShowAlert(true);
+            productsApi.list().then((data) => {
+                setProducts(data);
+            });
+        } else {
+            if (result.statusCode in [StatusCodes.INTERNAL_SERVER_ERROR, StatusCodes.BAD_REQUEST, StatusCodes.NOT_FOUND]) {
+                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                setShowAlert(true);
+            }
+        }
     }
 
     const handleShowEditModal = (op: string, id?: string) => {
@@ -34,7 +44,7 @@ export const Products = () => {
         setShowEditModal(true);
     }
 
-    const handleCloseEditModal = (error?) => {
+    const handleSave = (error?) => {
         setShowEditModal(false);
         if (error) {
             const errorDescription = error.statusCode === StatusCodes.INTERNAL_SERVER_ERROR ?
@@ -43,6 +53,17 @@ export const Products = () => {
             appCtx.handleAlert(true, AlertType.DANGER, error.name, errorDescription);
             setShowAlert(true);
         }
+    }
+
+    const handleCancel = () => {
+        setShowEditModal(false);
+    }
+
+    const handleNewProduct = () => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+
+        handleShowEditModal("new");
     }
 
     useEffect(() => {
@@ -60,7 +81,6 @@ export const Products = () => {
 
     const viewOnly = editViewOp.op === "view";
 
-
     return (
         <div className="default-margin">
             {showAlert && <AlertToast/>}
@@ -72,7 +92,7 @@ export const Products = () => {
                             caption="New Product"
                             type="new"
                             customClass="fa fa-box-open"
-                            onClick={() => handleShowEditModal("new")} />
+                            onClick={handleNewProduct} />
                     </Card.Title>
                     <ProductsList
                         products={products}
@@ -83,7 +103,7 @@ export const Products = () => {
             <div>
                 <Modal
                     show={showEditModal}
-                    onHide={handleCloseEditModal}
+                    onHide={handleCancel}
                     backdrop="static"
                     centered
                     style={{ justifyItems: "center", margin: "auto"}}
@@ -91,7 +111,11 @@ export const Products = () => {
                     keyboard={true}>
                     <Modal.Body>
                         <div className="container4">
-                            <EditProduct id={editViewOp.productId} op={editViewOp.op} onSaveCancel={handleCloseEditModal}/>
+                            <EditProduct id={editViewOp.productId}
+                                         op={editViewOp.op}
+                                         onSave={handleSave}
+                                         onCancel={handleCancel}
+                            />
                         </div>
                     </Modal.Body>
                 </Modal>

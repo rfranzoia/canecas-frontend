@@ -4,12 +4,20 @@ import {Card, Col, Container, Image, Row} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {StatusCodes} from "http-status-codes";
+import {servicesApi} from "../../api/ServicesAPI";
+import {ButtonAction, getActionIcon} from "../ui/Actions";
+
+enum ImageDivType { VIEW, EDIT, NEW}
 
 export const EditProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const product = props.product;
+    const [image, setImage] = useState(null);
+    const [originalImage, setOriginalImage] = useState(props.product.image);
+    const [divIndex, setDivIndex] = useState(ImageDivType.VIEW);
     const [formData, setFormData] = useState({
         name: product.name,
         description: "",
@@ -17,22 +25,11 @@ export const EditProductForm = (props) => {
         type: "",
         image: ""
     });
+    const [file, setFile] = useState({
+        selectedFile: null
+    });
 
-    const [types, setTypes] = useState([])
-
-    const handleSave = (event) => {
-        event.preventDefault();
-        if (!isDataValid()) return;
-
-        const product = {
-            name: formData.name,
-            description: formData.description,
-            price: formData.price,
-            type: formData.type,
-            image: formData.image
-        }
-        props.onSaveProduct(product);
-    }
+    const [types, setTypes] = useState([]);
 
     const isDataValid = (): boolean => {
         const {name, description, price, type, image} = formData;
@@ -50,12 +47,43 @@ export const EditProductForm = (props) => {
         return true;
     }
 
-    const handleCancel = (event) => {
+    const getImage = () => {
+        const load = async () => {
+            setImage(await imageHelper.getImageFromServer(product.image));
+        }
+
+        load().then(() => null);
+    }
+
+    const handleSave = async (event) => {
         event.preventDefault();
-        props.onCancel();
+        if (!isDataValid()) return;
+
+        if (divIndex === ImageDivType.NEW) {
+            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile);
+
+            if (sendResult instanceof Error) {
+                appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                return;
+
+            } else if (sendResult.statusCode !== StatusCodes.OK) {
+                appCtx.handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                return;
+            }
+        }
+
+        const product = {
+            name: formData.name,
+            description: formData.description,
+            price: formData.price,
+            type: formData.type,
+            image: formData.image
+        }
+        props.onSave(product);
     }
 
     const handleChange = (event) => {
+        event.preventDefault();
         const {name, value} = event.target;
         setFormData(prevState => {
             return {
@@ -65,7 +93,19 @@ export const EditProductForm = (props) => {
         });
     }
 
+    const handleChangeFile = (event) => {
+        event.preventDefault();
+        setFile({selectedFile: event.target.files[0]});
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                image: event.target.files[0].name
+            }
+        })
+    };
+
     const handleNumberInput = (e) => {
+        e.preventDefault();
         let {name, value} = e.target;
         value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
         if (isNaN(value)) {
@@ -88,6 +128,26 @@ export const EditProductForm = (props) => {
         })
     }
 
+    const handleChangeDiv = () => {
+        document.getElementById("file").click();
+        /*
+        setDivIndex(prevState => {
+            if (prevState === ImageDivType.EDIT) {
+                return ImageDivType.NEW;
+            } else {
+                setFormData(prevState => {
+                    return {
+                        ...prevState,
+                        image: originalImage
+                    }
+                })
+                return ImageDivType.EDIT
+            }
+        })
+
+         */
+    }
+
     useEffect(() => {
         setFormData({
             name: product.name,
@@ -96,6 +156,9 @@ export const EditProductForm = (props) => {
             type: product.type,
             image: product.image
         });
+        setOriginalImage(product.image);
+        getImage();
+
     }, [product]);
 
     useEffect(() => {
@@ -103,12 +166,19 @@ export const EditProductForm = (props) => {
             .then(data => {
                 setTypes(data);
             });
+
+        setDivIndex(props.op === OpType.VIEW?
+                        ImageDivType.VIEW:
+                            props.op === OpType.EDIT?
+                                ImageDivType.EDIT:
+                                ImageDivType.NEW);
     }, []);
 
-    const viewOnly = props.op === "view";
-    const title = props.op === "new" ? "New" :
-                    props.op === "edit" ? "Edit" : "View";
+    const viewOnly = props.op === OpType.VIEW;
+    const title = props.op === OpType.NEW ? "New" :
+        props.op === OpType.EDIT ? "Edit" : "View";
 
+    console.log(originalImage)
     return (
         <>
             <AlertToast />
@@ -120,7 +190,7 @@ export const EditProductForm = (props) => {
                             {viewOnly &&
                                 <Col>
                                     <div className="flex-item-image-auto">
-                                        <Image src={imageHelper.getImageUrl(product.image)}
+                                        <Image src={image}
                                                fluid width="600" title={product.image}/>
                                     </div>
                                 </Col>
@@ -171,9 +241,28 @@ export const EditProductForm = (props) => {
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="image">Image<span aria-hidden="true"
                                                                           className="required">*</span></label>
-                                        <input className="form-control bigger-input" id="image" name="image" required type="url"
-                                               value={formData.image} onChange={handleChange} disabled={viewOnly}/>
-
+                                        <div className="flex-control">
+                                            <input className="form-control bigger-input"
+                                                   id="image"
+                                                   name="image"
+                                                   required type="url"
+                                                   value={formData.image}
+                                                   onChange={handleChange}
+                                                   disabled
+                                            />
+                                            <input
+                                                type="file"
+                                                id="file"
+                                                className="form-control bigger-input"
+                                                placeholder="Enter your name here"
+                                                name="file"
+                                                onChange={handleChangeFile}
+                                                style={{display: 'none'}}
+                                            />
+                                            {props.op !== OpType.VIEW &&
+                                                getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleChangeDiv)
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                             </Col>
@@ -188,7 +277,7 @@ export const EditProductForm = (props) => {
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={props.onCancel} type="close"/>
                 <p aria-hidden="true" id="required-description">
                     <span aria-hidden="true" className="required">*</span>Required field(s)
                 </p>
