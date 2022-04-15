@@ -7,12 +7,15 @@ export const AutoCompleteInput = (props) => {
     const [field, setField] = useState("");
     const [displayFields, setDisplayFields] = useState([]);
 
+    const AUTOCOMPLETE_FIELD_JOINER = " // ";
+    const AUTOCOMPLETE_DISPLAY_FIELDS_SEPARATOR = ",";
+
     useEffect(() => {
         setData(props.data);
         setField(props.value);
 
         if (props.displayFields) {
-            setDisplayFields(props.displayFields.split(","));
+            setDisplayFields(props.displayFields.split(AUTOCOMPLETE_DISPLAY_FIELDS_SEPARATOR));
         } else {
             setDisplayFields([props.displayField])
         }
@@ -46,14 +49,14 @@ export const AutoCompleteInput = (props) => {
             const inner = displayFields.map(df => {
                 return s[df];
             })
-            return { _id: s._id, value: inner.join((" - "))}
+            return { _id: s._id, value: inner.join((AUTOCOMPLETE_FIELD_JOINER))}
         })
 
         return (
             <ul>
                 {arr.map(a => {
                     return (
-                        <li key={a._id} onClick={() => handleFieldSelected(a.value.split(" - ")[0])}>{a.value}</li>
+                        <li key={a._id} onClick={() => handleFieldSelected(a.value.split(AUTOCOMPLETE_FIELD_JOINER)[0])}>{a.value}</li>
                     )
                 })}
             </ul>
