@@ -1,9 +1,14 @@
-import {useContext} from "react";
+import {useContext, useEffect} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {Presentation} from "../presentation/Presentation";
 
 export const Home = () => {
     const appCtx = useContext(ApplicationContext);
+
+    useEffect(() => {
+        appCtx.checkValidLogin()
+            .then(() => undefined);
+    }, [])
 
     return (
         <>
