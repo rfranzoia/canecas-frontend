@@ -1,5 +1,6 @@
 import axios, {processRequestError} from "./axios";
 import {Order, OrderItem} from "../domain/Order";
+import {DefaultAPI} from "./DefaultAPI";
 
 const ORDERS_URL = "/orders";
 
@@ -7,14 +8,7 @@ export const DEFAULT_PAGE_SIZE = 7;
 export const DEFAULT_BOUNDARIES = 1;
 export const DEFAULT_AROUND = 1;
 
-export class OrdersAPI {
-
-    authToken: string = "";
-
-    withToken(authToken: string) {
-        this.authToken = authToken;
-        return this;
-    }
+export class OrdersAPI extends DefaultAPI {
 
     count = async () => {
         try {

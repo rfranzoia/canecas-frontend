@@ -1,16 +1,10 @@
 import axios, {processRequestError} from "./axios";
 import { User } from "../domain/User";
+import {DefaultAPI} from "./DefaultAPI";
 
 const USERS_URL = "/users";
 
-export class UsersAPI {
-
-    authToken: string = "";
-
-    withToken = (authToken: string) => {
-        this.authToken = authToken;
-        return this;
-    }
+export class UsersAPI extends DefaultAPI {
 
     list = async () => {
 

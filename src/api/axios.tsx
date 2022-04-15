@@ -1,8 +1,10 @@
 import axios from 'axios';
 import {StatusCodes} from "http-status-codes";
 
+export const BASE_API_URL = "http://192.168.1.116:3500/api";
+
 export default axios.create({
-    baseURL: 'http://192.168.1.116:3500/api'
+    baseURL: BASE_API_URL
 });
 
 export const processRequestError = (error: any, method: string = "") => {

@@ -1,16 +1,10 @@
 import axios, {processRequestError} from "./axios";
 import {Type} from "../domain/Type";
+import {DefaultAPI} from "./DefaultAPI";
 
 const TYPES_URL = "/types";
 
-export class TypesAPI {
-
-    authToken: string = "";
-
-    withToken(authToken: string) {
-        this.authToken = authToken;
-        return this;
-    }
+export class TypesAPI extends DefaultAPI {
 
     list = async () => {
 

@@ -1,16 +1,10 @@
 import axios, {processRequestError} from "./axios";
 import { Product } from "../domain/Product";
+import {DefaultAPI} from "./DefaultAPI";
 
 const PRODUCTS_URL = "/products";
 
-export class ProductsAPI {
-
-    authToken: string = "";
-
-    withToken(authToken: string) {
-        this.authToken = authToken;
-        return this;
-    }
+export class ProductsAPI extends DefaultAPI {
 
     list = async () => {
 
@@ -86,8 +80,7 @@ export class ProductsAPI {
             });
             return null;
         } catch (error: any) {
-            processRequestError(error, "product:delete");
-            return error?.response?.data
+            return processRequestError(error, "product:delete");
         }
     }
 
