@@ -2,6 +2,7 @@ import {useContext} from "react";
 import {Table} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {ProductRow} from "./ProductRow";
+import {Role} from "../../domain/User";
 
 export const ProductsList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -24,7 +25,9 @@ export const ProductsList = (props) => {
                 <th style={{ width: "7%" }}>Price</th>
                 <th style={{ width: "15%" }}>Type</th>
                 <th style={{ width: "10%" }}>Image</th>
-                <th style={{ width: "8%" }}>&nbsp;</th>
+                {appCtx.userData.role !== Role.GUEST &&
+                    <th style={{width: "8%"}}>&nbsp;</th>
+                }
             </tr>
             </thead>
             <tbody>

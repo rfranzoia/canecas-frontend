@@ -53,7 +53,7 @@ export const UserRegistration = (props) => {
         if (!isDataValid()) return;
 
         const user = {
-            role: Role.USER,
+            role: Role.GUEST,
             name: userRegister.name,
             email: userRegister.email,
             password: userRegister.password,

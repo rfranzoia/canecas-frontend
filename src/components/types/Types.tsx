@@ -6,6 +6,7 @@ import {EditType} from "./EditType";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {Role} from "../../domain/User";
 
 export const Types = () => {
     const appCtx = useContext(ApplicationContext);
@@ -67,11 +68,14 @@ export const Types = () => {
                 <Card.Header as="h3">Types</Card.Header>
                 <Card.Body>
                     <Card.Title>
-                        <CustomButton
-                            caption="New Type"
-                            type="new"
-                            customClass="fa fa-industry"
-                            onClick={handleNewType}/>
+                        {appCtx.userData.role !== Role.GUEST &&
+                            <CustomButton
+                                caption="New Type"
+                                type="new"
+                                customClass="fa fa-industry"
+                                onClick={handleNewType}
+                            />
+                        }
                     </Card.Title>
                     <TypesList
                         types={types}

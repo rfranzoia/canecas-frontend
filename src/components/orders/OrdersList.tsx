@@ -4,6 +4,7 @@ import {OrderRow} from "./OrderRow";
 import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {DEFAULT_AROUND, DEFAULT_BOUNDARIES} from "../../api/OrdersAPI";
+import {Role} from "../../domain/User";
 
 export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -158,19 +159,21 @@ export const OrdersList = (props) => {
         })
     }, [props.totalPages])
 
-
+console.log(appCtx.userData.role)
     return (
         <>
             <Card border="dark" style={{margin: "1rem"}}>
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
-                    <div>
-                        <CustomButton
-                            caption="New Order"
-                            type="new"
-                            customClass="fa fa-file-invoice"
-                            onClick={() => handleEditOrder("new", "")}/>
-                    </div>
+                    {appCtx.userData.role !== Role.GUEST &&
+                        <div>
+                            <CustomButton
+                                caption="New Order"
+                                type="new"
+                                customClass="fa fa-file-invoice"
+                                onClick={() => handleEditOrder("new", "")}/>
+                        </div>
+                    }
                     {orders.map(order => {
                         return (
                             <OrderRow key={order._id}

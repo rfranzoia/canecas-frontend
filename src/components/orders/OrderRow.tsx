@@ -195,7 +195,7 @@ export const OrderRow = (props) => {
                     <td width="20%">Customer: {order.userEmail}</td>
                     <td width="15%">Status: {OrderStatus[order.status]}</td>
                     <td width="8%" align="right">Total: {order.totalPrice.toFixed(2)}</td>
-                    {actions}
+                    {appCtx.userData.role !== Role.GUEST && actions}
                 </tr>
                 </tbody>
             </table>

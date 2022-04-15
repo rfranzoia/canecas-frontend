@@ -3,6 +3,7 @@ import {useContext} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {typesApi} from "../../api/TypesAPI";
 import {TypeRow} from "./TypeRow";
+import {Role} from "../../domain/User";
 
 export const TypesList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -25,7 +26,9 @@ export const TypesList = (props) => {
             <tr>
                 <th style={{ width: "60%" }}>Description</th>
                 <th style={{ width: "10%" }}>Image</th>
-                <th style={{ width: "10%" }}>&nbsp;</th>
+                {appCtx.userData.role !== Role.GUEST &&
+                    <th style={{width: "10%"}}>&nbsp;</th>
+                }
             </tr>
             </thead>
             <tbody>

@@ -1,10 +1,13 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
 import {BiEdit, BiTrash} from "react-icons/all";
 import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
+import {Role} from "../../domain/User";
+import {ApplicationContext} from "../../context/ApplicationContext";
 
 export const ProductRow = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const product = props.product;
     const [image, setImage] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -40,21 +43,24 @@ export const ProductRow = (props) => {
                 <Image src={image}
                        fluid width="60" title={product.name}/>
             </td>
-            <td align="center">
-                <BiEdit
-                    onClick={() => props.onEdit("edit", product._id)}
-                    title="Edit Product"
-                    size="2em"
-                    cursor="pointer"
-                    color="blue"/>
-                <span> | </span>
-                <BiTrash
-                    onClick={handleDelete}
-                    title="Delete Product"
-                    size="2em"
-                    cursor="pointer"
-                    color="red"/>
-            </td>
+            {appCtx.userData.role !== Role.GUEST &&
+                <td align="center">
+                    <BiEdit
+                        onClick={() => props.onEdit("edit", product._id)}
+                        title="Edit Product"
+                        size="2em"
+                        cursor="pointer"
+                        color="blue"/>
+                    <span> | </span>
+                    <BiTrash
+                        onClick={handleDelete}
+                        title="Delete Product"
+                        size="2em"
+                        cursor="pointer"
+                        color="red"
+                    />
+                </td>
+            }
             <ConfirmModal show={showConfirmation} handleClose={handleNotConfirmDelete} handleConfirm={handleConfirmDelete}
                 title="Delete Product"  message={`Are you sure you want to delete the product '${product.name}'?`}/>
         </tr>
