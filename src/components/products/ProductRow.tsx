@@ -22,16 +22,12 @@ export const ProductRow = (props) => {
         props.onDelete(product);
     }
 
-    const getImage = (name) => {
-        const load = async () => {
-            setImage(await imageHelper.getImageFromServer(name));
-        }
-
-        load().then(() => null);
+    const loadImage = async (name) => {
+        setImage(await imageHelper.getImageFromServer(name));
     }
 
     useEffect(() => {
-        getImage(props.product.image);
+        imageHelper.getImage(loadImage, props.product.image);
     },[props]);
 
     return (

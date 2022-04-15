@@ -1,7 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 import {typesApi} from "../../api/TypesAPI";
 import {Card, Col, Container, Image, Row} from "react-bootstrap";
-import {imageHelper} from "../ui/ImageHelper";
+import {imageHelper, ImageOpType} from "../ui/ImageHelper";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
@@ -10,14 +10,11 @@ import {StatusCodes} from "http-status-codes";
 import {servicesApi} from "../../api/ServicesAPI";
 import {ButtonAction, getActionIcon} from "../ui/Actions";
 
-enum ImageDivType { VIEW, EDIT, NEW}
-
 export const EditProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const product = props.product;
     const [image, setImage] = useState(null);
-    const [originalImage, setOriginalImage] = useState(props.product.image);
-    const [divIndex, setDivIndex] = useState(ImageDivType.VIEW);
+    const [imageOpType, setImageOpType] = useState(ImageOpType.VIEW);
     const [formData, setFormData] = useState({
         name: product.name,
         description: "",
@@ -47,19 +44,18 @@ export const EditProductForm = (props) => {
         return true;
     }
 
-    const getImage = () => {
-        const load = async () => {
-            setImage(await imageHelper.getImageFromServer(product.image));
-        }
-
-        load().then(() => null);
+    const load = async (name) => {
+        setImage(await imageHelper.getImageFromServer(name));
     }
 
     const handleSave = async (event) => {
         event.preventDefault();
+
+        await appCtx.checkValidLogin();
+
         if (!isDataValid()) return;
 
-        if (divIndex === ImageDivType.NEW) {
+        if (imageOpType === ImageOpType.NEW) {
             const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
@@ -128,24 +124,8 @@ export const EditProductForm = (props) => {
         })
     }
 
-    const handleChangeDiv = () => {
+    const handleFileClick = () => {
         document.getElementById("file").click();
-        /*
-        setDivIndex(prevState => {
-            if (prevState === ImageDivType.EDIT) {
-                return ImageDivType.NEW;
-            } else {
-                setFormData(prevState => {
-                    return {
-                        ...prevState,
-                        image: originalImage
-                    }
-                })
-                return ImageDivType.EDIT
-            }
-        })
-
-         */
     }
 
     useEffect(() => {
@@ -156,8 +136,7 @@ export const EditProductForm = (props) => {
             type: product.type,
             image: product.image
         });
-        setOriginalImage(product.image);
-        getImage();
+        imageHelper.getImage(load, product.image);
 
     }, [product]);
 
@@ -167,18 +146,17 @@ export const EditProductForm = (props) => {
                 setTypes(data);
             });
 
-        setDivIndex(props.op === OpType.VIEW?
-                        ImageDivType.VIEW:
+        setImageOpType(props.op === OpType.VIEW?
+                        ImageOpType.VIEW:
                             props.op === OpType.EDIT?
-                                ImageDivType.EDIT:
-                                ImageDivType.NEW);
+                                ImageOpType.EDIT:
+                                ImageOpType.NEW);
     }, []);
 
     const viewOnly = props.op === OpType.VIEW;
     const title = props.op === OpType.NEW ? "New" :
         props.op === OpType.EDIT ? "Edit" : "View";
 
-    console.log(originalImage)
     return (
         <>
             <AlertToast />
@@ -260,7 +238,7 @@ export const EditProductForm = (props) => {
                                                 style={{display: 'none'}}
                                             />
                                             {props.op !== OpType.VIEW &&
-                                                getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleChangeDiv)
+                                                getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleFileClick)
                                             }
                                         </div>
                                     </div>
