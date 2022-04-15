@@ -100,7 +100,7 @@ export const NewOrder = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                type: user
+                userEmail: user
             }
         })
     }

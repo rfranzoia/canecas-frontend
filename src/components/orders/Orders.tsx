@@ -65,6 +65,17 @@ export const Orders = () => {
         }
     }
 
+    const updatePages = () => {
+        ordersApi.withToken(appCtx.userData.authToken).count()
+            .then(result => {
+                setPageControl({
+                    currPage: 1,
+                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                });
+                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+            });
+    }
+
     const handleEdit = (op: string, orderId: string) => {
         setEdit({
             show: true,
@@ -74,6 +85,7 @@ export const Orders = () => {
     }
 
     const handleEditSave = () => {
+        updatePages();
         loadOrders(pageControl.currPage);
         setEdit({
             show: false,
@@ -140,6 +152,7 @@ export const Orders = () => {
                     appCtx.handleAlert(true, AlertType.WARNING, "Delete OrderRow", `Order '${orderId}' deleted successfully`);
                     setShowAlert(true);
                 }
+                updatePages();
                 loadOrders(pageControl.currPage);
             })
     }
@@ -157,14 +170,7 @@ export const Orders = () => {
     }, [appCtx.alert.show]);
 
     useEffect(() => {
-        ordersApi.withToken(appCtx.userData.authToken).count()
-            .then(result => {
-                setPageControl({
-                    currPage: 1,
-                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
-                });
-                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
-            })
+        updatePages();
     }, [])
 
     return (

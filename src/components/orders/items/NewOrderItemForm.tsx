@@ -39,6 +39,10 @@ export const NewOrderItemForm = (props) => {
     const handleAdd = () => {
         if (!isValidData()) return;
         const selectedProduct = products.find(product => product.name === formData.product);
+        if (!selectedProduct) {
+            appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
+            return;
+        }
         const item = {
             product: formData.product,
             price: isNaN(Number(formData.price)) ? 0 : Number(formData.price),
