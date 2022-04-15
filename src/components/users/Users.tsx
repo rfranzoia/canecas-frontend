@@ -1,12 +1,12 @@
-import { useContext, useEffect, useState } from "react";
-import { Card, Modal} from "react-bootstrap";
-import { usersApi } from "../../api/UsersAPI";
-import { UsersList } from "./UsersList";
-import { EditUser } from "./EditUser";
+import {useContext, useEffect, useState} from "react";
+import {Card, Modal} from "react-bootstrap";
+import {usersApi} from "../../api/UsersAPI";
+import {UsersList} from "./UsersList";
+import {EditUser} from "./EditUser";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
-import { StatusCodes } from "http-status-codes";
-import { CustomButton } from "../ui/CustomButton";
-import { ChangeUserPassword } from "./ChangeUserPassword";
+import {StatusCodes} from "http-status-codes";
+import {CustomButton} from "../ui/CustomButton";
+import {ChangeUserPassword} from "./ChangeUserPassword";
 import {AlertToast} from "../ui/AlertToast";
 
 export const Users = () => {

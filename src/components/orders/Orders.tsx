@@ -160,7 +160,7 @@ export const Orders = () => {
     useEffect(() => {
         appCtx.checkValidLogin()
             .then(() => undefined);
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (!appCtx.alert.show) {

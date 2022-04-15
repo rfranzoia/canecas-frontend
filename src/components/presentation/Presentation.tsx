@@ -82,10 +82,8 @@ export const Presentation = () => {
     }, [appCtx.alert.show])
 
     useEffect(() => {
-        const check = async () => {
-            await appCtx.checkValidLogin();
-        }
-        check();
+        appCtx.checkValidLogin()
+            .then(() => undefined);
     }, [])
 
     return (
