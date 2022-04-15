@@ -42,7 +42,13 @@ class ImageHelper {
             }
         });
     }
+
+    getImage = (loadImage: Function, name: string) => {
+        loadImage(name).then(() => null);
+    }
 }
+
+export enum ImageOpType { VIEW, EDIT, NEW}
 
 export const BASE_SERVER_IMAGES_URL = `http://192.168.1.116:3500/api/images/`
 
