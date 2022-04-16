@@ -166,12 +166,14 @@ console.log(appCtx.userData.role)
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
                     {appCtx.userData.role !== Role.GUEST &&
-                        <div>
+                        <div className="two-items-container">
                             <CustomButton
                                 caption="New Order"
                                 type="new"
                                 customClass="fa fa-file-invoice"
-                                onClick={() => handleEditOrder("new", "")}/>
+                                onClick={() => handleEditOrder("new", "")}
+                            />
+                            {pagination}
                         </div>
                     }
                     {orders.map(order => {
@@ -187,7 +189,6 @@ console.log(appCtx.userData.role)
                     })}
                 </Card.Body>
             </Card>
-            {pagination}
             <br/>
             <br/>
         </>
