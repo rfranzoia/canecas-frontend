@@ -4,7 +4,7 @@ import {DefaultAPI} from "./DefaultAPI";
 
 const ORDERS_URL = "/orders";
 
-export const DEFAULT_PAGE_SIZE = 7;
+export const DEFAULT_PAGE_SIZE = 9;
 export const DEFAULT_BOUNDARIES = 1;
 export const DEFAULT_AROUND = 1;
 
