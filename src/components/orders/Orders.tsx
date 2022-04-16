@@ -109,7 +109,7 @@ export const Orders = () => {
         }
         updateOrder(orderId, o)
             .then(() => {
-                appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm OrderRow", `Order '${orderId}' updated successfully`);
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm Order", `Order '${orderId}' updated successfully`);
                 setShowAlert(true);
                 loadOrders(pageControl.currPage);
             });
@@ -122,7 +122,7 @@ export const Orders = () => {
         }
         updateOrder(orderId, o)
             .then(() => {
-                appCtx.handleAlert(true, AlertType.WARNING, "Cancel OrderRow", `Order '${orderId}' has been canceled`);
+                appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
                 setShowAlert(true);
                 loadOrders(pageControl.currPage);
             });
@@ -135,7 +135,7 @@ export const Orders = () => {
         }
         updateOrder(order._id, o)
             .then(() => {
-                appCtx.handleAlert(true, AlertType.SUCCESS, "Update OrderRow Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+                appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
                 setShowAlert(true);
                 loadOrders(pageControl.currPage);
             });
@@ -149,7 +149,7 @@ export const Orders = () => {
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
                     setShowAlert(true);
                 } else {
-                    appCtx.handleAlert(true, AlertType.WARNING, "Delete OrderRow", `Order '${orderId}' deleted successfully`);
+                    appCtx.handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
                     setShowAlert(true);
                 }
                 updatePages();

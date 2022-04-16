@@ -80,14 +80,14 @@ export const EditOrderForm = (props) => {
         const { userEmail, orderDate } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "OrderRow Date and Customer Email must be provided!");
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date and Customer Email must be provided!");
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
             if (d.getDate() > Date.now()) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "OrderRow Date cannot be after today");
+                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
                 setShowAlert(true);
                 return false;
             }

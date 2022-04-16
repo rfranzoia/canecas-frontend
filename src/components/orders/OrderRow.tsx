@@ -83,7 +83,7 @@ export const OrderRow = (props) => {
         if (order.status === OrderStatus.NEW) {
             setConfirmationDialog({
                 show: true,
-                title: "Delete OrderRow",
+                title: "Delete Order",
                 message: `Are you sure you want to delete the order '${order._id}'?`,
                 op: "delete",
                 hasData: false,
@@ -93,7 +93,7 @@ export const OrderRow = (props) => {
         } else {
             setConfirmationDialog({
                 show: true,
-                title: "Cancel OrderRow",
+                title: "Cancel Order",
                 message: `Are you sure you want to CANCEL the order # '${order._id}'?,
                             this action cannot be undone`,
                 hasData: true,
@@ -108,7 +108,7 @@ export const OrderRow = (props) => {
     const handleConfirmOrderDialog = () => {
         setConfirmationDialog({
             show: true,
-            title: "Confirm OrderRow",
+            title: "Confirm Order",
             message: `Are you sure you want to confirm the order # '${order._id}', 
                            you wont be able to make changes after that?`,
             hasData: false,
@@ -144,7 +144,7 @@ export const OrderRow = (props) => {
             <td width="15%" align="right">
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.EDIT,
-                        "Edit OrderRow",
+                        "Edit Order",
                         order.status === OrderStatus.NEW,
                         () => handleEditOrder(order._id))
                 }
@@ -153,14 +153,14 @@ export const OrderRow = (props) => {
                         getActionIcon(order.status === OrderStatus.NEW?
                                 ButtonAction.DELETE:
                                 ButtonAction.CANCEL_ITEM,
-                            order.status === OrderStatus.NEW?"Delete OrderRow":"Cancel OrderRow",
+                            order.status === OrderStatus.NEW?"Delete Order":"Cancel Order",
                             canCancelOrder,
                             () => handleDeleteOrCancel())
                 }
                 <span>&nbsp;</span>
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                     getActionIcon(ButtonAction.USER_CHECK,
-                    "Confirm OrderRow",
+                    "Confirm Order",
                     order.status === OrderStatus.NEW,
                     () => handleConfirmOrderDialog())}
                 <span>&nbsp;</span>
