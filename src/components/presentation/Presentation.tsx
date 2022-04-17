@@ -41,7 +41,7 @@ export const Presentation = () => {
         window.location.href=link.concat(message);
     }
 
-    const handleShorComoPedir = (show: boolean) => {
+    const handleShowHowToOrder = (show: boolean) => {
         setShowHowToOrder(show);
     }
 
@@ -110,7 +110,7 @@ export const Presentation = () => {
                 <h1>Caricanecas Manauara</h1>
                 <Modal
                     show={showHowToOrder}
-                    onHide={() => handleShorComoPedir(false)}
+                    onHide={() => handleShowHowToOrder(false)}
                     backdrop="static"
                     centered
                     keyboard={true}
@@ -140,7 +140,7 @@ export const Presentation = () => {
             </div>
             <div className="flex-centered-container">
                 <Image src={imageHelper.getImageFromClient("como-pedir-0.png")}
-                       onClick={() => handleShorComoPedir(true)}
+                       onClick={() => handleShowHowToOrder(true)}
                        fluid width="800" title="perfil caricanecas"/>
             </div>
 
