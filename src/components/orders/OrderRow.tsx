@@ -1,7 +1,7 @@
 import classes from "./Orders.module.css";
 import {useContext, useEffect, useState} from "react";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
-import {ButtonAction, getActionIcon} from "../ui/Actions";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {OrderItems} from "./OrderItems";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {Role} from "../../domain/User";
@@ -143,7 +143,7 @@ export const OrderRow = (props) => {
     const actions =
             <td width="15%" align="right">
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
-                    getActionIcon(ButtonAction.EDIT,
+                    getActionIcon(ActionIconType.EDIT,
                         "Edit Order",
                         order.status === OrderStatus.NEW,
                         () => handleEditOrder(order._id))
@@ -151,21 +151,21 @@ export const OrderRow = (props) => {
                 <span>&nbsp;</span>
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
                         getActionIcon(order.status === OrderStatus.NEW?
-                                ButtonAction.DELETE:
-                                ButtonAction.CANCEL_ITEM,
+                                ActionIconType.DELETE:
+                                ActionIconType.CANCEL_ITEM,
                             order.status === OrderStatus.NEW?"Delete Order":"Cancel Order",
                             canCancelOrder,
                             () => handleDeleteOrCancel())
                 }
                 <span>&nbsp;</span>
                 {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
-                    getActionIcon(ButtonAction.USER_CHECK,
+                    getActionIcon(ActionIconType.USER_CHECK,
                     "Confirm Order",
                     order.status === OrderStatus.NEW,
                     () => handleConfirmOrderDialog())}
                 <span>&nbsp;</span>
                 {appCtx.userData.role === Role.ADMIN &&
-                    getActionIcon(ButtonAction.ACTION_FORWARD,
+                    getActionIcon(ActionIconType.ACTION_FORWARD,
                     `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
                     (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
                     () => handleMoveForward())}
@@ -182,8 +182,8 @@ export const OrderRow = (props) => {
                 <tr>
                     <td width="1%">
                         {!showItems ?
-                            getActionIcon(ButtonAction.EXPAND, "Expand", true, () => handleClickMaster()) :
-                            getActionIcon(ButtonAction.COLLAPSE, "Collapse", true, () => handleClickMaster())
+                            getActionIcon(ActionIconType.EXPAND, "Expand", true, () => handleClickMaster()) :
+                            getActionIcon(ActionIconType.COLLAPSE, "Collapse", true, () => handleClickMaster())
                         }
                     </td>
                     <td width="15%">

@@ -8,7 +8,7 @@ import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationCo
 import {AlertToast} from "../ui/AlertToast";
 import {StatusCodes} from "http-status-codes";
 import {servicesApi} from "../../api/ServicesAPI";
-import {ButtonAction, getActionIcon} from "../ui/Actions";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 
 export const EditProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -239,7 +239,7 @@ export const EditProductForm = (props) => {
                                                 style={{display: 'none'}}
                                             />
                                             {props.op !== OpType.VIEW &&
-                                                getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleFileClick)
+                                                getActionIcon(ActionIconType.IMAGE_EDIT, "Select Image", true, handleFileClick)
                                             }
                                         </div>
                                     </div>

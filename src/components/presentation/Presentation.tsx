@@ -9,16 +9,18 @@ import {productsApi} from "../../api/ProductsAPI";
 import {StatusCodes} from "http-status-codes";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
 import {Product} from "../../domain/Product";
-import {ButtonAction, getActionIcon} from "../ui/Actions";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import {HowToOrderPresentation} from "./HowToOrderPresentation";
 
 export const Presentation = () => {
     const appCtx = useContext(ApplicationContext);
-    const [showFormCotacao, setShowFormCotacao] = useState(false);
+    const [showFormQuote, setShowFormQuote] = useState(false);
     const [products, setProducts] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
+    const [showHowToOrder, setShowHowToOrder] = useState(false);
 
-    const handleShowCotacao = () => {
-        setShowFormCotacao(true);
+    const handleShowQuote = () => {
+        setShowFormQuote(true);
     }
 
     const handleConfirm = () => {
@@ -29,7 +31,7 @@ export const Presentation = () => {
     }
 
     const handleCancel = () => {
-        setShowFormCotacao(false);
+        setShowFormQuote(false);
     }
 
     const handleWhatsappClick = () => {
@@ -37,6 +39,10 @@ export const Presentation = () => {
         const message = `Olá,\neu gostaria de mais informações sobre os produtos de vocês`
 
         window.location.href=link.concat(message);
+    }
+
+    const handleShorComoPedir = (show: boolean) => {
+        setShowHowToOrder(show);
     }
 
     useEffect(() => {
@@ -86,6 +92,8 @@ export const Presentation = () => {
             .then(() => undefined);
     }, [])
 
+
+
     return (
         <div className="default-margin">
             {(appCtx.alert.show && showAlert) &&
@@ -100,6 +108,18 @@ export const Presentation = () => {
                 position: "relative"
             }}>
                 <h1>Caricanecas Manauara</h1>
+                <Modal
+                    show={showHowToOrder}
+                    onHide={() => handleShorComoPedir(false)}
+                    backdrop="static"
+                    centered
+                    keyboard={true}
+                    size="lg">
+                    <Modal.Body>
+                        <HowToOrderPresentation />
+                    </Modal.Body>
+                </Modal>
+
                 <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>
                     ✏️ Usamos a arte para encantar com um produto que é a sua cara!
                     Um brinde que é a sua cara!❤️<br/>
@@ -107,10 +127,10 @@ export const Presentation = () => {
                 </p>
                 <div>
                     <CustomButton caption="Request Quote" customClass="fa fa-money-check-dollar"
-                                  onClick={handleShowCotacao} type="custom-success"/>
+                                  onClick={handleShowQuote} type="custom-success"/>
                 </div>
                 <p style={{textAlign: "center"}}>You can also send us a message on &nbsp;
-                    <span style={{cursor: "pointer"}} onClick={handleWhatsappClick}>{getActionIcon(ButtonAction.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
+                    <span style={{cursor: "pointer"}} onClick={handleWhatsappClick}>{getActionIcon(ActionIconType.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
                 </p>
             </div>
             <br/>
@@ -118,8 +138,14 @@ export const Presentation = () => {
                 <Image src={imageHelper.getImageFromClient("perfil-caricanecas.jpeg")}
                        fluid width="800" title="perfil caricanecas"/>
             </div>
+            <div className="flex-centered-container">
+                <Image src={imageHelper.getImageFromClient("como-pedir-0.png")}
+                       onClick={() => handleShorComoPedir(true)}
+                       fluid width="800" title="perfil caricanecas"/>
+            </div>
+
             <Card border="dark" style={{ margin: "auto"}}>
-                <Card.Header as="h3">Nossos Produtos</Card.Header>
+                <Card.Header as="h3">Our Products</Card.Header>
                 <Card.Body>
                     <div className="flex-card">
                         {products.map(p => {
@@ -132,7 +158,7 @@ export const Presentation = () => {
                 </Card.Body>
             </Card>
             <Modal
-                show={showFormCotacao}
+                show={showFormQuote}
                 onHide={handleCancel}
                 backdrop="static"
                 centered

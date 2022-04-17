@@ -6,7 +6,7 @@ import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationCo
 import {AlertToast} from "../ui/AlertToast";
 import {servicesApi} from "../../api/ServicesAPI";
 import {StatusCodes} from "http-status-codes";
-import {ButtonAction, getActionIcon} from "../ui/Actions";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 
 export const EditTypeForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -149,7 +149,7 @@ export const EditTypeForm = (props) => {
                                         style={{display: 'none'}}
                                     />
                                     {props.op !== OpType.VIEW &&
-                                        getActionIcon(ButtonAction.IMAGE_EDIT, "Select Image", true, handleFileClick)
+                                        getActionIcon(ActionIconType.IMAGE_EDIT, "Select Image", true, handleFileClick)
                                     }
                                 </div>
                             </div>

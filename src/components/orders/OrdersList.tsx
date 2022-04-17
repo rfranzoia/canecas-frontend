@@ -5,6 +5,7 @@ import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {DEFAULT_AROUND, DEFAULT_BOUNDARIES} from "../../api/OrdersAPI";
 import {Role} from "../../domain/User";
+import {CustomPagination} from "../ui/CustomPagination";
 
 export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -159,7 +160,10 @@ export const OrdersList = (props) => {
         })
     }, [props.totalPages])
 
-console.log(appCtx.userData.role)
+    const handlePageChange = (currPage) => {
+        props.loadOrders(currPage);
+    }
+
     return (
         <>
             <Card border="dark" style={{margin: "1rem"}}>
