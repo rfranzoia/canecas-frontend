@@ -1,10 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@100;400&family=Roboto+Condensed:wght@300&display=swap');
+@font-face {
+    src: local("Arial Narrow");
+}
 
 body {
     margin: 0;
     font-style: normal;
-    font-family: "Barlow Semi Condensed", sans-serif;
-    font-size: 20px;
+    font-family: "Arial Narrow";
+    font-size: 17px;
 
     background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 
@@ -39,7 +41,7 @@ h4 {
 }
 
 .bigger-input {
-    font-size: 21px;
+    font-size: 17px;
 }
 
 .header {

@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Lato');
-
 .timelineContainer {
     display: flex;
     flex-direction: column;
@@ -72,7 +70,7 @@
 
 .timelineItemContent .tag {
     color: #fff;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     top: 5px;
     left: 5px;
@@ -89,12 +87,12 @@
 
 .timelineItemContent time {
     color: #777;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: normal;
 }
 
 .timelineItemContent p {
-    font-size: 18px;
+    font-size: 17px;
     line-height: 24px;
     margin: 15px 0;
     max-width: 250px;
@@ -103,13 +101,13 @@
 .timelineItemContent a {
     color: #333;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
 }
 
 .timelineItemContent a::after {
     content: ' ►';
-    font-size: 12px;
+    font-size: 10px;
 }
 
 .timelineItemContent .circle {
@@ -159,29 +157,4 @@
     .timelineItemContent a::after {
         display: none;
     }
-}
-
-footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
-}
-
-footer p {
-    margin: 10px 0;
-}
-
-footer i {
-    color: red;
-}
-
-footer a {
-    color: #3c97bf;
-    text-decoration: none;
 }
