@@ -99,27 +99,8 @@ export const Presentation = () => {
             {(appCtx.alert.show && showAlert) &&
                 <AlertToast/>
             }
-            <div style={{
-                margin: "auto",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                width: "30rem",
-                position: "relative"
-            }}>
+            <div className="some-centered-container">
                 <h1>Caricanecas Manauara</h1>
-                <Modal
-                    show={showHowToOrder}
-                    onHide={() => handleShowHowToOrder(false)}
-                    backdrop="static"
-                    centered
-                    keyboard={true}
-                    size="lg">
-                    <Modal.Body>
-                        <HowToOrderPresentation />
-                    </Modal.Body>
-                </Modal>
-
                 <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>
                     ✏️ Usamos a arte para encantar com um produto que é a sua cara!
                     Um brinde que é a sua cara!❤️<br/>
@@ -134,16 +115,14 @@ export const Presentation = () => {
                 </p>
             </div>
             <br/>
-            <div className="flex-centered-container">
+            <div className="flex-separated-items">
                 <Image src={imageHelper.getImageFromClient("perfil-caricanecas.jpeg")}
-                       fluid width="800" title="perfil caricanecas"/>
-            </div>
-            <div className="flex-centered-container">
+                       fluid width="700" title="perfil caricanecas"/>
                 <Image src={imageHelper.getImageFromClient("como-pedir-0.png")}
                        onClick={() => handleShowHowToOrder(true)}
-                       fluid width="800" title="perfil caricanecas"/>
+                       fluid width="600" title="perfil caricanecas"/>
             </div>
-
+            <br/>
             <Card border="dark" style={{ margin: "auto"}}>
                 <Card.Header as="h3">Our Products</Card.Header>
                 <Card.Body>
@@ -157,6 +136,16 @@ export const Presentation = () => {
                     <p style={{textAlign: "center", fontSize: "16px"}}>Clique na imagem para saber mais</p>
                 </Card.Body>
             </Card>
+            <Modal
+                show={showHowToOrder}
+                onHide={() => handleShowHowToOrder(false)}
+                centered
+                keyboard={true}
+                size="lg">
+                <Modal.Body>
+                    <HowToOrderPresentation />
+                </Modal.Body>
+            </Modal>
             <Modal
                 show={showFormQuote}
                 onHide={handleCancel}

@@ -29,7 +29,7 @@ export const ProductShowCaseRow = (props) => {
         <div className="flex-container">
             <div className="flex-item-image">
                 <Image src={image}
-                       fluid width="250" title={product.name}/>
+                       fluid width="210" title={product.name}/>
             </div>
             <div className="flex-item-data">
                 <h3>{product.type}</h3>
