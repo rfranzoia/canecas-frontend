@@ -1,7 +1,15 @@
 import axios from 'axios';
 import {StatusCodes} from "http-status-codes";
 
-export const BASE_API_URL = "http://192.168.1.116:3500/api";
+enum Environment { DEV, PROD}
+
+const apiServers = [ "http://192.168.1.116:3500", ""];
+const contentServers = [ "http://192.168.1.116:3000", ""];
+
+export const CONTENT_SERVER_ADDRESS = contentServers[Environment.DEV];
+export const API_SERVER_ADDRESS = apiServers[Environment.DEV];
+
+export const BASE_API_URL = `${API_SERVER_ADDRESS}/api`;
 
 export default axios.create({
     baseURL: BASE_API_URL
