@@ -8,7 +8,7 @@ import {Role} from "../../domain/User";
 import {EditUser} from "../users/EditUser";
 import {AlertToast} from "../ui/AlertToast";
 import {ChangeUserPassword} from "../users/ChangeUserPassword";
-import {API_SERVER_ADDRESS} from "../../api/axios";
+import {API_SERVER_ADDRESS, CONTENT_SERVER_ADDRESS} from "../../api/axios";
 
 export const Header = () => {
     const history = useHistory();
@@ -79,7 +79,7 @@ export const Header = () => {
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
-                            <Image src={`${API_SERVER_ADDRESS}/logo.jpg`}
+                            <Image src={`${CONTENT_SERVER_ADDRESS}/logo.jpg`}
                                    title="Caricanecas Manauara"
                                     roundedCircle
                                     width="55"/>
