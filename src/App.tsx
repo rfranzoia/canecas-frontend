@@ -1,6 +1,5 @@
 import { Route, Switch } from "react-router-dom";
 import { ProtectedRoute } from "./api/ProtectedRouter";
-import { Types } from "./components/types/Types";
 import { Users } from "./components/users/Users";
 import { Layout } from "./components/layout/Layout";
 import { Products } from "./components/products/Products";
@@ -14,7 +13,6 @@ function App() {
         <Layout>
             <Switch>
                 <Route path="/" exact><Home/></Route>
-                <ProtectedRoute exact path="/types" component={Types} />
                 <ProtectedRoute exact path="/products" component={Products} />
                 <ProtectedRoute exact path="/users" component={Users} />
                 <ProtectedRoute exact path="/orders" component={Orders} />

@@ -17,24 +17,6 @@ export class ProductsAPI extends DefaultAPI {
 
     }
 
-    listOrderByType = async () => {
-        try {
-            const res = await axios.get(`${PRODUCTS_URL}/orderBy/type`);
-            return res.data;
-        } catch (error) {
-            return processRequestError(error, "producr:listOrderByType");
-        }
-    }
-
-    listByType = async (type: string) => {
-        try {
-            const res = await axios.get(`${PRODUCTS_URL}/productType/${type}`);
-            return res.data;
-        } catch (error: any) {
-            return processRequestError(error, "product:get");
-        }
-    }
-
     get = async (id: string) => {
         try {
             const res = await axios.get(`${PRODUCTS_URL}/${id}`);

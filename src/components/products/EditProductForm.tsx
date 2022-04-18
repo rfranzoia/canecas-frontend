@@ -1,8 +1,6 @@
 import {useContext, useEffect, useState} from "react";
-import {typesApi} from "../../api/TypesAPI";
 import {Card, Col, Container, Image, Row} from "react-bootstrap";
 import {imageHelper, ImageOpType} from "../ui/ImageHelper";
-import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
@@ -19,20 +17,16 @@ export const EditProductForm = (props) => {
         name: product.name,
         description: "",
         price: 0,
-        type: "",
         image: ""
     });
     const [file, setFile] = useState({
         selectedFile: null
     });
 
-    const [types, setTypes] = useState([]);
-
     const isDataValid = (): boolean => {
-        const {name, description, price, type, image} = formData;
+        const {name, description, price, image} = formData;
 
-        if (name.trim().length === 0 || description.trim().length === 0 ||
-            type.trim().length === 0 || image.trim().length === 0) {
+        if (name.trim().length === 0 || description.trim().length === 0 || image.trim().length === 0) {
             appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
             return false;
         }
@@ -72,7 +66,6 @@ export const EditProductForm = (props) => {
             name: formData.name,
             description: formData.description,
             price: formData.price,
-            type: formData.type,
             image: formData.image
         }
         props.onSave(product);
@@ -115,15 +108,6 @@ export const EditProductForm = (props) => {
         });
     }
 
-    const handleSelectType = (type) => {
-        setFormData(prevState => {
-            return {
-                ...prevState,
-                type: type
-            }
-        })
-    }
-
     const handleFileClick = () => {
         document.getElementById("file").click();
     }
@@ -133,7 +117,6 @@ export const EditProductForm = (props) => {
             name: product.name,
             description: product.description,
             price: product.price,
-            type: product.type,
             image: product.image
         });
         imageHelper.getImage(load, product.image);
@@ -141,11 +124,6 @@ export const EditProductForm = (props) => {
     }, [product]);
 
     useEffect(() => {
-        typesApi.list()
-            .then(data => {
-                setTypes(data);
-            });
-
         setImageOpType(props.op === OpType.VIEW?
                         ImageOpType.VIEW:
                             props.op === OpType.EDIT?
@@ -203,19 +181,6 @@ export const EditProductForm = (props) => {
                                             style={{textAlign: "right"}}
                                             disabled={viewOnly}
                                             onInput={handleNumberInput}/>
-                                    </div>
-                                    <div className="form-group spaced-form-group">
-                                        <label htmlFor="type">Type<span aria-hidden="true"
-                                                                        className="required">*</span></label>
-                                        <AutoCompleteInput
-                                            data={types}
-                                            displayFields="description"
-                                            value={formData.type}
-                                            disabled={viewOnly}
-                                            onFieldSelected={handleSelectType}
-                                            className="form-control bigger-input"
-                                            required
-                                            placeholder="Please select a type"/>
                                     </div>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="image">Image<span aria-hidden="true"

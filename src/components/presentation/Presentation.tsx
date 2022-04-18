@@ -5,10 +5,7 @@ import {QuoteRequestForm} from "./QuoteRequestForm";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
-import {productsApi} from "../../api/ProductsAPI";
-import {StatusCodes} from "http-status-codes";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
-import {Product} from "../../domain/Product";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {HowToOrderPresentation} from "./HowToOrderPresentation";
 
@@ -46,39 +43,7 @@ export const Presentation = () => {
     }
 
     useEffect(() => {
-        productsApi.listOrderByType()
-            .then((result) => {
-                if (!result) return;
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                    setProducts([]);
-                } else {
-                    let mapped = [{
-                        product: result[0],
-                        type: result[0].type,
-                        price: 999999
-                    }]
-                    let product: Product;
-                    for (let i = 0; i < result.length; i++) {
-                        product = result[i];
-                        if (product.type !== mapped[mapped.length - 1].type) {
-                            mapped.push({
-                                product: product,
-                                type: product.type,
-                                price: 999999
-                            })
-                        }
-                        if (product.price < mapped[mapped.length - 1].price) {
-                            mapped[mapped.length - 1].price = product.price;
-                        }
-                    }
-                    if (product.price < mapped[mapped.length - 1].price) {
-                        mapped[mapped.length - 1].price = product.price;
-                    }
-                    setProducts(mapped);
-                }
-            });
+        setProducts([]);
     }, [appCtx])
 
     useEffect(() => {

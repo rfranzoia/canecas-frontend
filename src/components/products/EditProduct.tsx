@@ -10,7 +10,6 @@ export const EditProduct = (props) => {
         name: "",
         description: "",
         price: 0,
-        type: "",
         image: ""
     });
 
@@ -46,7 +45,6 @@ export const EditProduct = (props) => {
                     name: "",
                     description: "",
                     price: 0,
-                    type: "",
                     image: ""
                 })
             }
