@@ -30,6 +30,8 @@
 .AutoCompleteText input {
     padding: 0 0.3rem;
     tab-index: 0;
+    font-size: 23px;
+    width: 100%;
 }
 
 .iconText {

@@ -91,12 +91,13 @@ export const AutoCompleteInput = (props) => {
 
     return (
         <div className={classes.AutoCompleteText}>
-            <IconContext.Provider value={{ color: "black", size: '1.3rem' }}>
+            <IconContext.Provider value={{ color: "black", size: '1.8rem' }}>
             <input type="text"
                    id="autocompleteInput"
                    onChange={handleChange}
                    value={field}
                    className={props.className}
+                   style={props.style}
                    disabled={props.disabled}
                    required={props.required}
                    placeholder={props.placeholder}
