@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import classes from "./AutoCompleteInput.module.css";
 import {IconContext} from "react-icons";
-import {BsCaretDownFill, BsCaretUpFill} from "react-icons/all";
+import {BsCaretDown, GrFormClose} from "react-icons/all";
 
 export const AutoCompleteInput = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -100,14 +100,15 @@ export const AutoCompleteInput = (props) => {
                    disabled={props.disabled}
                    required={props.required}
                    placeholder={props.placeholder}
+                   autoComplete="off"
                    onKeyUp={handleKeyPress}
                     />
                 {suggestions.length === 0?
-                    <BsCaretDownFill className={classes.iconText}
+                    <BsCaretDown className={classes.iconText}
                                      onClick={handleClickIcon}
                                      style={{ pointerEvents: (props.disabled)?"none":"all"}} />
                 :
-                    <BsCaretUpFill className={classes.iconText}
+                    <GrFormClose className={classes.iconText}
                                      onClick={handleClickIcon}
                                      style={{ pointerEvents: (props.disabled)?"none":"all"}} />
                 }
