@@ -26,3 +26,18 @@
     text-decoration: none;
     background-color: lightgrey;
 }
+
+.AutoCompleteText input {
+    padding: 0 0.3rem;
+    tab-index: 0;
+}
+
+.iconText {
+    position: absolute;
+    margin-left: -2rem;
+    margin-top: 0.4rem;
+}
+
+.iconText:disabled{
+    background-color: #9d9d9d;
+}

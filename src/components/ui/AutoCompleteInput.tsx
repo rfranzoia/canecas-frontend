@@ -1,5 +1,7 @@
 import {useEffect, useState} from "react";
 import classes from "./AutoCompleteInput.module.css";
+import {IconContext} from "react-icons";
+import {BsCaretDownFill, BsCaretUpFill} from "react-icons/all";
 
 export const AutoCompleteInput = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -69,16 +71,48 @@ export const AutoCompleteInput = (props) => {
         props.onFieldSelected(field)
     }
 
+    const handleClickIcon = () => {
+        if (suggestions.length > 0) {
+            setSuggestions([])
+            setField("")
+            document.getElementById("autocompleteInput").focus();
+        } else {
+            setSuggestions(data);
+        }
+    }
+
+    const handleKeyPress = (event) => {
+        if (event.code.toLowerCase() === "escape") {
+            setSuggestions([])
+            setField("")
+            document.getElementById("autocompleteInput").focus();
+        }
+    }
+
     return (
         <div className={classes.AutoCompleteText}>
+            <IconContext.Provider value={{ color: "black", size: '1.3rem' }}>
             <input type="text"
+                   id="autocompleteInput"
                    onChange={handleChange}
                    value={field}
                    className={props.className}
                    disabled={props.disabled}
                    required={props.required}
                    placeholder={props.placeholder}
+                   onKeyUp={handleKeyPress}
                     />
+                {suggestions.length === 0?
+                    <BsCaretDownFill className={classes.iconText}
+                                     onClick={handleClickIcon}
+                                     style={{ pointerEvents: (props.disabled)?"none":"all"}} />
+                :
+                    <BsCaretUpFill className={classes.iconText}
+                                     onClick={handleClickIcon}
+                                     style={{ pointerEvents: (props.disabled)?"none":"all"}} />
+                }
+
+            </IconContext.Provider>
             <div>
                 {renderSuggestions()}
             </div>
