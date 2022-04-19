@@ -7,6 +7,7 @@ import { NewOrder } from "./components/orders/NewOrder";
 import { EditOrder } from "./components/orders/EditOrder";
 import {Home} from "./components/layout/Home";
 import {Orders} from "./components/orders/Orders";
+import {Variations} from "./components/variations/Variations";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
             <Switch>
                 <Route path="/" exact><Home/></Route>
                 <ProtectedRoute exact path="/products" component={Products} />
+                <ProtectedRoute exact path="/variations" component={Variations} />
                 <ProtectedRoute exact path="/users" component={Users} />
                 <ProtectedRoute exact path="/orders" component={Orders} />
                 <ProtectedRoute exact path="/orders/new" component={NewOrder} />

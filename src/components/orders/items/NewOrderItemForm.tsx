@@ -19,14 +19,7 @@ export const NewOrderItemForm = (props) => {
         const load = async () => {
             const res = await productsApi.list();
             if (res) {
-                setProducts(
-                    res.map(r => {
-                        return {
-                            ...r,
-                            label: r.name
-                        }
-                    })
-                );
+                setProducts(res);
             } else {
                 setProducts([]);
             }

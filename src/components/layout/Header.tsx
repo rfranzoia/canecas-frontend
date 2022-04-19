@@ -8,7 +8,7 @@ import {Role} from "../../domain/User";
 import {EditUser} from "../users/EditUser";
 import {AlertToast} from "../ui/AlertToast";
 import {ChangeUserPassword} from "../users/ChangeUserPassword";
-import {API_SERVER_ADDRESS, CONTENT_SERVER_ADDRESS} from "../../api/axios";
+import {CONTENT_SERVER_ADDRESS} from "../../api/axios";
 
 export const Header = () => {
     const history = useHistory();
@@ -54,9 +54,10 @@ export const Header = () => {
     const adminUser = (
         <>
             <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
+            <Nav.Link as={Link} to="/variations">Variations</Nav.Link>
             <NavDropdown title="Manage" id="navbarScrollingDropdown">
-                <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/variations">Product Variations</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item as={Link} to="/users">Users</NavDropdown.Item>
             </NavDropdown>
