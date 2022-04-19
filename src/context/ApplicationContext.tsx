@@ -65,7 +65,7 @@ const defaultValue: AppCtx = {
     checkValidLogin: () => {}
 }
 
-export const ALERT_TIMEOUT = 3 * 1000;
+export const ALERT_TIMEOUT = 10 * 1000;
 
 export enum AlertType { NONE = "", DANGER = "danger", SUCCESS = "success", WARNING = "warning", INFO = "info" }
 
