@@ -9,13 +9,25 @@ import {Variation} from "../../domain/Variation";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
+import {ConfirmModal} from "../ui/ConfirmModal";
 
 export const VariationsList = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
     const [variations, setVariations] = useState([]);
+    const [variationId, setVariationId] = useState(null);
     const [showVariationFormModal, setShowVariationFormModal] = useState(false);
     const [variationFormOp, setVariationFormOp] = useState(OpType.VIEW);
+    const [confirmationDialog, setConfirmationDialog] = useState({
+            show: false,
+            title: "",
+            message: "",
+            hasData: false,
+            op: "",
+            onConfirm: () => undefined,
+            onCancel: () => undefined
+        }
+    );
 
     const loadVariations = () => {
         variationsApi.list()
@@ -29,20 +41,34 @@ export const VariationsList = (props) => {
             })
     }
 
-    const handleAddVariation = (variation: Variation) => {
+    const handleSaveVariation = (variation: Variation) => {
         setShowVariationFormModal(false);
 
-        variationsApi.withToken(appCtx.userData.authToken)
-            .create(variation)
-            .then(result => {
-                if (!result._id) {
-                    console.error(result.name, result.description)
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
-                    setShowAlert(true);
-                } else {
-                    loadVariations();
-                }
-            });
+        if (variationFormOp === OpType.NEW) {
+            variationsApi.withToken(appCtx.userData.authToken)
+                .create(variation)
+                .then(result => {
+                    if (!result._id) {
+                        console.error(result.name, result.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        setShowAlert(true);
+                    } else {
+                        loadVariations();
+                    }
+                });
+        } else if (variationFormOp === OpType.EDIT) {
+            variationsApi.withToken(appCtx.userData.authToken)
+                .update(variation._id, variation)
+                .then(result => {
+                    if (result.statusCode) {
+                        console.error(result.name, result.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        setShowAlert(true);
+                    } else {
+                        loadVariations();
+                    }
+                });
+        }
 
     }
 
@@ -91,12 +117,66 @@ export const VariationsList = (props) => {
         setShowVariationFormModal(true);
     }
 
+    const handleEditVariation = (id: string) => {
+        setVariationId(id);
+        setVariationFormOp(OpType.EDIT);
+        setShowVariationFormModal(true);
+    }
+
+    const handleConfirmDelete = (id: string) => {
+        handleCloseConfirmDialog();
+        variationsApi.withToken(appCtx.userData.authToken)
+            .delete(id)
+            .then(result => {
+                if (result) {
+                    console.error(result.name, result.description)
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    setShowAlert(true);
+                } else {
+                    appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
+                    setShowAlert(true);
+                    loadVariations();
+                }
+            });
+    }
+
+    const handleCloseConfirmDialog = () => {
+        setConfirmationDialog({
+            show: false,
+            title: "",
+            message: "",
+            hasData: false,
+            op: "",
+            onConfirm: () => undefined,
+            onCancel: () => undefined
+        });
+    }
+
+    const handDeleteVariation = (id: string) => {
+        setConfirmationDialog({
+            show: true,
+            title: "Delete Order",
+            message: `Are you sure you want to delete the Variation '${id}'?`,
+            op: "delete",
+            hasData: false,
+            onConfirm: () => handleConfirmDelete(id),
+            onCancel: () => handleCloseConfirmDialog()
+        });
+
+    }
+
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
         }
         loadVariations();
     }, [appCtx.alert.show]);
+
+    useEffect(() => {
+        if (!showVariationFormModal) {
+            loadVariations()
+        }
+    }, [showVariationFormModal])
 
     return (
         <>
@@ -109,9 +189,9 @@ export const VariationsList = (props) => {
                 <Table bordered striped hover className="table-small-font table-sm">
                     <thead>
                     <tr>
-                        <th style={{width: "40%"}} colSpan={2}>Product</th>
-                        <th style={{width: "25%", textAlign: "center"}}>Drawings</th>
-                        <th style={{width: "25%", textAlign: "center"}}>Background</th>
+                        <th style={{width: "35%"}} colSpan={2}>Product</th>
+                        <th style={{width: "20%", textAlign: "center"}}>Drawings</th>
+                        <th style={{width: "20%", textAlign: "center"}}>Background</th>
                         <th style={{width: "10%", textAlign: "right"}}>Price</th>
                         <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>
                     </tr>
@@ -119,7 +199,7 @@ export const VariationsList = (props) => {
                     <tbody>
                     {variations.length > 0 && variations.map(v => {
                         return (
-                            <VariationRow key={v._id} variation={v}/>
+                            <VariationRow key={v._id} variation={v} onEdit={handleEditVariation} onDelete={handDeleteVariation}/>
                         )
                     })}
                     {(!variations || variations.length === 0) &&
@@ -133,10 +213,19 @@ export const VariationsList = (props) => {
                 </Table>
                 { showVariationFormModal &&
                     <Modal onClose={handleCloseNewVariantModal} size="md">
-                        <VariationEditForm onAdd={handleAddVariation}
+                        <VariationEditForm onSave={handleSaveVariation}
                                            onCancel={handleCloseNewVariantModal}
+                                           variationId={variationId}
                                            op={variationFormOp} />
                     </Modal>
+                }
+                { confirmationDialog.show &&
+                    <ConfirmModal
+                        show={confirmationDialog.show}
+                        handleClose={confirmationDialog.onCancel}
+                        handleConfirm={confirmationDialog.onConfirm}
+                        title={confirmationDialog.title}
+                        message={confirmationDialog.message}/>
                 }
             </div>
         </>

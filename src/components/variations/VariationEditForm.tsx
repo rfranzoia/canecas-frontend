@@ -7,12 +7,14 @@ import {AlertToast} from "../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
 import {Variation} from "../../domain/Variation";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import {variationsApi} from "../../api/VariationAPI";
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [viewOnly, setViewOnly] = useState(false);
     const [formData, setFormData] = useState({
+        _id: null,
         product: "",
         drawings: 0,
         background: "empty",
@@ -66,21 +68,24 @@ export const VariationEditForm = (props) => {
         props.onCancel();
     }
 
-    const handleAdd = () => {
+    const handleSave = () => {
         if (!isValidData()) return;
-        const selectedProduct = products.find(product => product.name === formData.product);
-        if (!selectedProduct) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
-            return;
+        if (props.op == OpType.NEW) {
+            const selectedProduct = products.find(product => product.name === formData.product);
+            if (!selectedProduct) {
+                appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
+                return;
+            }
         }
         const variation: Variation = {
+            _id: formData._id,
             product: formData.product,
             drawings: Number(formData.drawings),
             background: formData.background,
             price: Number(formData.price),
             image: formData.image,
         }
-        props.onAdd(variation);
+        props.onSave(variation);
     }
 
     const handleNumberInput = (e) => {
@@ -111,6 +116,27 @@ export const VariationEditForm = (props) => {
     const handleFileClick = () => {
         document.getElementById("file").click();
     }
+
+    useEffect(() => {
+        if (!props.variationId && props.op !== OpType.EDIT) return;
+        variationsApi.withToken(appCtx.userData.authToken)
+            .get(props.variationId)
+            .then(result => {
+                if (!result._id) {
+                    console.error(result.name, JSON.stringify(result.description));
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                } else {
+                    setFormData({
+                        _id: result._id,
+                        product: result.product,
+                        background: result.background,
+                        drawings: result.drawings,
+                        price: result.price,
+                        image: result.image,
+                    })
+                }
+            })
+    },[props.variationId])
 
     useEffect(() => {
         productsApi.list()
@@ -242,7 +268,7 @@ export const VariationEditForm = (props) => {
                         </Row>
                     </Form>
                     <br/>
-                    <CustomButton caption="Add" onClick={handleAdd} type="add"/>
+                    <CustomButton caption="Save" onClick={handleSave} type="save"/>
                     &nbsp;
                     <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
                     <p aria-hidden="true" id="required-description">
