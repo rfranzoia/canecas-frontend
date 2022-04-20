@@ -199,7 +199,7 @@ export const EditOrderForm = (props) => {
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}
-                                            className="form-control bigger-input"
+                                            className="bigger-input"
                                             required
                                             disabled={viewOnly}
                                             placeholder="Please select an user email"/>

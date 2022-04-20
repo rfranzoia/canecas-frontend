@@ -2,12 +2,12 @@ import {useContext, useEffect, useState} from "react";
 import {DEFAULT_PAGE_SIZE, ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
-import {Modal} from "react-bootstrap";
 import {EditOrder} from "./EditOrder";
 import {NewOrder} from "./NewOrder";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {OrdersList} from "./OrdersList";
 import {AlertToast} from "../ui/AlertToast";
+import Modal from "../ui/Modal";
 
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -190,14 +190,10 @@ export const Orders = () => {
                     onForwardOrder={handleForwardOrder}/>
             </div>
             <div>
-                <Modal
-                    show={edit.show}
-                    size="lg"
-                    onHide={handleEditCancel}
-                    backdrop="static"
-                    centered
-                    keyboard={true}>
-                    <Modal.Body>
+                { edit.show &&
+                    <Modal
+                        size="md"
+                        onClose={handleEditCancel}>
                         {edit.op === "new" ?
                             <NewOrder
                                 onSave={handleEditSave}
@@ -206,10 +202,9 @@ export const Orders = () => {
                                 id={edit.orderId}
                                 op={edit.op}
                                 onSave={handleEditSave}
-                                onCancel={handleEditCancel}/>
-                        }
-                    </Modal.Body>
-                </Modal>
+                                onCancel={handleEditCancel}/>}
+                    </Modal>
+                }
             </div>
         </>
     )

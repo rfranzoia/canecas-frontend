@@ -120,80 +120,73 @@ export const NewOrder = (props) => {
     }, []);
 
     return (
-        <Container fluid style={{ padding: "1rem", display: "flex", justifyContent: "center" }}>
-            <Row>
-                <Col>
-                    {showAlert && <AlertToast/>}
-                </Col>
-                <Col>
-                    <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
-                        <Card.Header as="h3">New Order</Card.Header>
-                        <Card.Body>
-                            <form>
-                                <Container>
-                                    <Row>
-                                        <Col>
-                                            <div className="form-group spaced-form-group">
-                                                <label htmlFor="userEmail">
-                                                    Customer Email<span aria-hidden="true" className="required">*</span>
-                                                </label>
-                                                <AutoCompleteInput
-                                                    data={users}
-                                                    value={formData.userEmail}
-                                                    displayFields="email,name"
-                                                    onFieldSelected={handleSelectUser}
-                                                    className="form-control bigger-input"
-                                                    required
-                                                    placeholder="Please select an user email"/>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <div className="form-group spaced-form-group">
-                                                <label htmlFor="orderDate">Date<span aria-hidden="true"
-                                                                                     className="required">*</span></label>
-                                                <input className="form-control bigger-input" id="orderDate" name="orderDate" required type="date"
-                                                       value={formData.orderDate} onChange={handleChange}/>
-                                            </div>
+        <>
+            {showAlert && <AlertToast/>}
+            <Card border="dark" className="align-content-center" style={{width: '50rem'}}>
+                <Card.Header as="h3">New Order</Card.Header>
+                <Card.Body>
+                    <form>
+                        <Container>
+                            <Row>
+                                <Col>
+                                    <div className="form-group spaced-form-group">
+                                        <label htmlFor="userEmail">
+                                            Customer Email<span aria-hidden="true" className="required">*</span>
+                                        </label>
+                                        <AutoCompleteInput
+                                            data={users}
+                                            value={formData.userEmail}
+                                            displayFields="email,name"
+                                            onFieldSelected={handleSelectUser}
+                                            className="bigger-input"
+                                            required
+                                            placeholder="Please select an user email"/>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div className="form-group spaced-form-group">
+                                        <label htmlFor="orderDate">Date<span aria-hidden="true"
+                                                                             className="required">*</span></label>
+                                        <input className="form-control bigger-input" id="orderDate" name="orderDate" required type="date"
+                                               value={formData.orderDate} onChange={handleChange}/>
+                                    </div>
 
-                                        </Col>
-                                        <Col>
-                                            <div className="form-group spaced-form-group">
-                                                <label htmlFor="totalPrice">Total Price</label>
-                                                <input className="form-control bigger-input" id="totalPrice" name="totalPrice" required type="number"
-                                                       style={{textAlign: "right"}}
-                                                       value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <OrderItemsList items={formData.items}
-                                                            viewOnly={false}
-                                                            onItemRemove={handleItemRemove}
-                                                            onItemAdd={handleItemAdd}/>
-                                        </Col>
-                                    </Row>
-                                    <br/>
-                                    <Row>
-                                        <Col>
-                                            <CustomButton caption="Save" type="save" onClick={handleSave}/>
-                                            <span>&nbsp;</span>
-                                            <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
-                                            <p aria-hidden="true" id="required-description">
-                                                <span aria-hidden="true" className="required">*</span>Required field(s)
-                                            </p>
-                                        </Col>
-                                    </Row>
+                                </Col>
+                                <Col>
+                                    <div className="form-group spaced-form-group">
+                                        <label htmlFor="totalPrice">Total Price</label>
+                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice" required type="number"
+                                               style={{textAlign: "right"}}
+                                               value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <OrderItemsList items={formData.items}
+                                                    viewOnly={false}
+                                                    onItemRemove={handleItemRemove}
+                                                    onItemAdd={handleItemAdd}/>
+                                </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col>
+                                    <CustomButton caption="Save" type="save" onClick={handleSave}/>
+                                    <span>&nbsp;</span>
+                                    <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                                    <p aria-hidden="true" id="required-description">
+                                        <span aria-hidden="true" className="required">*</span>Required field(s)
+                                    </p>
+                                </Col>
+                            </Row>
 
-                                </Container>
-                            </form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
-
+                        </Container>
+                    </form>
+                </Card.Body>
+            </Card>
+        </>
     );
 }

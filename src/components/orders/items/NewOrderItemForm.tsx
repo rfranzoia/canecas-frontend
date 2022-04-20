@@ -116,7 +116,7 @@ export const NewOrderItemForm = (props) => {
                                             displayFields="name"
                                             value={formData.product}
                                             onFieldSelected={handleSelectProduct}
-                                            className="form-control bigger-input"
+                                            className="bigger-input"
                                             required
                                             placeholder="Please select a product"/>
                                     </Form.Group>
@@ -137,8 +137,6 @@ export const NewOrderItemForm = (props) => {
                                             onInput={handleNumberInput}/>
                                     </Form.Group>
                                 </Col>
-                            </Row>
-                            <Row>
                                 <Col>
                                     <Form.Group className="spaced-form-group">
                                         <Form.Label>Amount<span aria-hidden="true"
