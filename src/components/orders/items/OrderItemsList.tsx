@@ -39,21 +39,27 @@ export const OrderItemsList = (props) => {
                     keyboard={true}
                     centered>
                     <Modal.Body>
-                        <NewOrderItemForm onItemAdd={handleItemAdded} onCancelItemAdd={handleCloseModal}/>
+                        <NewOrderItemForm onItemAdd={handleItemAdded}
+                                          onCancelItemAdd={handleCloseModal}/>
                     </Modal.Body>
                 </Modal>
                 <Table striped bordered hover size="sm">
                     <thead>
                     <tr>
-                        <th style={{ width: "20%" }}>Product</th>
-                        <th style={{ width: "10%" }}>Price</th>
-                        <th style={{ width: "10%" }}>Amount</th>
+                        <th style={{ width: "30%" }}>Product</th>
+                        <th style={{ width: "5%", textAlign: "center" }}>Drawings</th>
+                        <th style={{ width: "5%", textAlign: "center" }}>Background</th>
+                        <th style={{ width: "10%", textAlign: "right" }}>Price</th>
+                        <th style={{ width: "5%", textAlign: "right" }}>Amount</th>
                         <th style={{ width: "5%" }}>&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
                     {orderItems.map(item => (
-                        <OrderItemRow key={item._id} viewOnly={props.viewOnly} item={item} onDelete={() => props.onItemRemove(item._id)}/>
+                        <OrderItemRow key={item._id}
+                                      viewOnly={props.viewOnly}
+                                      item={item}
+                                      onDelete={() => props.onItemRemove(item._id)}/>
                     ))}
                     </tbody>
                 </Table>
@@ -67,7 +73,7 @@ export const OrderItemsList = (props) => {
                         title="Add Item"
                         size="2em"
                         cursor="pointer"
-                        color={props.viewOnly?"#a2a0a0":"blue"}/>
+                        color={props.viewOnly?"#cdcdcd":"blue"}/>
                 </div>
             }
         </div>

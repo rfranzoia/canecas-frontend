@@ -11,8 +11,10 @@ export const NewOrderItemForm = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         product: "",
+        drawings: 0,
+        background: "",
         price: 0,
-        amount: 0
+        amount: 0,
     });
 
     useEffect(() => {
@@ -38,9 +40,11 @@ export const NewOrderItemForm = (props) => {
         }
         const item = {
             product: formData.product,
+            drawings: Number(formData.drawings),
+            background: formData.background,
             price: isNaN(Number(formData.price)) ? 0 : Number(formData.price),
             amount: isNaN(Number(formData.amount)) ? 0 : Number(formData.amount),
-            _id: selectedProduct._id
+            _id: selectedProduct._id,
         }
         props.onItemAdd(item);
     }
@@ -77,10 +81,12 @@ export const NewOrderItemForm = (props) => {
     }
 
     const handleSelectProduct = (product) => {
+        const selectedProduct = products.find(p => p.name === product);
         setFormData(prevState => {
             return {
                 ...prevState,
-                product: product
+                product: product,
+                price: selectedProduct.price,
             }
         })
     }
@@ -123,6 +129,46 @@ export const NewOrderItemForm = (props) => {
                                 </Col>
                             </Row>
                             <Row>
+                                <Col md={4}>
+                                    <Form.Group className="spaced-form-group">
+                                        <Form.Label>Drawings<span aria-hidden="true"
+                                                                  className="required">*</span></Form.Label>
+                                        <Form.Select value={formData.drawings}
+                                                     className="bigger-select"
+                                                     onChange={handleChange}
+                                                     name="drawings">
+                                            <option value={0}>0</option>
+                                            <option value={1}>1</option>
+                                            <option value={2}>2</option>
+                                            <option value={3}>3</option>
+                                            <option value={9}>+ de 3</option>
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={8}>
+                                    <Form.Group className="spaced-form-group">
+                                        <Form.Label>Background<span aria-hidden="true"
+                                                                    className="required">*</span></Form.Label>
+                                        <div style={{ padding: "0.5rem", border: "1px solid #cdcdcd"}}>
+                                            <Form.Check type="radio"
+                                                        label="Empty"
+                                                        id="bgEmpty"
+                                                        name="background"
+                                                        value="empty"
+                                                        checked={formData.background === "empty"}
+                                                        onChange={handleChange} />
+                                            <Form.Check type="radio"
+                                                        label="Personalized"
+                                                        id="bgPersonalized"
+                                                        name="background"
+                                                        value="personalized"
+                                                        checked={formData.background === "personalized"}
+                                                        onChange={handleChange} />
+                                        </div>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Row>
                                 <Col>
                                     <Form.Group className="spaced-form-group">
                                         <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
@@ -133,6 +179,7 @@ export const NewOrderItemForm = (props) => {
                                             name="price"
                                             value={formData.price}
                                             onChange={handleChange}
+                                            autoComplete="off"
                                             style={{textAlign: "right"}}
                                             onInput={handleNumberInput}/>
                                     </Form.Group>
@@ -148,6 +195,7 @@ export const NewOrderItemForm = (props) => {
                                             name="amount"
                                             value={formData.amount}
                                             onChange={handleChange}
+                                            autoComplete="off"
                                             style={{textAlign: "right"}}
                                             onInput={handleNumberInput}/>
                                     </Form.Group>
