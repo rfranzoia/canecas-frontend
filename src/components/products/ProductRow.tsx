@@ -38,7 +38,6 @@ export const ProductRow = (props) => {
             <td>{product.name}</td>
             <td><span style={{cursor: "pointer", color: "blue"}} onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
             <td align="right">{product.price.toFixed(2)}</td>
-            <td>{product.type}</td>
             <td align="center">
                 <Image src={image}
                        fluid width="60" title={product.name}/>

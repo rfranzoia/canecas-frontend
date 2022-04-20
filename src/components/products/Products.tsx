@@ -1,12 +1,13 @@
 import {useContext, useEffect, useState} from "react";
-import {Card, Modal} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {productsApi} from "../../api/ProductsAPI";
 import {ProductsList} from "./ProductsList";
-import {EditProduct} from "./EditProduct";
 import {CustomButton} from "../ui/CustomButton";
 import {StatusCodes} from "http-status-codes";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {EditProductForm} from "./EditProductForm";
+import Modal from "../ui/Modal";
 
 export const Products = () => {
     const appCtx = useContext(ApplicationContext);
@@ -16,6 +17,12 @@ export const Products = () => {
     const [editViewOp, setEditViewOp] = useState({
         productId: "",
         op: ""
+    });
+    const [product, setProduct] = useState({
+        name: "",
+        description: "",
+        price: 0,
+        image: ""
     });
 
     const handleDelete = async (product) => {
@@ -37,11 +44,50 @@ export const Products = () => {
     }
 
     const handleShowEditModal = (op: string, id?: string) => {
+        const callback = async () => {
+            if (op === "edit" || op === "view") {
+                const p = await productsApi.get(id);
+                setProduct(p);
+            } else {
+                setProduct({
+                    name: "",
+                    description: "",
+                    price: 0,
+                    image: ""
+                })
+            }
+        }
+        callback()
+            .then(() => {
+                return undefined
+            });
         setEditViewOp({
             productId: id,
             op: op
         })
         setShowEditModal(true);
+    }
+
+    const handleSaveProduct = (product) => {
+        if (!appCtx.userData.authToken) return;
+
+        const save = async (product) => {
+            let result;
+            if (editViewOp.op === "edit") {
+                result = await productsApi.withToken(appCtx.userData.authToken).update(editViewOp.productId, product)
+            } else if (editViewOp.op === "new") {
+                result = await productsApi.withToken(appCtx.userData.authToken).create(product);
+            }
+            if (result.statusCode) {
+                if (result.statusCode in [StatusCodes.UNAUTHORIZED, StatusCodes.BAD_REQUEST, StatusCodes.INTERNAL_SERVER_ERROR]) {
+                    handleSave(result);
+                }
+            } else {
+                handleSave();
+            }
+        }
+        save(product)
+            .then(() => undefined);
     }
 
     const handleSave = (error?) => {
@@ -79,8 +125,6 @@ export const Products = () => {
         }
     },[appCtx.alert.show])
 
-    const viewOnly = editViewOp.op === "view";
-
     return (
         <div className="default-margin">
             {showAlert && <AlertToast/>}
@@ -101,24 +145,17 @@ export const Products = () => {
                 </Card.Body>
             </Card>
             <div>
-                <Modal
-                    show={showEditModal}
-                    onHide={handleCancel}
-                    backdrop="static"
-                    centered
-                    style={{ justifyItems: "center", margin: "auto"}}
-                    size={viewOnly?"xl": "lg"}
-                    keyboard={true}>
-                    <Modal.Body>
-                        <div className="container4">
-                            <EditProduct id={editViewOp.productId}
-                                         op={editViewOp.op}
-                                         onSave={handleSave}
-                                         onCancel={handleCancel}
-                            />
+                {showEditModal &&
+                    <Modal
+                        onClose={handleCancel}
+                        style={{ justifyItems: "center", margin: "auto"}}
+                        size="lg" >
+                        <div>
+                            <EditProductForm product={product} op={editViewOp.op} onSave={handleSaveProduct} onCancel={handleCancel}/>
                         </div>
-                    </Modal.Body>
-                </Modal>
+                    </Modal>
+                }
+
             </div>
         </div>
     );
