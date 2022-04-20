@@ -11,7 +11,8 @@ export enum ActionIconType {
     CANCEL_ITEM,
     WHATSAPP,
     UNDO,
-    IMAGE_EDIT
+    IMAGE_EDIT,
+    SEARCH
 }
 
 const matrix = [
@@ -26,6 +27,7 @@ const matrix = [
     { type: ActionIconType.CANCEL_ITEM, class: "fa fa-trash", color: "red", size: "2rem" },
     { type: ActionIconType.IMAGE_EDIT, class: "fa fa-file-image", color: "blue", size: "2rem" },
     { type: ActionIconType.UNDO, class: "fa fa-rotate-left", color: "red", size: "2rem" },
+    { type: ActionIconType.SEARCH, class: "fa fa-binoculars", color: "black", size: "1.5rem" },
     { type: ActionIconType.WHATSAPP, class: "fa-brands fa-whatsapp", color: "green", size: "2rem" },
 ]
 
