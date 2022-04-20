@@ -63,7 +63,7 @@ export const NewOrder = (props) => {
                 if (result._id) {
                     props.onSave();
                 } else {
-                    const error = result?.response?.data;
+                    const error = result;
                     appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
                     setShowAlert(true);
                 }
