@@ -69,7 +69,7 @@ export const ALERT_TIMEOUT = 10 * 1000;
 
 export enum AlertType { NONE = "", DANGER = "danger", SUCCESS = "success", WARNING = "warning", INFO = "info" }
 
-export enum OpType { NEW = "new", EDIT = "edit", VIEW = "view", DELETE = "delete", UPDATE = "update", CANCEL = "cancel" }
+export enum OpType { NEW = "new", EDIT = "edit", VIEW = "view", DELETE = "delete", UPDATE = "update", CANCEL = "cancel", SELECT = "select" }
 
 export const ApplicationContext = createContext(defaultValue);
 
