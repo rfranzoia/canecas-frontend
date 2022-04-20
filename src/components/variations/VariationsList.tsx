@@ -72,7 +72,7 @@ export const VariationsList = (props) => {
 
     }
 
-    const handleCloseNewVariantModal = () => {
+    const handleCloseNewVariationModal = () => {
         setShowVariationFormModal(false);
     }
 
@@ -111,6 +111,10 @@ export const VariationsList = (props) => {
     useEffect(() => {
         loadVariations();
     }, []);
+
+    const handleSelectVariation = (variation) => {
+        props.onSelect(variation);
+    }
 
     const handleNewVariation = () => {
         setVariationFormOp(OpType.NEW);
@@ -199,7 +203,13 @@ export const VariationsList = (props) => {
                     <tbody>
                     {variations.length > 0 && variations.map(v => {
                         return (
-                            <VariationRow key={v._id} variation={v} onEdit={handleEditVariation} onDelete={handDeleteVariation}/>
+                            <VariationRow key={v._id}
+                                          variation={v}
+                                          onEdit={handleEditVariation}
+                                          onDelete={handDeleteVariation}
+                                          onSelect={handleSelectVariation}
+                                          op={props.isModal === "yes"? OpType.SELECT: "none"}
+                            />
                         )
                     })}
                     {(!variations || variations.length === 0) &&
@@ -212,9 +222,9 @@ export const VariationsList = (props) => {
                     </tbody>
                 </Table>
                 { showVariationFormModal &&
-                    <Modal onClose={handleCloseNewVariantModal} size="md">
+                    <Modal onClose={handleCloseNewVariationModal} size="md">
                         <VariationEditForm onSave={handleSaveVariation}
-                                           onCancel={handleCloseNewVariantModal}
+                                           onCancel={handleCloseNewVariationModal}
                                            variationId={variationId}
                                            op={variationFormOp} />
                     </Modal>

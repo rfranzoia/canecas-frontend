@@ -22,7 +22,7 @@ export const VariationRow = (props) => {
                 props.onDelete(variationId);
                 return
             case OpType.SELECT:
-                props.onSelect(variationId);
+                props.onSelect(variation);
                 return
         }
     }
@@ -39,27 +39,32 @@ export const VariationRow = (props) => {
                 </td>
                 <td width="30%" >{variation.product}</td>
                 <td width="20%" align="center">{variation.drawings}</td>
-                <td width="25%" align="center">{variation.background}</td>
+                <td width="20%" align="center">{variation.background}</td>
                 <td width="10%" align="right">{variation.price.toFixed(2)}</td>
-                <td width="15%" align="right">
-                    {getActionIcon(ActionIconType.EXPAND, {
-                        color: "#000",
-                        title: "select",
-                        canClick: true,
-                        onClick: () => handleOnClickRow(OpType.SELECT, variation._id)
-                    })}
-                    &nbsp;
-                    {getActionIcon(ActionIconType.EDIT, {
-                        title: "edit",
-                        canClick: true,
-                        onClick: () => handleOnClickRow(OpType.EDIT, variation._id)
-                    })}
-                    &nbsp;
-                    {getActionIcon(ActionIconType.DELETE, {
-                        title: "delete",
-                        canClick: true,
-                        onClick: () => handleOnClickRow(OpType.DELETE, variation._id)
-                    })}
+                <td width="15%" align="center">
+                    { props.op === OpType.SELECT &&
+                        getActionIcon(ActionIconType.EXPAND, {
+                            color: "#000",
+                            title: "select",
+                            canClick: true,
+                            onClick: () => handleOnClickRow(OpType.SELECT, variation._id)
+                        })
+                    }
+                    { props.op !== OpType.SELECT &&
+                        <>
+                            {getActionIcon(ActionIconType.EDIT, {
+                                title: "edit",
+                                canClick: true,
+                                onClick: () => handleOnClickRow(OpType.EDIT, variation._id)
+                            })}
+                            &nbsp;
+                            {getActionIcon(ActionIconType.DELETE, {
+                                title: "delete",
+                                canClick: true,
+                                onClick: () => handleOnClickRow(OpType.DELETE, variation._id)
+                            })}
+                        </>
+                    }
                 </td>
             </tr>
         </>

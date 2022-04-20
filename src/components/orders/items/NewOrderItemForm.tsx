@@ -1,14 +1,18 @@
 import {useContext, useEffect, useState} from "react";
 import {productsApi} from "../../../api/ProductsAPI";
-import {Card, Col, Container, Form, Row} from "react-bootstrap";
+import {Card, Col, Container, Form, Modal, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {CustomButton} from "../../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {AlertToast} from "../../ui/AlertToast";
+import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
+import {VariationsList} from "../../variations/VariationsList";
+import {Variation} from "../../../domain/Variation";
 
 export const NewOrderItemForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
+    const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
         drawings: 0,
@@ -30,6 +34,28 @@ export const NewOrderItemForm = (props) => {
         load().then(() => undefined);
 
     }, []);
+
+    const handleSearchVariations = () => {
+        setShowVariationsModal(true);
+    }
+
+    const handleCloseVariationsModal = () => {
+        setShowVariationsModal(false);
+    }
+
+    const handleSelectVariation = (variation: Variation) => {
+        setShowVariationsModal(false);
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                product: variation.product,
+                background: variation.background,
+                drawings: variation.drawings,
+                price: variation.price,
+            }
+        })
+        document.getElementById("amount").focus();
+    }
 
     const handleAdd = () => {
         if (!isValidData()) return;
@@ -91,16 +117,13 @@ export const NewOrderItemForm = (props) => {
         })
     }
 
-    const handleNumberInput = (e) => {
-        let {name, value} = e.target;
-        value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
-        if (isNaN(value)) {
-            value = 0;
-        }
+    const handleChangeNumber = (event) => {
+        const {name, value} = event.target;
+        console.log(value.replace(/[^0-9.,]+/, ""))
         setFormData(prevState => {
             return {
                 ...prevState,
-                [name]: Number(value).toFixed(2)
+                [name]: value.replace(/[^0-9.,]+/, "")
             }
         });
     }
@@ -113,7 +136,7 @@ export const NewOrderItemForm = (props) => {
                     <Container>
                         <Form onSubmit={handleAdd}>
                             <Row>
-                                <Col>
+                                <Col md={11}>
                                     <Form.Group className="spaced-form-group">
                                         <Form.Label>Product<span aria-hidden="true"
                                                                  className="required">*</span></Form.Label>
@@ -125,6 +148,19 @@ export const NewOrderItemForm = (props) => {
                                             className="bigger-input"
                                             required
                                             placeholder="Please select a product"/>
+                                    </Form.Group>
+
+                                </Col>
+                                <Col md={1}>
+                                    <Form.Group>
+                                        <Form.Label>&nbsp;&nbsp;</Form.Label>
+                                        <div style={{ marginTop: "0.5rem", marginLeft: "-1rem"}}>
+                                            {getActionIcon(ActionIconType.SEARCH, {
+                                                title: "search",
+                                                canClick: true,
+                                                onClick: () => handleSearchVariations()
+                                            })}
+                                        </div>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -178,10 +214,10 @@ export const NewOrderItemForm = (props) => {
                                             type="text"
                                             name="price"
                                             value={formData.price}
-                                            onChange={handleChange}
+                                            onChange={handleChangeNumber}
                                             autoComplete="off"
                                             style={{textAlign: "right"}}
-                                            onInput={handleNumberInput}/>
+                                        />
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -193,11 +229,12 @@ export const NewOrderItemForm = (props) => {
                                             required
                                             type="text"
                                             name="amount"
+                                            id="amount"
                                             value={formData.amount}
-                                            onChange={handleChange}
+                                            onChange={handleChangeNumber}
                                             autoComplete="off"
                                             style={{textAlign: "right"}}
-                                            onInput={handleNumberInput}/>
+                                        />
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -216,6 +253,21 @@ export const NewOrderItemForm = (props) => {
                     </Container>
                 </Card.Body>
             </Card>
+            {showVariationsModal &&
+                <Modal
+                    show={showVariationsModal}
+                    onHide={handleCloseVariationsModal}
+                    backdrop="static"
+                    keyboard={true}
+                    centered size="xl">
+                    <Modal.Body>
+                        <VariationsList onClose={handleCloseVariationsModal}
+                                        onSelect={handleSelectVariation}
+                                        isModal="yes"
+                        />
+                    </Modal.Body>
+                </Modal>
+            }
         </>
     );
 }
