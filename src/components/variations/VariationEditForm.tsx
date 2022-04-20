@@ -52,10 +52,12 @@ export const VariationEditForm = (props) => {
     }
 
     const handleSelectProduct = (product) => {
+        const selectedProduct = products.find(p => p.name === product);
         setFormData(prevState => {
             return {
                 ...prevState,
-                product: product
+                product: product,
+                price: selectedProduct.price,
             }
         })
     }
@@ -129,12 +131,12 @@ export const VariationEditForm = (props) => {
     return (
         <>
             <AlertToast />
-            <Card border="dark" style={{ width: "47.7rem"}}>
+            <Card border="dark"  style={{ width: "45rem"}}>
                 <Card.Header as="h3">{props.op === OpType.NEW?"New":"Edit"} Variation</Card.Header>
                 <Card.Body>
                     <Form>
                         <Row>
-                            <Col md={8}>
+                            <Col>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Product<span aria-hidden="true"
                                                                 className="required">*</span></Form.Label>
@@ -149,6 +151,23 @@ export const VariationEditForm = (props) => {
                             </Col>
                         </Row>
                         <Row>
+                            <Col md={4}>
+                                <Form.Group className="spaced-form-group">
+                                    <Form.Label>Drawings<span aria-hidden="true"
+                                                              className="required">*</span></Form.Label>
+                                    <Form.Select value={formData.drawings}
+                                                 className="bigger-select"
+                                                 onChange={handleChange}
+                                                 disabled={viewOnly || props.op === OpType.EDIT}
+                                                 name="drawings">
+                                        <option value={0}>0</option>
+                                        <option value={1}>1</option>
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={9}>+ de 3</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
                             <Col md={8}>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Background<span aria-hidden="true"
@@ -175,27 +194,10 @@ export const VariationEditForm = (props) => {
 
                                 </Form.Group>
                             </Col>
-                            <Col md={4}>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Drawings<span aria-hidden="true"
-                                                                className="required">*</span></Form.Label>
-                                    <Form.Select value={formData.drawings}
-                                                 className="bigger-select"
-                                                 onChange={handleChange}
-                                                 disabled={viewOnly || props.op === OpType.EDIT}
-                                                 name="drawings">
-                                        <option value={0}>0</option>
-                                        <option value={1}>1</option>
-                                        <option value={2}>2</option>
-                                        <option value={3}>3</option>
-                                        <option value={9}>+ de 3</option>
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
 
                         </Row>
                         <Row>
-                            <Col md={8}>
+                            <Col md={4}>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
                                     <input
@@ -210,9 +212,7 @@ export const VariationEditForm = (props) => {
                                         onInput={handleNumberInput}/>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <Row>
-                            <Col>
+                            <Col md={8}>
                                 <Form.Group>
                                     <Form.Label>Image<span aria-hidden="true" className="required">*</span></Form.Label>
                                     <div className="flex-control">

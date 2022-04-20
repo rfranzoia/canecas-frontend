@@ -1,6 +1,6 @@
 import {VariationListFilter} from "./VariationListFilter";
 import {VariationRow} from "./VariationRow";
-import {Modal, Table} from "react-bootstrap";
+import {Table} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {variationsApi} from "../../api/VariationAPI";
 import {CustomButton} from "../ui/CustomButton";
@@ -8,6 +8,7 @@ import {VariationEditForm} from "./VariationEditForm";
 import {Variation} from "../../domain/Variation";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import Modal from "../ui/Modal";
 
 export const VariationsList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -130,19 +131,13 @@ export const VariationsList = (props) => {
                     }
                     </tbody>
                 </Table>
-                <Modal
-                    size="lg"
-                    show={showVariationFormModal}
-                    onHide={handleCloseNewVariantModal}
-                    backdrop="static"
-                    keyboard={true}
-                    centered>
-                    <Modal.Body>
+                { showVariationFormModal &&
+                    <Modal onClose={handleCloseNewVariantModal} size="md">
                         <VariationEditForm onAdd={handleAddVariation}
                                            onCancel={handleCloseNewVariantModal}
                                            op={variationFormOp} />
-                    </Modal.Body>
-                </Modal>
+                    </Modal>
+                }
             </div>
         </>
     );
