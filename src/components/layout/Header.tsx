@@ -55,7 +55,6 @@ export const Header = () => {
     const adminUser = (
         <>
             <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
-            <Nav.Link as={Link} to="/variations">Variations</Nav.Link>
             <NavDropdown title="Manage" id="navbarScrollingDropdown">
                 <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/variations">Product Variations</NavDropdown.Item>
@@ -69,8 +68,8 @@ export const Header = () => {
         <>
             <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
             <NavDropdown title="Manage" id="navbarScrollingDropdown">
-                <NavDropdown.Item as={Link} to="/types">Types</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/variations">Product Variations</NavDropdown.Item>
             </NavDropdown>
         </>
     )
@@ -91,7 +90,7 @@ export const Header = () => {
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
-                            >
+                        >
 
                             {appCtx.isLoggedIn() && appCtx.userData.role === Role.ADMIN && adminUser }
                             {appCtx.isLoggedIn() && appCtx.userData.role !== Role.ADMIN && simpleUser }
@@ -141,7 +140,7 @@ export const Header = () => {
                 <div>
                     <Modal
                         onClose={() => setShowChangePassword(false)}
-                        size="sm" >
+                        size="tn" >
                         <div>
                             <ChangeUserPassword email={appCtx.userData.userEmail} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
                         </div>
