@@ -12,7 +12,8 @@ export enum ActionIconType {
     WHATSAPP,
     UNDO,
     IMAGE_EDIT,
-    SEARCH
+    SEARCH,
+    SELECT
 }
 
 const matrix = [
@@ -22,8 +23,9 @@ const matrix = [
     { type: ActionIconType.ACTION_FORWARD, class: "fa fa-forward", color: "orange", size: "2rem" },
     { type: ActionIconType.ACTION_BACKWARD, class: "fa fa-backward", color: "orange", size: "2rem" },
     { type: ActionIconType.ADD_ITEM, class: "fa fa-cart-circle-plus", color: "blue", size: "2rem" },
-    { type: ActionIconType.EXPAND, class: "fa fa-square-plus", color: "black", size: "1.5rem" },
-    { type: ActionIconType.COLLAPSE, class: "fa fa-square-minus", color: "black", size: "1.5rem" },
+    { type: ActionIconType.SELECT, class: "fa fa-square-plus", color: "black", size: "1.5rem" },
+    { type: ActionIconType.EXPAND, class: "fa fa-caret-down", color: "black", size: "1.5rem" },
+    { type: ActionIconType.COLLAPSE, class: "fa fa-caret-up", color: "black", size: "1.5rem" },
     { type: ActionIconType.CANCEL_ITEM, class: "fa fa-trash", color: "red", size: "2rem" },
     { type: ActionIconType.IMAGE_EDIT, class: "fa fa-file-image", color: "blue", size: "2rem" },
     { type: ActionIconType.UNDO, class: "fa fa-rotate-left", color: "red", size: "2rem" },
