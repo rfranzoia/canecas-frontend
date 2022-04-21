@@ -235,3 +235,9 @@ h4 {
 .form-small-font select:disabled {
     background: #dddddd;
 }
+
+.actions {
+    margin: 0.5rem 0.5rem;
+    display: flex;
+    gap: 0.2rem;
+}
