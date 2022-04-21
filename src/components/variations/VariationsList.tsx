@@ -186,8 +186,10 @@ export const VariationsList = (props) => {
         <>
             {showAlert && <AlertToast />}
             <VariationListFilter onFilterApply={handleFilterApply}/>
-            <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
-                          onClick={handleNewVariation}/>
+            {props.isModal !== "yes" &&
+                <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
+                              onClick={handleNewVariation}/>
+            }
             <br/>
             <div>
                 <Table bordered striped hover className="table-small-font table-sm">

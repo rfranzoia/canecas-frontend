@@ -203,10 +203,16 @@ h4 {
     font-size: 19px;
 }
 
+.inline-filter {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2rem;
+    width: 50rem;
+}
 .form-small-font {
-    font-size: 19px;
-    background-color: #eaeaea;
+    font-size: 18px;
     border: 1px solid;
+    background-color: #ededed;
 }
 
 .form-small-font input[type="checkbox"], input[type="radio"] {

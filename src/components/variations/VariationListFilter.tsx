@@ -102,53 +102,54 @@ export const VariationListFilter = (props) => {
             })
             props.onFilterApply();
         }
-    },[formData.filterCheck])
+    }, [formData.filterCheck])
 
     return (
-        <div className="form-small-font">
+        <Container style={{padding: "0.5rem"}} fluid className="form-small-font">
             <form>
-                <Container style={{padding: "0.5rem"}} fluid>
-                    <Row style={{margin: "0.5rem"}}>
+                <Row>
+                    <Col>
+                        <Form.Check type="checkbox"
+                                    label="Filter List By"
+                                    id="checkFilterList"
+                                    name="filterCheck"
+                                    checked={formData.filterCheck}
+                                    onChange={handleChange}
+                        />
+                    </Col>
+                </Row>
+                {formData.filterCheck &&
+                    <Row>
                         <Col>
-                            <Form.Check type="checkbox"
-                                        label="Filter List By"
-                                        id="checkFilterList"
-                                        name="filterCheck"
-                                        checked={formData.filterCheck}
-                                        onChange={handleChange}/>
-                        </Col>
-                    </Row>
-                    <Row style={{margin: "0.5rem"}}>
-                        <Col>
-                            {formData.filterCheck &&
-                                <Container>
-                                    <Row className="mb-3">
-                                        <Col md={2}>
-                                            <Form.Group className="spaced-form-group">
+                            <Container>
+                                <Row className="mb-3">
+                                    <Col>
+                                        <Form.Group>
+                                            <div className="inline-filter">
                                                 <Form.Check type="checkbox"
                                                             label="Product"
                                                             id="checkProduct"
                                                             name="filterByProductCheck"
                                                             checked={formData.filterByProductCheck}
                                                             onChange={handleChange}/>
-
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <AutoCompleteInput
-                                                className="bigger-input"
-                                                style={{width: "25rem"}}
-                                                data={products}
-                                                displayFields="name"
-                                                value={formData.product}
-                                                onFieldSelected={handleSelectProduct}
-                                                disabled={!formData.filterByProductCheck}
-                                                placeholder="Please select a product"/>
-                                        </Col>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Col md={2}>
-                                            <Form.Group className="spaced-form-group">
+                                                <AutoCompleteInput
+                                                    className="bigger-input"
+                                                    style={{width: "25rem"}}
+                                                    data={products}
+                                                    displayFields="name"
+                                                    value={formData.product}
+                                                    onFieldSelected={handleSelectProduct}
+                                                    disabled={!formData.filterByProductCheck}
+                                                    placeholder="Please select a product"
+                                                />
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row className="mb-3">
+                                    <Col>
+                                        <Form.Group>
+                                            <div className="inline-filter">
                                                 <Form.Check type="checkbox"
                                                             label="Drawings"
                                                             id="checkDrawings"
@@ -157,24 +158,24 @@ export const VariationListFilter = (props) => {
                                                             onChange={handleChange}/>
 
 
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Select value={formData.drawings}
-                                                         onChange={handleChange}
-                                                         disabled={!formData.filterByDrawingsCheck}
-                                                         name="drawings">
-                                                <option value={0}>0</option>
-                                                <option value={1}>1</option>
-                                                <option value={2}>2</option>
-                                                <option value={3}>3</option>
-                                                <option value={9}>+ de 3</option>
-                                            </Form.Select>
-                                        </Col>
-                                    </Row>
-                                    <Row className="mb-3">
-                                        <Col md={2}>
-                                            <Form.Group className="spaced-form-group">
+                                                <Form.Select value={formData.drawings}
+                                                             onChange={handleChange}
+                                                             disabled={!formData.filterByDrawingsCheck}
+                                                             name="drawings">
+                                                    <option value={0}>0</option>
+                                                    <option value={1}>1</option>
+                                                    <option value={2}>2</option>
+                                                    <option value={3}>3</option>
+                                                    <option value={9}>+ de 3</option>
+                                                </Form.Select>
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row className="mb-3">
+                                    <Col>
+                                        <Form.Group>
+                                            <div className="inline-filter" >
                                                 <Form.Check type="checkbox"
                                                             label="Background"
                                                             id="checkBackground"
@@ -182,48 +183,45 @@ export const VariationListFilter = (props) => {
                                                             checked={formData.filterByBackgroundCheck}
                                                             onChange={handleChange}/>
 
-
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Check type="radio"
-                                                        label="Empty"
-                                                        id="bgEmpty"
-                                                        name="background"
-                                                        value="empty"
-                                                        checked={formData.background === "empty"}
-                                                        disabled={!formData.filterByBackgroundCheck}
-                                                        onChange={handleChange}/>
-                                            <Form.Check type="radio"
-                                                        label="Personalized"
-                                                        id="bgPersonalized"
-                                                        name="background"
-                                                        value="personalized"
-                                                        checked={formData.background === "personalized"}
-                                                        disabled={!formData.filterByBackgroundCheck}
-                                                        onChange={handleChange}/>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <CustomButton
-                                                caption="Apply Filter"
-                                                type="custom-primary"
-                                                customClass="fa fa-list-check"
-                                                onClick={handleApplyFilter}/>
-                                            &nbsp;
-                                            <CustomButton
-                                                caption="Clear Selection"
-                                                type="close"
-                                                onClick={handleClearFilter}/>
-                                        </Col>
-                                    </Row>
-                                </Container>
-                            }
+                                                <Form.Check type="radio"
+                                                            label="Empty"
+                                                            id="bgEmpty"
+                                                            name="background"
+                                                            value="empty"
+                                                            checked={formData.background === "empty"}
+                                                            disabled={!formData.filterByBackgroundCheck}
+                                                            onChange={handleChange}/>
+                                                <Form.Check type="radio"
+                                                            label="Personalized"
+                                                            id="bgPersonalized"
+                                                            name="background"
+                                                            value="personalized"
+                                                            checked={formData.background === "personalized"}
+                                                            disabled={!formData.filterByBackgroundCheck}
+                                                            onChange={handleChange}/>
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <CustomButton
+                                            caption="Apply Filter"
+                                            type="custom-primary"
+                                            customClass="fa fa-list-check"
+                                            onClick={handleApplyFilter}/>
+                                        &nbsp;
+                                        <CustomButton
+                                            caption="Clear Selection"
+                                            type="close"
+                                            onClick={handleClearFilter}/>
+                                    </Col>
+                                </Row>
+                            </Container>
                         </Col>
                     </Row>
-                </Container>
+                }
             </form>
-        </div>
+        </Container>
     );
 }

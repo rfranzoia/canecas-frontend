@@ -88,16 +88,13 @@ export const VariationEditForm = (props) => {
         props.onSave(variation);
     }
 
-    const handleNumberInput = (e) => {
-        let {name, value} = e.target;
-        value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
-        if (isNaN(value)) {
-            value = 0;
-        }
+    const handleChangeNumber = (event) => {
+        const {name, value} = event.target;
+        console.log(value.replace(/[^0-9.,]+/, ""))
         setFormData(prevState => {
             return {
                 ...prevState,
-                [name]: Number(value).toFixed(2)
+                [name]: value.replace(/[^0-9.,]+/, "")
             }
         });
     }
@@ -157,7 +154,7 @@ export const VariationEditForm = (props) => {
     return (
         <>
             <AlertToast />
-            <Card border="dark"  style={{ width: "45rem"}}>
+            <Card border="dark">
                 <Card.Header as="h3">{props.op === OpType.NEW?"New":"Edit"} Variation</Card.Header>
                 <Card.Body>
                     <Form>
@@ -232,10 +229,9 @@ export const VariationEditForm = (props) => {
                                         type="text"
                                         name="price"
                                         value={formData.price}
-                                        onChange={handleChange}
+                                        onChange={handleChangeNumber}
                                         disabled={viewOnly}
-                                        style={{textAlign: "right"}}
-                                        onInput={handleNumberInput}/>
+                                        style={{textAlign: "right"}}/>
                                 </Form.Group>
                             </Col>
                             <Col md={8}>
