@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {Card, Modal} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {usersApi} from "../../api/UsersAPI";
 import {UsersList} from "./UsersList";
 import {EditUser} from "./EditUser";
@@ -8,6 +8,7 @@ import {StatusCodes} from "http-status-codes";
 import {CustomButton} from "../ui/CustomButton";
 import {ChangeUserPassword} from "./ChangeUserPassword";
 import {AlertToast} from "../ui/AlertToast";
+import Modal from "../ui/Modal";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);
@@ -90,7 +91,7 @@ export const Users = () => {
     useEffect(() => {
         appCtx.checkValidLogin()
             .then(() => undefined);
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (!appCtx.userData.authToken) {
@@ -100,21 +101,21 @@ export const Users = () => {
         usersApi
             .withToken(appCtx.userData.authToken)
             .list()
-                .then((result) => {
-                    if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                        appCtx.showErrorAlert(result.name, result.description);
-                        setUsers([]);
-                    } else {
-                        setUsers(result);
-                    }
-                });
+            .then((result) => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.showErrorAlert(result.name, result.description);
+                    setUsers([]);
+                } else {
+                    setUsers(result);
+                }
+            });
     }, [appCtx, showEditModal]);
 
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
         }
-    },[appCtx.alert.show])
+    }, [appCtx.alert.show])
 
     return (
         <div className="default-margin">
@@ -127,7 +128,7 @@ export const Users = () => {
                             caption="New User"
                             type="new"
                             customClass="fa fa-user-plus"
-                            onClick={() => handleShowEditModal("new")} />
+                            onClick={() => handleShowEditModal("new")}/>
                     </Card.Title>
                     <UsersList
                         users={users}
@@ -136,44 +137,31 @@ export const Users = () => {
                         onChangePassword={handleShowChangePasswordModal}/>
                 </Card.Body>
             </Card>
-            <div>
+            {showEditModal &&
                 <Modal
-                    show={showEditModal}
-                    onHide={handleCloseEditModal}
-                    backdrop="static"
-                    centered
-                    style={{ justifyItems: "center", margin: "auto"}}
-                    size="lg"
-                    keyboard={true}>
-                    <Modal.Body>
-                        <div className="container4">
-                            <EditUser id={editViewOp.userId}
-                                      op={editViewOp.op}
-                                      onSaveCancel={handleCloseEditModal}
-                                      onSave={handleEditUserSave}
-                                      onCancel={handleEditUserCancel}
-                            />
-                        </div>
-                    </Modal.Body>
+                    onClose={handleCloseEditModal}
+                    size="sm">
+                    <div>
+                        <EditUser id={editViewOp.userId}
+                                  op={editViewOp.op}
+                                  onSaveCancel={handleCloseEditModal}
+                                  onSave={handleEditUserSave}
+                                  onCancel={handleEditUserCancel}
+                        />
+                    </div>
                 </Modal>
-            </div>
-            <div>
+            }
+            {showChangePassword &&
                 <Modal
-                    show={showChangePassword}
-                    onHide={handleChangePasswordCancel}
-                    backdrop="static"
-                    centered
-                    keyboard={true}
-                    style={{ margin: "auto", alignContent: "center", justifyItems: "center" }}>
-                    <Modal.Body>
-                        <div className="container4">
-                            <ChangeUserPassword email={editViewOp.email}
-                                                onCancel={handleChangePasswordCancel}
-                                                onSave={handleChangePasswordSave}/>
-                        </div>
-                    </Modal.Body>
+                    onClose={handleChangePasswordCancel}
+                    size="sm">
+                    <div>
+                        <ChangeUserPassword email={editViewOp.email}
+                                            onCancel={handleChangePasswordCancel}
+                                            onSave={handleChangePasswordSave}/>
+                    </div>
                 </Modal>
-            </div>
+            }
         </div>
     );
 };

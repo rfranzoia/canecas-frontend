@@ -16,6 +16,7 @@ export const EditUser = (props) => {
     });
 
     const handleSaveUser = (user) => {
+        if (props.op === "view") return;
         const save = async (user) => {
             let result;
             if (props.op === "edit") {
@@ -61,15 +62,9 @@ export const EditUser = (props) => {
         });
     }, [props.id, props.op, appCtx]);
 
-    const handleOp = (user) => {
-        if (props.op !== "view") {
-            handleSaveUser(user);
-        }
-    };
-
     return (
         <>
-            <EditUserForm user={user} op={props.op} onSaveUser={handleOp} onCancel={handleCancel} />
+            <EditUserForm user={user} op={props.op} onSaveUser={handleSaveUser} onCancel={handleCancel} />
         </>
     );
 };

@@ -1,4 +1,4 @@
-import {Alert, Container, Dropdown, Image, Modal, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Alert, Container, Dropdown, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
@@ -9,6 +9,7 @@ import {EditUser} from "../users/EditUser";
 import {AlertToast} from "../ui/AlertToast";
 import {ChangeUserPassword} from "../users/ChangeUserPassword";
 import {CONTENT_SERVER_ADDRESS} from "../../api/axios";
+import Modal from "../ui/Modal";
 
 export const Header = () => {
     const history = useHistory();
@@ -128,36 +129,24 @@ export const Header = () => {
             {showEditModal &&
                 <div>
                     <Modal
-                        show={showEditModal}
-                        onHide={handleCloseEditModal}
-                        backdrop="static"
-                        centered
-                        style={{ justifyItems: "center", margin: "auto"}}
-                        size="lg"
-                        keyboard={true}>
-                        <Modal.Body>
-                            <div className="container4">
-                                <EditUser id={appCtx.userData.userId} op="edit" onSaveCancel={handleCloseEditModal}/>
-                            </div>
-                        </Modal.Body>
+                        onClose={handleCloseEditModal}
+                        size="sm" >
+                        <div>
+                            <EditUser id={appCtx.userData.userId} op="edit" onSaveCancel={handleCloseEditModal}/>
+                        </div>
                     </Modal>
                 </div>
             }
             { showChangePassword &&
                 <div>
                     <Modal
-                        show={showChangePassword}
-                        onHide={() => setShowChangePassword(false)}
-                        backdrop="static"
-                        centered
-                        keyboard={true}
-                        style={{ margin: "auto", alignContent: "center", justifyItems: "center" }}>
-                        <Modal.Body>
-                            <div className="container4">
-                                <ChangeUserPassword email={appCtx.userData.userEmail} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
-                            </div>
-                        </Modal.Body>
+                        onClose={() => setShowChangePassword(false)}
+                        size="sm" >
+                        <div>
+                            <ChangeUserPassword email={appCtx.userData.userEmail} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
+                        </div>
                     </Modal>
+
                 </div>
             }
             {appCtx.error.show &&
