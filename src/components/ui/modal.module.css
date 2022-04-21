@@ -5,47 +5,38 @@
     width: 100%;
     height: 100vh;
     z-index: 20;
-    background-color: rgba(0, 0, 0, 0.75);
+    background-color: rgba(0, 0, 0, 0.45);
 }
 
 .modal {
-    position: fixed;
-    top: 20vh;
-    left: calc(50% - 21rem);
-    width: auto;
+    position: absolute;
+    margin:auto;
+    top: 10vh;
+    left: calc(50% - 20rem);
+    width: 40rem;
     background-color: white;
     padding: 1rem;
     border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
     z-index: 30;
     animation: slide-down 300ms ease-out forwards;
 }
 
 .modal-lg {
-    position: fixed;
-    top: 20vh;
     left: calc(50% - 35rem);
-    width: auto;
-    background-color: white;
-    padding: 1rem;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    z-index: 30;
-    animation: slide-down 300ms ease-out forwards;
+    width: 70rem;
+}
+
+.modal-lg {
+    left: calc(50% - 30rem);
+    width: 60rem;
 }
 
 .modal-md {
-    position: fixed;
-    top: 20vh;
-    left: calc(50% - 27rem);
-    width: auto;
-    background-color: white;
-    padding: 1rem;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    z-index: 30;
-    animation: slide-down 300ms ease-out forwards;
+    left: calc(50% - 25rem);
+    width: 50rem;
 }
+
 
 @keyframes slide-down {
     from {
