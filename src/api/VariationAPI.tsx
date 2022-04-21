@@ -1,4 +1,4 @@
-import axios, {processRequestError} from "./axios";
+import axios, {DEFAULT_PAGE_SIZE, processRequestError} from "./axios";
 import {DefaultAPI} from "./DefaultAPI";
 import {Variation} from "../domain/Variation";
 
@@ -6,13 +6,12 @@ const VARIATIONS_URL = "/productVariations";
 
 export class VariationsAPI extends DefaultAPI {
 
-    list = async () => {
-
+    list = async (currPage: number = 1) => {
         try {
-            const res = await axios.get(VARIATIONS_URL);
+            const res = await axios.get(`${VARIATIONS_URL}?pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`);
             return res.data;
         } catch (error: any) {
-            return processRequestError(error, "variation:list");
+            return processRequestError(error, "variations:list");
         }
 
     }
@@ -23,7 +22,17 @@ export class VariationsAPI extends DefaultAPI {
             const res = await axios.get(`${VARIATIONS_URL}${filter}`);
             return res.data;
         } catch (error: any) {
-            return processRequestError(error, "variation:list");
+            return processRequestError(error, "variation:listBy");
+        }
+
+    }
+
+    count = async () => {
+        try {
+            const res = await axios.get(`${VARIATIONS_URL}/count`);
+            return res.data;
+        } catch (error: any) {
+            return processRequestError(error, "variation:count");
         }
 
     }

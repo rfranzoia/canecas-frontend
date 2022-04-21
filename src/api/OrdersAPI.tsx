@@ -1,12 +1,8 @@
-import axios, {processRequestError} from "./axios";
+import axios, {DEFAULT_PAGE_SIZE, processRequestError} from "./axios";
 import {Order, OrderItem} from "../domain/Order";
 import {DefaultAPI} from "./DefaultAPI";
 
 const ORDERS_URL = "/orders";
-
-export const DEFAULT_PAGE_SIZE = 8;
-export const DEFAULT_BOUNDARIES = 1;
-export const DEFAULT_AROUND = 1;
 
 export class OrdersAPI extends DefaultAPI {
 
