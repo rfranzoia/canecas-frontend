@@ -1,6 +1,6 @@
 import {Pagination} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {DEFAULT_AROUND, DEFAULT_BOUNDARIES} from "../../api/OrdersAPI";
+import {DEFAULT_AROUND, DEFAULT_BOUNDARIES} from "../../api/axios";
 
 export const CustomPagination = (props) => {
     const [pages, setPages] = useState([]);
@@ -47,18 +47,21 @@ export const CustomPagination = (props) => {
     }, [])
 
     const handleCurrPage = (currPage: number) => {
+        if (currPage === pageControl.currPage) return;
         setPageControl(prevState => {
             return {
                 ...prevState,
                 currPage: currPage
             };
         });
-        props.onPageChange(pageControl.currPage);
+        props.onPageChange(currPage);
     }
 
     const handleNextPage = () => {
         if (pageControl.currPage === pageControl.totalPages) return;
+        if (props.totalPages === 0) return;
         const next = pageControl.currPage + 1;
+        if (next > props.totalPages) return;
         setPageControl(prevState => {
             return {
                 ...prevState,
@@ -70,34 +73,36 @@ export const CustomPagination = (props) => {
 
     const handlePrevPage = () => {
         if (pageControl.currPage === 1) return;
+        const previous = pageControl.currPage - 1;
         setPageControl(prevState => {
             return {
                 ...prevState,
-                currPage: prevState.currPage - 1
+                currPage: previous
             };
         });
-        props.onPageChange(pageControl.currPage);
+        props.onPageChange(previous);
     }
 
     const handleFirstPage = () => {
+        if (pageControl.currPage === 1) return;
         setPageControl(prevState => {
             return {
                 ...prevState,
                 currPage: 1
             };
         });
-        props.onPageChange(pageControl.currPage);
+        props.onPageChange(1);
     }
 
     const handleLastPage = () => {
-        if (pageControl.currPage + 1 >= pageControl.totalPages) return;
+        if (pageControl.currPage === props.totalPages) return;
         setPageControl(prevState => {
             return {
                 ...prevState,
-                currPage: prevState.totalPages
+                currPage: props.totalPages
             };
         });
-        props.onPageChange();
+        props.onPageChange(props.totalPages);
     }
 
     return (
@@ -105,15 +110,15 @@ export const CustomPagination = (props) => {
             <Pagination>
                 <Pagination.First onClick={handleFirstPage}/>
                 <Pagination.Prev onClick={handlePrevPage}/>
-                {pages.map(p => {
+                {pages.map(page => {
                     return (
-                        p !== -1 ?
-                            <Pagination.Item key={p}
-                                             active={p === pageControl.currPage}
-                                             onClick={() => handleCurrPage(p)}>
-                                {p}
+                        page !== -1 ?
+                            <Pagination.Item key={page}
+                                             active={page === pageControl.currPage}
+                                             onClick={() => handleCurrPage(page)}>
+                                {page}
                             </Pagination.Item>:
-                            <Pagination.Ellipsis key={p} disabled={true}/>
+                            <Pagination.Ellipsis key={page} disabled={true}/>
                     )
                 })}
                 <Pagination.Next onClick={handleNextPage}/>
