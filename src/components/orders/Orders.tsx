@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {DEFAULT_PAGE_SIZE, ordersApi} from "../../api/OrdersAPI";
+import {ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 import {EditOrder} from "./EditOrder";
@@ -8,6 +8,7 @@ import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {OrdersList} from "./OrdersList";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
+import {DEFAULT_PAGE_SIZE} from "../../api/axios";
 
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -65,7 +66,7 @@ export const Orders = () => {
         }
     }
 
-    const updatePages = () => {
+    const getTotalPages = () => {
         ordersApi.withToken(appCtx.userData.authToken).count()
             .then(result => {
                 setPageControl({
@@ -85,7 +86,7 @@ export const Orders = () => {
     }
 
     const handleEditSave = () => {
-        updatePages();
+        getTotalPages();
         loadOrders(pageControl.currPage);
         setEdit({
             show: false,
@@ -152,7 +153,7 @@ export const Orders = () => {
                     appCtx.handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
                     setShowAlert(true);
                 }
-                updatePages();
+                getTotalPages();
                 loadOrders(pageControl.currPage);
             })
     }
@@ -170,7 +171,7 @@ export const Orders = () => {
     }, [appCtx.alert.show]);
 
     useEffect(() => {
-        updatePages();
+        getTotalPages();
     }, [])
 
     return (
