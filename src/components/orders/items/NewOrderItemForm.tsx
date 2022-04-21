@@ -256,10 +256,11 @@ export const NewOrderItemForm = (props) => {
             {showVariationsModal &&
                 <Modal
                     show={showVariationsModal}
+                    style={{ maxHeight: "45rem"}}
                     onHide={handleCloseVariationsModal}
                     backdrop="static"
                     keyboard={true}
-                    centered size="xl">
+                    centered size="lg">
                     <Modal.Body>
                         <VariationsList onClose={handleCloseVariationsModal}
                                         onSelect={handleSelectVariation}
