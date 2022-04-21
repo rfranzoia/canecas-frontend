@@ -138,7 +138,7 @@ export const EditProductForm = (props) => {
     return (
         <>
             <AlertToast/>
-            <Card border="dark" style={{width: "51rem"}}>
+            <Card border="dark">
                 <Card.Header as="h3">{`${title} Product`}</Card.Header>
                 <Form onSubmit={handleSave}>
                     <Container fluid>
