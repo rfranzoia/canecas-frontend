@@ -43,7 +43,7 @@ export const VariationRow = (props) => {
                 <td width="10%" align="right">{variation.price.toFixed(2)}</td>
                 <td width="15%" align="center">
                     { props.op === OpType.SELECT &&
-                        getActionIcon(ActionIconType.EXPAND, {
+                        getActionIcon(ActionIconType.SELECT, {
                             color: "#000",
                             title: "select",
                             canClick: true,
