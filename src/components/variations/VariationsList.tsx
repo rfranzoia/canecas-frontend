@@ -1,15 +1,17 @@
+import {useContext, useEffect, useState} from "react";
+import {Table} from "react-bootstrap";
 import {VariationListFilter} from "./VariationListFilter";
 import {VariationRow} from "./VariationRow";
-import {Table} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
+import {VariationEditForm} from "./VariationEditForm";
 import {variationsApi} from "../../api/VariationAPI";
 import {CustomButton} from "../ui/CustomButton";
-import {VariationEditForm} from "./VariationEditForm";
-import {Variation} from "../../domain/Variation";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 import {ConfirmModal} from "../ui/ConfirmModal";
+import {CustomPagination} from "../ui/CustomPagination";
+import {Variation} from "../../domain/Variation";
+import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {DEFAULT_PAGE_SIZE} from "../../api/axios";
 
 export const VariationsList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -18,6 +20,8 @@ export const VariationsList = (props) => {
     const [variationId, setVariationId] = useState(null);
     const [showVariationFormModal, setShowVariationFormModal] = useState(false);
     const [variationFormOp, setVariationFormOp] = useState(OpType.VIEW);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [confirmationDialog, setConfirmationDialog] = useState({
             show: false,
             title: "",
@@ -29,16 +33,24 @@ export const VariationsList = (props) => {
         }
     );
 
-    const loadVariations = () => {
-        variationsApi.list()
+    const loadVariations = (currPage) => {
+        variationsApi.list(currPage)
             .then(result => {
                 if (result.statusCode) {
                     const error = result?.response?.data;
                     appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
                 } else {
                     setVariations(result);
+                    setCurrentPage(currPage);
                 }
             })
+    }
+
+    const getTotalPages = () => {
+        variationsApi.count()
+            .then(result => {
+                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+            });
     }
 
     const handleSaveVariation = (variation: Variation) => {
@@ -53,7 +65,7 @@ export const VariationsList = (props) => {
                         appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
-                        loadVariations();
+                        loadVariations(1);
                     }
                 });
         } else if (variationFormOp === OpType.EDIT) {
@@ -65,7 +77,7 @@ export const VariationsList = (props) => {
                         appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
-                        loadVariations();
+                        loadVariations(currentPage);
                     }
                 });
         }
@@ -105,11 +117,12 @@ export const VariationsList = (props) => {
                 return
             }
         }
-        loadVariations();
+        loadVariations(1);
     }
 
     useEffect(() => {
-        loadVariations();
+        loadVariations(1);
+        getTotalPages();
     }, []);
 
     const handleSelectVariation = (variation) => {
@@ -139,7 +152,7 @@ export const VariationsList = (props) => {
                 } else {
                     appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
                     setShowAlert(true);
-                    loadVariations();
+                    loadVariations(currentPage);
                 }
             });
     }
@@ -169,16 +182,20 @@ export const VariationsList = (props) => {
 
     }
 
+    const handlePageChange = (currPage) => {
+        loadVariations(currPage);
+    }
+
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
         }
-        loadVariations();
+        loadVariations(currentPage);
     }, [appCtx.alert.show]);
 
     useEffect(() => {
         if (!showVariationFormModal) {
-            loadVariations()
+            loadVariations(currentPage)
         }
     }, [showVariationFormModal])
 
@@ -186,10 +203,13 @@ export const VariationsList = (props) => {
         <>
             {showAlert && <AlertToast />}
             <VariationListFilter onFilterApply={handleFilterApply}/>
-            {props.isModal !== "yes" &&
-                <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
-                              onClick={handleNewVariation}/>
-            }
+            <div className="two-items-container">
+                {props.isModal !== "yes" &&
+                    <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
+                                  onClick={handleNewVariation}/>
+                }
+                <CustomPagination totalPages={totalPages} onPageChange={handlePageChange}/>
+            </div>
             <br/>
             <div>
                 <Table bordered striped hover className="table-small-font table-sm">
