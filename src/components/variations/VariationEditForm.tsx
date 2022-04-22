@@ -263,15 +263,17 @@ export const VariationEditForm = (props) => {
                             </Col>
                         </Row>
                     </Form>
-                    <br/>
-                    <CustomButton caption="Save" onClick={handleSave} type="save"/>
-                    &nbsp;
-                    <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
-                    <p aria-hidden="true" id="required-description">
-                        <span aria-hidden="true" className="required">*</span>Required field(s)
-                    </p>
                 </Card.Body>
             </Card>
+            { !viewOnly &&
+                <p aria-hidden="true" id="required-description">
+                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                </p>
+            }
+            <div className="actions">
+                <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+            </div>
 
         </>
     );
