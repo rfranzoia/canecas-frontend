@@ -6,7 +6,7 @@ import {CustomButton} from "../../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {AlertToast} from "../../ui/AlertToast";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
-import {VariationsList} from "../../variations/VariationsList";
+import {Variations} from "../../variations/Variations";
 import {Variation} from "../../../domain/Variation";
 
 export const NewOrderItemForm = (props) => {
@@ -262,9 +262,9 @@ export const NewOrderItemForm = (props) => {
                     keyboard={true}
                     centered size="lg">
                     <Modal.Body>
-                        <VariationsList onClose={handleCloseVariationsModal}
-                                        onSelect={handleSelectVariation}
-                                        isModal="yes"
+                        <Variations onClose={handleCloseVariationsModal}
+                                    onSelect={handleSelectVariation}
+                                    isModal="yes"
                         />
                     </Modal.Body>
                 </Modal>

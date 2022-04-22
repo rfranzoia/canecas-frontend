@@ -181,7 +181,9 @@ export const EditOrderForm = (props) => {
                                 </Col>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="orderDate">Date</label>
+                                        <label htmlFor="orderDate">Date
+                                            <span aria-hidden="true" className="required">*</span>
+                                        </label>
                                         <input className="form-control bigger-input" id="orderDate" name="orderDate" required
                                                type="date"
                                                value={formData.orderDate}
@@ -193,7 +195,9 @@ export const EditOrderForm = (props) => {
                             <Row>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="userEmail">Customer Email</label>
+                                        <label htmlFor="userEmail">Customer Email
+                                            <span aria-hidden="true" className="required">*</span>
+                                        </label>
                                         <AutoCompleteInput
                                             data={users}
                                             value={formData.userEmail}
@@ -240,35 +244,34 @@ export const EditOrderForm = (props) => {
                                                     onItemAdd={handleItemAdd}/>
                                 </Col>
                             </Row>
-                            <br/>
-                            <Row>
-                                <Col>
-                                    <div className="align-content-end">
-                                        {!viewOnly && (
-                                            <>
-                                                <CustomButton caption="Save" onClick={handleSave} type="save"/>
-                                                <span>&nbsp;</span>
-                                            </>
-                                        )}
-                                        <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
-                                        <span>&nbsp;</span>
-                                        {(viewOnly && order.status > 0) &&
-                                            <CustomButton caption="Status Changes"
-                                                          onClick={handleViewStatusHistory}
-                                                          type="list"/>
-                                        }
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Modal size="lg" show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
-                                    <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
-                                </Modal>
-                            </Row>
                         </Container>
                     </form>
                 </Card.Body>
             </Card>
+            {!viewOnly &&
+                <p aria-hidden="true" id="required-description">
+                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                </p>
+            }
+            <div className="actions">
+                {!viewOnly && (
+                    <>
+                        <CustomButton caption="Save" onClick={handleSave} type="save"/>
+                        <span>&nbsp;</span>
+                    </>
+                )}
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
+                <span>&nbsp;</span>
+                {(viewOnly && order.status > 0) &&
+                    <CustomButton caption="Status Changes"
+                                  onClick={handleViewStatusHistory}
+                                  type="list"/>
+                }
+            </div>
+
+            <Modal size="lg" show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
+                <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
+            </Modal>
         </>
     );
 }

@@ -36,8 +36,7 @@ export const OrderItemsList = (props) => {
                     show={showModal}
                     onHide={handleCloseModal}
                     backdrop="static"
-                    keyboard={true}
-                    centered>
+                    keyboard={true} >
                     <Modal.Body>
                         <NewOrderItemForm onItemAdd={handleItemAdded}
                                           onCancelItemAdd={handleCloseModal}/>

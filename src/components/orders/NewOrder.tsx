@@ -130,8 +130,8 @@ export const NewOrder = (props) => {
                             <Row>
                                 <Col>
                                     <div className="form-group spaced-form-group">
-                                        <label htmlFor="userEmail">
-                                            Customer Email<span aria-hidden="true" className="required">*</span>
+                                        <label htmlFor="userEmail">Customer Email
+                                            <span aria-hidden="true" className="required">*</span>
                                         </label>
                                         <AutoCompleteInput
                                             data={users}
@@ -171,22 +171,23 @@ export const NewOrder = (props) => {
                                                     onItemAdd={handleItemAdd}/>
                                 </Col>
                             </Row>
-                            <br/>
                             <Row>
                                 <Col>
-                                    <CustomButton caption="Save" type="save" onClick={handleSave}/>
-                                    <span>&nbsp;</span>
-                                    <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
-                                    <p aria-hidden="true" id="required-description">
-                                        <span aria-hidden="true" className="required">*</span>Required field(s)
-                                    </p>
+
                                 </Col>
                             </Row>
-
                         </Container>
                     </form>
                 </Card.Body>
             </Card>
+            <p aria-hidden="true" id="required-description">
+                <span aria-hidden="true" className="required">*</span>Required field(s)
+            </p>
+            <div className="actions">
+                <CustomButton caption="Save" type="save" onClick={handleSave}/>
+                <span>&nbsp;</span>
+                <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+            </div>
         </>
     );
 }

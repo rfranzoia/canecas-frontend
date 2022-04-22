@@ -41,8 +41,12 @@ export const Header = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
-            setShowAlert(true);
+            if (error.name && error.description) {
+                appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+                setShowAlert(true);
+            } else {
+                console.warn("warning", error);
+            }
         }
     };
 
