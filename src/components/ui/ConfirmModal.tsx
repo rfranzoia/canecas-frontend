@@ -8,10 +8,10 @@ export const ConfirmModal = (props) => {
                 <Modal.Title>{props.title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>{!props.hasData?props.message:props.children}</Modal.Body>
-            <Modal.Footer>
+            <div className="actions">
                 <CustomButton caption="No" onClick={props.handleClose} type="close"/>
                 <CustomButton caption="Yes" onClick={props.handleConfirm} type="confirm"/>
-            </Modal.Footer>
+            </div>
         </Modal>
     );
 }
