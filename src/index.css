@@ -32,21 +32,6 @@ h4 {
     font-weight: bold;
 }
 
-.required {
-    color: red;
-}
-
-.spaced-form-group {
-    margin-bottom: 1rem;
-}
-
-.bigger-input {
-    font-size: 19px;
-}
-
-.bigger-select {
-    height: 2.3rem;
-}
 .header {
     margin-bottom: 20px;
 }
@@ -61,6 +46,9 @@ h4 {
     vertical-align: center;
 }
 
+.required {
+    color: red;
+}
 
 .alert-top {
     position: absolute;
@@ -78,11 +66,23 @@ h4 {
     background-color: #006c86;
 }
 
-.default-margin {
-    margin: 1rem;
+.actions {
+    margin: 0.5rem 0.5rem;
+    display: flex;
+    gap: 0.2rem;
 }
 
-.tr-item {
+.actions button {
+    min-width: 5.5rem;
+    min-height: 2rem;
+}
+
+.spaced-form-group {
+    margin-bottom: 1rem;
+}
+
+.default-margin {
+    margin: 1rem;
 }
 
 .tr-item:hover {
@@ -236,8 +236,3 @@ h4 {
     background: #dddddd;
 }
 
-.actions {
-    margin: 0.5rem 0.5rem;
-    display: flex;
-    gap: 0.2rem;
-}
