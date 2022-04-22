@@ -1,3 +1,4 @@
+import styles from "./actionIcon.module.css";
 
 export enum ActionIconType {
     EDIT,
@@ -67,7 +68,7 @@ export const getActionIcon = (actionIconType: ActionIconType, ...args) => {
 
     return (
         <button type="button"
-                className="transparent-btn"
+                className={styles["transparent-btn"]}
                 onClick={options.onClick}
                 title={options.title}
                 disabled={!options.canClick}>
