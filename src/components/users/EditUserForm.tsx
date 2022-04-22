@@ -196,6 +196,11 @@ export const EditUserForm = (props) => {
                     </form>
                 </Card.Body>
             </Card>
+            { !viewOnly &&
+                <p aria-hidden="true" id="required-description">
+                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                </p>
+            }
             <div className="actions">
                 {!viewOnly && (
                     <>
@@ -205,9 +210,6 @@ export const EditUserForm = (props) => {
                 )}
                 <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
             </div>
-            <p aria-hidden="true" id="required-description">
-                <span aria-hidden="true" className="required">*</span>Required field(s)
-            </p>
         </>
     );
 };
