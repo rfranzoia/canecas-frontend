@@ -230,6 +230,11 @@ export const EditProductForm = (props) => {
                     </Container>
                 </Form>
             </Card>
+            { !viewOnly &&
+                <p aria-hidden="true" id="required-description">
+                    <span aria-hidden="true" className="required">*</span>Required field(s)
+                </p>
+            }
             <div className="default-margin">
                 {!viewOnly && (
                     <>
@@ -238,9 +243,6 @@ export const EditProductForm = (props) => {
                     </>
                 )}
                 <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={props.onCancel} type="close"/>
-                <p aria-hidden="true" id="required-description">
-                    <span aria-hidden="true" className="required">*</span>Required field(s)
-                </p>
             </div>
         </>
     );
