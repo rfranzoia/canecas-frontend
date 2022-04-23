@@ -1,37 +1,25 @@
 import {useContext, useEffect, useState} from "react";
-import {Card, Table} from "react-bootstrap";
-import {VariationListFilter} from "./VariationListFilter";
-import {VariationRow} from "./VariationRow";
-import {VariationEditForm} from "./VariationEditForm";
+import {Card} from "react-bootstrap";
 import {variationsApi} from "../../api/VariationAPI";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertToast} from "../ui/AlertToast";
-import Modal from "../ui/Modal";
-import {ConfirmModal} from "../ui/ConfirmModal";
 import {CustomPagination} from "../ui/CustomPagination";
 import {Variation} from "../../domain/Variation";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {DEFAULT_PAGE_SIZE} from "../../api/axios";
+import {VariationsList} from "./VariationsList";
+import Modal from "../ui/Modal";
+import {VariationEditForm} from "./VariationEditForm";
 
 export const Variations = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
-    const [variations, setVariations] = useState([]);
-    const [variationId, setVariationId] = useState(null);
     const [showVariationFormModal, setShowVariationFormModal] = useState(false);
     const [variationFormOp, setVariationFormOp] = useState(OpType.VIEW);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [confirmationDialog, setConfirmationDialog] = useState({
-            show: false,
-            title: "",
-            message: "",
-            hasData: false,
-            op: "",
-            onConfirm: () => undefined,
-            onCancel: () => undefined
-        }
-    );
+    const [variations, setVariations] = useState([]);
+    const [variationId, setVariationId] = useState(null);
 
     const loadVariations = (currPage) => {
         variationsApi.list(currPage)
@@ -142,7 +130,6 @@ export const Variations = (props) => {
     }
 
     const handleConfirmDelete = (id: string) => {
-        handleCloseConfirmDialog();
         variationsApi.withToken(appCtx.userData.authToken)
             .delete(id)
             .then(result => {
@@ -156,31 +143,6 @@ export const Variations = (props) => {
                     loadVariations(currentPage);
                 }
             });
-    }
-
-    const handleCloseConfirmDialog = () => {
-        setConfirmationDialog({
-            show: false,
-            title: "",
-            message: "",
-            hasData: false,
-            op: "",
-            onConfirm: () => undefined,
-            onCancel: () => undefined
-        });
-    }
-
-    const handDeleteVariation = (id: string) => {
-        setConfirmationDialog({
-            show: true,
-            title: "Delete Order",
-            message: `Are you sure you want to delete the Variation '${id}'?`,
-            op: "delete",
-            hasData: false,
-            onConfirm: () => handleConfirmDelete(id),
-            onCancel: () => handleCloseConfirmDialog()
-        });
-
     }
 
     const handlePageChange = (currPage) => {
@@ -214,59 +176,23 @@ export const Variations = (props) => {
                             }
                             <CustomPagination totalPages={totalPages} onPageChange={handlePageChange}/>
                         </div>
-                        <VariationListFilter onFilterApply={handleFilterApply}/>
                     </Card.Title>
-                    <div>
-                        <Table bordered striped hover className="table-small-font table-sm">
-                            <thead>
-                            <tr>
-                                <th style={{width: "35%"}} colSpan={2}>Product</th>
-                                <th style={{width: "20%", textAlign: "center"}}>Drawings</th>
-                                <th style={{width: "20%", textAlign: "center"}}>Background</th>
-                                <th style={{width: "10%", textAlign: "right"}}>Price</th>
-                                <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {variations.length > 0 && variations.map(v => {
-                                return (
-                                    <VariationRow key={v._id}
-                                                  variation={v}
-                                                  onEdit={handleEditVariation}
-                                                  onDelete={handDeleteVariation}
-                                                  onSelect={handleSelectVariation}
-                                                  op={props.isModal === "yes"? OpType.SELECT: "none"}
-                                    />
-                                )
-                            })}
-                            {(!variations || variations.length === 0) &&
-                                <tr>
-                                    <td colSpan={6}>
-                                        No variations were found
-                                    </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </Table>
-                        { showVariationFormModal &&
-                            <Modal onClose={handleCloseNewVariationModal} size="sm">
-                                <VariationEditForm onSave={handleSaveVariation}
-                                                   onCancel={handleCloseNewVariationModal}
-                                                   variationId={variationId}
-                                                   op={variationFormOp} />
-                            </Modal>
-                        }
-                        { confirmationDialog.show &&
-                            <ConfirmModal
-                                show={confirmationDialog.show}
-                                handleClose={confirmationDialog.onCancel}
-                                handleConfirm={confirmationDialog.onConfirm}
-                                title={confirmationDialog.title}
-                                message={confirmationDialog.message}/>
-                        }
-                    </div>
+                    <VariationsList variations={variations}
+                                    onEdit={handleEditVariation}
+                                    onDelete={handleConfirmDelete}
+                                    onSelect={handleSelectVariation}
+                                    onFilterChange={handleFilterApply}
+                    />
                 </Card.Body>
             </Card>
+            { showVariationFormModal &&
+                <Modal onClose={handleCloseNewVariationModal} size="sm">
+                    <VariationEditForm onSave={handleSaveVariation}
+                                       onCancel={handleCloseNewVariationModal}
+                                       variationId={variationId}
+                                       op={variationFormOp} />
+                </Modal>
+            }
         </div>
     );
 }

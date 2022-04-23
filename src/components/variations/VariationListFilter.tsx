@@ -4,6 +4,8 @@ import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {productsApi} from "../../api/ProductsAPI";
 
+import "./variationListFilter.css"
+
 export const VariationListFilter = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -105,7 +107,7 @@ export const VariationListFilter = (props) => {
     }, [formData.filterCheck])
 
     return (
-        <Container style={{padding: "0.5rem"}} fluid className="form-small-font">
+        <Container style={{padding: "0.5rem"}} fluid className="list-filter">
             <form>
                 <Row>
                     <Col>
