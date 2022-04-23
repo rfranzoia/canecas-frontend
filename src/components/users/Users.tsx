@@ -124,7 +124,7 @@ export const Users = () => {
     return (
         <div className="default-margin">
             {showAlert && <AlertToast/>}
-            <Card border="dark" className="align-content-center">
+            <Card border="dark">
                 <Card.Header as="h3">Users</Card.Header>
                 <Card.Body>
                     <Card.Title>
