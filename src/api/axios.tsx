@@ -12,8 +12,6 @@ export const API_SERVER_ADDRESS = apiServers[Environment.DEV];
 export const BASE_API_URL = `${API_SERVER_ADDRESS}/api`;
 
 export const DEFAULT_PAGE_SIZE = 8;
-export const DEFAULT_BOUNDARIES = 1;
-export const DEFAULT_AROUND = 1;
 
 export default axios.create({
     baseURL: BASE_API_URL
