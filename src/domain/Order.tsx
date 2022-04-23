@@ -39,6 +39,10 @@ export interface Order {
 
 export interface OrderItem {
     product: string,
+    drawings: number,
+    drawingsImages?: string,
+    background: string,
+    backgroundImage?: string,
     price: number,
     amount: number
 }
