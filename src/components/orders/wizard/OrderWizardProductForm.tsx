@@ -48,7 +48,7 @@ export const OrderWizardProductForm = (props) => {
         if (!isValidData()) return;
         const product = {
             product: formData.product,
-            productPrice: formData.price,
+            price: formData.price,
         }
         props.onForward(product)
     }

@@ -5,7 +5,9 @@ export const OrderItemRow = (props) => {
     const [item, setItem] = useState({
         product: "",
         drawings: 0,
+        drawingsImages: null,
         background: "",
+        backgroundImage: null,
         price: 0,
         amount: 0,
     });
@@ -14,9 +16,11 @@ export const OrderItemRow = (props) => {
         setItem({
             product: props.item.product,
             drawings: props.item.drawings,
+            drawingsImages: props.item.drawingsImages,
             background: props.item.background,
-            price: props.item.price,
-            amount: props.item.amount
+            backgroundImage: props.item.backgroundImage,
+            price: +props.item.price,
+            amount: +props.item.amount
         })
     },[props.item]);
 

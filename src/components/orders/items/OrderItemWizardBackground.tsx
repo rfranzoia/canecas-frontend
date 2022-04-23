@@ -5,16 +5,15 @@ import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {imageHelper} from "../../ui/ImageHelper";
-
-import "./orderItemWizard.css";
+import {BorderedRow} from "../../ui/BorderedRow";
 
 export const OrderItemWizardBackground = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         product: "",
         drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
+        drawingsImages: "",
+        drawingsImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -75,8 +74,8 @@ export const OrderItemWizardBackground = (props) => {
         setFormData({
             product: props.orderItem.product,
             drawings: props.orderItem.drawings,
-            drawingsImage: props.orderItem.drawingsImage,
-            drawingsImageFile: props.orderItem.drawingsImageFile,
+            drawingsImages: props.orderItem.drawingsImages,
+            drawingsImagesFile: props.orderItem.drawingsImagesFile,
             background: props.orderItem.background,
             backgroundDescription: props.orderItem.backgroundDescription,
             backgroundImage: props.orderItem.backgroundImage,
@@ -107,19 +106,17 @@ export const OrderItemWizardBackground = (props) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Row>
+                        <BorderedRow title={"Drawings"}>
                             <Col md="auto">
-                                <div className="tinny-bordered-panel">
-                                    {formData.drawingsImage &&
-                                        <Image src={formData.drawingsImageFile}
-                                               fluid width="100" title={formData.drawingsImage}/>
+                                <div className="bordered-panel bordered-panel-tn">
+                                    {formData.drawingsImages &&
+                                        <Image src={formData.drawingsImagesFile}
+                                               fluid width="100" title={formData.drawingsImages}/>
                                     }
                                 </div>
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Drawings<span aria-hidden="true"
-                                                              className="required">*</span></Form.Label>
                                     <Form.Select value={formData.drawings}
                                                  className="bigger-select"
                                                  disabled
@@ -131,12 +128,11 @@ export const OrderItemWizardBackground = (props) => {
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
                                     </Form.Select>
-                                    <small>{formData.drawingsImage}</small>
+                                    <small>{formData.drawingsImages}</small>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <br/>
-                        <Row>
+                        </BorderedRow>
+                        <BorderedRow title={"Background"} required>
                             <Col md="auto">
                                 <div className="bordered-panel">
                                     {formData.backgroundImage &&
@@ -147,8 +143,6 @@ export const OrderItemWizardBackground = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Background<span aria-hidden="true"
-                                                                className="required">*</span></Form.Label>
                                     <Form.Check type="radio"
                                                 label="Empty"
                                                 id="bgEmpty"
@@ -198,7 +192,7 @@ export const OrderItemWizardBackground = (props) => {
                                     </Form.Group>
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </BorderedRow>
                     </Form>
                 </Card.Body>
             </Card>

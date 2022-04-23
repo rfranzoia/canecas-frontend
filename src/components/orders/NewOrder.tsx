@@ -52,11 +52,22 @@ export const NewOrder = (props) => {
     const handleSave = (event) => {
         event.preventDefault();
         if (!isValidData()) return;
+        const orderItems = formData.items.map(i => (
+            {
+                product: i.product,
+                drawings: i.drawings,
+                drawingsImages: i.drawingsImages,
+                background: i.background,
+                backgroundImage: i.backgroundImage,
+                price: +i.price,
+                amount: i.amount,
+            }
+        ))
         const order: Order = {
             orderDate: new Date(formData.orderDate),
             userEmail: formData.userEmail,
-            totalPrice: formData.totalPrice,
-            items: formData.items
+            totalPrice: +formData.totalPrice,
+            items: orderItems,
         }
         ordersApi.withToken(appCtx.userData.authToken).create(order)
             .then(result => {
@@ -169,11 +180,6 @@ export const NewOrder = (props) => {
                                                     viewOnly={false}
                                                     onItemRemove={handleItemRemove}
                                                     onItemAdd={handleItemAdd}/>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-
                                 </Col>
                             </Row>
                         </Container>

@@ -6,23 +6,23 @@ import {OrderWizardBackground} from "./OrderWizardBackground";
 import {OrderWizardAmount} from "./OrderWizardAmount";
 import {WizardFormData} from "../Orders";
 
-
+const initWizardFormData: WizardFormData = {
+    user: null,
+    product: "",
+    price: 0,
+    drawings: 0,
+    drawingsImages: "",
+    drawingsImagesFile: null,
+    background: "",
+    backgroundDescription: "",
+    backgroundImage: "",
+    backgroundImageFile: null,
+    amount: 0,
+}
 
 export const OrderWizard = (props) => {
     const [currStep, setCurrStep] = useState(0);
-    const [wizardFormData, setWizardFormData] = useState({
-        user: null,
-        product: "",
-        productPrice: 0,
-        drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
-        background: "",
-        backgroundDescription: "",
-        backgroundImage: "",
-        backgroundImageFile: null,
-        amount: 0,
-    })
+    const [wizardFormData, setWizardFormData] = useState(initWizardFormData)
 
     const save = () => {
         console.log(wizardFormData);
@@ -48,7 +48,7 @@ export const OrderWizard = (props) => {
                 return {
                     ...prevState,
                     product: formData.product,
-                    productPrice: formData.productPrice,
+                    price: formData.price,
                 }
             })
         }
@@ -57,8 +57,8 @@ export const OrderWizard = (props) => {
                 return {
                     ...prevState,
                     drawings: formData.drawings,
-                    drawingsImage: formData.drawingsImage,
-                    drawingsImageFile: formData.drawingsImageFile,
+                    drawingsImages: formData.drawingsImages,
+                    drawingsImagesFile: formData.drawingsImagesFile,
                 }
             })
         }

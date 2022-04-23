@@ -9,15 +9,13 @@ import {productsApi} from "../../../api/ProductsAPI";
 import {Variations} from "../../variations/Variations";
 import {Variation} from "../../../domain/Variation";
 
-import "./orderItemWizard.css"
-
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
-        productPrice: 0,
+        price: 0,
     });
 
     const handleSearchVariations = () => {
@@ -34,7 +32,7 @@ export const OrderItemWizardProduct = (props) => {
             product: variation.product,
             background: variation.background,
             drawings: variation.drawings,
-            productPrice: variation.price,
+            price: variation.price,
         }
         props.onVariantSelect(selectedVariant);
     }
@@ -45,7 +43,7 @@ export const OrderItemWizardProduct = (props) => {
             return {
                 ...prevState,
                 product: product,
-                productPrice: selectedProduct.price,
+                price: selectedProduct.price,
             }
         })
     }
@@ -73,13 +71,9 @@ export const OrderItemWizardProduct = (props) => {
         if (!isValidData()) return;
         const product = {
             product: formData.product,
-            productPrice: formData.productPrice,
+            price: formData.price,
         }
         props.onForward(product)
-    }
-
-    const handleBackward = () => {
-        props.onBackward();
     }
 
     useEffect(() => {
@@ -99,7 +93,7 @@ export const OrderItemWizardProduct = (props) => {
     useEffect(() => {
         setFormData({
             product: props.orderItem.product,
-            productPrice: props.orderItem.productPrice,
+            price: props.orderItem.price,
         })
     }, [props.orderItem])
 
@@ -145,8 +139,8 @@ export const OrderItemWizardProduct = (props) => {
                                     <input
                                         className="form-control bigger-input"
                                         type="text"
-                                        name="productPrice"
-                                        value={formData.productPrice}
+                                        name="price"
+                                        value={formData.price}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
                                         style={{textAlign: "right"}}

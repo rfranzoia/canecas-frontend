@@ -1,4 +1,4 @@
-import {Card, Col, Container, Modal, Row} from "react-bootstrap";
+import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useContext, useEffect, useState} from "react";
 import {StatusChangeList} from "./history/StatusChangeList";
@@ -8,6 +8,8 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {usersApi} from "../../api/UsersAPI";
+import {ordersApi} from "../../api/OrdersAPI";
+import Modal from "../ui/Modal";
 
 export const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -26,16 +28,10 @@ export const EditOrderForm = (props) => {
 
     const [showStatusHistory, setShowStatusHistory] = useState(false);
 
-    const evaluateTotalPrice = (items) => {
-        return items.reduce((acc, item) => {
-            return acc + (item.price * item.amount);
-        }, 0);
-    }
-
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
-            const totalPrice = evaluateTotalPrice(items);
+            const totalPrice = ordersApi.evaluateTotalPrice(items);
             return {
                 ...prevState,
                 items: items,
@@ -53,7 +49,7 @@ export const EditOrderForm = (props) => {
             handleCloseToast();
             setFormData(prevState => {
                 const items = [...prevState.items, item];
-                const totalPrice = evaluateTotalPrice(items);
+                const totalPrice = ordersApi.evaluateTotalPrice(items);
                 return {
                     ...prevState,
                     items: items,
@@ -166,7 +162,7 @@ export const EditOrderForm = (props) => {
     return (
         <>
             {showAlert && <AlertToast/>}
-            <Card border="dark" className="align-content-center" style={{width: '46.5rem'}}>
+            <Card border="dark" className="align-content-center" >
                 <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
                 <Card.Body>
                     <form onSubmit={handleSave}>
@@ -268,10 +264,11 @@ export const EditOrderForm = (props) => {
                                   type="list"/>
                 }
             </div>
-
-            <Modal size="lg" show={showStatusHistory} onHide={handleCloseViewStatusHistory} backdrop="static" keyboard={true} centered>
-                <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
-            </Modal>
+            { showStatusHistory &&
+                <Modal onClose={handleCloseViewStatusHistory}>
+                    <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
+                </Modal>
+            }
         </>
     );
 }

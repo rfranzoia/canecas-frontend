@@ -73,7 +73,10 @@ export const EditOrder = (props) => {
                 <AlertToast/>
             }
             <div>
-                <EditOrderForm title={title} order={order} op={props.op} onSaveOrder={handleOp}
+                <EditOrderForm title={title}
+                               order={order}
+                               op={props.op}
+                               onSaveOrder={handleOp}
                                onCancel={handleCancel}/>
             </div>
         </>

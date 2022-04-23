@@ -5,16 +5,15 @@ import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {imageHelper} from "../../ui/ImageHelper";
-
-import "./orderItemWizard.css";
+import {BorderedRow} from "../../ui/BorderedRow";
 
 export const OrderItemWizardDrawings = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         product: "",
         drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
+        drawingsImages: "",
+        drawingsImagesFile: null,
     });
 
     const handleChange = (event) => {
@@ -42,8 +41,8 @@ export const OrderItemWizardDrawings = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                drawingsImage: event.target.files[0].name,
-                drawingsImageFile: image,
+                drawingsImages: event.target.files[0].name,
+                drawingsImagesFile: image,
             }
         })
     };
@@ -55,8 +54,8 @@ export const OrderItemWizardDrawings = (props) => {
     const handleForward = () => {
         const drawings = {
             drawings: formData.drawings,
-            drawingsImage: formData.drawingsImage,
-            drawingsImageFile: formData.drawingsImageFile,
+            drawingsImages: formData.drawingsImages,
+            drawingsImagesFile: formData.drawingsImagesFile,
         }
         props.onForward(drawings)
     }
@@ -69,8 +68,8 @@ export const OrderItemWizardDrawings = (props) => {
         setFormData({
             product: props.orderItem.product,
             drawings: props.orderItem.drawings,
-            drawingsImage: props.orderItem.drawingsImage,
-            drawingsImageFile: props.orderItem.drawingsImageFile,
+            drawingsImages: props.orderItem.drawingsImages,
+            drawingsImagesFile: props.orderItem.drawingsImagesFile,
         });
     }, [props.orderItem])
 
@@ -96,19 +95,17 @@ export const OrderItemWizardDrawings = (props) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Row>
+                        <BorderedRow title={"Drawings"} required>
                             <Col md="auto">
                                 <div className="bordered-panel">
-                                    {formData.drawingsImageFile &&
-                                        <Image src={formData.drawingsImageFile}
-                                               fluid width="200" title={formData.drawingsImage}/>
+                                    {formData.drawingsImagesFile &&
+                                        <Image src={formData.drawingsImagesFile}
+                                               fluid width="200" title={formData.drawingsImages}/>
                                     }
                                 </div>
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Drawings<span aria-hidden="true"
-                                                              className="required">*</span></Form.Label>
                                     <Form.Select value={formData.drawings}
                                                  className="bigger-select"
                                                  onChange={handleChange}
@@ -127,7 +124,7 @@ export const OrderItemWizardDrawings = (props) => {
                                                id="image"
                                                name="image"
                                                required type="url"
-                                               value={formData.drawingsImage}
+                                               value={formData.drawingsImages}
                                                onChange={handleChange}
                                                disabled
                                         />
@@ -145,7 +142,7 @@ export const OrderItemWizardDrawings = (props) => {
                                     <small>If the photo is not available just ignore this</small>
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </BorderedRow>
                     </Form>
                 </Card.Body>
             </Card>

@@ -3,15 +3,16 @@ import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../../context/ApplicationContext";
 import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
+import {BorderedRow} from "../../ui/BorderedRow";
 
 export const OrderItemWizardAmount = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         product: "",
-        productPrice: 0,
+        price: 0,
         drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
+        drawingsImages: "",
+        drawingsImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -42,8 +43,9 @@ export const OrderItemWizardAmount = (props) => {
     const handleAddItem = () => {
         const amount = {
             amount: formData.amount,
+            price: formData.price,
         }
-        props.onFinish({amount: amount});
+        props.onFinish(amount);
     }
 
     const handleBackward = () => {
@@ -53,10 +55,10 @@ export const OrderItemWizardAmount = (props) => {
     useEffect(() => {
         setFormData({
             product: props.orderItem.product,
-            productPrice: props.orderItem.productPrice,
+            price: props.orderItem.price,
             drawings: props.orderItem.drawings,
-            drawingsImage: props.orderItem.drawingsImage,
-            drawingsImageFile: props.orderItem.drawingsImageFile,
+            drawingsImages: props.orderItem.drawingsImages,
+            drawingsImagesFile: props.orderItem.drawingsImagesFile,
             background: props.orderItem.background,
             backgroundDescription: props.orderItem.backgroundDescription,
             backgroundImage: props.orderItem.backgroundImage,
@@ -86,13 +88,12 @@ export const OrderItemWizardAmount = (props) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <Row>
-                            <Form.Label>Drawings</Form.Label>
+                        <BorderedRow title={"Drawings"}>
                             <Col md="auto">
-                                <div className="tinny-bordered-panel">
-                                    {formData.drawingsImage &&
-                                        <Image src={formData.drawingsImageFile}
-                                               fluid width="100" title={formData.drawingsImage}/>
+                                <div className="bordered-panel bordered-panel-tn">
+                                    {formData.drawingsImages &&
+                                        <Image src={formData.drawingsImagesFile}
+                                               fluid width="100" title={formData.drawingsImages}/>
                                     }
                                 </div>
                             </Col>
@@ -109,14 +110,13 @@ export const OrderItemWizardAmount = (props) => {
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
                                     </Form.Select>
-                                    <small>{formData.drawingsImage}</small>
+                                    <small>{formData.drawingsImages}</small>
                                 </Form.Group>
                             </Col>
-                        </Row>
-                        <Row>
-                            <Form.Label>Background</Form.Label>
+                        </BorderedRow>
+                        <BorderedRow title={"Background"}>
                             <Col md="auto">
-                                <div className="tinny-bordered-panel">
+                                <div className="bordered-panel bordered-panel-tn">
                                     {formData.backgroundImage &&
                                         <Image src={formData.backgroundImageFile}
                                                fluid width="100" title={formData.backgroundImage}/>
@@ -143,7 +143,7 @@ export const OrderItemWizardAmount = (props) => {
                                                 onChange={handleChange}/>
                                 </Form.Group>
                                 <Form.Group className="spaced-form-group">
-                                    <label htmlFor="description">Tell us your idea</label>
+                                    <Form.Text muted>Tell us your idea</Form.Text>
                                     <textarea className="form-control bigger-input"
                                               id="description"
                                               name="backgroundDescription"
@@ -154,7 +154,7 @@ export const OrderItemWizardAmount = (props) => {
                                     <small>{formData.backgroundImage}</small>
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </BorderedRow>
                         <Row>
                             <Col>
                                 <Form.Group className="spaced-form-group">
@@ -163,8 +163,8 @@ export const OrderItemWizardAmount = (props) => {
                                         className="form-control bigger-input"
                                         required
                                         type="text"
-                                        name="productPrice"
-                                        value={formData.productPrice}
+                                        name="price"
+                                        value={formData.price}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
                                         style={{textAlign: "right"}}

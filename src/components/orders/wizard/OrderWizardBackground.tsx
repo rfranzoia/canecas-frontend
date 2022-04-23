@@ -10,8 +10,8 @@ export const OrderWizardBackground = (props) => {
     const [formData, setFormData] = useState({
         background: "",
         backgroundDescription: "",
-        drawingsImage: "",
-        drawingsImageFile: null,
+        backgroundImage: "",
+        backgroundImageFile: null,
     });
 
     const handleChangeFile = (event) => {
@@ -19,8 +19,8 @@ export const OrderWizardBackground = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                drawingsImage: event.target.files[0].name,
-                drawingsImageFile: event.target.files[0]
+                drawingsImages: event.target.files[0].name,
+                drawingsImagesFile: event.target.files[0]
             }
         })
     };
@@ -42,8 +42,8 @@ export const OrderWizardBackground = (props) => {
     const handleForward = () => {
         const background = {
             background: formData.background,
-            backgroundImage: formData.drawingsImage,
-            backgroundImageFile: formData.drawingsImageFile,
+            backgroundImage: formData.backgroundImage,
+            backgroundImageFile: formData.backgroundImageFile,
         }
         props.onForward(background)
     }
@@ -96,7 +96,7 @@ export const OrderWizardBackground = (props) => {
                                                        id="image"
                                                        name="image"
                                                        required type="url"
-                                                       value={formData.drawingsImage}
+                                                       value={formData.backgroundImage}
                                                        onChange={handleChange}
                                                        disabled
                                                 />

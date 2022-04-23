@@ -5,16 +5,15 @@ import {OrderItemWizardDrawings} from "./OrderItemWizardDrawings";
 import {OrderItemWizardBackground} from "./OrderItemWizardBackground";
 import {OrderItemWizardAmount} from "./OrderItemWizardAmount";
 
-import "./orderItemWizard.css";
-
 export const OrderItemWizard = (props) => {
     const [currStep, setCurrStep] = useState(0);
     const [wizardFormData, setWizardFormData] = useState({
+        _id: "",
         product: "",
-        productPrice: 0,
+        price: 0,
         drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
+        drawingsImages: "",
+        drawingsImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -22,9 +21,15 @@ export const OrderItemWizard = (props) => {
         amount: 0,
     })
 
-    const addItem = () => {
-        console.log(wizardFormData);
-        props.onCancel();
+    const handleFinish = (formData: WizardFormData) => {
+        const _id = wizardFormData.product.trim().concat(wizardFormData.drawings.toString()).concat(wizardFormData.background);
+        const data = {
+            ...wizardFormData,
+            _id: _id,
+            price: formData.price,
+            amount: formData.amount,
+        }
+        props.onItemAdd(data);
     }
 
     const handleCancel = () => {
@@ -45,7 +50,7 @@ export const OrderItemWizard = (props) => {
                 return {
                     ...prevState,
                     product: formData.product,
-                    productPrice: formData.productPrice,
+                    price: formData.price,
                 }
             })
         }
@@ -54,8 +59,8 @@ export const OrderItemWizard = (props) => {
                 return {
                     ...prevState,
                     drawings: formData.drawings,
-                    drawingsImage: formData.drawingsImage,
-                    drawingsImageFile: formData.drawingsImageFile,
+                    drawingsImages: formData.drawingsImages,
+                    drawingsImagesFile: formData.drawingsImagesFile,
                 }
             })
         }
@@ -88,16 +93,6 @@ export const OrderItemWizard = (props) => {
     const handleVariantSelected = (selectedVariant: WizardFormData) => {
         updateFormData(selectedVariant);
         setCurrStep(steps.length - 1);
-    }
-
-    const handleFinish = (formData: WizardFormData) => {
-        setWizardFormData(prevState => {
-            return {
-                ...prevState,
-                amount: formData.amount,
-            }
-        })
-        addItem();
     }
 
     const steps = [

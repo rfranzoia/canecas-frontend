@@ -14,12 +14,13 @@ import {User} from "../../domain/User";
 import styles from "./orders.module.css"
 
 export interface WizardFormData {
+    _id?: string,
     user?: User,
     product?: string,
-    productPrice?: number,
+    price?: number,
     drawings?: number,
-    drawingsImage?: string,
-    drawingsImageFile?: object,
+    drawingsImages?: string,
+    drawingsImagesFile?: object,
     background?: string,
     backgroundDescription?: string,
     backgroundImage?: string,

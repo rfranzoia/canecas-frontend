@@ -9,8 +9,8 @@ export const OrderWizardDrawingsForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         drawings: 0,
-        drawingsImage: "",
-        drawingsImageFile: null,
+        drawingsImages: "",
+        drawingsImagesFile: null,
     });
 
     const handleChange = (event) => {
@@ -28,8 +28,8 @@ export const OrderWizardDrawingsForm = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                drawingsImage: event.target.files[0].name,
-                drawingsImageFile: event.target.files[0]
+                drawingsImages: event.target.files[0].name,
+                drawingsImagesFile: event.target.files[0]
             }
         })
     };
@@ -41,8 +41,8 @@ export const OrderWizardDrawingsForm = (props) => {
     const handleForward = () => {
         const drawings = {
             drawings: formData.drawings,
-            drawingsImage: formData.drawingsImage,
-            drawingsImageFile: formData.drawingsImageFile,
+            drawingsImages: formData.drawingsImages,
+            drawingsImagesFile: formData.drawingsImagesFile,
         }
         props.onForward(drawings)
     }
@@ -83,7 +83,7 @@ export const OrderWizardDrawingsForm = (props) => {
                                                        id="image"
                                                        name="image"
                                                        required type="url"
-                                                       value={formData.drawingsImage}
+                                                       value={formData.drawingsImages}
                                                        onChange={handleChange}
                                                        disabled
                                                 />

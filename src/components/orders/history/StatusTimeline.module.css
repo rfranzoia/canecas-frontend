@@ -2,11 +2,11 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    margin: 40px 0;
+    margin: 10px 0;
 }
 
 .timelineContainer::after {
-    background-color: #e17b77;
+    background-color: #000;
     content: '';
     position: absolute;
     left: calc(50% - 2px);
@@ -32,7 +32,7 @@
 }
 
 .timelineItemContent {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     background-color: #fff;
     display: flex;
@@ -40,8 +40,8 @@
     align-items: flex-end;
     padding: 15px;
     position: relative;
-    width: 500px;
-    max-width: 85%;
+    width: 650px;
+    max-width: 90%;
     text-align: right;
 }
 
@@ -70,7 +70,8 @@
 
 .timelineItemContent .tag {
     color: #fff;
-    font-size: 12px;
+    background-color: black;
+    font-size: 11px;
     font-weight: bold;
     top: 5px;
     left: 5px;
@@ -86,7 +87,7 @@
 }
 
 .timelineItemContent time {
-    color: #777;
+    color: #666;
     font-size: 15px;
     font-weight: normal;
 }
@@ -112,7 +113,7 @@
 
 .timelineItemContent .circle {
     background-color: #fff;
-    border: 3px solid #e17b77;
+    border: 3px solid #000;
     border-radius: 50%;
     position: absolute;
     top: calc(50% - 10px);
@@ -147,7 +148,7 @@
     }
 
     .timelineItemContent time {
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .timelineItemContent a {

@@ -28,9 +28,6 @@ export const OrderItemsList = (props) => {
         props.onItemAdd(item);
     }
 
-    //<NewOrderItemForm onItemAdd={handleItemAdded}
-    //                  onCancelItemAdd={handleCloseModal}/>
-
     return (
         <div>
             <div><h5>Items<span aria-hidden="true"
