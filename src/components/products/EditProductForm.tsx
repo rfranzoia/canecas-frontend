@@ -82,6 +82,16 @@ export const EditProductForm = (props) => {
         });
     }
 
+    const handleChangeNumber = (event) => {
+        const {name, value} = event.target;
+        setFormData(prevState => {
+            return {
+                ...prevState,
+                [name]: value.replace(/[^0-9.,]+/, "")
+            }
+        });
+    }
+
     const handleChangeFile = (event) => {
         event.preventDefault();
         setFile({selectedFile: event.target.files[0]});
@@ -92,21 +102,6 @@ export const EditProductForm = (props) => {
             }
         })
     };
-
-    const handleNumberInput = (e) => {
-        e.preventDefault();
-        let {name, value} = e.target;
-        value = value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1')
-        if (isNaN(value)) {
-            value = 0;
-        }
-        setFormData(prevState => {
-            return {
-                ...prevState,
-                [name]: Number(value).toFixed(2)
-            }
-        });
-    }
 
     const handleFileClick = () => {
         document.getElementById("file").click();
@@ -189,10 +184,9 @@ export const EditProductForm = (props) => {
                                                     type="text"
                                                     name="price"
                                                     value={viewOnly ? formData.price.toFixed(2) : formData.price}
-                                                    onChange={handleChange}
+                                                    onChange={handleChangeNumber}
                                                     style={{textAlign: "right"}}
-                                                    disabled={viewOnly}
-                                                    onInput={handleNumberInput}/>
+                                                    disabled={viewOnly} />
                                             </Form.Group>
                                         </Col>
                                         <Col>
