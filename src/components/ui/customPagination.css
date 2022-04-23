@@ -1,0 +1,12 @@
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff !important;
+    background-color: green !important;
+    border-color: white;
+}
+
+.page-item .page-link{
+    border-radius: 15%;
+    padding: 0.6rem;
+    color: green;
+}

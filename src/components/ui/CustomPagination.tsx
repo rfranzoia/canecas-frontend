@@ -1,6 +1,9 @@
 import {Pagination} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {DEFAULT_AROUND, DEFAULT_BOUNDARIES} from "../../api/axios";
+import "./customPagination.css"
+
+const DEFAULT_AROUND = 1;
+const DEFAULT_BOUNDARIES = 1;
 
 export const CustomPagination = (props) => {
     const [pages, setPages] = useState([]);
@@ -114,6 +117,7 @@ export const CustomPagination = (props) => {
                     return (
                         page !== -1 ?
                             <Pagination.Item key={page}
+                                             className="page-item"
                                              active={page === pageControl.currPage}
                                              onClick={() => handleCurrPage(page)}>
                                 {page}
