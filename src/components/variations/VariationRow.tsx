@@ -1,5 +1,5 @@
 import {Image} from "react-bootstrap";
-import classes from "./variation.module.css"
+import classes from "./variations.module.css"
 import {imageHelper} from "../ui/ImageHelper";
 import {useContext, useEffect, useState} from "react";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";

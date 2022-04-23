@@ -1,18 +1,25 @@
 import {useContext, useEffect, useState} from "react";
+import {Card, Col, Form, Image, Row} from "react-bootstrap";
+
+import {Variation} from "../../domain/Variation";
+import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+
 import {productsApi} from "../../api/ProductsAPI";
+import {variationsApi} from "../../api/VariationAPI";
+
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {Variation} from "../../domain/Variation";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {variationsApi} from "../../api/VariationAPI";
+import {imageHelper} from "../ui/ImageHelper";
+
+import styles from "./variations.module.css"
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
     const [viewOnly, setViewOnly] = useState(false);
+    const [image, setImage] = useState(null);
     const [formData, setFormData] = useState({
         _id: null,
         product: "",
@@ -70,7 +77,7 @@ export const VariationEditForm = (props) => {
 
     const handleSave = () => {
         if (!isValidData()) return;
-        if (props.op == OpType.NEW) {
+        if (props.op === OpType.NEW) {
             const selectedProduct = products.find(product => product.name === formData.product);
             if (!selectedProduct) {
                 appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
@@ -99,9 +106,10 @@ export const VariationEditForm = (props) => {
         });
     }
 
-    const handleChangeFile = (event) => {
+    const handleChangeFile = async (event) => {
         event.preventDefault();
         setFile({selectedFile: event.target.files[0]});
+        setImage(await imageHelper.convertToBase64(event.target.files[0]))
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -112,6 +120,10 @@ export const VariationEditForm = (props) => {
 
     const handleFileClick = () => {
         document.getElementById("file").click();
+    }
+
+    const loadImage = async (name) => {
+        setImage(await imageHelper.getImageFromServer(name));
     }
 
     useEffect(() => {
@@ -131,6 +143,7 @@ export const VariationEditForm = (props) => {
                         price: result.price,
                         image: result.image,
                     })
+                    imageHelper.getImage(loadImage, result.image);
                 }
             })
     },[props.variationId])
@@ -154,114 +167,128 @@ export const VariationEditForm = (props) => {
     return (
         <>
             <AlertToast />
-            <Card border="dark">
+            <Card border="dark" className={styles["variations-edit-modal"]}>
                 <Card.Header as="h3">{props.op === OpType.NEW?"New":"Edit"} Variation</Card.Header>
                 <Card.Body>
                     <Form>
                         <Row>
+                            <Col md={"auto"}>
+                                <div className={"bordered-panel bordered-panel-lg"}>
+                                    {image &&
+                                        <Image src={image}
+                                        fluid width="500" title={formData.image}/>
+                                    }
+                                </div>
+                            </Col>
                             <Col>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Product<span aria-hidden="true"
-                                                                className="required">*</span></Form.Label>
-                                    <AutoCompleteInput
-                                        data={products}
-                                        displayFields="name"
-                                        value={formData.product}
-                                        disabled={viewOnly || props.op === OpType.EDIT}
-                                        onFieldSelected={handleSelectProduct}
-                                        placeholder="Please select a product"/>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md={4}>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Drawings<span aria-hidden="true"
-                                                              className="required">*</span></Form.Label>
-                                    <Form.Select value={formData.drawings}
-                                                 className="bigger-select"
-                                                 onChange={handleChange}
-                                                 disabled={viewOnly || props.op === OpType.EDIT}
-                                                 name="drawings">
-                                        <option value={0}>0</option>
-                                        <option value={1}>1</option>
-                                        <option value={2}>2</option>
-                                        <option value={3}>3</option>
-                                        <option value={9}>+ de 3</option>
-                                    </Form.Select>
-                                </Form.Group>
-                            </Col>
-                            <Col md={8}>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Background<span aria-hidden="true"
-                                                                className="required">*</span></Form.Label>
-                                    <div style={{ padding: "0.5rem", border: "1px solid #cdcdcd"}}>
-                                        <Form.Check type="radio"
-                                                    label="Empty"
-                                                    id="bgEmpty"
-                                                    name="background"
-                                                    value="empty"
-                                                    disabled={viewOnly || props.op === OpType.EDIT}
-                                                    checked={formData.background === "empty"}
-                                                    onChange={handleChange} />
-                                        <Form.Check type="radio"
-                                                    label="Personalized"
-                                                    id="bgPersonalized"
-                                                    name="background"
-                                                    disabled={viewOnly || props.op === OpType.EDIT}
-                                                    value="personalized"
-                                                    checked={formData.background === "personalized"}
-                                                    onChange={handleChange} />
-                                    </div>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="spaced-form-group">
+                                            <Form.Label>Product<span aria-hidden="true"
+                                                                     className="required">*</span></Form.Label>
+                                            <AutoCompleteInput
+                                                data={products}
+                                                displayFields="name"
+                                                value={formData.product}
+                                                disabled={viewOnly || props.op === OpType.EDIT}
+                                                onFieldSelected={handleSelectProduct}
+                                                placeholder="Please select a product"/>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col md={4}>
+                                        <Form.Group className="spaced-form-group">
+                                            <Form.Label>Drawings<span aria-hidden="true"
+                                                                      className="required">*</span></Form.Label>
+                                            <Form.Select value={formData.drawings}
+                                                         className="bigger-select"
+                                                         onChange={handleChange}
+                                                         disabled={viewOnly || props.op === OpType.EDIT}
+                                                         name="drawings">
+                                                <option value={0}>No drawings</option>
+                                                <option value={1}>1</option>
+                                                <option value={2}>2</option>
+                                                <option value={3}>3</option>
+                                                <option value={9}>+3</option>
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={8}>
+                                        <Form.Group className="spaced-form-group">
+                                            <Form.Label>Background<span aria-hidden="true"
+                                                                        className="required">*</span></Form.Label>
+                                            <div style={{ padding: "0.5rem", border: "1px solid #cdcdcd"}}>
+                                                <Form.Check type="radio"
+                                                            label="Empty"
+                                                            id="bgEmpty"
+                                                            name="background"
+                                                            value="empty"
+                                                            disabled={viewOnly || props.op === OpType.EDIT}
+                                                            checked={formData.background === "empty"}
+                                                            onChange={handleChange} />
+                                                <Form.Check type="radio"
+                                                            label="Personalized"
+                                                            id="bgPersonalized"
+                                                            name="background"
+                                                            disabled={viewOnly || props.op === OpType.EDIT}
+                                                            value="personalized"
+                                                            checked={formData.background === "personalized"}
+                                                            onChange={handleChange} />
+                                            </div>
 
 
-                                </Form.Group>
-                            </Col>
+                                        </Form.Group>
+                                    </Col>
 
-                        </Row>
-                        <Row>
-                            <Col md={4}>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
-                                    <input
-                                        className="form-control bigger-input"
-                                        required
-                                        type="text"
-                                        name="price"
-                                        value={formData.price}
-                                        onChange={handleChangeNumber}
-                                        disabled={viewOnly}
-                                        style={{textAlign: "right"}}/>
-                                </Form.Group>
+                                </Row>
+                                <Row>
+                                    <Col md={4}>
+                                        <Form.Group className="spaced-form-group">
+                                            <Form.Label>Price<span aria-hidden="true" className="required">*</span></Form.Label>
+                                            <input
+                                                className="form-control bigger-input"
+                                                required
+                                                type="text"
+                                                name="price"
+                                                value={formData.price}
+                                                onChange={handleChangeNumber}
+                                                disabled={viewOnly}
+                                                autoComplete="off"
+                                                style={{textAlign: "right"}}/>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col md={8}>
+                                        <Form.Group>
+                                            <Form.Label>Image<span aria-hidden="true" className="required">*</span></Form.Label>
+                                            <div className="flex-control">
+                                                <input className="form-control bigger-input"
+                                                       id="image"
+                                                       name="image"
+                                                       required type="url"
+                                                       value={formData.image}
+                                                       onChange={handleChange}
+                                                       disabled
+                                                />
+                                                <input
+                                                    type="file"
+                                                    id="file"
+                                                    className="form-control bigger-input"
+                                                    placeholder="Enter the file name here"
+                                                    name="file"
+                                                    onChange={handleChangeFile}
+                                                    style={{display: 'none'}}
+                                                />
+                                                {props.op !== OpType.VIEW &&
+                                                    getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", !viewOnly, handleFileClick)
+                                                }
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
                             </Col>
-                            <Col md={8}>
-                                <Form.Group>
-                                    <Form.Label>Image<span aria-hidden="true" className="required">*</span></Form.Label>
-                                    <div className="flex-control">
-                                        <input className="form-control bigger-input"
-                                               id="image"
-                                               name="image"
-                                               required type="url"
-                                               value={formData.image}
-                                               onChange={handleChange}
-                                               disabled
-                                        />
-                                        <input
-                                            type="file"
-                                            id="file"
-                                            className="form-control bigger-input"
-                                            placeholder="Enter the file name here"
-                                            name="file"
-                                            onChange={handleChangeFile}
-                                            style={{display: 'none'}}
-                                        />
-                                        {props.op !== OpType.VIEW &&
-                                            getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", !viewOnly, handleFileClick)
-                                        }
-                                    </div>
-                                </Form.Group>
-                            </Col>
                         </Row>
+
                     </Form>
                 </Card.Body>
             </Card>
@@ -271,8 +298,8 @@ export const VariationEditForm = (props) => {
                 </p>
             }
             <div className="actions">
-                <CustomButton caption="Save" onClick={handleSave} type="save"/>
                 <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                <CustomButton caption="Save" onClick={handleSave} type="save"/>
             </div>
 
         </>

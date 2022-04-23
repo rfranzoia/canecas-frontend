@@ -4,9 +4,9 @@ import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {productsApi} from "../../api/ProductsAPI";
 
-import "./variationListFilter.css"
+import classes from "./variationListFilter.module.css"
 
-export const VariationListFilter = (props) => {
+export const VariationListFilterModule = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         filterCheck: false,
@@ -107,7 +107,7 @@ export const VariationListFilter = (props) => {
     }, [formData.filterCheck])
 
     return (
-        <Container style={{padding: "0.5rem"}} fluid className="list-filter">
+        <Container fluid className={classes["list-filter"]}>
             <form>
                 <Row>
                     <Col>
@@ -127,7 +127,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className="inline-filter">
+                                            <div className={classes["inline-filter"]}>
                                                 <Form.Check type="checkbox"
                                                             label="Product"
                                                             id="checkProduct"
@@ -151,7 +151,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className="inline-filter">
+                                            <div className={classes["inline-filter"]}>
                                                 <Form.Check type="checkbox"
                                                             label="Drawings"
                                                             id="checkDrawings"
@@ -177,7 +177,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className="inline-filter" >
+                                            <div className={classes["inline-filter"]} >
                                                 <Form.Check type="checkbox"
                                                             label="Background"
                                                             id="checkBackground"

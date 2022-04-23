@@ -1,4 +1,4 @@
-import {VariationListFilter} from "./VariationListFilter";
+import {VariationListFilterModule} from "./VariationListFilter.module";
 import {Table} from "react-bootstrap";
 import {VariationRow} from "./VariationRow";
 import {ApplicationContext, OpType} from "../../context/ApplicationContext";
@@ -56,7 +56,7 @@ export const VariationsList = (props) => {
 
     return (
         <>
-            <VariationListFilter onFilterApply={props.onFilterChange}/>
+            <VariationListFilterModule onFilterApply={props.onFilterChange}/>
             <div>
                 <Table bordered striped hover className="table-small-font table-sm">
                     <thead>

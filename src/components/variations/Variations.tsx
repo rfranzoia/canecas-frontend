@@ -187,7 +187,7 @@ export const Variations = (props) => {
                 </Card.Body>
             </Card>
             { showVariationFormModal &&
-                <Modal onClose={handleCloseNewVariationModal} size="sm">
+                <Modal onClose={handleCloseNewVariationModal} >
                     <VariationEditForm onSave={handleSaveVariation}
                                        onCancel={handleCloseNewVariationModal}
                                        variationId={variationId}
