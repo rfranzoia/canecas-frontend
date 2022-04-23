@@ -146,14 +146,15 @@ export const UserRegistration = (props) => {
                     </Form>
                 </Card.Body>
             </Card>
+            <p>
+                Need an account?&nbsp;
+                <span onClick={() => handleShowType(ShowType.SIGN_UP)}><Link to="#">Sign Up</Link></span>
+            </p>
             <div className="actions">
                 <CustomButton caption="Cancel" onClick={props.handleClose} type="close"/>
                 <CustomButton caption="Sign In" onClick={() => handleSignIn(user)} type="sign-in"/>
             </div>
-            <p className="forgot-password text-right">
-                Need an account?&nbsp;
-                <span onClick={() => handleShowType(ShowType.SIGN_UP)}><Link to="#">Sign Up</Link></span>
-            </p>
+
         </>
     )
 
@@ -262,15 +263,16 @@ export const UserRegistration = (props) => {
                     </Form>
                 </Card.Body>
             </Card>
-            <div className="actions">
-                <CustomButton caption="Cancel" onClick={props.handleClose} type="close"/>
-                <CustomButton caption="Sign Up" onClick={handleSignUp} type="sign-up"/>
-            </div>
             <p aria-hidden="true" id="required-description">
                 <span aria-hidden="true" className="required">*</span>Required field(s)<br/>
                 Already registered?&nbsp;
                 <span onClick={() => handleShowType(ShowType.SIGN_IN)}><Link to="#">Sign In</Link></span>
             </p>
+            <div className="actions">
+                <CustomButton caption="Cancel" onClick={props.handleClose} type="close"/>
+                <CustomButton caption="Sign Up" onClick={handleSignUp} type="sign-up"/>
+            </div>
+
         </>
     )
 
