@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import classes from "./AutoCompleteInput.module.css";
+import styles from "./autoCompleteInput.module.css";
 import {IconContext} from "react-icons";
 import {BsCaretDown, GrFormClose} from "react-icons/all";
 
@@ -90,7 +90,7 @@ export const AutoCompleteInput = (props) => {
     }
 
     return (
-        <div className={classes.AutoCompleteText}>
+        <div className={styles.AutoCompleteText}>
             <IconContext.Provider value={{ color: "black", size: '1.8rem' }}>
             <input type="text"
                    id="autocompleteInput"
@@ -105,11 +105,11 @@ export const AutoCompleteInput = (props) => {
                    onKeyUp={handleKeyPress}
                     />
                 {suggestions.length === 0?
-                    <BsCaretDown className={classes.iconText}
+                    <BsCaretDown className={styles.iconText}
                                      onClick={handleClickIcon}
                                      style={{ pointerEvents: (props.disabled)?"none":"all"}} />
                 :
-                    <GrFormClose className={classes.iconText}
+                    <GrFormClose className={styles.iconText}
                                      onClick={handleClickIcon}
                                      style={{ pointerEvents: (props.disabled)?"none":"all"}} />
                 }
