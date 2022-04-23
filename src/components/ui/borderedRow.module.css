@@ -1,0 +1,17 @@
+.row-border {
+    margin-bottom: 1rem;
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+    border: 1px solid #cdcdcd;
+    padding: 1rem 0;
+}
+
+.row-title {
+    position: fixed;
+    margin-top: -1.8rem;
+    margin-left: 0.5rem;
+    background-color: white;
+    width: auto;
+    height: 1.5rem;
+    color: #777777;
+}
