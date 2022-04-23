@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import {Card, Col, Container, Form, Image, Row} from "react-bootstrap";
+import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {imageHelper, ImageOpType} from "../ui/ImageHelper";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
@@ -92,9 +92,10 @@ export const EditProductForm = (props) => {
         });
     }
 
-    const handleChangeFile = (event) => {
+    const handleChangeFile = async (event) => {
         event.preventDefault();
         setFile({selectedFile: event.target.files[0]});
+        setImage(await imageHelper.convertToBase64(event.target.files[0]))
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -135,108 +136,106 @@ export const EditProductForm = (props) => {
             <AlertToast/>
             <Card border="dark">
                 <Card.Header as="h3">{`${title} Product`}</Card.Header>
-                <Form onSubmit={handleSave}>
-                    <Container fluid>
+                <Card.Body>
+                    <Form>
                         <Row>
-                            {viewOnly &&
-                                <Col>
-                                    <div className="flex-item-image-auto">
+                            <Col md={"auto"}>
+                                <div className="bordered-panel bordered-panel-lg">
+                                    { formData.image &&
                                         <Image src={image}
-                                               fluid width="600" title={product.image}/>
-                                    </div>
-                                </Col>
-                            }
+                                               fluid width="500" title={product.image}/>
+                                    }
+                                </div>
+                            </Col>
                             <Col>
-                                <Container fluid>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group className="spaced-form-group">
-                                                <label htmlFor="name">Name<span aria-hidden="true"
-                                                                                className="required">*</span></label>
-                                                <input className="form-control bigger-input" id="name" name="name" required
-                                                       type="text"
-                                                       value={formData.name} onChange={handleChange} disabled={viewOnly}/>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group className="spaced-form-group">
-                                                <label htmlFor="description">Description<span aria-hidden="true"
-                                                                                              className="required">*</span></label>
-                                                <textarea className="form-control bigger-input" id="description"
-                                                          name="description"
-                                                          required
-                                                          rows={3}
-                                                          value={formData.description} onChange={handleChange}
-                                                          disabled={viewOnly}/>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col>
-                                            <Form.Group className="spaced-form-group">
-                                                <label htmlFor="price">Price<span aria-hidden="true"
-                                                                                  className="required">*</span></label>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="spaced-form-group">
+                                            <label htmlFor="name">Name<span aria-hidden="true"
+                                                                            className="required">*</span></label>
+                                            <input className="form-control bigger-input" id="name" name="name" required
+                                                   type="text"
+                                                   value={formData.name} onChange={handleChange} disabled={viewOnly}/>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="spaced-form-group">
+                                            <label htmlFor="description">Description<span aria-hidden="true"
+                                                                                          className="required">*</span></label>
+                                            <textarea className="form-control bigger-input" id="description"
+                                                      name="description"
+                                                      required
+                                                      rows={3}
+                                                      value={formData.description} onChange={handleChange}
+                                                      disabled={viewOnly}/>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <Form.Group className="spaced-form-group">
+                                            <label htmlFor="price">Starting Price<span aria-hidden="true"
+                                                                              className="required">*</span></label>
+                                            <input
+                                                className="form-control bigger-input"
+                                                required
+                                                type="text"
+                                                name="price"
+                                                value={viewOnly ? formData.price.toFixed(2) : formData.price}
+                                                onChange={handleChangeNumber}
+                                                style={{textAlign: "right"}}
+                                                disabled={viewOnly} />
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group className="spaced-form-group">
+                                            <label htmlFor="image">Image<span aria-hidden="true"
+                                                                              className="required">*</span></label>
+                                            <div className="flex-control">
+                                                <input className="form-control bigger-input"
+                                                       id="image"
+                                                       name="image"
+                                                       required type="url"
+                                                       value={formData.image}
+                                                       onChange={handleChange}
+                                                       disabled
+                                                />
                                                 <input
+                                                    type="file"
+                                                    id="file"
                                                     className="form-control bigger-input"
-                                                    required
-                                                    type="text"
-                                                    name="price"
-                                                    value={viewOnly ? formData.price.toFixed(2) : formData.price}
-                                                    onChange={handleChangeNumber}
-                                                    style={{textAlign: "right"}}
-                                                    disabled={viewOnly} />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col>
-                                            <Form.Group className="spaced-form-group">
-                                                <label htmlFor="image">Image<span aria-hidden="true"
-                                                                                  className="required">*</span></label>
-                                                <div className="flex-control">
-                                                    <input className="form-control bigger-input"
-                                                           id="image"
-                                                           name="image"
-                                                           required type="url"
-                                                           value={formData.image}
-                                                           onChange={handleChange}
-                                                           disabled
-                                                    />
-                                                    <input
-                                                        type="file"
-                                                        id="file"
-                                                        className="form-control bigger-input"
-                                                        placeholder="Enter your name here"
-                                                        name="file"
-                                                        onChange={handleChangeFile}
-                                                        style={{display: 'none'}}
-                                                    />
-                                                    {props.op !== OpType.VIEW &&
-                                                        getActionIcon(ActionIconType.IMAGE_EDIT, "Select Image", true, handleFileClick)
-                                                    }
-                                                </div>
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
-                                </Container>
+                                                    placeholder="Enter your name here"
+                                                    name="file"
+                                                    onChange={handleChangeFile}
+                                                    style={{display: 'none'}}
+                                                />
+                                                {props.op !== OpType.VIEW &&
+                                                    getActionIcon(ActionIconType.IMAGE_EDIT, "Select Image", true, handleFileClick)
+                                                }
+                                            </div>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
-                    </Container>
-                </Form>
+                    </Form>
+                </Card.Body>
             </Card>
             { !viewOnly &&
                 <p aria-hidden="true" id="required-description">
                     <span aria-hidden="true" className="required">*</span>Required field(s)
                 </p>
             }
-            <div className="default-margin">
+            <div className="actions">
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={props.onCancel} type="close"/>
                 {!viewOnly && (
                     <>
                         <CustomButton caption="Save" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={props.onCancel} type="close"/>
             </div>
         </>
     );

@@ -8,6 +8,7 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {EditProductForm} from "./EditProductForm";
 import Modal from "../ui/Modal";
+import {Role} from "../../domain/User";
 
 export const Products = () => {
     const appCtx = useContext(ApplicationContext);
@@ -126,18 +127,20 @@ export const Products = () => {
     },[appCtx.alert.show])
 
     return (
-        <div className="default-margin">
+        <div>
             {showAlert && <AlertToast/>}
             <Card border="dark">
                 <Card.Header as="h3">Products</Card.Header>
                 <Card.Body>
-                    <Card.Title>
-                        <CustomButton
-                            caption="New Product"
-                            type="new"
-                            customClass="fa fa-box-open"
-                            onClick={handleNewProduct} />
-                    </Card.Title>
+                    { appCtx.userData.role === Role.ADMIN &&
+                        <Card.Title>
+                            <CustomButton
+                                caption="New Product"
+                                type="new"
+                                customClass="fa fa-box-open"
+                                onClick={handleNewProduct} />
+                        </Card.Title>
+                    }
                     <ProductsList
                         products={products}
                         onDelete={handleDelete}
@@ -147,9 +150,7 @@ export const Products = () => {
             <div>
                 {showEditModal &&
                     <Modal
-                        onClose={handleCancel}
-                        style={{ justifyItems: "center", margin: "auto"}}
-                        size="lg" >
+                        onClose={handleCancel} >
                         <div>
                             <EditProductForm product={product} op={editViewOp.op} onSave={handleSaveProduct} onCancel={handleCancel}/>
                         </div>
