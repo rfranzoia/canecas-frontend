@@ -122,7 +122,7 @@ export const Users = () => {
     }, [appCtx.alert.show])
 
     return (
-        <div className="default-margin">
+        <div>
             {showAlert && <AlertToast/>}
             <Card border="dark">
                 <Card.Header as="h3">Users</Card.Header>
@@ -143,8 +143,7 @@ export const Users = () => {
             </Card>
             {showEditModal &&
                 <Modal
-                    onClose={handleCloseEditModal}
-                    size="sm">
+                    onClose={handleCloseEditModal} >
                     <div>
                         <EditUser id={editViewOp.userId}
                                   op={editViewOp.op}
@@ -157,8 +156,7 @@ export const Users = () => {
             }
             {showChangePassword &&
                 <Modal
-                    onClose={handleChangePasswordCancel}
-                    size="sm">
+                    onClose={handleChangePasswordCancel} >
                     <div>
                         <ChangeUserPassword email={editViewOp.email}
                                             onCancel={handleChangePasswordCancel}

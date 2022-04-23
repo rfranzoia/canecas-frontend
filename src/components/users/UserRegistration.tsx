@@ -1,4 +1,4 @@
-import {Card, Form} from "react-bootstrap";
+import {Card, Col, Form, Row} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
 import {Link, useHistory} from "react-router-dom";
 import {usersApi} from "../../api/UsersAPI";
@@ -7,6 +7,8 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
 import Modal from "../ui/Modal";
+
+import styles from "./users.module.css"
 
 export const enum ShowType { SIGN_IN, SIGN_UP}
 
@@ -116,7 +118,7 @@ export const UserRegistration = (props) => {
 
     const formSignIn = (
         <>
-            <Card border="dark">
+            <Card border="dark" className={styles["registration-width-login"]}>
                 <Card.Header as="h4">Sign In</Card.Header>
                 <Card.Body>
                     {appCtx.alert.show && <AlertToast/>}
@@ -161,91 +163,103 @@ export const UserRegistration = (props) => {
 
     const formSignUp = (
         <>
-            <Card border="dark">
+            <Card border="dark" className={styles["registration-width-signup"]}>
                 <Card.Header as="h4">Sign Up</Card.Header>
                 <Card.Body>
                     {appCtx.alert.show && <AlertToast/>}
-                    <form>
-                        <div className="form-group spaced-form-group">
-                            <label>Name<span aria-hidden="true" className="required">*</span></label>
-                            <input
-                                required
-                                type="text"
-                                className="form-control bigger-input"
-                                placeholder="Enter your name here"
-                                name="name"
-                                value={userRegister.name}
-                                onChange={handleChangeRegister}
-                            />
-                        </div>
-                        <div className="form-group spaced-form-group">
-                            <label>Email address<span aria-hidden="true" className="required">*</span></label>
-                            <input
-                                required
-                                type="email"
-                                className="form-control bigger-input"
-                                placeholder="Enter email for login"
-                                name="email"
-                                value={userRegister.email}
-                                onChange={handleChangeRegister}
-                            />
-                            <small>This will be your login information</small>
-                        </div>
-                        <div className="form-group spaced-form-group" style={{display: "flex", marginBottom: "1rem"}}>
-                            <div style={{float: "left", width: "20rem"}}>
-                                <label>Password<span aria-hidden="true" className="required">*</span></label>
+                    <Form>
+                        <Row>
+                            <Form.Group className="spaced-form-group">
+                                <label>Name<span aria-hidden="true" className="required">*</span></label>
                                 <input
                                     required
-                                    type="password"
-                                    className="form-control bigger-input"
-                                    placeholder="Enter a password"
-                                    name="password"
-                                    value={userRegister.password}
-                                    onChange={handleChangeRegister}
-                                />
-                            </div>
-                            &nbsp;
-                            <div style={{float: "left", width: "20rem"}}>
-                                <label>Confirm Password<span aria-hidden="true"
-                                                             className="required">*</span></label>
-                                <input
-                                    required
-                                    type="password"
-                                    className="form-control bigger-input"
-                                    placeholder="Confirm your password"
-                                    name="confirmPassword"
-                                    value={userRegister.confirmPassword}
-                                    onChange={handleChangeRegister}
-                                />
-                            </div>
-                        </div>
-                        <div className="form-group spaced-form-group" style={{display: "flex", marginBottom: "1rem"}}>
-                            <div style={{float: "left", width: "20rem"}}>
-                                <label>Phone<span aria-hidden="true"
-                                                  className="required">*</span></label>
-                                <input
                                     type="text"
                                     className="form-control bigger-input"
-                                    placeholder="Enter your Phone"
-                                    name="phone"
-                                    value={userRegister.phone}
+                                    placeholder="Enter your name here"
+                                    name="name"
+                                    value={userRegister.name}
                                     onChange={handleChangeRegister}
                                 />
-                                <small>This is how we'll mainly contact you</small>
-                            </div>
-                            <div style={{float: "left", width: "20rem"}}>
-                                <label>Address</label>
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Form.Group className="spaced-form-group">
+                                <label>Email address<span aria-hidden="true" className="required">*</span></label>
                                 <input
-                                    type="address"
+                                    required
+                                    type="email"
                                     className="form-control bigger-input"
-                                    placeholder="Enter your Address"
-                                    name="address"
-                                    value={userRegister.address}
+                                    placeholder="Enter email for login"
+                                    name="email"
+                                    value={userRegister.email}
                                     onChange={handleChangeRegister}
                                 />
-                            </div>
-                        </div>
-                    </form>
+                                <small>This will be your login information</small>
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Password<span aria-hidden="true" className="required">*</span></label>
+                                    <input
+                                        required
+                                        type="password"
+                                        className="form-control bigger-input"
+                                        placeholder="Enter a password"
+                                        name="password"
+                                        value={userRegister.password}
+                                        onChange={handleChangeRegister}
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Confirm Password<span aria-hidden="true"
+                                                                 className="required">*</span></label>
+                                    <input
+                                        required
+                                        type="password"
+                                        className="form-control bigger-input"
+                                        placeholder="Confirm your password"
+                                        name="confirmPassword"
+                                        value={userRegister.confirmPassword}
+                                        onChange={handleChangeRegister}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Phone<span aria-hidden="true"
+                                                      className="required">*</span></label>
+                                    <input
+                                        type="text"
+                                        className="form-control bigger-input"
+                                        placeholder="Enter your Phone"
+                                        name="phone"
+                                        value={userRegister.phone}
+                                        onChange={handleChangeRegister}
+                                    />
+                                    <small>This is how we'll mainly contact you</small>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Address</label>
+                                    <input
+                                        type="address"
+                                        className="form-control bigger-input"
+                                        placeholder="Enter your Address"
+                                        name="address"
+                                        value={userRegister.address}
+                                        onChange={handleChangeRegister}
+                                    />
+                                    <small>No need to be full address here</small>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Card.Body>
             </Card>
             <div className="actions">
@@ -263,8 +277,7 @@ export const UserRegistration = (props) => {
     if (props.show) {
         return (
             <Modal
-                onClose={props.handleClose}
-                size={showType === ShowType.SIGN_IN?"tn":"sm"} >
+                onClose={props.handleClose}>
                 <div>
                     {showType === ShowType.SIGN_IN && formSignIn}
                     {showType === ShowType.SIGN_UP && formSignUp}

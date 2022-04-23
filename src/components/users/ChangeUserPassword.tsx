@@ -1,9 +1,11 @@
-import {Alert, Card, Form} from "react-bootstrap";
+import {Alert, Card, Col, Form, Row} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import {usersApi} from "../../api/UsersAPI";
 import {StatusCodes} from "http-status-codes";
+
+import styles from "./users.module.css"
 
 export const ChangeUserPassword = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -87,7 +89,7 @@ export const ChangeUserPassword = (props) => {
 
     return (
         <>
-            <Card>
+            <Card className={styles["registration-width-signup"]}>
                 <Card.Header as="h3">Change Password</Card.Header>
                 {showError.show &&
                     <Alert variant="danger" onClose={handleHideError} dismissible transition  className="alert-top">
@@ -95,56 +97,68 @@ export const ChangeUserPassword = (props) => {
                         <p>{showError.message}</p>
                     </Alert>
                 }
-                <Form>
-                    <div style={{margin: "0.5rem"}}>
-                        <Form.Group className="spaced-form-group">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control
-                                type="email"
-                                name="email"
-                                value={props.email}
-                                disabled
-                                onChange={handleChange}/>
-                        </Form.Group>
-                    </div>
-                    <div style={{margin: "0.5rem"}}>
-                        <Form.Group className="spaced-form-group">
-                            <Form.Label>Current Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="password"
-                                value={user.password}
-                                placeholder="Enter your current password"
-                                onChange={handleChange}/>
-                        </Form.Group>
-                    </div>
-                    <div style={{margin: "0.5rem"}}>
-                        <Form.Group className="spaced-form-group">
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="newPassword"
-                                value={user.newPassword}
-                                placeholder="Enter a new password"
-                                onChange={handleChange}/>
-                        </Form.Group>
-                    </div>
-                    <div style={{margin: "0.5rem"}}>
-                        <Form.Group className="spaced-form-group">
-                            <Form.Label>Confirm New Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                name="confirmNewPassword"
-                                value={user.confirmNewPassword}
-                                placeholder="Please re-enter your new password"
-                                onChange={handleChange}/>
-                        </Form.Group>
-                    </div>
-                </Form>
+                <Card.Body>
+                    <Form>
+                        <Row>
+                            <Form.Group className="spaced-form-group">
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    name="email"
+                                    value={props.email}
+                                    disabled
+                                    onChange={handleChange}/>
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Form.Group className="spaced-form-group">
+                                <Form.Label>Current Password
+                                    <span aria-hidden="true" className="required">*</span>
+                                </Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    name="password"
+                                    value={user.password}
+                                    placeholder="Enter your current password"
+                                    onChange={handleChange}/>
+                            </Form.Group>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <Form.Label>New Password
+                                        <span aria-hidden="true" className="required">*</span>
+                                    </Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        name="newPassword"
+                                        value={user.newPassword}
+                                        placeholder="Enter a new password"
+                                        onChange={handleChange}/>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <Form.Label>Confirm New Password
+                                        <span aria-hidden="true" className="required">*</span>
+                                    </Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        name="confirmNewPassword"
+                                        value={user.confirmNewPassword}
+                                        placeholder="Please re-enter your new password"
+                                        onChange={handleChange}/>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Card.Body>
             </Card>
-            <div style={{padding: "0.5rem"}}>
+            <p aria-hidden="true" id="required-description">
+                <span aria-hidden="true" className="required">*</span>Required field(s)
+            </p>
+            <div className={"actions"}>
                 <CustomButton caption="Cancel" onClick={props.onCancel} type="close"/>
-                &nbsp;
                 <CustomButton caption="Confirm" onClick={handleConfirm} type="confirm"/>
             </div>
         </>

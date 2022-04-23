@@ -1,9 +1,11 @@
 import {useContext, useEffect, useState} from "react";
-import {Card} from "react-bootstrap";
+import {Card, Col, Form, Row} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
+
+import styles from "./users.module.css"
 
 export const EditUserForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -89,57 +91,73 @@ export const EditUserForm = (props) => {
     return (
         <>
             <AlertToast/>
-            <Card border="dark">
+            <Card border="dark" className={styles["registration-width-signup"]}>
                 <Card.Header as="h3">{`${title} User`}</Card.Header>
                 <Card.Body>
-                    <form>
-                        <div className="form-group spaced-form-group">
-                            <label>Role<span aria-hidden="true" className="required">*</span></label>
-                            <select
-                                className="form-select"
-                                id="role"
-                                name="role"
-                                required
-                                value={formData.role}
-                                disabled={viewOnly || appCtx.userData.role !== Role.ADMIN}
-                                onChange={handleChange}>
-                                <option value="">Please Select</option>
-                                <option value="ADMIN">Admin</option>
-                                <option value="USER">User</option>
-                                <option value="GUEST">Guest</option>
-                            </select>
-                        </div>
-                        <div className="form-group spaced-form-group">
-                            <label>Name<span aria-hidden="true" className="required">*</span></label>
-                            <input
-                                required
-                                type="text"
-                                className="form-control bigger-input"
-                                placeholder="Enter your name here"
-                                name="name"
-                                value={formData.name}
-                                disabled={viewOnly}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group spaced-form-group">
-                            <label>Email address<span aria-hidden="true" className="required">*</span></label>
-                            <input
-                                required
-                                type="email"
-                                className="form-control bigger-input"
-                                placeholder="Enter email for login"
-                                name="email"
-                                value={formData.email}
-                                disabled={viewOnly}
-                                onChange={handleChange}
-                            />
-                        </div>
+                    <Form>
+                        <Row>
+                            <Col md={"auto"}>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Role
+                                        <span aria-hidden="true" className="required">*</span>
+                                    </label>
+                                    <select
+                                        className="form-select"
+                                        id="role"
+                                        name="role"
+                                        required
+                                        value={formData.role}
+                                        disabled={viewOnly || appCtx.userData.role !== Role.ADMIN}
+                                        onChange={handleChange}>
+                                        <option value="">Please Select</option>
+                                        <option value="ADMIN">Admin</option>
+                                        <option value="USER">User</option>
+                                        <option value="GUEST">Guest</option>
+                                    </select>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Name
+                                        <span aria-hidden="true" className="required">*</span>
+                                    </label>
+                                    <input
+                                        required
+                                        type="text"
+                                        className="form-control bigger-input"
+                                        placeholder="Enter your name here"
+                                        name="name"
+                                        value={formData.name}
+                                        disabled={viewOnly}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Form.Group className="spaced-form-group">
+                                <label>Email address
+                                    <span aria-hidden="true" className="required">*</span>
+                                </label>
+                                <input
+                                    required
+                                    type="email"
+                                    className="form-control bigger-input"
+                                    placeholder="Enter email for login"
+                                    name="email"
+                                    value={formData.email}
+                                    disabled={viewOnly}
+                                    onChange={handleChange}
+                                />
+                            </Form.Group>
+                        </Row>
                         {(!viewOnly && !isEdit) &&
-                            (
-                                <div className="form-group spaced-form-group" style={{display: "flex"}}>
-                                    <div style={{float: "left", width: "20rem"}}>
-                                        <label>Password<span aria-hidden="true" className="required">*</span></label>
+                            <Row>
+                                <Col>
+                                    <Form.Group className="spaced-form-group">
+                                        <label>Password
+                                            <span aria-hidden="true" className="required">*</span>
+                                        </label>
                                         <input
                                             required
                                             type="password"
@@ -150,11 +168,13 @@ export const EditUserForm = (props) => {
                                             value={formData.password}
                                             onChange={handleChange}
                                         />
-                                    </div>
-                                    &nbsp;
-                                    <div style={{float: "left", width: "20rem"}}>
-                                        <label>Confirm Password<span aria-hidden="true"
-                                                                     className="required">*</span></label>
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group className="spaced-form-group">
+                                        <label>Confirm Password
+                                            <span aria-hidden="true" className="required">*</span>
+                                        </label>
                                         <input
                                             required
                                             type="password"
@@ -165,35 +185,44 @@ export const EditUserForm = (props) => {
                                             value={formData.confirmPassword}
                                             onChange={handleChange}
                                         />
-                                    </div>
-                                </div>
-                            )
+                                    </Form.Group>
+                                </Col>
+                            </Row>
                         }
-                        <div className="form-group spaced-form-group">
-                            <label>Phone</label>
-                            <input
-                                type="text"
-                                className="form-control bigger-input"
-                                placeholder="Phone"
-                                name="phone"
-                                value={formData.phone}
-                                disabled={viewOnly}
-                                onChange={handleChange}
-                            />
-                        </div>
-                        <div className="form-group spaced-form-group">
-                            <label>Address</label>
-                            <input
-                                type="address"
-                                className="form-control bigger-input"
-                                placeholder="Address"
-                                name="address"
-                                value={formData.address}
-                                disabled={viewOnly}
-                                onChange={handleChange}
-                            />
-                        </div>
-                    </form>
+
+                        <Row>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Phone
+                                        <span aria-hidden="true" className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className="form-control bigger-input"
+                                        placeholder="Phone"
+                                        name="phone"
+                                        value={formData.phone}
+                                        disabled={viewOnly}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group className="spaced-form-group">
+                                    <label>Address</label>
+                                    <input
+                                        type="address"
+                                        className="form-control bigger-input"
+                                        placeholder="Address"
+                                        name="address"
+                                        value={formData.address}
+                                        disabled={viewOnly}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Card.Body>
             </Card>
             { !viewOnly &&
@@ -202,13 +231,13 @@ export const EditUserForm = (props) => {
                 </p>
             }
             <div className="actions">
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
                 {!viewOnly && (
                     <>
                         <CustomButton caption="Save" onClick={handleSave} type="save"/>
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={handleCancel} type="close"/>
             </div>
         </>
     );
