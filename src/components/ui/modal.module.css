@@ -11,35 +11,16 @@
 .modal {
     position: absolute;
     margin:auto;
-    top: 10vh;
-    left: calc(50% - 20rem);
-    width: 40rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: white;
-    padding: 1rem;
-    border-radius: 14px;
+    padding: 0.75rem;
+    border: 1px solid #000;
     box-shadow: 7px 7px 5px 0 rgba(0, 0, 0, 0.75);
-    z-index: 30;
+    z-index: 999;
     animation: slide-down 300ms ease-out forwards;
 }
 
-.modal-tn {
-    left: calc(50% - 15rem);
-    width: 30rem;
-}
-
-.modal-xl {
-    left: calc(50% - 35rem);
-    width: 70rem;
-}
-
-.modal-lg {
-    left: calc(50% - 30rem);
-    width: 60rem;
-}
-
-.modal-md {
-    left: calc(50% - 25rem);
-    width: 50rem;
-}
 
 
