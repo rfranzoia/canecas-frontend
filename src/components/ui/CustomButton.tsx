@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import {Button} from "react-bootstrap";
+import styles from "./customButton.module.css"
 
 export interface ButtonType {
     type: string,
@@ -50,7 +51,7 @@ export const CustomButton = (props: any) => {
     }, [props]);
 
     return (
-        <Button onClick={props.onClick} variant={buttonType.variant} className="bigger-input">
+        <Button onClick={props.onClick} variant={buttonType.variant} className={styles.button}>
             <i className={buttonType.class}>&nbsp;</i>
             {props.caption}
         </Button>
