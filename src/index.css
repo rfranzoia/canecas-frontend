@@ -94,4 +94,28 @@ h4 {
     margin-bottom: 1rem;
 }
 
+.bordered-panel {
+    width: 210px;
+    height: 210px;
+    padding: 5px;
+    background-color: white;
+    border: 1px solid #cdcdcd;
+}
+
+.bordered-panel-lg {
+    width: 310px;
+    height: 100%;
+}
+
+.bordered-panel-tn{
+    width: 110px;
+    height: 110px;
+}
+
+.two-items-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 
