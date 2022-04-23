@@ -1,11 +1,13 @@
 import {VariationListFilter} from "./VariationListFilter";
 import {Table} from "react-bootstrap";
 import {VariationRow} from "./VariationRow";
-import {OpType} from "../../context/ApplicationContext";
+import {ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import {Role} from "../../domain/User";
 
 export const VariationsList = (props) => {
+    const appCtx = useContext(ApplicationContext);
     const [variations, setVariations] = useState([]);
     const [confirmationDialog, setConfirmationDialog] = useState({
             show: false,
@@ -63,7 +65,9 @@ export const VariationsList = (props) => {
                         <th style={{width: "20%", textAlign: "center"}}>Drawings</th>
                         <th style={{width: "20%", textAlign: "center"}}>Background</th>
                         <th style={{width: "10%", textAlign: "right"}}>Price</th>
-                        <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>
+                        { appCtx.userData.role === Role.ADMIN &&
+                            <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>
+                        }
                     </tr>
                     </thead>
                     <tbody>

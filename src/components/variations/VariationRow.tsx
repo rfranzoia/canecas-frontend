@@ -1,12 +1,14 @@
 import {Image} from "react-bootstrap";
 import classes from "./variation.module.css"
 import {imageHelper} from "../ui/ImageHelper";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {OpType} from "../../context/ApplicationContext";
+import {ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {Role} from "../../domain/User";
 
 export const VariationRow = (props) => {
-    const [image, setImage] = useState(null)
+    const appCtx = useContext(ApplicationContext);
+    const [image, setImage] = useState(null);
     const variation = props.variation;
 
     const loadImage = async (name) => {
@@ -41,31 +43,33 @@ export const VariationRow = (props) => {
                 <td width="20%" align="center">{variation.drawings}</td>
                 <td width="20%" align="center">{variation.background}</td>
                 <td width="10%" align="right">{variation.price.toFixed(2)}</td>
-                <td width="15%" align="center">
-                    { props.op === OpType.SELECT &&
-                        getActionIcon(ActionIconType.SELECT, {
-                            color: "#000",
-                            title: "select",
-                            canClick: true,
-                            onClick: () => handleOnClickRow(OpType.SELECT, variation._id)
-                        })
-                    }
-                    { props.op !== OpType.SELECT &&
-                        <>
-                            {getActionIcon(ActionIconType.EDIT, {
-                                title: "edit",
+                { appCtx.userData.role === Role.ADMIN &&
+                    <td width="15%" align="center">
+                        { props.op === OpType.SELECT &&
+                            getActionIcon(ActionIconType.SELECT, {
+                                color: "#000",
+                                title: "select",
                                 canClick: true,
-                                onClick: () => handleOnClickRow(OpType.EDIT, variation._id)
-                            })}
-                            &nbsp;
-                            {getActionIcon(ActionIconType.DELETE, {
-                                title: "delete",
-                                canClick: true,
-                                onClick: () => handleOnClickRow(OpType.DELETE, variation._id)
-                            })}
-                        </>
-                    }
-                </td>
+                                onClick: () => handleOnClickRow(OpType.SELECT, variation._id)
+                            })
+                        }
+                        { props.op !== OpType.SELECT &&
+                            <>
+                                {getActionIcon(ActionIconType.EDIT, {
+                                    title: "edit",
+                                    canClick: true,
+                                    onClick: () => handleOnClickRow(OpType.EDIT, variation._id)
+                                })}
+                                &nbsp;
+                                {getActionIcon(ActionIconType.DELETE, {
+                                    title: "delete",
+                                    canClick: true,
+                                    onClick: () => handleOnClickRow(OpType.DELETE, variation._id)
+                                })}
+                            </>
+                        }
+                    </td>
+                }
             </tr>
         </>
     );
