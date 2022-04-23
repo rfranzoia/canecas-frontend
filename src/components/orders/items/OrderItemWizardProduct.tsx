@@ -1,4 +1,4 @@
-import {Card, Col, Form, Modal, Row} from "react-bootstrap";
+import {Card, Col, Form, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {AlertToast} from "../../ui/AlertToast";
@@ -8,6 +8,8 @@ import {AlertType, ApplicationContext} from "../../../context/ApplicationContext
 import {productsApi} from "../../../api/ProductsAPI";
 import {Variations} from "../../variations/Variations";
 import {Variation} from "../../../domain/Variation";
+import Modal from "../../ui/Modal";
+import {WizardFormData} from "../Orders";
 
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -28,13 +30,13 @@ export const OrderItemWizardProduct = (props) => {
 
     const handleSelectVariation = (variation: Variation) => {
         setShowVariationsModal(false);
-        const selectedVariant = {
+        const selectedVariation: WizardFormData = {
             product: variation.product,
             background: variation.background,
             drawings: variation.drawings,
             price: variation.price,
         }
-        props.onVariantSelect(selectedVariant);
+        props.onSelect(selectedVariation);
     }
 
     const handleSelectProduct = (product) => {
@@ -163,18 +165,11 @@ export const OrderItemWizardProduct = (props) => {
             </div>
             {showVariationsModal &&
                 <Modal
-                    show={showVariationsModal}
-                    style={{ maxHeight: "45rem"}}
-                    onHide={handleCloseVariationsModal}
-                    backdrop="static"
-                    keyboard={true}
-                    centered size="lg">
-                    <Modal.Body>
-                        <Variations onClose={handleCloseVariationsModal}
-                                    onSelect={handleSelectVariation}
-                                    isModal="yes"
-                        />
-                    </Modal.Body>
+                    onClose={handleCloseVariationsModal} >
+                    <Variations onClose={handleCloseVariationsModal}
+                                onSelect={handleSelectVariation}
+                                isModal="yes"
+                    />
                 </Modal>
             }
         </>

@@ -25,7 +25,7 @@ export interface WizardFormData {
     backgroundDescription?: string,
     backgroundImage?: string,
     backgroundImageFile?: object,
-    amount: number,
+    amount?: number,
 }
 
 export const Orders = () => {

@@ -164,7 +164,7 @@ export const Variations = (props) => {
     }, [showVariationFormModal])
 
     return (
-        <div className="default-margin">
+        <div>
             {showAlert && <AlertToast />}
             <Card border="dark">
                 <Card.Header as="h3">Product Variations</Card.Header>
@@ -179,6 +179,7 @@ export const Variations = (props) => {
                         </div>
                     </Card.Title>
                     <VariationsList variations={variations}
+                                    isModal={props.isModal}
                                     onEdit={handleEditVariation}
                                     onDelete={handleConfirmDelete}
                                     onSelect={handleSelectVariation}

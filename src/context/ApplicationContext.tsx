@@ -75,6 +75,7 @@ export const ApplicationContext = createContext(defaultValue);
 
 export const ApplicationContextProvider = (props) => {
     const history = useHistory();
+    let timeoutId;
 
     const [error, setError] = useState({
         show: false,
@@ -129,7 +130,7 @@ export const ApplicationContextProvider = (props) => {
             title: title,
             message: message
         });
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
             hideErrorAlert();
         }, ALERT_TIMEOUT * 2);
     }
@@ -140,6 +141,7 @@ export const ApplicationContextProvider = (props) => {
             title: "",
             message: ""
         });
+        clearTimeout(timeoutId);
     }
 
     const handleAlert = (show: boolean, type: AlertType = AlertType.NONE, title: string = "", message: string = "") => {
@@ -150,9 +152,11 @@ export const ApplicationContextProvider = (props) => {
             message: message,
         });
         if (show) {
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 handleAlert(false);
             }, ALERT_TIMEOUT);
+        } else {
+            clearTimeout(timeoutId);
         }
     };
 
@@ -178,7 +182,7 @@ export const ApplicationContextProvider = (props) => {
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));
         if (!userData.userId || !userData.authToken) {
-            setTimeout(() => {
+            timeoutId = setTimeout(() => {
                 handleAlert(false);
                 if (history) history.replace("/");
             }, ALERT_TIMEOUT * 2);

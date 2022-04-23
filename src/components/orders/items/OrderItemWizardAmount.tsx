@@ -1,6 +1,6 @@
 import {CustomButton} from "../../ui/CustomButton";
 import {useContext, useEffect, useState} from "react";
-import {ApplicationContext} from "../../../context/ApplicationContext";
+import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {BorderedRow} from "../../ui/BorderedRow";
@@ -41,10 +41,16 @@ export const OrderItemWizardAmount = (props) => {
     }
 
     const handleAddItem = () => {
-        const amount = {
-            amount: formData.amount,
-            price: formData.price,
+        if (Number(formData.amount) <= 0 || Number(formData.price) >= 0) {
+            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Price and Amount must be greater than zero!");
+            return;
         }
+
+        const amount = {
+            amount: +formData.amount,
+            price: +formData.price,
+        }
+
         props.onFinish(amount);
     }
 

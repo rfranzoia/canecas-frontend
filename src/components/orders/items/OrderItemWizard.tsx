@@ -90,13 +90,13 @@ export const OrderItemWizard = (props) => {
         setCurrStep(previous);
     }
 
-    const handleVariantSelected = (selectedVariant: WizardFormData) => {
+    const handleSelect = (selectedVariant: WizardFormData) => {
         updateFormData(selectedVariant);
         setCurrStep(steps.length - 1);
     }
 
     const steps = [
-        <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onVariantSelected={handleVariantSelected} orderItem={wizardFormData} />,
+        <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect} orderItem={wizardFormData} />,
         <OrderItemWizardDrawings onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} orderItem={wizardFormData} />,
         <OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} orderItem={wizardFormData} />,
         <OrderItemWizardAmount onFinish={handleFinish} onCancel={handleCancel} orderItem={wizardFormData} onBackward={handleBackward} />,

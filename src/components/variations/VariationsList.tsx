@@ -50,6 +50,10 @@ export const VariationsList = (props) => {
         });
     }
 
+    const handleSelect = (variation) => {
+        props.onSelect(variation);
+    }
+
     useEffect(() => {
         setVariations(props.variations);
     }, [props.variations])
@@ -77,7 +81,7 @@ export const VariationsList = (props) => {
                                           variation={v}
                                           onEdit={props.onEdit}
                                           onDelete={handDeleteVariation}
-                                          onSelect={props.onSelect}
+                                          onSelect={handleSelect}
                                           op={props.isModal === "yes"? OpType.SELECT: "none"}
                             />
                         )
