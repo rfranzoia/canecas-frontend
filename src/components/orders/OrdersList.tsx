@@ -64,7 +64,7 @@ export const OrdersList = (props) => {
 
     return (
         <>
-            <Card border="dark" style={{margin: "1rem"}}>
+            <Card border="dark">
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
                     {appCtx.userData.role !== Role.GUEST &&

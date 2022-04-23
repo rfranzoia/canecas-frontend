@@ -1,13 +1,14 @@
 import {CustomButton} from "../ui/CustomButton";
-import {Card, Col, Container, Image, Modal, Row} from "react-bootstrap";
+import {Card, Image} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
-import {QuoteRequestForm} from "./QuoteRequestForm";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {HowToOrderPresentation} from "./HowToOrderPresentation";
+import {OrderWizard} from "../orders/wizard/OrderWizard";
+import Modal from "../ui/Modal";
 
 export const Presentation = () => {
     const appCtx = useContext(ApplicationContext);
@@ -101,34 +102,29 @@ export const Presentation = () => {
                     <p style={{textAlign: "center", fontSize: "16px"}}>Clique na imagem para saber mais</p>
                 </Card.Body>
             </Card>
-            <Modal
-                show={showHowToOrder}
-                onHide={() => handleShowHowToOrder(false)}
-                centered
-                keyboard={true}
-                size="lg">
-                <Modal.Body>
+            { showHowToOrder &&
+                <Modal onClose={() => handleShowHowToOrder(false)} >
                     <HowToOrderPresentation />
-                </Modal.Body>
-            </Modal>
-            <Modal
-                show={showFormQuote}
-                onHide={handleCancel}
-                backdrop="static"
-                centered
-                style={{justifyItems: "center", margin: "auto"}}
-                keyboard={true}>
-                <Modal.Body>
-                    <Container fluid
-                               style={{padding: "1rem", display: "flex", justifyContent: "center", width: "auto"}}>
-                        <Row>
-                            <Col md="auto">
-                                <QuoteRequestForm onConfirm={handleConfirm} onCancel={handleCancel}/>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Modal.Body>
-            </Modal>
+                </Modal>
+            }
+            { showFormQuote &&
+                <Modal onClose={handleCancel} >
+                    <OrderWizard onCancel={handleCancel}/>
+                </Modal>
+            }
+
         </div>
     );
 }
+
+/*
+<Container fluid
+           style={{padding: "1rem", display: "flex", justifyContent: "center", width: "auto"}}>
+    <Row>
+        <Col md="auto">
+            <QuoteRequestForm onConfirm={handleConfirm} onCancel={handleCancel}/>
+
+        </Col>
+    </Row>
+</Container>
+ */

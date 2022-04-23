@@ -1,4 +1,4 @@
-import classes from "./Orders.module.css";
+import classes from "./orders.module.css";
 import {useContext, useEffect, useState} from "react";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";

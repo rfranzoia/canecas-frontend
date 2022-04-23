@@ -9,6 +9,23 @@ import {OrdersList} from "./OrdersList";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 import {DEFAULT_PAGE_SIZE} from "../../api/axios";
+import {User} from "../../domain/User";
+
+import styles from "./orders.module.css"
+
+export interface WizardFormData {
+    user?: User,
+    product?: string,
+    productPrice?: number,
+    drawings?: number,
+    drawingsImage?: string,
+    drawingsImageFile?: object,
+    background?: string,
+    backgroundDescription?: string,
+    backgroundImage?: string,
+    backgroundImageFile?: object,
+    amount: number,
+}
 
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -193,17 +210,18 @@ export const Orders = () => {
             <div>
                 { edit.show &&
                     <Modal
-                        size="md"
                         onClose={handleEditCancel}>
-                        {edit.op === "new" ?
-                            <NewOrder
-                                onSave={handleEditSave}
-                                onCancel={handleEditCancel}/> :
-                            <EditOrder
-                                id={edit.orderId}
-                                op={edit.op}
-                                onSave={handleEditSave}
-                                onCancel={handleEditCancel}/>}
+                        <div className={styles["edit-order-modal"]}>
+                            {edit.op === "new" ?
+                                <NewOrder
+                                    onSave={handleEditSave}
+                                    onCancel={handleEditCancel}/> :
+                                <EditOrder
+                                    id={edit.orderId}
+                                    op={edit.op}
+                                    onSave={handleEditSave}
+                                    onCancel={handleEditCancel}/>}
+                        </div>
                     </Modal>
                 }
             </div>

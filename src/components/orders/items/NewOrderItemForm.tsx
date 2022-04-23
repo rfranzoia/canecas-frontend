@@ -119,7 +119,6 @@ export const NewOrderItemForm = (props) => {
 
     const handleChangeNumber = (event) => {
         const {name, value} = event.target;
-        console.log(value.replace(/[^0-9.,]+/, ""))
         setFormData(prevState => {
             return {
                 ...prevState,

@@ -1,8 +1,9 @@
 import {useEffect, useState} from "react";
-import { Modal, Table} from "react-bootstrap";
+import {Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
-import {NewOrderItemForm} from "./NewOrderItemForm";
 import {MdPostAdd} from "react-icons/all";
+import {OrderItemWizard} from "./OrderItemWizard";
+import Modal from "../../ui/Modal";
 
 export const OrderItemsList = (props) => {
     const [orderItems, setOrderItems] = useState([]);
@@ -27,21 +28,21 @@ export const OrderItemsList = (props) => {
         props.onItemAdd(item);
     }
 
+    //<NewOrderItemForm onItemAdd={handleItemAdded}
+    //                  onCancelItemAdd={handleCloseModal}/>
+
     return (
         <div>
             <div><h5>Items<span aria-hidden="true"
                                 className="required">*</span></h5></div>
             <div>
-                <Modal
-                    show={showModal}
-                    onHide={handleCloseModal}
-                    backdrop="static"
-                    keyboard={true} >
-                    <Modal.Body>
-                        <NewOrderItemForm onItemAdd={handleItemAdded}
-                                          onCancelItemAdd={handleCloseModal}/>
-                    </Modal.Body>
-                </Modal>
+                { showModal &&
+                    <Modal
+                        onClose={handleCloseModal} >
+                        <OrderItemWizard onCancel={handleCloseModal} onItemAdd={handleItemAdded} />
+                    </Modal>
+                }
+
                 <Table striped bordered hover size="sm">
                     <thead>
                     <tr>

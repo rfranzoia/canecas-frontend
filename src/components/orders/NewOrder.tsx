@@ -122,7 +122,7 @@ export const NewOrder = (props) => {
     return (
         <>
             {showAlert && <AlertToast/>}
-            <Card border="dark" className="align-content-center">
+            <Card border="dark">
                 <Card.Header as="h3">New Order</Card.Header>
                 <Card.Body>
                     <form>
