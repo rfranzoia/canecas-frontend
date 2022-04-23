@@ -84,6 +84,10 @@ h4 {
     justify-content: end;
 }
 
+.action-justify-center {
+    justify-content: center;
+}
+
 .flex-control {
     display: flex;
     height: 2.5rem;
@@ -96,7 +100,7 @@ h4 {
 
 .bordered-panel {
     width: 210px;
-    height: 210px;
+    height: 100%;
     padding: 5px;
     background-color: white;
     border: 1px solid #cdcdcd;
@@ -104,12 +108,10 @@ h4 {
 
 .bordered-panel-lg {
     width: 310px;
-    height: 100%;
 }
 
 .bordered-panel-tn{
     width: 110px;
-    height: 110px;
 }
 
 .two-items-container {
