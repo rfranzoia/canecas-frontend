@@ -60,7 +60,7 @@ export const VariationsList = (props) => {
 
     return (
         <>
-            <VariationListFilter onFilterApply={props.onFilterChange}/>
+            <VariationListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>
             <div>
                 <Table bordered striped hover className="table-small-font table-sm">
                     <thead>

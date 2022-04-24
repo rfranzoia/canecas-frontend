@@ -1,10 +1,10 @@
 import {Col, Container, Form, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {productsApi} from "../../api/ProductsAPI";
 
-import classes from "./variationListFilter.module.css"
+import styles from "./variationListFilter.module.css"
 
 export const VariationListFilter = (props) => {
     const [products, setProducts] = useState([]);
@@ -17,6 +17,11 @@ export const VariationListFilter = (props) => {
         drawings: 0,
         background: "empty"
     });
+
+    const { onFilterChange } = props;
+    const handleFilterChange = useCallback(() => {
+        onFilterChange();
+    },[onFilterChange])
 
     const handleChange = (event) => {
         const {name, value, type, checked} = event.target
@@ -49,12 +54,13 @@ export const VariationListFilter = (props) => {
         }
         return filter;
     }
+
     const handleApplyFilter = () => {
-        if (!formData.filterCheck) {
-            props.onFilterApply()
-        } else {
-            props.onFilterApply(createFilter());
+        if (!formData.filterByProductCheck && !formData.filterByDrawingsCheck && !formData.filterByBackgroundCheck) {
+            props.onFilterError();
+            return
         }
+        props.onFilterChange(createFilter());
     }
 
     const handleSelectProduct = (product) => {
@@ -79,7 +85,7 @@ export const VariationListFilter = (props) => {
                 background: "empty"
             }
         })
-        props.onFilterApply();
+        handleFilterChange();
     }
 
     useEffect(() => {
@@ -102,12 +108,14 @@ export const VariationListFilter = (props) => {
                     background: "empty"
                 }
             })
-            props.onFilterApply();
+            handleFilterChange();
         }
-    }, [formData.filterCheck])
+    }, [formData.filterCheck, handleFilterChange])
+
+    const disableClear = !formData.filterByProductCheck && !formData.filterByDrawingsCheck && !formData.filterByBackgroundCheck;
 
     return (
-        <Container fluid className={classes["list-filter"]}>
+        <Container fluid className={styles["list-filter"]}>
             <form>
                 <Row>
                     <Col>
@@ -127,7 +135,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className={classes["inline-filter"]}>
+                                            <div className={styles["inline-filter"]}>
                                                 <Form.Check type="checkbox"
                                                             label="Product"
                                                             id="checkProduct"
@@ -151,7 +159,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className={classes["inline-filter"]}>
+                                            <div className={styles["inline-filter"]}>
                                                 <Form.Check type="checkbox"
                                                             label="Drawings"
                                                             id="checkDrawings"
@@ -177,7 +185,7 @@ export const VariationListFilter = (props) => {
                                 <Row className="mb-3">
                                     <Col>
                                         <Form.Group>
-                                            <div className={classes["inline-filter"]} >
+                                            <div className={styles["inline-filter"]} >
                                                 <Form.Check type="checkbox"
                                                             label="Background"
                                                             id="checkBackground"
@@ -207,16 +215,20 @@ export const VariationListFilter = (props) => {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <CustomButton
-                                            caption="Apply Filter"
-                                            type="custom-primary"
-                                            customClass="fa fa-list-check"
-                                            onClick={handleApplyFilter}/>
-                                        &nbsp;
-                                        <CustomButton
-                                            caption="Clear Selection"
-                                            type="close"
-                                            onClick={handleClearFilter}/>
+                                        <div className={"actions"}>
+                                            <CustomButton
+                                                caption="Apply Filter"
+                                                type="custom-primary"
+                                                customClass="fa fa-list-check"
+                                                disabled={disableClear}
+                                                onClick={handleApplyFilter}/>
+                                            <CustomButton
+                                                caption="Clear Selection"
+                                                type="close"
+                                                disabled={disableClear}
+                                                onClick={handleClearFilter}/>
+                                        </div>
+
                                     </Col>
                                 </Row>
                             </Container>

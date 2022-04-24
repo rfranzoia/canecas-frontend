@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {variationsApi} from "../../api/VariationAPI";
 import {CustomButton} from "../ui/CustomButton";
@@ -21,19 +21,21 @@ export const Variations = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [variations, setVariations] = useState([]);
     const [variationId, setVariationId] = useState(null);
+    const { handleAlert } = appCtx;
 
-    const loadVariations = (currPage) => {
-        variationsApi.list(currPage)
+    const loadVariations = useCallback((currPage:number, filter?:string) => {
+        console.warn("loadVariations",currPage)
+        variationsApi.listBy(currPage, filter)
             .then(result => {
                 if (result.statusCode) {
                     const error = result?.response?.data;
-                    appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+                    handleAlert(true, AlertType.DANGER, error.name, error.description);
                 } else {
                     setVariations(result);
                     setCurrentPage(currPage);
                 }
             })
-    }
+    },[handleAlert])
 
     const getTotalPages = () => {
         variationsApi.count()
@@ -78,42 +80,31 @@ export const Variations = (props) => {
         setShowVariationFormModal(false);
     }
 
-    const handleFilterApply = (filter?) => {
-        if (filter) {
-            let arr: string[] = [];
-
-            if (filter.product) {
-                arr.push(`product=${filter.product}`)
-            }
-            if (filter.drawings >= 0) {
-                arr.push(`drawings=${filter.drawings}`)
-            }
-            if (filter.background) {
-                arr.push(`background=${filter.background}`)
-            }
-            if (arr.length > 0) {
-                let f = "";
-                arr.forEach(a => {
-                    if (f.trim().length > 0) {
-                        f = f.concat("&");
-                    }
-                    f = f.concat(a);
-                })
-                f = "/filterBy?".concat(f);
-                variationsApi.listBy(f)
-                    .then(result => {
-                        setVariations(result);
-                    })
-                return
-            }
+    const handleFilterChange = useCallback((filter?) => {
+        if (!filter) {
+            loadVariations(currentPage);
+            return;
         }
-        loadVariations(1);
-    }
 
-    useEffect(() => {
-        getTotalPages();
-        loadVariations(1);
-    }, []);
+        let g = "";
+        if (filter.product) {
+            g = g.concat(`product=${filter.product}`)
+        }
+        if (filter.drawings >= 0) {
+            if (g.trim().length > 0) {
+                g = g.concat("&");
+            }
+            g = g.concat(`drawings=${filter.drawings}`);
+        }
+        if (filter.background) {
+            if (g.trim().length > 0) {
+                g = g.concat("&");
+            }
+            g = g.concat(`background=${filter.background}`);
+        }
+        g = "?".concat(g);
+        loadVariations(1, g);
+    },[currentPage, loadVariations])
 
     const handleSelectVariation = (variation) => {
         props.onSelect(variation);
@@ -152,18 +143,31 @@ export const Variations = (props) => {
         loadVariations(currPage);
     }
 
+    const handleFilterError = () => {
+        handleAlert(true, AlertType.WARNING, "Filter Error", "You must select at least one filter type");
+        setShowAlert(true);
+    }
+
+    useEffect(() => {
+        getTotalPages();
+        loadVariations(1);
+    }, [loadVariations]);
+
+    /*
     useEffect(() => {
         if (!appCtx.alert.show) {
             setShowAlert(false)
         }
         loadVariations(currentPage);
-    }, [appCtx.alert.show, currentPage]);
+    }, [appCtx.alert.show, currentPage, loadVariations]);
 
     useEffect(() => {
         if (!showVariationFormModal) {
             loadVariations(currentPage)
         }
     }, [showVariationFormModal, currentPage])
+
+     */
 
     return (
         <div>
@@ -185,7 +189,8 @@ export const Variations = (props) => {
                                     onEdit={handleEditVariation}
                                     onDelete={handleConfirmDelete}
                                     onSelect={handleSelectVariation}
-                                    onFilterChange={handleFilterApply}
+                                    onFilterChange={handleFilterChange}
+                                    onFilterError={handleFilterError}
                     />
                 </Card.Body>
             </Card>
