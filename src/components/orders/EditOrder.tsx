@@ -23,7 +23,7 @@ export const EditOrder = (props) => {
             .then(result => {
                 if (result._id) {
                     appCtx.handleAlert(false);
-                    handleSave(result._id);
+                    props.onSave(result._id);
                 } else {
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
                 }
@@ -33,11 +33,6 @@ export const EditOrder = (props) => {
     const handleCancel = () => {
         props.onCancel();
     }
-
-    const handleSave = (orderId: string) => {
-        props.onSave(orderId);
-    }
-
 
     useEffect(() => {
         if (!appCtx.userData.authToken) return;

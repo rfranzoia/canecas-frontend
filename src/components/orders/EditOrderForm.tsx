@@ -123,7 +123,7 @@ export const EditOrderForm = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                type: user
+                userEmail: user
             }
         })
     }

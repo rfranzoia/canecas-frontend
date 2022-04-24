@@ -41,7 +41,7 @@ export const OrderItemWizardAmount = (props) => {
     }
 
     const handleAddItem = () => {
-        if (Number(formData.amount) <= 0 || Number(formData.price) >= 0) {
+        if (Number(formData.amount) <= 0 || Number(formData.price) <= 0) {
             appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Price and Amount must be greater than zero!");
             return;
         }
