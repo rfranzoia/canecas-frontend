@@ -12,43 +12,6 @@ export const CustomPagination = (props) => {
         totalPages: props.totalPages
     });
 
-    useEffect(() => {
-        const start = DEFAULT_BOUNDARIES;
-        const end = props.totalPages - DEFAULT_BOUNDARIES + 1;
-        const aroundBefore = pageControl.currPage - DEFAULT_AROUND;
-        const aroundAfter = pageControl.currPage + DEFAULT_AROUND;
-
-        let _pages: number[] = [];
-        let printDot = false;
-
-        const isTooShort = (end - start) <= 4;
-        for (let page = 1; page <= props.totalPages; page++) {
-            if (isTooShort) {
-                _pages.push(page);
-
-            } else if (page <= start || page >= end || page === pageControl.currPage ||
-                (page >= aroundBefore && page <= aroundAfter)) {
-                _pages.push(page);
-                printDot = true;
-
-            } else if (printDot) {
-                _pages.push(-1);
-                printDot = false;
-            }
-        }
-
-        setPages(_pages);
-    }, [props.totalPages])
-
-    useEffect(() => {
-        setPageControl(prevState => {
-            return {
-                ...prevState,
-                totalPages: props.totalPages
-            }
-        })
-    }, [])
-
     const handleCurrPage = (currPage: number) => {
         if (currPage === pageControl.currPage) return;
         setPageControl(prevState => {
@@ -107,6 +70,50 @@ export const CustomPagination = (props) => {
         });
         props.onPageChange(props.totalPages);
     }
+
+    useEffect(() => {
+        setPageControl(prevState => ({
+            ...prevState,
+            currPage: props.currPage,
+        }))
+    }, [props.currPage]);
+
+    useEffect(() => {
+        const start = DEFAULT_BOUNDARIES;
+        const end = props.totalPages - DEFAULT_BOUNDARIES + 1;
+        const aroundBefore = pageControl.currPage - DEFAULT_AROUND;
+        const aroundAfter = pageControl.currPage + DEFAULT_AROUND;
+
+        let _pages: number[] = [];
+        let printDot = false;
+
+        const isTooShort = (end - start) <= 4;
+        for (let page = 1; page <= props.totalPages; page++) {
+            if (isTooShort) {
+                _pages.push(page);
+
+            } else if (page <= start || page >= end || page === pageControl.currPage ||
+                (page >= aroundBefore && page <= aroundAfter)) {
+                _pages.push(page);
+                printDot = true;
+
+            } else if (printDot) {
+                _pages.push(-1);
+                printDot = false;
+            }
+        }
+
+        setPages(_pages);
+    }, [props.totalPages, pageControl.currPage])
+
+    useEffect(() => {
+        setPageControl(prevState => {
+            return {
+                ...prevState,
+                totalPages: props.totalPages
+            }
+        })
+    }, [props.totalPages])
 
     return (
         <>

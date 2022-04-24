@@ -11,10 +11,10 @@ class ImageHelper {
         }
     }
 
-    getImageFromServer = (imageName) => {
+    getImageFromServer = (imageName: string, origin: string) => {
         if (!imageName) return null;
         return new Promise(async (resolve) => {
-            const imageUrl = `${BASE_SERVER_IMAGES_URL}${imageName}`;
+            const imageUrl = `${BASE_SERVER_IMAGES_URL}${origin}/${imageName}`;
             const response = await fetch(imageUrl);
             const imageBlob = await response.blob();
             const reader = new FileReader();
