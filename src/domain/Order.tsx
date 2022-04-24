@@ -14,7 +14,13 @@ export const findNextOrderStatus = (currStatus: OrderStatus): OrderStatus => {
         }
     }
     return OrderStatus.NEW;
-} 
+}
+
+export const evaluateTotalPrice = (items: OrderItem[]) => {
+    return items.reduce((acc, item) => {
+        return acc + (item.price * item.amount);
+    }, 0);
+}
 
 export const orderStatusAsArray = (): number[] => {
     const statuses = [];

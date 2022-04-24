@@ -149,7 +149,7 @@ export const Orders = () => {
             });
     }, [handleAlert, appCtx.userData.authToken])
 
-    const loadOrders = useCallback((page) => {
+    const loadOrders = useCallback((page: number, filter?: string) => {
         if (!appCtx.userData.authToken) {
             setOrders([]);
             return;
@@ -160,7 +160,7 @@ export const Orders = () => {
             currPage: page
         }));
 
-        ordersApi.withToken(appCtx.userData.authToken).list(page)
+        ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);

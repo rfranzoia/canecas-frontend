@@ -2,14 +2,13 @@ import {memo, useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {StatusChangeList} from "./history/StatusChangeList";
-import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
+import {evaluateTotalPrice, OrderStatus, orderStatusAsArray} from "../../domain/Order";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import Modal from "../ui/Modal";
 import {usersApi} from "../../api/UsersAPI";
-import {ordersApi} from "../../api/OrdersAPI";
 
 const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -31,7 +30,7 @@ const EditOrderForm = (props) => {
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
-            const totalPrice = ordersApi.evaluateTotalPrice(items);
+            const totalPrice = evaluateTotalPrice(items);
             return {
                 ...prevState,
                 items: items,
@@ -49,7 +48,7 @@ const EditOrderForm = (props) => {
             handleCloseToast();
             setFormData(prevState => {
                 const items = [...prevState.items, item];
-                const totalPrice = ordersApi.evaluateTotalPrice(items);
+                const totalPrice = evaluateTotalPrice(items);
                 return {
                     ...prevState,
                     items: items,

@@ -4,7 +4,7 @@ import {useContext, useEffect, useState} from "react";
 import {ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
-import { Order } from "../../domain/Order";
+import {evaluateTotalPrice, Order} from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
 import {usersApi} from "../../api/UsersAPI";
@@ -24,7 +24,7 @@ export const NewOrder = (props) => {
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
-            const totalPrice = ordersApi.evaluateTotalPrice(items);
+            const totalPrice = evaluateTotalPrice(items);
             return {
                 ...prevState,
                 items: items,
@@ -39,7 +39,7 @@ export const NewOrder = (props) => {
         } else {
             setFormData(prevState => {
                 const items = [...prevState.items, item];
-                const totalPrice = ordersApi.evaluateTotalPrice(items);
+                const totalPrice = evaluateTotalPrice(items);
                 return {
                     ...prevState,
                     items: items,
