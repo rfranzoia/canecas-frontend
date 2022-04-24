@@ -1,4 +1,4 @@
-import {createContext, useEffect, useState} from "react";
+import {createContext, useCallback, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
 
 export interface GlobalError {
@@ -140,23 +140,23 @@ export const ApplicationContextProvider = (props) => {
         setTimeoutId(null);
     }
 
-    const handleAlert = (show: boolean, type: AlertType = AlertType.NONE, title: string = "", message: string = "") => {
+    const handleAlert = useCallback((show: boolean, type: AlertType = AlertType.NONE, title: string = "", message: string = "") => {
         setAlert({
             show: show,
             type: type,
             title: title,
             message: message,
         });
+        let t = null;
         if (show) {
-            const t = setTimeout(() => {
+            t = setTimeout(() => {
                 handleAlert(false);
             }, ALERT_TIMEOUT);
             setTimeoutId(t);
         } else {
-            clearTimeout(timeoutId);
-            setTimeoutId(null);
+            clearTimeout(t);
         }
-    };
+    },[]);
 
     useEffect(() => {
         const storage = JSON.parse(localStorage.getItem("userData"));
@@ -174,7 +174,7 @@ export const ApplicationContextProvider = (props) => {
             }, ALERT_TIMEOUT * 2);
             setTimeoutId(t);
         }
-    }, [userData]);
+    }, [userData, handleAlert, history]);
 
     const context: AppCtx = {
         userData: userData,
