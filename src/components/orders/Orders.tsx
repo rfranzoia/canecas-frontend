@@ -54,9 +54,7 @@ export const Orders = () => {
             currPage: currPage
         }));
 
-        ordersApi
-            .withToken(appCtx.userData.authToken)
-            .list(currPage)
+        ordersApi.withToken(appCtx.userData.authToken).list(currPage)
             .then((result) => {
                 if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -68,30 +66,35 @@ export const Orders = () => {
             });
     }
 
-    const updateOrder = async (orderId: string, order) => {
-        if (!appCtx.userData.authToken) {
-            return;
-        }
+    const updateOrder = (orderId: string, order, callback) => {
 
-        const result = await ordersApi.withToken(appCtx.userData.authToken).update(orderId, order);
-        if (result.statusCode) {
-            if (result.statusCode === StatusCodes.BAD_REQUEST ||
-                result.statusCode === StatusCodes.NOT_FOUND ||
-                result.statusCode === StatusCodes.INTERNAL_SERVER_ERROR) {
-                appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-            }
-            handleEditCancel();
-        }
+        ordersApi.withToken(appCtx.userData.authToken).update(orderId, order)
+            .then(result => {
+                if (result.statusCode) {
+                    if (result.statusCode in [StatusCodes.BAD_REQUEST, StatusCodes.NOT_FOUND, StatusCodes.INTERNAL_SERVER_ERROR, StatusCodes.UNAUTHORIZED]) {
+                        appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                        setShowAlert(true);
+                    }
+                } else {
+                    callback();
+                }
+            });
+        handleEditCancel();
     }
 
     const getTotalPages = () => {
         ordersApi.withToken(appCtx.userData.authToken).count()
             .then(result => {
-                setPageControl({
-                    currPage: 1,
-                    totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
-                });
-                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                } else {
+                    setPageControl({
+                        currPage: 1,
+                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                    });
+                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+                }
             });
     }
 
@@ -114,7 +117,6 @@ export const Orders = () => {
     }
 
     const handleEditCancel = () => {
-        loadOrders(pageControl.currPage);
         setEdit({
             show: false,
             op: "",
@@ -126,12 +128,11 @@ export const Orders = () => {
         const o = {
             status: OrderStatus.CONFIRMED
         }
-        updateOrder(orderId, o)
-            .then(() => {
-                appCtx.handleAlert(true, AlertType.SUCCESS, "Confirm Order", `Order '${orderId}' updated successfully`);
-                setShowAlert(true);
-                loadOrders(pageControl.currPage);
-            });
+        updateOrder(orderId, o, () => {
+            appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' updated successfully`);
+            setShowAlert(true);
+            loadOrders(pageControl.currPage);
+        });
     }
 
     const handleCancelOrder = (orderId: string, cancelReason: string) => {
@@ -139,12 +140,11 @@ export const Orders = () => {
             status: OrderStatus.CANCELED,
             statusReason: cancelReason
         }
-        updateOrder(orderId, o)
-            .then(() => {
-                appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
-                setShowAlert(true);
-                loadOrders(pageControl.currPage);
-            });
+        updateOrder(orderId, o, () => {
+            appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
+            setShowAlert(true);
+            loadOrders(pageControl.currPage);
+        });
     }
 
     const handleForwardOrder = (order, forwardReason: string) => {
@@ -152,12 +152,11 @@ export const Orders = () => {
             status: findNextOrderStatus(order.status),
             statusReason: forwardReason
         }
-        updateOrder(order._id, o)
-            .then(() => {
-                appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
-                setShowAlert(true);
-                loadOrders(pageControl.currPage);
-            });
+        updateOrder(order._id, o, () => {
+            appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+            setShowAlert(true);
+            loadOrders(pageControl.currPage);
+        });
     }
 
     const handleDeleteOrder = async (orderId: string) => {
@@ -166,30 +165,18 @@ export const Orders = () => {
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
                 } else {
                     appCtx.handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
-                    setShowAlert(true);
                 }
+                setShowAlert(true);
                 getTotalPages();
                 loadOrders(pageControl.currPage);
             })
     }
 
     useEffect(() => {
-        appCtx.checkValidLogin()
-            .then(() => undefined);
-    }, []);
-
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-        loadOrders(pageControl.currPage);
-    }, [appCtx.alert.show]);
-
-    useEffect(() => {
         getTotalPages();
+        loadOrders(1);
     }, [])
 
     return (

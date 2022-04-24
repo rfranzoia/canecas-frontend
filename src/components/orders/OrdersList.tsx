@@ -34,16 +34,9 @@ export const OrdersList = (props) => {
         props.onDeleteOrder(orderId);
     }
 
-    const loadOrders = () => {
-        props.loadOrders(pageControl.currPage);
+    const handlePageChange = (currPage) => {
+        props.loadOrders(currPage);
     }
-
-    useEffect(() => {
-        if (!appCtx.userData.authToken) {
-            return;
-        }
-        loadOrders();
-    }, [appCtx, pageControl.currPage]);
 
     useEffect(() => {
         setOrders(props.orders);
@@ -57,10 +50,6 @@ export const OrdersList = (props) => {
             }
         })
     }, [props.totalPages])
-
-    const handlePageChange = (currPage) => {
-        props.loadOrders(currPage);
-    }
 
     return (
         <>
