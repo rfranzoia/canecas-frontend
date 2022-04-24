@@ -1,6 +1,4 @@
 import {createContext, useEffect, useState} from "react";
-import {usersApi} from "../api/UsersAPI";
-import {StatusCodes} from "http-status-codes";
 import {useHistory} from "react-router-dom";
 
 export interface GlobalError {
@@ -34,7 +32,6 @@ export interface AppCtx {
     showErrorAlert: Function,
     hideErrorAlert: Function,
     handleAlert: Function,
-    checkValidLogin: Function
 }
 
 const defaultValue: AppCtx = {
@@ -62,7 +59,6 @@ const defaultValue: AppCtx = {
     showErrorAlert: () => {},
     hideErrorAlert: () => {},
     handleAlert: () => {},
-    checkValidLogin: () => {}
 }
 
 export const ALERT_TIMEOUT = 10 * 1000;
@@ -75,7 +71,7 @@ export const ApplicationContext = createContext(defaultValue);
 
 export const ApplicationContextProvider = (props) => {
     const history = useHistory();
-    let timeoutId;
+    const [timeoutId, setTimeoutId] = useState(null);
 
     const [error, setError] = useState({
         show: false,
@@ -130,9 +126,10 @@ export const ApplicationContextProvider = (props) => {
             title: title,
             message: message
         });
-        timeoutId = setTimeout(() => {
+        const t = setTimeout(() => {
             hideErrorAlert();
         }, ALERT_TIMEOUT * 2);
+        setTimeoutId(t);
     }
 
     const hideErrorAlert = () => {
@@ -142,6 +139,7 @@ export const ApplicationContextProvider = (props) => {
             message: ""
         });
         clearTimeout(timeoutId);
+        setTimeoutId(null);
     }
 
     const handleAlert = (show: boolean, type: AlertType = AlertType.NONE, title: string = "", message: string = "") => {
@@ -152,25 +150,15 @@ export const ApplicationContextProvider = (props) => {
             message: message,
         });
         if (show) {
-            timeoutId = setTimeout(() => {
+            const t = setTimeout(() => {
                 handleAlert(false);
             }, ALERT_TIMEOUT);
+            setTimeoutId(t);
         } else {
             clearTimeout(timeoutId);
+            setTimeoutId(null);
         }
     };
-
-    const checkValidLogin = async () => {
-        if (!userData || !userData.userId || !userData.authToken) {
-            removeUser();
-        } else if (userData.userId && userData.authToken) {
-            const result = await usersApi.withToken(userData.authToken).get(userData.userId);
-            if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                handleAlert(true, AlertType.DANGER, "Session Expired", "User Session has expired, please login again!");
-                removeUser();
-            }
-        }
-    }
 
     useEffect(() => {
         const storage = JSON.parse(localStorage.getItem("userData"));
@@ -182,10 +170,11 @@ export const ApplicationContextProvider = (props) => {
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));
         if (!userData.userId || !userData.authToken) {
-            timeoutId = setTimeout(() => {
+            const t = setTimeout(() => {
                 handleAlert(false);
                 if (history) history.replace("/");
             }, ALERT_TIMEOUT * 2);
+            setTimeoutId(t);
         }
     }, [userData]);
 
@@ -199,7 +188,6 @@ export const ApplicationContextProvider = (props) => {
         showErrorAlert: showErrorAlert,
         hideErrorAlert: hideErrorAlert,
         handleAlert: handleAlert,
-        checkValidLogin: checkValidLogin
     }
 
     return (
