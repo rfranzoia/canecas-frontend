@@ -94,8 +94,6 @@ export const ApplicationContextProvider = (props) => {
         message: "",
     });
 
-
-
     const addUser = (user) => {
         setUserData({
             userId: user.userId,
