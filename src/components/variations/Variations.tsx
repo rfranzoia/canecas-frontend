@@ -24,7 +24,7 @@ export const Variations = (props) => {
     const { handleAlert } = appCtx;
 
     const loadVariations = useCallback((currPage:number, filter?:string) => {
-        variationsApi.listBy(currPage, filter)
+        variationsApi.listByFilter(currPage, filter)
             .then(result => {
                 if (result.statusCode) {
                     const error = result?.response?.data;
@@ -79,7 +79,7 @@ export const Variations = (props) => {
         setShowVariationFormModal(false);
     }
 
-    const handleFilterChange = useCallback((filter?) => {
+    const handleFilterChange = useCallback((filter?: VariationsFilter) => {
         if (!filter) {
             loadVariations(currentPage);
             return;
@@ -187,4 +187,10 @@ export const Variations = (props) => {
             }
         </div>
     );
+}
+
+export interface VariationsFilter {
+    product?: string,
+    drawings?: number,
+    background?: string,
 }
