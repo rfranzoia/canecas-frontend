@@ -24,7 +24,6 @@ export const Variations = (props) => {
     const { handleAlert } = appCtx;
 
     const loadVariations = useCallback((currPage:number, filter?:string) => {
-        console.warn("loadVariations",currPage)
         variationsApi.listBy(currPage, filter)
             .then(result => {
                 if (result.statusCode) {
@@ -152,22 +151,6 @@ export const Variations = (props) => {
         getTotalPages();
         loadVariations(1);
     }, [loadVariations]);
-
-    /*
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-        loadVariations(currentPage);
-    }, [appCtx.alert.show, currentPage, loadVariations]);
-
-    useEffect(() => {
-        if (!showVariationFormModal) {
-            loadVariations(currentPage)
-        }
-    }, [showVariationFormModal, currentPage])
-
-     */
 
     return (
         <div>
