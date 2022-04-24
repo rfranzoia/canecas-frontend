@@ -6,7 +6,7 @@ import {productsApi} from "../../api/ProductsAPI";
 
 import classes from "./variationListFilter.module.css"
 
-export const VariationListFilterModule = (props) => {
+export const VariationListFilter = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
         filterCheck: false,
