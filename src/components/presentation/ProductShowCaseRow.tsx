@@ -14,7 +14,7 @@ export const ProductShowCaseRow = (props) => {
 
     const getImage = (name) => {
         const load = async () => {
-            setImage(await imageHelper.getImageFromServer(name));
+            setImage(await imageHelper.getImageFromServer(name, "product"));
         }
 
         load().then(() => null);

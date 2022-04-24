@@ -4,7 +4,7 @@ import {DefaultAPI} from "./DefaultAPI";
 
 export class ServicesAPI extends DefaultAPI {
 
-    uploadImage = async (file) => {
+    uploadImage = async (file, origin: string) => {
         try {
             const data = await imageHelper.convertToBase64(file);
             if (!data) {
@@ -13,6 +13,7 @@ export class ServicesAPI extends DefaultAPI {
             }
 
             const obj = {
+                origin: origin,
                 name: file.name,
                 data: data
             }
