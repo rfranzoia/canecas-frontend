@@ -93,11 +93,6 @@ export const Users = () => {
     };
 
     useEffect(() => {
-        appCtx.checkValidLogin()
-            .then(() => undefined);
-    }, []);
-
-    useEffect(() => {
         if (!appCtx.userData.authToken) {
             setUsers([]);
             return;

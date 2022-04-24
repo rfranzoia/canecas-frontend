@@ -1,14 +1,17 @@
 import {CustomButton} from "../ui/CustomButton";
 import {Card, Image} from "react-bootstrap";
 import {useContext, useEffect, useState} from "react";
+
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+
+import Modal from "../ui/Modal";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
-import {ProductShowCaseRow} from "./ProductShowCaseRow";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+
 import {HowToOrderPresentation} from "./HowToOrderPresentation";
 import {OrderWizard} from "../orders/wizard/OrderWizard";
-import Modal from "../ui/Modal";
+import {ProductShowCaseRow} from "./ProductShowCaseRow";
 
 export const Presentation = () => {
     const appCtx = useContext(ApplicationContext);
@@ -52,13 +55,6 @@ export const Presentation = () => {
             setShowAlert(false)
         }
     }, [appCtx.alert.show])
-
-    useEffect(() => {
-        appCtx.checkValidLogin()
-            .then(() => undefined);
-    }, [])
-
-
 
     return (
         <div className="default-margin">
@@ -109,7 +105,7 @@ export const Presentation = () => {
             }
             { showFormQuote &&
                 <Modal onClose={handleCancel} >
-                    <OrderWizard onCancel={handleCancel}/>
+                    <OrderWizard onCancel={handleConfirm}/>
                 </Modal>
             }
 

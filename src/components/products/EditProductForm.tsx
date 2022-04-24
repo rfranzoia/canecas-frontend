@@ -45,8 +45,6 @@ export const EditProductForm = (props) => {
     const handleSave = async (event) => {
         event.preventDefault();
 
-        await appCtx.checkValidLogin();
-
         if (!isDataValid()) return;
 
         if (imageOpType === ImageOpType.NEW) {

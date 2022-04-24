@@ -107,8 +107,6 @@ export const Products = () => {
     }
 
     const handleNewProduct = () => {
-        appCtx.checkValidLogin()
-            .then(() => undefined);
 
         handleShowEditModal("new");
     }

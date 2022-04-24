@@ -41,8 +41,6 @@ export const ChangeUserPassword = (props) => {
     }
 
     const handleConfirm = () => {
-        appCtx.checkValidLogin()
-            .then(() => undefined);
 
         if (user.newPassword.trim().length === 0 || user.confirmNewPassword.trim().length === 0) {
             setShowError({
