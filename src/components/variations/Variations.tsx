@@ -54,6 +54,7 @@ export const Variations = (props) => {
                         appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
+                        getTotalPages();
                         loadVariations(1);
                     }
                 });
@@ -110,8 +111,8 @@ export const Variations = (props) => {
     }
 
     useEffect(() => {
-        loadVariations(1);
         getTotalPages();
+        loadVariations(1);
     }, []);
 
     const handleSelectVariation = (variation) => {
@@ -141,7 +142,8 @@ export const Variations = (props) => {
                 } else {
                     appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
                     setShowAlert(true);
-                    loadVariations(currentPage);
+                    getTotalPages();
+                    loadVariations(1);
                 }
             });
     }
@@ -155,13 +157,13 @@ export const Variations = (props) => {
             setShowAlert(false)
         }
         loadVariations(currentPage);
-    }, [appCtx.alert.show]);
+    }, [appCtx.alert.show, currentPage]);
 
     useEffect(() => {
         if (!showVariationFormModal) {
             loadVariations(currentPage)
         }
-    }, [showVariationFormModal])
+    }, [showVariationFormModal, currentPage])
 
     return (
         <div>
@@ -175,7 +177,7 @@ export const Variations = (props) => {
                                 <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
                                               onClick={handleNewVariation}/>
                             }
-                            <CustomPagination totalPages={totalPages} onPageChange={handlePageChange}/>
+                            <CustomPagination totalPages={totalPages} onPageChange={handlePageChange} currPage={currentPage}/>
                         </div>
                     </Card.Title>
                     <VariationsList variations={variations}

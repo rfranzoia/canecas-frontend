@@ -14,6 +14,8 @@ import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {imageHelper} from "../ui/ImageHelper";
 
 import styles from "./variations.module.css"
+import {servicesApi} from "../../api/ServicesAPI";
+import {StatusCodes} from "http-status-codes";
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -75,15 +77,28 @@ export const VariationEditForm = (props) => {
         props.onCancel();
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!isValidData()) return;
         if (props.op === OpType.NEW) {
             const selectedProduct = products.find(product => product.name === formData.product);
+
             if (!selectedProduct) {
                 appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
                 return;
             }
+
+            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile, "variation");
+
+            if (sendResult instanceof Error) {
+                appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                return;
+
+            } else if (sendResult.statusCode !== StatusCodes.OK) {
+                appCtx.handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                return;
+            }
         }
+
         const variation: Variation = {
             _id: formData._id,
             product: formData.product,
@@ -92,12 +107,12 @@ export const VariationEditForm = (props) => {
             price: Number(formData.price),
             image: formData.image,
         }
+
         props.onSave(variation);
     }
 
     const handleChangeNumber = (event) => {
         const {name, value} = event.target;
-        console.log(value.replace(/[^0-9.,]+/, ""))
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -123,7 +138,7 @@ export const VariationEditForm = (props) => {
     }
 
     const loadImage = async (name) => {
-        setImage(await imageHelper.getImageFromServer(name));
+        setImage(await imageHelper.getImageFromServer(name, "variation"));
     }
 
     useEffect(() => {
@@ -146,7 +161,7 @@ export const VariationEditForm = (props) => {
                     imageHelper.getImage(loadImage, result.image);
                 }
             })
-    },[props.variationId])
+    },[props.variationId, appCtx, props.op])
 
     useEffect(() => {
         productsApi.list()
@@ -158,7 +173,7 @@ export const VariationEditForm = (props) => {
                     setProducts([]);
                 }
             });
-    },[])
+    },[appCtx])
 
     useEffect(() => {
         setViewOnly(props.op === OpType.VIEW)

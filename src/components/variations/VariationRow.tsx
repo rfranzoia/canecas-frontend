@@ -12,7 +12,7 @@ export const VariationRow = (props) => {
     const variation = props.variation;
 
     const loadImage = async (name) => {
-        setImage(await imageHelper.getImageFromServer(name));
+        setImage(await imageHelper.getImageFromServer(name, "variation"));
     }
 
     const handleOnClickRow = (op: OpType, variationId: string) => {
