@@ -1,17 +1,17 @@
+import {memo, useContext, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
-import {useContext, useEffect, useState} from "react";
 import {StatusChangeList} from "./history/StatusChangeList";
-import {CustomButton} from "../ui/CustomButton";
 import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
+import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
+import Modal from "../ui/Modal";
 import {usersApi} from "../../api/UsersAPI";
 import {ordersApi} from "../../api/OrdersAPI";
-import Modal from "../ui/Modal";
 
-export const EditOrderForm = (props) => {
+const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const order = props.order;
     const [users, setUsers] = useState([]);
@@ -59,8 +59,7 @@ export const EditOrderForm = (props) => {
         }
     }
 
-    const handleSave = (event) => {
-        event.preventDefault();
+    const handleSave = () => {
         if (!formData._id) return;
         if (!isDataValid()) return;
         const o = {
@@ -141,24 +140,14 @@ export const EditOrderForm = (props) => {
     }, [order])
 
     useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-    },[appCtx.alert.show])
-
-    useEffect(() => {
-        if (!appCtx.isLoggedIn()) return;
         usersApi.withToken(appCtx.userData.authToken).list()
             .then(result => {
                 setUsers(result);
             })
-    }, [appCtx]);
-
+    }, [appCtx.userData.authToken]);
 
     const viewOnly = props.op === "view";
     const lockChanges = order.status !== 0
-
-    if (!formData._id) return (<></>);
 
     return (
         <>
@@ -273,3 +262,5 @@ export const EditOrderForm = (props) => {
         </>
     );
 }
+
+export default memo(EditOrderForm);

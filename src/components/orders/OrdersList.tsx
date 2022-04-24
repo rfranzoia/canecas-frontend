@@ -64,7 +64,7 @@ export const OrdersList = (props) => {
                                 customClass="fa fa-file-invoice"
                                 onClick={() => handleEditOrder("new", "")}
                             />
-                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} />
+                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={pageControl.currPage}/>
                         </div>
                     }
                     {orders.map(order => {

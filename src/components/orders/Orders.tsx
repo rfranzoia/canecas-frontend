@@ -1,8 +1,7 @@
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
-import {EditOrder} from "./EditOrder";
 import {NewOrder} from "./NewOrder";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {OrdersList} from "./OrdersList";
@@ -12,6 +11,7 @@ import {DEFAULT_PAGE_SIZE} from "../../api/axios";
 import {User} from "../../domain/User";
 
 import styles from "./orders.module.css"
+import EditOrder from "./EditOrder";
 
 export interface WizardFormData {
     _id?: string,
@@ -33,6 +33,7 @@ export const Orders = () => {
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
+    const [saved, setSaved] = useState(false);
     const [pageControl, setPageControl] = useState({
         currPage: 1,
         totalPages: 0
@@ -42,29 +43,7 @@ export const Orders = () => {
         op: "",
         orderId: ""
     })
-
-    const loadOrders = (currPage: number) => {
-        if (!appCtx.userData.authToken) {
-            setOrders([]);
-            return;
-        }
-
-        setPageControl(prevState => ({
-            ...prevState,
-            currPage: currPage
-        }));
-
-        ordersApi.withToken(appCtx.userData.authToken).list(currPage)
-            .then((result) => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                    setOrders([]);
-                } else {
-                    setOrders(result);
-                }
-            });
-    }
+    const { handleAlert } = appCtx;
 
     const updateOrder = (orderId: string, order, callback) => {
 
@@ -72,7 +51,7 @@ export const Orders = () => {
             .then(result => {
                 if (result.statusCode) {
                     if (result.statusCode in [StatusCodes.BAD_REQUEST, StatusCodes.NOT_FOUND, StatusCodes.INTERNAL_SERVER_ERROR, StatusCodes.UNAUTHORIZED]) {
-                        appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                        handleAlert(true, AlertType.DANGER, result.name, result.description);
                         setShowAlert(true);
                     }
                 } else {
@@ -80,22 +59,6 @@ export const Orders = () => {
                 }
             });
         handleEditCancel();
-    }
-
-    const getTotalPages = () => {
-        ordersApi.withToken(appCtx.userData.authToken).count()
-            .then(result => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                } else {
-                    setPageControl({
-                        currPage: 1,
-                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
-                    });
-                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
-                }
-            });
     }
 
     const handleEdit = (op: string, orderId: string) => {
@@ -106,14 +69,10 @@ export const Orders = () => {
         });
     }
 
-    const handleEditSave = () => {
+    const handleSaveSuccessful = () => {
         getTotalPages();
         loadOrders(pageControl.currPage);
-        setEdit({
-            show: false,
-            op: "",
-            orderId: ""
-        });
+        setSaved(true);
     }
 
     const handleEditCancel = () => {
@@ -122,6 +81,7 @@ export const Orders = () => {
             op: "",
             orderId: ""
         });
+        setSaved(false);
     }
 
     const handleConfirmOrder = (orderId: string) => {
@@ -129,7 +89,7 @@ export const Orders = () => {
             status: OrderStatus.CONFIRMED
         }
         updateOrder(orderId, o, () => {
-            appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' updated successfully`);
+            handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' updated successfully`);
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -141,7 +101,7 @@ export const Orders = () => {
             statusReason: cancelReason
         }
         updateOrder(orderId, o, () => {
-            appCtx.handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
+            handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -153,20 +113,19 @@ export const Orders = () => {
             statusReason: forwardReason
         }
         updateOrder(order._id, o, () => {
-            appCtx.handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+            handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
     }
 
     const handleDeleteOrder = async (orderId: string) => {
-        if (!appCtx.userData.authToken) return;
         ordersApi.withToken(appCtx.userData.authToken).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
                 } else {
-                    appCtx.handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
+                    handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
                 }
                 setShowAlert(true);
                 getTotalPages();
@@ -174,10 +133,55 @@ export const Orders = () => {
             })
     }
 
+    const getTotalPages = useCallback(() => {
+        ordersApi.withToken(appCtx.userData.authToken).count()
+            .then(result => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                } else {
+                    setPageControl({
+                        currPage: 1,
+                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                    });
+                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+                }
+            });
+    }, [handleAlert, appCtx.userData.authToken])
+
+    const loadOrders = useCallback((page) => {
+        if (!appCtx.userData.authToken) {
+            setOrders([]);
+            return;
+        }
+
+        setPageControl(prevState => ({
+            ...prevState,
+            currPage: page
+        }));
+
+        ordersApi.withToken(appCtx.userData.authToken).list(page)
+            .then((result) => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                    setOrders([]);
+                } else {
+                    setOrders(result);
+                }
+            });
+    },[handleAlert, appCtx.userData.authToken])
+
     useEffect(() => {
         getTotalPages();
         loadOrders(1);
-    }, [])
+    }, [getTotalPages, loadOrders])
+
+    useEffect(() => {
+        if (saved) {
+            handleEditCancel();
+        }
+    }, [saved])
 
     return (
         <>
@@ -202,12 +206,12 @@ export const Orders = () => {
                         <div className={styles["edit-order-modal"]}>
                             {edit.op === "new" ?
                                 <NewOrder
-                                    onSave={handleEditSave}
+                                    onSaveSuccessful={handleSaveSuccessful}
                                     onCancel={handleEditCancel}/> :
                                 <EditOrder
                                     id={edit.orderId}
                                     op={edit.op}
-                                    onSave={handleEditSave}
+                                    onSaveSuccessful={handleSaveSuccessful}
                                     onCancel={handleEditCancel}/>}
                         </div>
                     </Modal>

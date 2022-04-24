@@ -72,7 +72,7 @@ export const NewOrder = (props) => {
         ordersApi.withToken(appCtx.userData.authToken).create(order)
             .then(result => {
                 if (result._id) {
-                    props.onSave();
+                    props.onSaveSuccessful();
                 } else {
                     const error = result;
                     appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
