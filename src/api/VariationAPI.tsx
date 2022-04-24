@@ -16,7 +16,7 @@ export class VariationsAPI extends DefaultAPI {
 
     }
 
-    listBy = async (currPage: number, filter: string) => {
+    listByFilter = async (currPage: number, filter: string) => {
 
         const pageFilter = (filter && filter.startsWith("?"))?filter.concat("&"):"?";
         const url = `${VARIATIONS_URL}/filterBy${pageFilter}pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`;
@@ -25,7 +25,7 @@ export class VariationsAPI extends DefaultAPI {
             const res = await axios.get(url);
             return res.data;
         } catch (error: any) {
-            return processRequestError(error, "variation:listBy");
+            return processRequestError(error, "variation:listByFilter");
         }
 
     }
