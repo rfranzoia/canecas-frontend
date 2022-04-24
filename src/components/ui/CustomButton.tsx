@@ -51,7 +51,7 @@ export const CustomButton = (props: any) => {
     }, [props]);
 
     return (
-        <Button onClick={props.onClick} variant={buttonType.variant} className={styles.button}>
+        <Button onClick={props.onClick} variant={buttonType.variant} className={styles.button} disabled={props.disabled}>
             <i className={buttonType.class}>&nbsp;</i>
             {props.caption}
         </Button>
