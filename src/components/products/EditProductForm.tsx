@@ -39,7 +39,7 @@ export const EditProductForm = (props) => {
     }
 
     const load = async (name) => {
-        setImage(await imageHelper.getImageFromServer(name));
+        setImage(await imageHelper.getImageFromServer(name, "product"));
     }
 
     const handleSave = async (event) => {
@@ -48,7 +48,7 @@ export const EditProductForm = (props) => {
         if (!isDataValid()) return;
 
         if (imageOpType === ImageOpType.NEW) {
-            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile);
+            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile, "product");
 
             if (sendResult instanceof Error) {
                 appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
@@ -123,7 +123,7 @@ export const EditProductForm = (props) => {
             props.op === OpType.EDIT ?
                 ImageOpType.EDIT :
                 ImageOpType.NEW);
-    }, []);
+    }, [props.op]);
 
     const viewOnly = props.op === OpType.VIEW;
     const title = props.op === OpType.NEW ? "New" :

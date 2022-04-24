@@ -26,7 +26,7 @@ export const ProductRow = (props) => {
     }
 
     const loadImage = async (name) => {
-        setImage(await imageHelper.getImageFromServer(name));
+        setImage(await imageHelper.getImageFromServer(name, "product"));
     }
 
     useEffect(() => {
