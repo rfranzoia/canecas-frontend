@@ -16,7 +16,7 @@ export class OrdersAPI extends DefaultAPI {
             });
             return res.data;
         } catch (error: any) {
-            return processRequestError(error, "order:list");
+            return processRequestError(error, "order:count");
         }
 
     }
