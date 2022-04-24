@@ -128,7 +128,7 @@ export const NewOrder = (props) => {
             .then(result => {
                 setUsers(result);
             })
-    }, []);
+    }, [appCtx]);
 
     return (
         <>

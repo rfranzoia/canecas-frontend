@@ -152,7 +152,8 @@ export const EditOrderForm = (props) => {
             .then(result => {
                 setUsers(result);
             })
-    }, []);
+    }, [appCtx]);
+
 
     const viewOnly = props.op === "view";
     const lockChanges = order.status !== 0
