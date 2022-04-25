@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {usersApi} from "../../api/UsersAPI";
 import {UsersList} from "./UsersList";
@@ -22,16 +22,18 @@ export const Users = () => {
         op: "",
     });
 
-    const loadData = async () => {
+    const {handleAlert} = appCtx;
+
+    const loadData = useCallback(async () => {
         if (!appCtx.userData.authToken) return;
         const result = await usersApi.withToken(appCtx.userData.authToken).list();
-        if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-            appCtx.showErrorAlert(result.name, result.description);
-            setUsers([]);
+        if (result.statusCode === StatusCodes.OK) {
+            setUsers(result.data);
         } else {
-            setUsers(result);
+            handleAlert(AlertType.DANGER, result.data.name, result.data.description);
+            setUsers([]);
         }
-    };
+    }, [appCtx.userData.authToken, handleAlert]);
 
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);
@@ -50,24 +52,13 @@ export const Users = () => {
         }
     }
 
-    const handleEditUserSave = () => {
-        setShowEditModal(false);
-    }
-
-    const handleEditUserCancel = () => {
-        setShowEditModal(false);
-    }
-
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            if (error.name && error.description) {
-                appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
-                setShowAlert(true);
-            } else {
-                console.error("warning", error)
-            }
+            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+            setShowAlert(true);
         }
+        loadData().then(undefined);
     };
 
     const handleShowEditModal = (op: string, id?: string) => {
@@ -93,22 +84,8 @@ export const Users = () => {
     };
 
     useEffect(() => {
-        if (!appCtx.userData.authToken) {
-            setUsers([]);
-            return;
-        }
-        usersApi
-            .withToken(appCtx.userData.authToken)
-            .list()
-            .then((result) => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    appCtx.showErrorAlert(result.name, result.description);
-                    setUsers([]);
-                } else {
-                    setUsers(result);
-                }
-            });
-    }, [appCtx, showEditModal]);
+        loadData().then(undefined);
+    }, [loadData]);
 
     useEffect(() => {
         if (!appCtx.alert.show) {
@@ -138,20 +115,18 @@ export const Users = () => {
             </Card>
             {showEditModal &&
                 <Modal
-                    onClose={handleCloseEditModal} >
+                    onClose={handleCloseEditModal}>
                     <div>
                         <EditUser id={editViewOp.userId}
                                   op={editViewOp.op}
-                                  onSaveCancel={handleCloseEditModal}
-                                  onSave={handleEditUserSave}
-                                  onCancel={handleEditUserCancel}
+                                  onCloseModal={handleCloseEditModal}
                         />
                     </div>
                 </Modal>
             }
             {showChangePassword &&
                 <Modal
-                    onClose={handleChangePasswordCancel} >
+                    onClose={handleChangePasswordCancel}>
                     <div>
                         <ChangeUserPassword email={editViewOp.email}
                                             onCancel={handleChangePasswordCancel}

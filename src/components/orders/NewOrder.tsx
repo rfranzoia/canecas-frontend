@@ -1,26 +1,26 @@
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useContext, useEffect, useState} from "react";
-import {ordersApi} from "../../api/OrdersAPI";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import {evaluateTotalPrice, Order} from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
-import {usersApi} from "../../api/UsersAPI";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
+import {OrdersContext} from "../../context/OrdersContext";
 
 export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const ordersCtx = useContext(OrdersContext);
     const [showAlert, setShowAlert] = useState(false);
-    const [users, setUsers] = useState([]);
     const [formData, setFormData] = useState({
         orderDate: "",
         userEmail: appCtx.userData.role === Role.ADMIN? "": appCtx.userData.userEmail,
         totalPrice: 0,
         items: []
     });
-
+    const {handleAlert} = appCtx;
+    
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
@@ -69,16 +69,7 @@ export const NewOrder = (props) => {
             totalPrice: +formData.totalPrice,
             items: orderItems,
         }
-        ordersApi.withToken(appCtx.userData.authToken).create(order)
-            .then(result => {
-                if (result._id) {
-                    props.onSaveSuccessful();
-                } else {
-                    const error = result;
-                    appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
-                    setShowAlert(true);
-                }
-            })
+        props.onSave(order);
 
     }
 
@@ -86,7 +77,7 @@ export const NewOrder = (props) => {
         const { userEmail, orderDate, items } = formData;
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
             setShowAlert(true);
             return false;
         }
@@ -122,13 +113,6 @@ export const NewOrder = (props) => {
         }
     },[appCtx.alert.show])
 
-    useEffect(() => {
-        usersApi.withToken(appCtx.userData.authToken).list()
-            .then(result => {
-                setUsers(result);
-            })
-    }, [appCtx.userData.authToken]);
-
     return (
         <>
             {showAlert && <AlertToast/>}
@@ -144,7 +128,7 @@ export const NewOrder = (props) => {
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
                                         <AutoCompleteInput
-                                            data={users}
+                                            data={ordersCtx.users}
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}

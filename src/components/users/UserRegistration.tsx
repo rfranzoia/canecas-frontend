@@ -9,6 +9,7 @@ import {Role} from "../../domain/User";
 import Modal from "../ui/Modal";
 
 import styles from "./users.module.css"
+import {StatusCodes} from "http-status-codes";
 
 export const enum ShowType { SIGN_IN, SIGN_UP}
 
@@ -37,18 +38,18 @@ export const UserRegistration = (props) => {
 
     const handleSignIn = async (credentials) => {
         const res = await usersApi.login(credentials.email, credentials.password);
-        if (res.email) {
+        if (res.statusCode === StatusCodes.OK) {
             appCtx.addUser({
-                userId: res._id,
-                name: res.name,
-                userEmail: res.email,
-                authToken: res.authToken,
-                role: res.role
+                userId: res.data._id,
+                name: res.data.name,
+                userEmail: res.data.email,
+                authToken: res.data.authToken,
+                role: res.data.role
             });
             props.handleClose();
             history.replace("/");
         } else {
-            appCtx.handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+            appCtx.handleAlert(true, AlertType.DANGER, res?.data.name, res?.data.description);
         }
     }
 
@@ -65,12 +66,10 @@ export const UserRegistration = (props) => {
         };
 
         const res = await usersApi.create(user);
-
-        if (res.email && res.email === userRegister.email) {
-            handleShowType(ShowType.SIGN_IN);
-
-        } else {
+        if (res.statusCode !== StatusCodes.CREATED) {
             appCtx.handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+        } else {
+            handleShowType(ShowType.SIGN_IN);
         }
     }
 

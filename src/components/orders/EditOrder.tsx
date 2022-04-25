@@ -4,6 +4,7 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 import {AlertToast} from "../ui/AlertToast";
 import EditOrderForm from "./EditOrderForm";
+import {Order} from "../../domain/Order";
 
 const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -18,25 +19,13 @@ const EditOrder = (props) => {
         statusHistory: []
     });
 
-    const handleSaveOrder = (order) => {
-        ordersApi.withToken(appCtx.userData.authToken).update(order._id, order)
-            .then(result => {
-                if (result._id) {
-                    handleAlert(false);
-                    props.onSaveSuccessful(result._id);
-                } else {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
-                }
-            });
-    }
-
     const handleCancel = () => {
         props.onCancel();
     }
 
-    const handleOp = (order) => {
+    const handleSaveOrder = (order: Order) => {
         if (props.op !== "view") {
-            handleSaveOrder(order);
+            props.onSave(order);
         }
     }
 
@@ -44,14 +33,13 @@ const EditOrder = (props) => {
         if (!props.id) return;
 
         const result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
-
-        if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+        if (result?.statusCode !== StatusCodes.OK) {
             handleAlert(true, AlertType.DANGER, result.name, result.description)
         } else {
-            if (result && !Array.isArray(result)) {
+            if (result.data && !Array.isArray(result.data)) {
                 setOrder({
-                    ...result,
-                    orderDate: result.orderDate.split("T")[0]
+                    ...result.data,
+                    orderDate: result.data.orderDate.split("T")[0]
                 });
             }
         }
@@ -70,7 +58,7 @@ const EditOrder = (props) => {
                 <EditOrderForm title={title}
                                order={order}
                                op={props.op}
-                               onSaveOrder={handleOp}
+                               onSaveOrder={handleSaveOrder}
                                onCancel={handleCancel}/>
             </div>
         </>

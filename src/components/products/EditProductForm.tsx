@@ -151,9 +151,16 @@ export const EditProductForm = (props) => {
                                         <Form.Group className="spaced-form-group">
                                             <label htmlFor="name">Name<span aria-hidden="true"
                                                                             className="required">*</span></label>
-                                            <input className="form-control bigger-input" id="name" name="name" required
+                                            <input className="form-control bigger-input"
+                                                   id="name"
+                                                   name="name"
+                                                   required
                                                    type="text"
-                                                   value={formData.name} onChange={handleChange} disabled={viewOnly}/>
+                                                   autoComplete={"off"}
+                                                   value={formData.name}
+                                                   onChange={handleChange}
+                                                   disabled={viewOnly}
+                                            />
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -162,7 +169,8 @@ export const EditProductForm = (props) => {
                                         <Form.Group className="spaced-form-group">
                                             <label htmlFor="description">Description<span aria-hidden="true"
                                                                                           className="required">*</span></label>
-                                            <textarea className="form-control bigger-input" id="description"
+                                            <textarea className="form-control bigger-input"
+                                                      id="description"
                                                       name="description"
                                                       required
                                                       rows={3}
@@ -183,6 +191,7 @@ export const EditProductForm = (props) => {
                                                 name="price"
                                                 value={viewOnly ? formData.price.toFixed(2) : formData.price}
                                                 onChange={handleChangeNumber}
+                                                autoComplete={"off"}
                                                 style={{textAlign: "right"}}
                                                 disabled={viewOnly} />
                                         </Form.Group>

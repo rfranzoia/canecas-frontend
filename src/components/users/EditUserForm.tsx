@@ -166,6 +166,7 @@ export const EditUserForm = (props) => {
                                             name="password"
                                             disabled={viewOnly || isEdit}
                                             value={formData.password}
+                                            autoComplete={"off"}
                                             onChange={handleChange}
                                         />
                                     </Form.Group>
@@ -183,6 +184,7 @@ export const EditUserForm = (props) => {
                                             name="confirmPassword"
                                             disabled={viewOnly || isEdit}
                                             value={formData.confirmPassword}
+                                            autoComplete={"off"}
                                             onChange={handleChange}
                                         />
                                     </Form.Group>
@@ -203,6 +205,7 @@ export const EditUserForm = (props) => {
                                         name="phone"
                                         value={formData.phone}
                                         disabled={viewOnly}
+                                        autoComplete={"off"}
                                         onChange={handleChange}
                                     />
                                 </Form.Group>
@@ -217,6 +220,7 @@ export const EditUserForm = (props) => {
                                         name="address"
                                         value={formData.address}
                                         disabled={viewOnly}
+                                        autoComplete={"off"}
                                         onChange={handleChange}
                                     />
                                 </Form.Group>

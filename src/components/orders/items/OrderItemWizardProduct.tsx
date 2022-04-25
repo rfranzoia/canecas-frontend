@@ -1,15 +1,16 @@
+import {useContext, useEffect, useState} from "react";
 import {Card, Col, Form, Row} from "react-bootstrap";
+import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
+import {WizardFormData} from "../Orders";
+import {Variation} from "../../../domain/Variation";
+import {Variations} from "../../variations/Variations";
+import {productsApi} from "../../../api/ProductsAPI";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {AlertToast} from "../../ui/AlertToast";
 import {CustomButton} from "../../ui/CustomButton";
-import {useContext, useEffect, useState} from "react";
-import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
-import {productsApi} from "../../../api/ProductsAPI";
-import {Variations} from "../../variations/Variations";
-import {Variation} from "../../../domain/Variation";
 import Modal from "../../ui/Modal";
-import {WizardFormData} from "../Orders";
+import {StatusCodes} from "http-status-codes";
 
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -81,14 +82,14 @@ export const OrderItemWizardProduct = (props) => {
     useEffect(() => {
         const load = async () => {
             const res = await productsApi.list();
-            if (res) {
+            if (res.statusCode === StatusCodes.OK) {
                 setProducts(res);
             } else {
                 setProducts([]);
             }
         }
 
-        load().then(() => undefined);
+        load().then(undefined);
 
     }, []);
 
@@ -165,6 +166,7 @@ export const OrderItemWizardProduct = (props) => {
             </div>
             {showVariationsModal &&
                 <Modal
+                    style={{ width: "45rem", maxHeight: "45rem", overflow: "scroll"}}
                     onClose={handleCloseVariationsModal} >
                     <Variations onClose={handleCloseVariationsModal}
                                 onSelect={handleSelectVariation}

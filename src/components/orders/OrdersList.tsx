@@ -13,8 +13,7 @@ export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [orders, setOrders] = useState([]);
     const [pageControl, setPageControl] = useState({
-        currPage: 1,
-        totalPages: 0
+        totalPages: 0,
     });
 
     const handleEditOrder = (op: string, orderId: string) => {
@@ -67,7 +66,7 @@ export const OrdersList = (props) => {
                                 customClass="fa fa-file-invoice"
                                 onClick={() => handleEditOrder("new", "")}
                             />
-                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={pageControl.currPage}/>
+                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={1}/>
                         </div>
                     }
                     <OrdersListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>

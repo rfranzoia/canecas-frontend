@@ -1,18 +1,18 @@
 import {useCallback, useContext, useEffect, useState} from "react";
-import {ordersApi} from "../../api/OrdersAPI";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
-import {NewOrder} from "./NewOrder";
-import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
+import {ordersApi} from "../../api/OrdersAPI";
+import {DEFAULT_PAGE_SIZE} from "../../api/axios";
+import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {OrdersList} from "./OrdersList";
+import {OrdersFilter} from "./OrdersListFilter";
+import {NewOrder} from "./NewOrder";
+import EditOrder from "./EditOrder";
+import {findNextOrderStatus, Order, OrderStatus} from "../../domain/Order";
+import {User} from "../../domain/User";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
-import {DEFAULT_PAGE_SIZE} from "../../api/axios";
-import {User} from "../../domain/User";
 
 import styles from "./orders.module.css"
-import EditOrder from "./EditOrder";
-import {OrdersFilter} from "./OrdersListFilter";
 
 export interface WizardFormData {
     _id?: string,
@@ -33,7 +33,6 @@ export const Orders = () => {
     const [orders, setOrders] = useState([]);
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
-    const [totalPages, setTotalPages] = useState(0);
     const [saved, setSaved] = useState(false);
     const [pageControl, setPageControl] = useState({
         currPage: 1,
@@ -59,44 +58,40 @@ export const Orders = () => {
 
         ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
             .then((result) => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
                     setShowAlert(true);
                     setOrders([]);
                 } else {
-                    setOrders(result);
+                    setOrders(result.data);
                 }
             });
     },[handleAlert, appCtx.userData.authToken])
 
     const updateOrder = (orderId: string, order, callback) => {
-
         ordersApi.withToken(appCtx.userData.authToken).update(orderId, order)
             .then(result => {
-                if (result.statusCode) {
-                    if (result.statusCode in [StatusCodes.BAD_REQUEST, StatusCodes.NOT_FOUND, StatusCodes.INTERNAL_SERVER_ERROR, StatusCodes.UNAUTHORIZED]) {
-                        handleAlert(true, AlertType.DANGER, result.name, result.description);
-                        setShowAlert(true);
-                    }
+                if (result.statusCode !== StatusCodes.OK) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
                 } else {
                     callback();
                 }
             });
-        handleEditCancel();
+        handleCloseEditModal();
     }
 
     const getTotalPages = useCallback(() => {
         ordersApi.withToken(appCtx.userData.authToken).count()
             .then(result => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
                     setShowAlert(true);
                 } else {
                     setPageControl({
                         currPage: 1,
-                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                        totalPages: Math.ceil(result.data.count / DEFAULT_PAGE_SIZE)
                     });
-                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
                 }
             });
     }, [handleAlert, appCtx.userData.authToken])
@@ -109,13 +104,32 @@ export const Orders = () => {
         });
     }
 
-    const handleSaveSuccessful = () => {
-        getTotalPages();
-        loadOrders(pageControl.currPage);
-        setSaved(true);
+    const handleSave = (order: Order) => {
+        if (edit.op === OpType.NEW) {
+            ordersApi.withToken(appCtx.userData.authToken).create(order)
+                .then(result => {
+                    if (result.statusCode === StatusCodes.CREATED) {
+                        handleAlert(false);
+                        getTotalPages();
+                        loadOrders(pageControl.currPage);
+                        setSaved(true);
+                    } else {
+                        const error = result.data;
+                        handleAlert(true, AlertType.DANGER, error.name, error.description);
+                        setShowAlert(true);
+                    }
+                })
+        } else if (edit.op === OpType.EDIT) {
+            updateOrder(order._id, order, () => {
+                handleAlert(false);
+                loadOrders(pageControl.currPage);
+                setSaved(true);
+            })
+        }
+
     }
 
-    const handleEditCancel = () => {
+    const handleCloseEditModal = () => {
         setEdit({
             show: false,
             op: "",
@@ -129,7 +143,7 @@ export const Orders = () => {
             status: OrderStatus.CONFIRMED
         }
         updateOrder(orderId, o, () => {
-            handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' updated successfully`);
+            handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' is now CONFIRMED`);
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -141,7 +155,7 @@ export const Orders = () => {
             statusReason: cancelReason
         }
         updateOrder(orderId, o, () => {
-            handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been canceled`);
+            handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been CANCELED`);
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -165,7 +179,7 @@ export const Orders = () => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
                 } else {
-                    handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' deleted successfully`);
+                    handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' has been successfully DELETED`);
                 }
                 setShowAlert(true);
                 getTotalPages();
@@ -210,7 +224,7 @@ export const Orders = () => {
 
     useEffect(() => {
         if (saved) {
-            handleEditCancel();
+            handleCloseEditModal();
         }
     }, [saved])
 
@@ -220,7 +234,7 @@ export const Orders = () => {
                 {showAlert && <AlertToast/> }
                 <OrdersList
                     orders={orders}
-                    totalPages={totalPages}
+                    totalPages={pageControl.totalPages}
                     loadOrders={loadOrders}
                     onEditOrder={handleEdit}
                     onDeleteOrder={handleDeleteOrder}
@@ -234,17 +248,17 @@ export const Orders = () => {
             <div>
                 { edit.show &&
                     <Modal
-                        onClose={handleEditCancel}>
+                        onClose={handleCloseEditModal}>
                         <div className={styles["edit-order-modal"]}>
-                            {edit.op === "new" ?
+                            {edit.op === OpType.NEW ?
                                 <NewOrder
-                                    onSaveSuccessful={handleSaveSuccessful}
-                                    onCancel={handleEditCancel}/> :
+                                    onSave={handleSave}
+                                    onCancel={handleCloseEditModal}/> :
                                 <EditOrder
                                     id={edit.orderId}
                                     op={edit.op}
-                                    onSaveSuccessful={handleSaveSuccessful}
-                                    onCancel={handleEditCancel}/>}
+                                    onSave={handleSave}
+                                    onCancel={handleCloseEditModal}/>}
                         </div>
                     </Modal>
                 }

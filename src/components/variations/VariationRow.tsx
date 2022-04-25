@@ -30,14 +30,16 @@ export const VariationRow = (props) => {
     }
 
     useEffect(() => {
-        loadImage(props.variation.image);
+        loadImage(props.variation.image).then(undefined);
     }, [props.variation.image]);
 
     return (
         <>
             <tr style={{ verticalAlign: "center", margin: "0"}} className="align-middle">
                 <td width="5%" align="center">
-                    <Image className={classes.imageTest} src={image} fluid width="50" title={variation.product}/>
+                    <div className={"list-image-panel"}>
+                        <Image className={classes.imageTest} src={image} fluid width="50" title={variation.product}/>
+                    </div>
                 </td>
                 <td width="30%" >{variation.product}</td>
                 <td width="20%" align="center">{variation.drawings}</td>

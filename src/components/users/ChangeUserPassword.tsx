@@ -63,7 +63,7 @@ export const ChangeUserPassword = (props) => {
         usersApi.withToken(appCtx.userData.authToken)
             .updatePassword(props.email, user.password, user.newPassword)
             .then(result => {
-                if (result.statusCode && result.statusCode === StatusCodes.BAD_REQUEST) {
+                if (result.statusCode !== StatusCodes.OK) {
                     setShowError({
                         show: true,
                         title: result.name,

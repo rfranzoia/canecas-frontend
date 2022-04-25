@@ -1,4 +1,4 @@
-import {BASE_API_URL, CONTENT_SERVER_ADDRESS} from "../../api/axios";
+import {API_SERVER_ADDRESS, CONTENT_SERVER_ADDRESS} from "../../api/axios";
 
 class ImageHelper {
 
@@ -52,7 +52,7 @@ class ImageHelper {
 
 export enum ImageOpType { VIEW, EDIT, NEW}
 
-export const BASE_SERVER_IMAGES_URL = `${BASE_API_URL}/images/`
+export const BASE_SERVER_IMAGES_URL = `${API_SERVER_ADDRESS}/images/`
 
 export const BASE_CLIENT_IMAGE_URL = `${CONTENT_SERVER_ADDRESS}/`;
 

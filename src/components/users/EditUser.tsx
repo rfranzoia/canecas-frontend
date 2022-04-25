@@ -1,8 +1,8 @@
-import { usersApi } from "../../api/UsersAPI";
-import { EditUserForm } from "./EditUserForm";
-import { useContext, useEffect, useState } from "react";
-import { ApplicationContext } from "../../context/ApplicationContext";
-import { StatusCodes } from "http-status-codes";
+import {usersApi} from "../../api/UsersAPI";
+import {EditUserForm} from "./EditUserForm";
+import {useContext, useEffect, useState} from "react";
+import {ApplicationContext} from "../../context/ApplicationContext";
+import {StatusCodes} from "http-status-codes";
 
 export const EditUser = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -24,28 +24,28 @@ export const EditUser = (props) => {
             } else if (props.op === "new") {
                 result = await usersApi.withToken(appCtx.userData.authToken).create(user);
             }
-            if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
-                appCtx.showErrorAlert(result.name, result.description);
-            } else if (result?.statusCode === StatusCodes.BAD_REQUEST) {
-                handleCancel(result);
+            if (result.statusCode !== StatusCodes.OK && result.statusCode !== StatusCodes.CREATED) {
+                handleCloseModal(result.data)
+            } else {
+                handleCloseModal();
             }
-            handleCancel();
         };
-        save(user).then(() => undefined);
+        save(user).then(undefined);
     };
 
-    const handleCancel = (error?) => {
-        props.onSaveCancel(error);
+    const handleCloseModal = (error?) => {
+        props.onCloseModal(error);
     };
 
     useEffect(() => {
-        const callback = async () => {
+        const getUser = async () => {
             if (props.op === "edit" || props.op === "view") {
                 const result = await usersApi.withToken(appCtx.userData.authToken).get(props.id);
-                if (result?.statusCode === StatusCodes.UNAUTHORIZED) {
+                if (result.statusCode !== StatusCodes.OK) {
                     appCtx.showErrorAlert(result.name, result.description);
+                } else {
+                    setUser(result.data);
                 }
-                setUser(result);
             } else {
                 setUser({
                     role: "",
@@ -57,14 +57,12 @@ export const EditUser = (props) => {
                 });
             }
         };
-        callback().then(() => {
-            return undefined;
-        });
+        getUser().then(undefined);
     }, [props.id, props.op, appCtx]);
 
     return (
         <>
-            <EditUserForm user={user} op={props.op} onSaveUser={handleSaveUser} onCancel={handleCancel} />
+            <EditUserForm user={user} op={props.op} onSaveUser={handleSaveUser} onCancel={handleCloseModal} />
         </>
     );
 };

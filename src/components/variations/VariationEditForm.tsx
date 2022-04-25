@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 
 import {Variation} from "../../domain/Variation";
@@ -33,6 +33,8 @@ export const VariationEditForm = (props) => {
     const [file, setFile] = useState({
         selectedFile: null
     });
+
+    const {handleAlert} = appCtx;
 
     const isValidData = (): boolean => {
         const { product, drawings, background, price, image } = formData;
@@ -141,27 +143,31 @@ export const VariationEditForm = (props) => {
         setImage(await imageHelper.getImageFromServer(name, "variation"));
     }
 
-    useEffect(() => {
+    const getVariation = useCallback(async () => {
         if (!props.variationId && props.op !== OpType.EDIT) return;
         variationsApi.withToken(appCtx.userData.authToken)
             .get(props.variationId)
             .then(result => {
-                if (!result._id) {
-                    console.error(result.name, JSON.stringify(result.description));
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                if (result.statusCode !== StatusCodes.OK) {
+                    console.error(result.data.name, JSON.stringify(result.data.description));
+                    handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
                 } else {
                     setFormData({
-                        _id: result._id,
-                        product: result.product,
-                        background: result.background,
-                        drawings: result.drawings,
-                        price: result.price,
-                        image: result.image,
+                        _id: result.data._id,
+                        product: result.data.product,
+                        background: result.data.background,
+                        drawings: result.data.drawings,
+                        price: result.data.price,
+                        image: result.data.image,
                     })
-                    imageHelper.getImage(loadImage, result.image);
+                    imageHelper.getImage(loadImage, result.data.image);
                 }
             })
-    },[props.variationId, appCtx, props.op])
+    }, [appCtx.userData.authToken, handleAlert, props.op, props.variationId])
+
+    useEffect(() => {
+        getVariation().then(undefined);
+    },[getVariation])
 
     useEffect(() => {
         productsApi.list()
@@ -169,11 +175,11 @@ export const VariationEditForm = (props) => {
                 if (result) {
                     setProducts(result);
                 } else {
-                    appCtx.handleAlert(true, AlertType.WARNING, "Loading Products!", "Could not load products list!");
+                    handleAlert(true, AlertType.WARNING, "Loading Products!", "Could not load products list!");
                     setProducts([]);
                 }
             });
-    },[appCtx])
+    },[handleAlert])
 
     useEffect(() => {
         setViewOnly(props.op === OpType.VIEW)

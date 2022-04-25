@@ -12,6 +12,7 @@ import Modal from "../ui/Modal";
 import {VariationEditForm} from "./VariationEditForm";
 import {Role} from "../../domain/User";
 import {VariationsFilter} from "./VariationListFilter";
+import {StatusCodes} from "http-status-codes";
 
 export const Variations = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -25,24 +26,30 @@ export const Variations = (props) => {
     const { handleAlert } = appCtx;
 
     const loadVariations = useCallback((currPage:number, filter?:string) => {
-        variationsApi.listByFilter(currPage, filter)
+        const pageSize = props.isModal? DEFAULT_PAGE_SIZE / 2: DEFAULT_PAGE_SIZE;
+        variationsApi.withPageSize(pageSize).listByFilter(currPage, filter)
             .then(result => {
-                if (result.statusCode) {
+                if (result.statusCode !== StatusCodes.OK) {
                     const error = result?.response?.data;
                     handleAlert(true, AlertType.DANGER, error.name, error.description);
                 } else {
-                    setVariations(result);
+                    setVariations(result.data);
                     setCurrentPage(currPage);
                 }
             })
-    },[handleAlert])
+    },[handleAlert, props.isModal])
 
-    const getTotalPages = () => {
-        variationsApi.count()
+    const getTotalPages = useCallback(() => {
+        const pageSize = props.isModal? DEFAULT_PAGE_SIZE / 2: DEFAULT_PAGE_SIZE;
+        variationsApi.withPageSize(pageSize).count()
             .then(result => {
-                setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+                if (result.statusCode !== StatusCodes.OK) {
+                    setTotalPages(0);
+                } else {
+                    setTotalPages(Math.ceil(result.data.count / pageSize));
+                }
             });
-    }
+    },[props.isModal])
 
     const handleSaveVariation = (variation: Variation) => {
         setShowVariationFormModal(false);
@@ -51,9 +58,9 @@ export const Variations = (props) => {
             variationsApi.withToken(appCtx.userData.authToken)
                 .create(variation)
                 .then(result => {
-                    if (!result._id) {
-                        console.error(result.name, result.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    if (result.statusCode !== StatusCodes.OK) {
+                        console.error(result.data.name, result.data.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
                         setShowAlert(true);
                     } else {
                         getTotalPages();
@@ -64,9 +71,9 @@ export const Variations = (props) => {
             variationsApi.withToken(appCtx.userData.authToken)
                 .update(variation._id, variation)
                 .then(result => {
-                    if (result.statusCode) {
-                        console.error(result.name, result.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    if (result.statusCode !== StatusCodes.OK) {
+                        console.error(result.data.name, result.data.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
                         setShowAlert(true);
                     } else {
                         loadVariations(currentPage);
@@ -126,16 +133,15 @@ export const Variations = (props) => {
         variationsApi.withToken(appCtx.userData.authToken)
             .delete(id)
             .then(result => {
-                if (result) {
-                    console.error(result.name, result.description)
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
-                    setShowAlert(true);
+                if (result.statusCode !== StatusCodes.OK) {
+                    console.error(result.data.name, result.data.description)
+                    appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
                 } else {
                     appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
-                    setShowAlert(true);
                     getTotalPages();
                     loadVariations(1);
                 }
+                setShowAlert(true);
             });
     }
 
@@ -151,7 +157,7 @@ export const Variations = (props) => {
     useEffect(() => {
         getTotalPages();
         loadVariations(1);
-    }, [loadVariations]);
+    }, [loadVariations, getTotalPages]);
 
     return (
         <div>
@@ -178,6 +184,18 @@ export const Variations = (props) => {
                     />
                 </Card.Body>
             </Card>
+            {props.isModal &&
+                <>
+                    <small>Click on the &nbsp;
+                        <span>
+                            <i className={"fa fa-square-plus"} style={{color: "black", fontSize: "1rem"}}/>
+                        </span>&nbsp; to select a product variation
+                    </small>
+                    <div className="actions">
+                        <CustomButton caption="Cancel" onClick={props.onClose} type="close"/>
+                    </div>
+                </>
+            }
             { showVariationFormModal &&
                 <Modal onClose={handleCloseNewVariationModal} >
                     <VariationEditForm onSave={handleSaveVariation}
