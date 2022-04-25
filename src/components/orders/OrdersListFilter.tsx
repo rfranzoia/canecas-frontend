@@ -6,14 +6,14 @@ import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
 import styles from "./ordersFilter.module.css";
 
-export interface OrderFilter {
+export interface OrdersFilter {
     startDate?: string,
     endDate?: string,
     orderStatus?: OrderStatus,
     userEmail?: string,
 }
 
-const OrdersFilter = (props) => {
+const OrdersListFilter = (props) => {
     const ordersCtx = useContext(OrdersContext);
     const [formData, setFormData] = useState({
         filterCheck: false,
@@ -27,7 +27,7 @@ const OrdersFilter = (props) => {
     });
 
     const {onFilterChange} = props;
-    const handleFilterChange = useCallback((filter?: OrderFilter) => {
+    const handleFilterChange = useCallback((filter?: OrdersFilter) => {
         onFilterChange(filter);
     }, [onFilterChange])
 
@@ -41,8 +41,8 @@ const OrdersFilter = (props) => {
         })
     }
 
-    const createFilter = (): OrderFilter => {
-        let filter: OrderFilter = {};
+    const createFilter = (): OrdersFilter => {
+        let filter: OrdersFilter = {};
         if (formData.filterByDateCheck) {
             filter = {
                 startDate: formData.startDate.split("T")[0],
@@ -124,7 +124,7 @@ const OrdersFilter = (props) => {
                 <Row>
                     <Col>
                         <Form.Check type="checkbox"
-                                    label="Filter List By"
+                                    label="Filter Orders By"
                                     id="checkFilterList"
                                     name="filterCheck"
                                     checked={formData.filterCheck}
@@ -239,4 +239,4 @@ const OrdersFilter = (props) => {
     );
 }
 
-export default memo(OrdersFilter)
+export default memo(OrdersListFilter)

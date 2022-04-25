@@ -12,7 +12,7 @@ import {User} from "../../domain/User";
 
 import styles from "./orders.module.css"
 import EditOrder from "./EditOrder";
-import {OrderFilter} from "./OrdersFilter";
+import {OrdersFilter} from "./OrdersListFilter";
 
 export interface WizardFormData {
     _id?: string,
@@ -173,7 +173,7 @@ export const Orders = () => {
             })
     }
 
-    const handleFilterChange = useCallback((filter?: OrderFilter) => {
+    const handleFilterChange = useCallback((filter?: OrdersFilter) => {
         if (!filter) {
             loadOrders(pageControl.currPage);
             return;

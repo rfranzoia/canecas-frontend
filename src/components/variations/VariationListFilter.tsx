@@ -126,7 +126,7 @@ export const VariationListFilter = (props) => {
                 <Row>
                     <Col>
                         <Form.Check type="checkbox"
-                                    label="Filter List By"
+                                    label="Filter Variations By"
                                     id="checkFilterList"
                                     name="filterCheck"
                                     checked={formData.filterCheck}

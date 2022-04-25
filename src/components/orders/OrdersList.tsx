@@ -5,9 +5,9 @@ import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {Role} from "../../domain/User";
 import {CustomPagination} from "../ui/CustomPagination";
-import OrdersFilter from "./OrdersFilter";
 
 import classes from "./orders.module.css";
+import OrdersListFilter from "./OrdersListFilter";
 
 export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -70,7 +70,7 @@ export const OrdersList = (props) => {
                             <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={pageControl.currPage}/>
                         </div>
                     }
-                    <OrdersFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>
+                    <OrdersListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>
                     {orders.length > 0 && orders.map(order => {
                         return (
                             <OrderRow key={order._id}
