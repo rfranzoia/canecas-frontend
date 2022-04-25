@@ -1,4 +1,4 @@
-import axios, {DEFAULT_PAGE_SIZE, processRequestError} from "./axios";
+import axios, {processRequestError} from "./axios";
 import {DefaultAPI} from "./DefaultAPI";
 import {Variation} from "../domain/Variation";
 
@@ -8,7 +8,7 @@ export class VariationsAPI extends DefaultAPI {
 
     list = async (currPage: number = 1) => {
         try {
-            const res = await axios.get(`${VARIATIONS_URL}?pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`);
+            const res = await axios.get(`${VARIATIONS_URL}?pageSize=${this.pageSize}&pageNumber=${currPage}`);
             return res.data;
         } catch (error: any) {
             return processRequestError(error, "variations:list");
@@ -19,7 +19,7 @@ export class VariationsAPI extends DefaultAPI {
     listByFilter = async (currPage: number, filter: string) => {
 
         const pageFilter = (filter && filter.startsWith("?"))?filter.concat("&"):"?";
-        const url = `${VARIATIONS_URL}/filterBy${pageFilter}pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`;
+        const url = `${VARIATIONS_URL}/filterBy${pageFilter}pageSize=${this.pageSize}&pageNumber=${currPage}`;
 
         try {
             const res = await axios.get(url);
