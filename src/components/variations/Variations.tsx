@@ -11,6 +11,7 @@ import {VariationsList} from "./VariationsList";
 import Modal from "../ui/Modal";
 import {VariationEditForm} from "./VariationEditForm";
 import {Role} from "../../domain/User";
+import {VariationsFilter} from "./VariationListFilter";
 
 export const Variations = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -187,10 +188,4 @@ export const Variations = (props) => {
             }
         </div>
     );
-}
-
-export interface VariationsFilter {
-    product?: string,
-    drawings?: number,
-    background?: string,
 }

@@ -6,6 +6,12 @@ import {productsApi} from "../../api/ProductsAPI";
 
 import styles from "./variationListFilter.module.css"
 
+export interface VariationsFilter {
+    product?: string,
+    drawings?: number,
+    background?: string,
+}
+
 export const VariationListFilter = (props) => {
     const [products, setProducts] = useState([]);
     const [formData, setFormData] = useState({
@@ -19,8 +25,8 @@ export const VariationListFilter = (props) => {
     });
 
     const { onFilterChange } = props;
-    const handleFilterChange = useCallback(() => {
-        onFilterChange();
+    const handleFilterChange = useCallback((filter?: VariationsFilter) => {
+        onFilterChange(filter);
     },[onFilterChange])
 
     const handleChange = (event) => {
@@ -34,7 +40,7 @@ export const VariationListFilter = (props) => {
     }
 
     const createFilter = () => {
-        let filter = {};
+        let filter: VariationsFilter = {};
         if (formData.filterByProductCheck) {
             filter = {
                 product: formData.product
@@ -60,7 +66,7 @@ export const VariationListFilter = (props) => {
             props.onFilterError();
             return
         }
-        props.onFilterChange(createFilter());
+        onFilterChange(createFilter());
     }
 
     const handleSelectProduct = (product) => {
