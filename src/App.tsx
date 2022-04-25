@@ -4,8 +4,8 @@ import { Users } from "./components/users/Users";
 import { Layout } from "./components/layout/Layout";
 import { Products } from "./components/products/Products";
 import {Home} from "./components/layout/Home";
-import {Orders} from "./components/orders/Orders";
 import {Variations} from "./components/variations/Variations";
+import {OrdersMain} from "./components/orders/OrdersMain";
 
 function App() {
     return (
@@ -15,7 +15,7 @@ function App() {
                 <ProtectedRoute exact path="/products" component={Products} />
                 <ProtectedRoute exact path="/variations" component={Variations} />
                 <ProtectedRoute exact path="/users" component={Users} />
-                <ProtectedRoute exact path="/orders" component={Orders} />
+                <ProtectedRoute exact path="/orders" component={OrdersMain} />
             </Switch>
         </Layout>
     );
