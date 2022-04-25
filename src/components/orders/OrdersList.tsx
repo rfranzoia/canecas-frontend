@@ -5,6 +5,9 @@ import {useContext, useEffect, useState} from "react";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {Role} from "../../domain/User";
 import {CustomPagination} from "../ui/CustomPagination";
+import OrdersFilter from "./OrdersFilter";
+
+import classes from "./orders.module.css";
 
 export const OrdersList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -67,7 +70,8 @@ export const OrdersList = (props) => {
                             <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={pageControl.currPage}/>
                         </div>
                     }
-                    {orders.map(order => {
+                    <OrdersFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>
+                    {orders.length > 0 && orders.map(order => {
                         return (
                             <OrderRow key={order._id}
                                       order={order}
@@ -78,6 +82,11 @@ export const OrdersList = (props) => {
                                       onForwardOrder={handleForwardOrder}/>
                         );
                     })}
+                    {orders.length === 0 &&
+                        <div className={classes.card}>
+                            No orders were found!
+                        </div>
+                    }
                 </Card.Body>
             </Card>
             <br/>

@@ -12,6 +12,7 @@ import {User} from "../../domain/User";
 
 import styles from "./orders.module.css"
 import EditOrder from "./EditOrder";
+import {OrderFilter} from "./OrdersFilter";
 
 export interface WizardFormData {
     _id?: string,
@@ -45,6 +46,29 @@ export const Orders = () => {
     })
     const { handleAlert } = appCtx;
 
+    const loadOrders = useCallback((page: number, filter?: string) => {
+        if (!appCtx.userData.authToken) {
+            setOrders([]);
+            return;
+        }
+
+        setPageControl(prevState => ({
+            ...prevState,
+            currPage: page
+        }));
+
+        ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
+            .then((result) => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                    setOrders([]);
+                } else {
+                    setOrders(result);
+                }
+            });
+    },[handleAlert, appCtx.userData.authToken])
+
     const updateOrder = (orderId: string, order, callback) => {
 
         ordersApi.withToken(appCtx.userData.authToken).update(orderId, order)
@@ -60,6 +84,22 @@ export const Orders = () => {
             });
         handleEditCancel();
     }
+
+    const getTotalPages = useCallback(() => {
+        ordersApi.withToken(appCtx.userData.authToken).count()
+            .then(result => {
+                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    setShowAlert(true);
+                } else {
+                    setPageControl({
+                        currPage: 1,
+                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
+                    });
+                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
+                }
+            });
+    }, [handleAlert, appCtx.userData.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setEdit({
@@ -133,44 +173,35 @@ export const Orders = () => {
             })
     }
 
-    const getTotalPages = useCallback(() => {
-        ordersApi.withToken(appCtx.userData.authToken).count()
-            .then(result => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                } else {
-                    setPageControl({
-                        currPage: 1,
-                        totalPages: Math.ceil(result.count / DEFAULT_PAGE_SIZE)
-                    });
-                    setTotalPages(Math.ceil(result.count / DEFAULT_PAGE_SIZE));
-                }
-            });
-    }, [handleAlert, appCtx.userData.authToken])
-
-    const loadOrders = useCallback((page: number, filter?: string) => {
-        if (!appCtx.userData.authToken) {
-            setOrders([]);
+    const handleFilterChange = useCallback((filter?: OrderFilter) => {
+        if (!filter) {
+            loadOrders(pageControl.currPage);
             return;
         }
+        let f = "";
+        if (filter.startDate && filter.endDate) {
+            f = f.concat(`startDate=${filter.startDate}&endDate=${filter.endDate}`);
+        }
+        if (filter.orderStatus) {
+            if (f.trim().length > 0) {
+                f = f.concat("&");
+            }
+            f = f.concat(`orderStatus=${filter.orderStatus}`);
+        }
+        if (filter.userEmail) {
+            if (f.trim().length > 0) {
+                f = f.concat("&");
+            }
+            f = f.concat(`userEmail=${filter.userEmail}`);
+        }
+        f = "?".concat(f);
+        loadOrders(1, f);
+    },[pageControl.currPage, loadOrders])
 
-        setPageControl(prevState => ({
-            ...prevState,
-            currPage: page
-        }));
-
-        ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
-            .then((result) => {
-                if (result.statusCode && result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
-                    setShowAlert(true);
-                    setOrders([]);
-                } else {
-                    setOrders(result);
-                }
-            });
-    },[handleAlert, appCtx.userData.authToken])
+    const handleFilterError = (errorMessage: string) => {
+        handleAlert(true, AlertType.WARNING, "Filter Error", errorMessage);
+        setShowAlert(true);
+    }
 
     useEffect(() => {
         getTotalPages();
@@ -186,9 +217,7 @@ export const Orders = () => {
     return (
         <>
             <div>
-                {showAlert &&
-                    <AlertToast/>
-                }
+                {showAlert && <AlertToast/> }
                 <OrdersList
                     orders={orders}
                     totalPages={totalPages}
@@ -197,7 +226,10 @@ export const Orders = () => {
                     onDeleteOrder={handleDeleteOrder}
                     onCancelOrder={handleCancelOrder}
                     onConfirmOrder={handleConfirmOrder}
-                    onForwardOrder={handleForwardOrder}/>
+                    onForwardOrder={handleForwardOrder}
+                    onFilterChange={handleFilterChange}
+                    onFitlerError={handleFilterError}
+                />
             </div>
             <div>
                 { edit.show &&

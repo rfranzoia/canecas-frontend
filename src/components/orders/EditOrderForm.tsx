@@ -8,12 +8,12 @@ import {AlertToast} from "../ui/AlertToast";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import Modal from "../ui/Modal";
-import {usersApi} from "../../api/UsersAPI";
+import {OrdersContext} from "../../context/OrdersContext";
 
 const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const ordersCtx = useContext(OrdersContext);
     const order = props.order;
-    const [users, setUsers] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         _id: "",
@@ -63,7 +63,7 @@ const EditOrderForm = (props) => {
         if (!isDataValid()) return;
         const o = {
             _id: formData._id,
-            orderDate: formData.orderDate.split("T"[0]),
+            orderDate: formData.orderDate.split("T")[0],
             userEmail: formData.userEmail,
             items: formData.items
         }
@@ -138,13 +138,6 @@ const EditOrderForm = (props) => {
         });
     }, [order])
 
-    useEffect(() => {
-        usersApi.withToken(appCtx.userData.authToken).list()
-            .then(result => {
-                setUsers(result);
-            })
-    }, [appCtx.userData.authToken]);
-
     const viewOnly = props.op === "view";
     const lockChanges = order.status !== 0
 
@@ -184,7 +177,7 @@ const EditOrderForm = (props) => {
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
                                         <AutoCompleteInput
-                                            data={users}
+                                            data={ordersCtx.users}
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}

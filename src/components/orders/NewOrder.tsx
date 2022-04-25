@@ -123,12 +123,11 @@ export const NewOrder = (props) => {
     },[appCtx.alert.show])
 
     useEffect(() => {
-        if (!appCtx.isLoggedIn()) return;
         usersApi.withToken(appCtx.userData.authToken).list()
             .then(result => {
                 setUsers(result);
             })
-    }, [appCtx]);
+    }, [appCtx.userData.authToken]);
 
     return (
         <>

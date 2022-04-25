@@ -1,0 +1,12 @@
+.inline-filter {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2rem;
+    width: 50rem;
+}
+
+.list-filter {
+    border: 1px solid;
+    background-color: #ededed;
+    padding: 0.5rem;
+}
