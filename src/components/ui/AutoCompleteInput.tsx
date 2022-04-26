@@ -13,8 +13,8 @@ export const AutoCompleteInput = (props) => {
     const AUTOCOMPLETE_DISPLAY_FIELDS_SEPARATOR = ",";
 
     useEffect(() => {
-        setData(props.data);
         setField(props.value);
+        setData(props.data);
 
         if (props.displayFields) {
             setDisplayFields(props.displayFields.split(AUTOCOMPLETE_DISPLAY_FIELDS_SEPARATOR));
@@ -23,6 +23,16 @@ export const AutoCompleteInput = (props) => {
         }
 
     },[props.data, props.value, props.displayField, props.displayFields]);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            data.sort((x, y) => {
+                const a = x[displayFields[0]].toLowerCase();
+                const b = y[displayFields[0]].toLowerCase();
+                return a === b ? 0 : a > b ? 1 : -1;
+            })
+        }
+    },[data, displayFields])
 
     const handleChange = (event) => {
         const value = event.target.value;
