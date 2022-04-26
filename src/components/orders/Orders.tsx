@@ -13,6 +13,7 @@ import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 
 import styles from "./orders.module.css"
+import {useHistory} from "react-router-dom";
 
 export interface WizardFormData {
     _id?: string,
@@ -32,6 +33,7 @@ export interface WizardFormData {
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
     const appCtx = useContext(ApplicationContext);
+    const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
     const [saved, setSaved] = useState(false);
     const [pageControl, setPageControl] = useState({
@@ -58,7 +60,10 @@ export const Orders = () => {
 
         ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
             .then((result) => {
-                if (result.statusCode !== StatusCodes.OK) {
+                if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    history.replace("/");
+                } else if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
                     setShowAlert(true);
                     setOrders([]);
@@ -66,7 +71,7 @@ export const Orders = () => {
                     setOrders(result.data);
                 }
             });
-    },[handleAlert, appCtx.userData.authToken])
+    },[handleAlert, appCtx.userData.authToken, history])
 
     const updateOrder = (orderId: string, order, callback) => {
         ordersApi.withToken(appCtx.userData.authToken).update(orderId, order)

@@ -12,6 +12,8 @@ import {CustomButton} from "../../ui/CustomButton";
 import Modal from "../../ui/Modal";
 import {StatusCodes} from "http-status-codes";
 
+import styles from "../orders.module.css";
+
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState([]);
@@ -83,7 +85,7 @@ export const OrderItemWizardProduct = (props) => {
         const load = async () => {
             const res = await productsApi.list();
             if (res.statusCode === StatusCodes.OK) {
-                setProducts(res);
+                setProducts(res.data);
             } else {
                 setProducts([]);
             }
@@ -117,9 +119,10 @@ export const OrderItemWizardProduct = (props) => {
                                         displayFields="name"
                                         value={formData.product}
                                         onFieldSelected={handleSelectProduct}
-                                        className="bigger-input"
+                                        className={styles["custom-autocomplete"]}
                                         required
-                                        placeholder="Please select a product"/>
+                                        placeholder="Enter the product name"/>
+                                    <small>If you don't see all available products, try scrolling down the list</small>
                                 </Form.Group>
                             </Col>
                             <Col md={1}>

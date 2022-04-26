@@ -4,6 +4,7 @@ import {OrdersContext} from "../../context/OrdersContext";
 import {Col, Container, Form, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
+
 import styles from "./ordersFilter.module.css";
 
 export interface OrdersFilter {
@@ -135,7 +136,7 @@ const OrdersListFilter = (props) => {
                 {formData.filterCheck &&
                     <Row>
                         <Col>
-                            <Row>
+                            <Row className="spaced-form-group">
                                 <Col>
                                     <Form.Group>
                                         <div className={styles["inline-filter"]}>
@@ -146,7 +147,7 @@ const OrdersListFilter = (props) => {
                                                         checked={formData.filterByDateCheck}
                                                         onChange={handleChange}/>
                                             <p>From:</p>
-                                            <input className="form-control bigger-input"
+                                            <input className={styles["custom-date"]}
                                                    id="startDate"
                                                    name="startDate"
                                                    type="date"
@@ -155,7 +156,7 @@ const OrdersListFilter = (props) => {
                                                    disabled={!formData.filterByDateCheck}
                                             />
                                             <p>To:</p>
-                                            <input className="form-control bigger-input"
+                                            <input className={styles["custom-date"]}
                                                    id="endDate"
                                                    name="endDate"
                                                    type="date"
@@ -167,7 +168,7 @@ const OrdersListFilter = (props) => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row className="spaced-form-group">
                                 <Col>
                                     <Form.Group>
                                         <div className={styles["inline-filter"]}>
@@ -180,7 +181,7 @@ const OrdersListFilter = (props) => {
                                             <select id="orderStatus" name="orderStatus" required
                                                     value={formData.orderStatus}
                                                     onChange={handleChange}
-                                                    className={"form-select bigger-select"}
+                                                    className={styles["custom-select"]}
                                                     disabled={!formData.filterByStatusCheck}>
                                                 <option value="">Please Select</option>
                                                 {orderStatusAsArray().map((status, idx) => {
@@ -192,7 +193,7 @@ const OrdersListFilter = (props) => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row className="spaced-form-group">
                                 <Col>
                                     <Form.Group>
                                         <div className={styles["inline-filter"]}>
@@ -206,15 +207,16 @@ const OrdersListFilter = (props) => {
                                                 data={ordersCtx.users}
                                                 value={formData.userEmail}
                                                 displayFields="email,name"
-                                                className={"bigger-input"}
                                                 onFieldSelected={handleSelectUser}
+                                                className={styles["custom-autocomplete"]}
                                                 disabled={!formData.filterByCustomerCheck}
                                                 placeholder="Please select an user email"/>
                                         </div>
+
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row className="spaced-form-group">
                                 <Col>
                                     <div className={"actions"}>
                                         <CustomButton

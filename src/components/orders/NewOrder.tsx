@@ -9,6 +9,8 @@ import {Role} from "../../domain/User";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {OrdersContext} from "../../context/OrdersContext";
 
+import styles from "./orders.module.css";
+
 export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
     const ordersCtx = useContext(OrdersContext);
@@ -132,9 +134,10 @@ export const NewOrder = (props) => {
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}
-                                            className="bigger-input"
+                                            className={styles["custom-autocomplete"]}
                                             required
-                                            placeholder="Please select an user email"/>
+                                            placeholder="Enter a user Email/Name"/>
+                                        <small>If you don't see all available emails try scrolling down the list</small>
                                     </div>
                                 </Col>
                             </Row>
