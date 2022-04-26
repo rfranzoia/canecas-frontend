@@ -38,7 +38,7 @@ export const VariationRow = (props) => {
             <tr style={{ verticalAlign: "center", margin: "0"}} className="align-middle">
                 <td width="5%" align="center">
                     <div className={"list-image-panel"}>
-                        <Image className={classes.imageTest} src={image} fluid width="50" title={variation.product}/>
+                        <Image className={classes.imageTest} src={image} width={"60"} fluid title={variation.image}/>
                     </div>
                 </td>
                 <td width="30%" >{variation.product}</td>

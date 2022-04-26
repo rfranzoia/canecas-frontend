@@ -23,10 +23,10 @@ export const Variations = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [variations, setVariations] = useState([]);
     const [variationId, setVariationId] = useState(null);
-    const { handleAlert } = appCtx;
+    const {handleAlert} = appCtx;
 
-    const loadVariations = useCallback((currPage:number, filter?:string) => {
-        const pageSize = props.isModal? DEFAULT_PAGE_SIZE / 2: DEFAULT_PAGE_SIZE;
+    const loadVariations = useCallback((currPage: number, filter?: string) => {
+        const pageSize = props.isModal ? DEFAULT_PAGE_SIZE / 2 : DEFAULT_PAGE_SIZE;
         variationsApi.withPageSize(pageSize).listByFilter(currPage, filter)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
@@ -37,10 +37,10 @@ export const Variations = (props) => {
                     setCurrentPage(currPage);
                 }
             })
-    },[handleAlert, props.isModal])
+    }, [handleAlert, props.isModal])
 
     const getTotalPages = useCallback(() => {
-        const pageSize = props.isModal? DEFAULT_PAGE_SIZE / 2: DEFAULT_PAGE_SIZE;
+        const pageSize = props.isModal ? DEFAULT_PAGE_SIZE / 2 : DEFAULT_PAGE_SIZE;
         variationsApi.withPageSize(pageSize).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
@@ -49,7 +49,7 @@ export const Variations = (props) => {
                     setTotalPages(Math.ceil(result.data.count / pageSize));
                 }
             });
-    },[props.isModal])
+    }, [props.isModal])
 
     const handleSaveVariation = (variation: Variation) => {
         setShowVariationFormModal(false);
@@ -59,8 +59,8 @@ export const Variations = (props) => {
                 .create(variation)
                 .then(result => {
                     if (result.statusCode !== StatusCodes.OK) {
-                        console.error(result.data.name, result.data.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
+                        console.error(result.name, result.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
                         getTotalPages();
@@ -72,8 +72,8 @@ export const Variations = (props) => {
                 .update(variation._id, variation)
                 .then(result => {
                     if (result.statusCode !== StatusCodes.OK) {
-                        console.error(result.data.name, result.data.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
+                        console.error(result.name, result.description)
+                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
                         loadVariations(currentPage);
@@ -111,7 +111,7 @@ export const Variations = (props) => {
         }
         g = "?".concat(g);
         loadVariations(1, g);
-    },[currentPage, loadVariations])
+    }, [currentPage, loadVariations])
 
     const handleSelectVariation = (variation) => {
         props.onSelect(variation);
@@ -134,8 +134,8 @@ export const Variations = (props) => {
             .delete(id)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    console.error(result.data.name, result.data.description)
-                    appCtx.handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
+                    console.error(result.name, result.description)
+                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                 } else {
                     appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
                     getTotalPages();
@@ -161,7 +161,7 @@ export const Variations = (props) => {
 
     return (
         <div>
-            {showAlert && <AlertToast />}
+            {showAlert && <AlertToast/>}
             <Card border="dark">
                 <Card.Header as="h3">Product Variations</Card.Header>
                 <Card.Body>
@@ -171,7 +171,8 @@ export const Variations = (props) => {
                                 <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
                                               onClick={handleNewVariation}/>
                             }
-                            <CustomPagination totalPages={totalPages} onPageChange={handlePageChange} currPage={currentPage}/>
+                            <CustomPagination totalPages={totalPages} onPageChange={handlePageChange}
+                                              currPage={currentPage}/>
                         </div>
                     </Card.Title>
                     <VariationsList variations={variations}
@@ -196,12 +197,12 @@ export const Variations = (props) => {
                     </div>
                 </>
             }
-            { showVariationFormModal &&
-                <Modal onClose={handleCloseNewVariationModal} >
+            {showVariationFormModal &&
+                <Modal onClose={handleCloseNewVariationModal}>
                     <VariationEditForm onSave={handleSaveVariation}
                                        onCancel={handleCloseNewVariationModal}
                                        variationId={variationId}
-                                       op={variationFormOp} />
+                                       op={variationFormOp}/>
                 </Modal>
             }
         </div>

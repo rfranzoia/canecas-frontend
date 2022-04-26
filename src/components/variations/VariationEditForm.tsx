@@ -40,15 +40,15 @@ export const VariationEditForm = (props) => {
         const { product, drawings, background, price, image } = formData;
         if (product.trim().length === 0 || background.trim().length === 0 ||
             image.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required to save the variation!");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required to save the variation!");
             return false;
         }
         if (isNaN(drawings) || isNaN(price)) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "You must inform valid number of Drawings and Price!");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "You must inform valid number of Drawings and Price!");
             return false;
         }
         if (price <= 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, Price value must be greater than zero!");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, Price value must be greater than zero!");
             return false;
         }
         return true;
@@ -85,18 +85,18 @@ export const VariationEditForm = (props) => {
             const selectedProduct = products.find(product => product.name === formData.product);
 
             if (!selectedProduct) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
+                handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
                 return;
             }
 
             const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile, "variation");
 
             if (sendResult instanceof Error) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
-                appCtx.handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
                 return;
             }
         }
@@ -149,8 +149,8 @@ export const VariationEditForm = (props) => {
             .get(props.variationId)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    console.error(result.data.name, JSON.stringify(result.data.description));
-                    handleAlert(true, AlertType.DANGER, result.data.name, JSON.stringify(result.data.description));
+                    console.error(result.name, JSON.stringify(result.description));
+                    handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                 } else {
                     setFormData({
                         _id: result.data._id,
@@ -172,9 +172,10 @@ export const VariationEditForm = (props) => {
     useEffect(() => {
         productsApi.list()
             .then(result => {
-                if (result) {
-                    setProducts(result);
+                if (result.statusCode === StatusCodes.OK) {
+                    setProducts(result.data);
                 } else {
+                    console.error("error loading products", result);
                     handleAlert(true, AlertType.WARNING, "Loading Products!", "Could not load products list!");
                     setProducts([]);
                 }
@@ -211,6 +212,7 @@ export const VariationEditForm = (props) => {
                                                 data={products}
                                                 displayFields="name"
                                                 value={formData.product}
+                                                className={styles["custom-autocomplete"]}
                                                 disabled={viewOnly || props.op === OpType.EDIT}
                                                 onFieldSelected={handleSelectProduct}
                                                 placeholder="Please select a product"/>
