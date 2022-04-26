@@ -151,10 +151,9 @@ export const ApplicationContextProvider = (props) => {
         if (show) {
             t = setTimeout(() => {
                 handleAlert(false);
+                clearTimeout(t);
             }, ALERT_TIMEOUT);
             setTimeoutId(t);
-        } else {
-            clearTimeout(t);
         }
     },[]);
 
@@ -164,6 +163,8 @@ export const ApplicationContextProvider = (props) => {
             addUser(storage);
         }
     }, []);
+
+
 
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));

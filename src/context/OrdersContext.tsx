@@ -24,7 +24,7 @@ export const OrdersContextProvider = (props) => {
     const loadUsers = useCallback(async () => {
         const result = await usersApi.withToken(appCtx.userData.authToken).list();
         if (result.statusCode !== StatusCodes.OK) {
-            handleAlert(true, AlertType.WARNING, result.name, result.description);
+            handleAlert(true, AlertType.DANGER, result.name, result.description);
             setUsers([]);
         } else {
             setUsers(result.data);
