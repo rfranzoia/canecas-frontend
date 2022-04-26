@@ -9,9 +9,11 @@ import {CustomButton} from "../ui/CustomButton";
 import {ChangeUserPassword} from "./ChangeUserPassword";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
+import {useHistory} from "react-router-dom";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);
+    const history = useHistory();
     const [users, setUsers] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
@@ -25,15 +27,18 @@ export const Users = () => {
     const {handleAlert} = appCtx;
 
     const loadData = useCallback(async () => {
-        if (!appCtx.userData.authToken) return;
         const result = await usersApi.withToken(appCtx.userData.authToken).list();
         if (result.statusCode === StatusCodes.OK) {
             setUsers(result.data);
+        } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
+            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            history.replace("/");
         } else {
-            handleAlert(AlertType.DANGER, result.data.name, result.data.description);
+            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            setShowAlert(true);
             setUsers([]);
         }
-    }, [appCtx.userData.authToken, handleAlert]);
+    }, [appCtx.userData.authToken, handleAlert, history]);
 
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);

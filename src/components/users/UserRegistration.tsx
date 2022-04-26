@@ -49,7 +49,7 @@ export const UserRegistration = (props) => {
             props.handleClose();
             history.replace("/");
         } else {
-            appCtx.handleAlert(true, AlertType.DANGER, res?.data.name, res?.data.description);
+            appCtx.handleAlert(true, AlertType.DANGER, res?.name, res?.description);
         }
     }
 
