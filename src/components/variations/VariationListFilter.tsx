@@ -2,9 +2,9 @@ import {Col, Container, Form, Row} from "react-bootstrap";
 import {useCallback, useEffect, useState} from "react";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
-import {productsApi} from "../../api/ProductsAPI";
 
 import styles from "./variationListFilter.module.css"
+import useProducts from "../../hooks/useProducts";
 
 export interface VariationsFilter {
     product?: string,
@@ -13,7 +13,7 @@ export interface VariationsFilter {
 }
 
 export const VariationListFilter = (props) => {
-    const [products, setProducts] = useState([]);
+    const {products} = useProducts();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByProductCheck: false,
@@ -93,13 +93,6 @@ export const VariationListFilter = (props) => {
         })
         handleFilterChange();
     }
-
-    useEffect(() => {
-        productsApi.list()
-            .then(result => {
-                setProducts(result);
-            });
-    }, [])
 
     useEffect(() => {
         if (!formData.filterCheck) {

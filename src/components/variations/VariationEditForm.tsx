@@ -1,24 +1,21 @@
 import {useCallback, useContext, useEffect, useState} from "react";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
-
+import {StatusCodes} from "http-status-codes";
 import {Variation} from "../../domain/Variation";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
-
 import {variationsApi} from "../../api/VariationAPI";
-
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertToast} from "../ui/AlertToast";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {imageHelper} from "../ui/ImageHelper";
-
-import styles from "./variations.module.css"
-import {servicesApi} from "../../api/ServicesAPI";
-import {StatusCodes} from "http-status-codes";
 import useProducts from "../../hooks/useProducts";
+import useServiceApi from "../../hooks/useServiceApi";
+import styles from "./variations.module.css"
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const {uploadImage} = useServiceApi("variation");
     const {products, findProduct} = useProducts();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
@@ -82,14 +79,14 @@ export const VariationEditForm = (props) => {
     const handleSave = async () => {
         if (!isValidData()) return;
         if (props.op === OpType.NEW) {
-            const selectedProduct = products.find(product => product.name === formData.product);
+            const selectedProduct = findProduct(formData.product);
 
             if (!selectedProduct) {
                 handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
                 return;
             }
 
-            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile, "variation");
+            const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
                 handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);

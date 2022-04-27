@@ -58,11 +58,12 @@ export const Variations = (props) => {
             variationsApi.withToken(appCtx.userData.authToken)
                 .create(variation)
                 .then(result => {
-                    if (result.statusCode !== StatusCodes.OK) {
+                    if (result.statusCode !== StatusCodes.CREATED) {
                         console.error(result.name, result.description)
                         appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
+                        setShowAlert(false);
                         getTotalPages();
                         loadVariations(1);
                     }
@@ -76,6 +77,7 @@ export const Variations = (props) => {
                         appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
+                        setShowAlert(false);
                         loadVariations(currentPage);
                     }
                 });
@@ -133,11 +135,11 @@ export const Variations = (props) => {
         variationsApi.withToken(appCtx.userData.authToken)
             .delete(id)
             .then(result => {
-                if (result.statusCode !== StatusCodes.OK) {
+                if (result && result.statusCode !== StatusCodes.OK) {
                     console.error(result.name, result.description)
                     appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                 } else {
-                    appCtx.handleAlert(true, AlertType.SUCCESS, "Delete Variation", "Variation deleted successfully");
+                    appCtx.handleAlert(true, AlertType.WARNING, "Delete Variation", "Variation deleted successfully");
                     getTotalPages();
                     loadVariations(1);
                 }
