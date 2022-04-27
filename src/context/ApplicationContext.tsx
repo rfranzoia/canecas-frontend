@@ -108,10 +108,7 @@ export const ApplicationContextProvider = (props) => {
         return (userData.userEmail !== "" && userData.authToken !== "");
     }
 
-    const handleAlert = useCallback((show: boolean,
-                                     type: AlertType = AlertType.INFO,
-                                     title: string = "Title",
-                                     message: string = "Information") => {
+    const handleAlert = useCallback((show: boolean, type?: AlertType, title?: string, message?: string) => {
         setAlert({
             show: show,
             type: type,
