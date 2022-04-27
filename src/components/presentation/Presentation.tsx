@@ -1,6 +1,6 @@
 import {CustomButton} from "../ui/CustomButton";
 import {Card, Image} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
+import {useCallback, useContext, useEffect, useState} from "react";
 
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 
@@ -12,6 +12,8 @@ import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {HowToOrderPresentation} from "./HowToOrderPresentation";
 import {OrderWizard} from "../orders/wizard/OrderWizard";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
+import {StatusCodes} from "http-status-codes";
+import {productsApi} from "../../api/ProductsAPI";
 
 export const Presentation = () => {
     const appCtx = useContext(ApplicationContext);
@@ -20,12 +22,14 @@ export const Presentation = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [showHowToOrder, setShowHowToOrder] = useState(false);
 
+    const {handleAlert} = appCtx;
+
     const handleShowQuote = () => {
         setShowFormQuote(true);
     }
 
     const handleConfirm = () => {
-        appCtx.handleAlert(true, AlertType.SUCCESS, "Request Quote",
+        handleAlert(true, AlertType.SUCCESS, "Request Quote",
             "Congratulations! Your quote has been sent. You'll be hearing from us soon");
         setShowAlert(true);
         handleCancel();
@@ -46,9 +50,20 @@ export const Presentation = () => {
         setShowHowToOrder(show);
     }
 
+    const loadProducts = useCallback(async () => {
+        const products = await productsApi.list();
+        if (products.statusCode !== StatusCodes.OK) {
+            handleAlert(true, AlertType.DANGER, "Load Products: ".concat(products.name), products.description);
+            setProducts([]);
+            return
+        } else {
+            setProducts(products.data);
+        }
+    }, [handleAlert]);
+
     useEffect(() => {
-        setProducts([]);
-    }, [appCtx])
+        loadProducts().then(undefined);
+    }, [loadProducts])
 
     useEffect(() => {
         if (!appCtx.alert.show) {
@@ -85,13 +100,13 @@ export const Presentation = () => {
                        fluid width="600" title="perfil caricanecas"/>
             </div>
             <br/>
-            <Card border="dark" style={{ margin: "auto"}}>
+            <Card border="dark">
                 <Card.Header as="h3">Our Products</Card.Header>
                 <Card.Body>
-                    <div className="flex-card">
+                    <div className="d-flex justify-content-center gap-4 flex-wrap">
                         {products.map(p => {
                             return (
-                                <ProductShowCaseRow key={p.product._id} product={p}/>
+                                <ProductShowCaseRow key={p._id} product={p}/>
                             )
                         })}
                     </div>

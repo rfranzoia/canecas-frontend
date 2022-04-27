@@ -7,8 +7,7 @@ export const ProductShowCaseRow = (props) => {
         name: "",
         description: "",
         price: 0,
-        type: "",
-        image: ""
+        image: "",
     })
     const [image, setImage] = useState(null);
 
@@ -21,21 +20,19 @@ export const ProductShowCaseRow = (props) => {
     }
 
     useEffect(() => {
-        setProduct(props.product.product);
-        getImage(props.product.product.image)
+        setProduct(props.product);
+        getImage(props.product.image)
     }, [props.product]);
 
     return (
-        <div className="flex-container">
-            <div className="flex-item-image">
+        <div className="card d-flex justify-content-center align-items-lg-center custom-shadow" style={{ width: "25%", padding: "1rem"}}>
+            <div>
                 <Image src={image}
                        fluid width="210" title={product.name}/>
             </div>
-            <div className="flex-item-data">
-                <h3>{product.type}</h3>
-                <h4>{product.name}</h4>
+            <div>
                 <p>{product.description}</p>
-                <p>à partir de R$ {props.product.price.toFixed(2)}</p>
+                <p>à partir de R$ {product.price.toFixed(2)}</p>
             </div>
         </div>
     );
