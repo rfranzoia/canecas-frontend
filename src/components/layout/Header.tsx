@@ -1,4 +1,4 @@
-import {Alert, Container, Dropdown, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
+import {Container, Dropdown, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
 import {useContext, useState} from "react";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
@@ -30,12 +30,6 @@ export const Header = () => {
     const handleLogout = () => {
         appCtx.removeUser();
         history.replace("/");
-    }
-
-    const handleDismissAlert = () => {
-        appCtx.hideErrorAlert();
-        appCtx.removeUser();
-        history.replace("/")
     }
 
     const handleCloseEditModal = (error?) => {
@@ -80,7 +74,7 @@ export const Header = () => {
 
     return (
         <header>
-            {showAlert && <AlertToast/>}
+            {(showAlert || (appCtx.alert.show && appCtx.alert.type === AlertType.INFO)) && <AlertToast/>}
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
@@ -135,7 +129,7 @@ export const Header = () => {
                         onClose={handleCloseEditModal}
                         size="sm" >
                         <div>
-                            <EditUser id={appCtx.userData.userId} op="edit" onSaveCancel={handleCloseEditModal}/>
+                            <EditUser id={appCtx.userData.userId} op="edit" onCloseModal={handleCloseEditModal}/>
                         </div>
                     </Modal>
                 </div>
@@ -151,12 +145,6 @@ export const Header = () => {
                     </Modal>
 
                 </div>
-            }
-            {appCtx.error.show &&
-                <Alert variant="danger" onClose={handleDismissAlert} dismissible transition  className="alert-top">
-                    <Alert.Heading>{appCtx.error.title}</Alert.Heading>
-                    <p>{appCtx.error.message}</p>
-                </Alert>
             }
         </header>
     );

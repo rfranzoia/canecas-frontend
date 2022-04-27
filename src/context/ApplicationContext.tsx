@@ -1,11 +1,7 @@
 import {createContext, useCallback, useEffect, useState} from "react";
 import {useHistory} from "react-router-dom";
-
-export interface GlobalError {
-    show: boolean,
-    title: string,
-    message: string
-}
+import {usersApi} from "../api/UsersAPI";
+import {StatusCodes} from "http-status-codes";
 
 export interface GlobalAlert {
     show: boolean,
@@ -24,13 +20,10 @@ export interface UserData {
 
 export interface AppCtx {
     userData: UserData,
-    error: GlobalError,
     alert: GlobalAlert,
     addUser: Function,
     removeUser: Function,
     isLoggedIn: Function,
-    showErrorAlert: Function,
-    hideErrorAlert: Function,
     handleAlert: Function,
 }
 
@@ -42,11 +35,6 @@ const defaultValue: AppCtx = {
         role: "",
         authToken: ""
     },
-    error: {
-        show: false,
-        title: "",
-        message: ""
-    },
     alert: {
         show: false,
         type: "",
@@ -56,28 +44,30 @@ const defaultValue: AppCtx = {
     addUser: () => {},
     removeUser: () => {},
     isLoggedIn: () => {},
-    showErrorAlert: () => {},
-    hideErrorAlert: () => {},
     handleAlert: () => {},
 }
 
-export const ALERT_TIMEOUT = 10 * 1000;
+export const ALERT_TIMEOUT = 5 * 1000;
 
-export enum AlertType { NONE = "", DANGER = "danger", SUCCESS = "success", WARNING = "warning", INFO = "info" }
+export enum AlertType { DANGER = "danger",
+                        SUCCESS = "success",
+                        WARNING = "warning",
+                        INFO = "info",
+                        }
 
-export enum OpType { NEW = "new", EDIT = "edit", VIEW = "view", DELETE = "delete", UPDATE = "update", CANCEL = "cancel", SELECT = "select" }
+export enum OpType { NEW = "new",
+                        EDIT = "edit",
+                        VIEW = "view",
+                        DELETE = "delete",
+                        UPDATE = "update",
+                        CANCEL = "cancel",
+                        SELECT = "select"
+                        }
 
 export const ApplicationContext = createContext(defaultValue);
 
 export const ApplicationContextProvider = (props) => {
     const history = useHistory();
-    const [timeoutId, setTimeoutId] = useState(null);
-
-    const [error, setError] = useState({
-        show: false,
-        title: "",
-        message: ""
-    });
 
     const [userData, setUserData] = useState({
         userId: "",
@@ -118,42 +108,22 @@ export const ApplicationContextProvider = (props) => {
         return (userData.userEmail !== "" && userData.authToken !== "");
     }
 
-    const showErrorAlert = (title, message) => {
-        setError({
-            show: true,
-            title: title,
-            message: message
-        });
-        const t = setTimeout(() => {
-            hideErrorAlert();
-        }, ALERT_TIMEOUT * 2);
-        setTimeoutId(t);
-    }
-
-    const hideErrorAlert = () => {
-        setError({
-            show: false,
-            title: "",
-            message: ""
-        });
-        clearTimeout(timeoutId);
-        setTimeoutId(null);
-    }
-
-    const handleAlert = useCallback((show: boolean, type: AlertType = AlertType.NONE, title: string = "", message: string = "") => {
+    const handleAlert = useCallback((show: boolean,
+                                     type: AlertType = AlertType.INFO,
+                                     title: string = "Title",
+                                     message: string = "Information") => {
         setAlert({
             show: show,
             type: type,
             title: title,
             message: message,
         });
-        let t = null;
+
         if (show) {
-            t = setTimeout(() => {
+            let t = setTimeout(() => {
                 handleAlert(false);
                 clearTimeout(t);
             }, ALERT_TIMEOUT);
-            setTimeoutId(t);
         }
     },[]);
 
@@ -164,28 +134,41 @@ export const ApplicationContextProvider = (props) => {
         }
     }, []);
 
-
+    const isTokenValid = useCallback(async (token) => {
+        const res = await usersApi.validateToken(token);
+        return res.statusCode === StatusCodes.OK;
+    }, [])
 
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));
         if (!userData.userId || !userData.authToken) {
-            const t = setTimeout(() => {
+            let t = setTimeout(() => {
                 handleAlert(false);
+                clearTimeout(t);
                 if (history) history.replace("/");
             }, ALERT_TIMEOUT * 2);
-            setTimeoutId(t);
+        } else {
+            isTokenValid(userData.authToken)
+                .then(isValid => {
+                    if (!isValid) {
+                        handleAlert(true, AlertType.INFO, "Login Expired", "Authentication Expired");
+                        let t = setTimeout(() => {
+                            handleAlert(false);
+                            removeUser();
+                            clearTimeout(t);
+                            if (history) history.replace("/");
+                        }, ALERT_TIMEOUT);
+                    }
+                })
         }
-    }, [userData, handleAlert, history]);
+    }, [userData, handleAlert, history, isTokenValid]);
 
     const context: AppCtx = {
         userData: userData,
-        error: error,
         alert: alert,
         isLoggedIn: isLoggedIn,
         addUser: addUser,
         removeUser: removeUser,
-        showErrorAlert: showErrorAlert,
-        hideErrorAlert: hideErrorAlert,
         handleAlert: handleAlert,
     }
 

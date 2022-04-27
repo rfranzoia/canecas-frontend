@@ -84,7 +84,21 @@ export class UsersAPI extends DefaultAPI {
             });
             return res.data;
         } catch (error: any) {
-            return processRequestError(error);
+            return processRequestError(error, "users:login");
+        }
+    }
+
+    validateToken = async (token: string) => {
+        const body = {
+            token: token
+        }
+        try {
+            const res = await axios.post(`${USERS_URL}/validateToken`, JSON.stringify(body), {
+                headers: { "Content-Type": "application/json" }
+            });
+            return res.data;
+        } catch (error: any) {
+            return processRequestError(error, "users:validateToken");
         }
     }
 
@@ -102,7 +116,7 @@ export class UsersAPI extends DefaultAPI {
             });
             return res.data;
         } catch (error: any) {
-            return processRequestError(error);
+            return processRequestError(error, "users:updatePassword");
         }
     }
 
