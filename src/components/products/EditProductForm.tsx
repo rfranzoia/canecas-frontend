@@ -5,12 +5,13 @@ import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {StatusCodes} from "http-status-codes";
-import {servicesApi} from "../../api/ServicesAPI";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import useServiceApi from "../../hooks/useServiceApi";
 
 export const EditProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const product = props.product;
+    const {uploadImage} = useServiceApi("product");
     const [image, setImage] = useState(null);
     const [imageOpType, setImageOpType] = useState(ImageOpType.VIEW);
     const [formData, setFormData] = useState({
@@ -48,7 +49,7 @@ export const EditProductForm = (props) => {
         if (!isDataValid()) return;
 
         if (imageOpType === ImageOpType.NEW) {
-            const sendResult = await servicesApi.withToken(appCtx.userData.authToken).uploadImage(file.selectedFile, "product");
+            const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
                 appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
