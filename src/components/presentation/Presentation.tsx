@@ -24,7 +24,7 @@ export const Presentation = () => {
 
     const {handleAlert} = appCtx;
 
-    const handleShowQuote = () => {
+    const handleShowRequestQuote = () => {
         setShowFormQuote(true);
     }
 
@@ -72,32 +72,36 @@ export const Presentation = () => {
     }, [appCtx.alert.show])
 
     return (
-        <div className="default-margin">
-            {(appCtx.alert.show && showAlert) &&
-                <AlertToast/>
-            }
-            <div className="some-centered-container">
+        <div>
+            {showAlert && <AlertToast/> }
+            <div>
                 <h1>Caricanecas Manauara</h1>
                 <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>
                     ✏️ Usamos a arte para encantar com um produto que é a sua cara!
                     Um brinde que é a sua cara!❤️<br/>
-                    Gostou da ideia? Faça seu pedido com a gente!👇
+                    Gostou da ideia? Peça uma cotação pra gente!👇
                 </p>
-                <div>
+                <div className="d-flex justify-content-center">
                     <CustomButton caption="Request Quote" customClass="fa fa-money-check-dollar"
-                                  onClick={handleShowQuote} type="custom-success"/>
+                                  onClick={handleShowRequestQuote} type="custom-success"/>
                 </div>
                 <p style={{textAlign: "center"}}>You can also send us a message on &nbsp;
                     <span style={{cursor: "pointer"}} onClick={handleWhatsappClick}>{getActionIcon(ActionIconType.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
                 </p>
             </div>
             <br/>
-            <div className="flex-separated-items">
-                <Image src={imageHelper.getImageFromClient("perfil-caricanecas.jpeg")}
-                       fluid width="700" title="perfil caricanecas"/>
-                <Image src={imageHelper.getImageFromClient("como-pedir-0.png")}
-                       onClick={() => handleShowHowToOrder(true)}
-                       fluid width="600" title="perfil caricanecas"/>
+            <div className="d-flex justify-content-evenly">
+                <div>
+                    <p className="text-center">Our Social Network links</p>
+                    <Image src={imageHelper.getImageFromClient("perfil-caricanecas.jpeg")}
+                           fluid width="550" title="perfil caricanecas"/>
+                </div>
+                <div>
+                    <p className="text-center">Click and check it out our ordering process</p>
+                    <Image src={imageHelper.getImageFromClient("como-pedir-0.png")}
+                           onClick={() => handleShowHowToOrder(true)}
+                           fluid width="550" title="perfil caricanecas"/>
+                </div>
             </div>
             <br/>
             <Card border="dark">

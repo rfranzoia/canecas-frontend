@@ -25,10 +25,11 @@ export const ProductShowCaseRow = (props) => {
     }, [props.product]);
 
     return (
-        <div className="card d-flex justify-content-center align-items-lg-center custom-shadow" style={{ width: "25%", padding: "1rem"}}>
-            <div>
+        <div className="card d-flex custom-shadow"
+             style={{ width: "15%", padding: "1rem"}}>
+            <div className={"d-flex align-items-stretch"}>
                 <Image src={image}
-                       fluid width="210" title={product.name}/>
+                       fluid width="150px" title={product.name}/>
             </div>
             <div>
                 <p>{product.description}</p>
