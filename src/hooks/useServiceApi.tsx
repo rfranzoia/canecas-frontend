@@ -1,10 +1,12 @@
-import axios, {processRequestError} from "./axios";
 import {imageHelper} from "../components/ui/ImageHelper";
-import {DefaultAPI} from "./DefaultAPI";
+import axios, {processRequestError} from "../api/axios";
+import {useContext} from "react";
+import {ApplicationContext} from "../context/ApplicationContext";
 
-export class ServicesAPI extends DefaultAPI {
+const useServiceApi = (origin: string) => {
+    const appCtx = useContext(ApplicationContext);
 
-    uploadImage = async (file, origin: string) => {
+    const uploadImage = async (file) => {
         try {
             const data = await imageHelper.convertToBase64(file);
             if (!data) {
@@ -17,11 +19,10 @@ export class ServicesAPI extends DefaultAPI {
                 name: file.name,
                 data: data
             }
-
             const res = await axios.post("/services/file/upload", obj, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${this.authToken}`
+                    "Authorization": `Bearer ${appCtx.userData.authToken}`
                 }
             });
 
@@ -34,6 +35,10 @@ export class ServicesAPI extends DefaultAPI {
             return processRequestError(error, "send:file");
         }
     }
+
+    return {
+        uploadImage
+    }
 }
 
-export const servicesApi = new ServicesAPI();
+export default useServiceApi;
