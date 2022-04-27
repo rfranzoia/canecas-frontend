@@ -4,19 +4,18 @@ import {AlertType, ApplicationContext} from "../../../context/ApplicationContext
 import {WizardFormData} from "../Orders";
 import {Variation} from "../../../domain/Variation";
 import {Variations} from "../../variations/Variations";
-import {productsApi} from "../../../api/ProductsAPI";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {AlertToast} from "../../ui/AlertToast";
 import {CustomButton} from "../../ui/CustomButton";
 import Modal from "../../ui/Modal";
-import {StatusCodes} from "http-status-codes";
 
 import styles from "../orders.module.css";
+import useProducts from "../../../hooks/useProducts";
 
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const [products, setProducts] = useState([]);
+    const {products, findProduct} = useProducts();
     const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
@@ -43,7 +42,7 @@ export const OrderItemWizardProduct = (props) => {
     }
 
     const handleSelectProduct = (product) => {
-        const selectedProduct = products.find(p => p.name === product);
+        const selectedProduct = findProduct(product);
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -80,20 +79,6 @@ export const OrderItemWizardProduct = (props) => {
         }
         props.onForward(product)
     }
-
-    useEffect(() => {
-        const load = async () => {
-            const res = await productsApi.list();
-            if (res.statusCode === StatusCodes.OK) {
-                setProducts(res.data);
-            } else {
-                setProducts([]);
-            }
-        }
-
-        load().then(undefined);
-
-    }, []);
 
     useEffect(() => {
         setFormData({

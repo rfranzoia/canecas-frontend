@@ -4,7 +4,6 @@ import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {Variation} from "../../domain/Variation";
 import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
 
-import {productsApi} from "../../api/ProductsAPI";
 import {variationsApi} from "../../api/VariationAPI";
 
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
@@ -16,10 +15,11 @@ import {imageHelper} from "../ui/ImageHelper";
 import styles from "./variations.module.css"
 import {servicesApi} from "../../api/ServicesAPI";
 import {StatusCodes} from "http-status-codes";
+import useProducts from "../../hooks/useProducts";
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const [products, setProducts] = useState([]);
+    const {products, findProduct} = useProducts();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
     const [formData, setFormData] = useState({
@@ -65,7 +65,7 @@ export const VariationEditForm = (props) => {
     }
 
     const handleSelectProduct = (product) => {
-        const selectedProduct = products.find(p => p.name === product);
+        const selectedProduct = findProduct(product);
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -168,19 +168,6 @@ export const VariationEditForm = (props) => {
     useEffect(() => {
         getVariation().then(undefined);
     },[getVariation])
-
-    useEffect(() => {
-        productsApi.list()
-            .then(result => {
-                if (result.statusCode === StatusCodes.OK) {
-                    setProducts(result.data);
-                } else {
-                    console.error("error loading products", result);
-                    handleAlert(true, AlertType.WARNING, "Loading Products!", "Could not load products list!");
-                    setProducts([]);
-                }
-            });
-    },[handleAlert])
 
     useEffect(() => {
         setViewOnly(props.op === OpType.VIEW)

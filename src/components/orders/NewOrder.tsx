@@ -1,19 +1,19 @@
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {useContext, useEffect, useState} from "react";
+import useUsers from "../../hooks/useUsers";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import {evaluateTotalPrice, Order} from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
-import {OrdersContext} from "../../context/OrdersContext";
 
 import styles from "./orders.module.css";
 
 export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const ordersCtx = useContext(OrdersContext);
+    const {users} = useUsers();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         orderDate: "",
@@ -130,7 +130,7 @@ export const NewOrder = (props) => {
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
                                         <AutoCompleteInput
-                                            data={ordersCtx.users}
+                                            data={users}
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}

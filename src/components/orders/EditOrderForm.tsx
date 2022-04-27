@@ -8,11 +8,13 @@ import {AlertToast} from "../ui/AlertToast";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import Modal from "../ui/Modal";
-import {OrdersContext} from "../../context/OrdersContext";
+import useUsers from "../../hooks/useUsers";
+
+import styles from "./orders.module.css";
 
 const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const ordersCtx = useContext(OrdersContext);
+    const {users} = useUsers();
     const order = props.order;
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
@@ -177,11 +179,11 @@ const EditOrderForm = (props) => {
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
                                         <AutoCompleteInput
-                                            data={ordersCtx.users}
+                                            data={users}
                                             value={formData.userEmail}
                                             displayFields="email,name"
                                             onFieldSelected={handleSelectUser}
-                                            className="bigger-input"
+                                            className={styles["custom-autocomplete"]}
                                             required
                                             disabled={viewOnly}
                                             placeholder="Please select an user email"/>

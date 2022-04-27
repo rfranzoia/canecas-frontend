@@ -1,11 +1,11 @@
-import {memo, useCallback, useContext, useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {OrderStatus, orderStatusAsArray} from "../../domain/Order";
-import {OrdersContext} from "../../context/OrdersContext";
 import {Col, Container, Form, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
 
 import styles from "./ordersFilter.module.css";
+import useUsers from "../../hooks/useUsers";
 
 export interface OrdersFilter {
     startDate?: string,
@@ -15,7 +15,7 @@ export interface OrdersFilter {
 }
 
 const OrdersListFilter = (props) => {
-    const ordersCtx = useContext(OrdersContext);
+    const {users} = useUsers();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByDateCheck: false,
@@ -204,7 +204,7 @@ const OrdersListFilter = (props) => {
                                                         checked={formData.filterByCustomerCheck}
                                                         onChange={handleChange}/>
                                             <AutoCompleteInput
-                                                data={ordersCtx.users}
+                                                data={users}
                                                 value={formData.userEmail}
                                                 displayFields="email,name"
                                                 onFieldSelected={handleSelectUser}
