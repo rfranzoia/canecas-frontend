@@ -1,17 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import 'typeface-roboto'
+import {createRoot} from "react-dom/client";
+import {BrowserRouter} from 'react-router-dom';
 import App from './App';
-import { ApplicationContextProvider } from './context/ApplicationContext';
-import { BrowserRouter } from 'react-router-dom';
+import {ApplicationContextProvider} from './context/ApplicationContext';
+import './index.css';
 
-ReactDOM.render(
-  <ApplicationContextProvider>
+const root = createRoot(document.getElementById("root"));
+root.render(
+    <ApplicationContextProvider>
         <BrowserRouter>
-            <App />
+            <App/>
         </BrowserRouter>
-    </ApplicationContextProvider>,
-  document.getElementById('root')
+    </ApplicationContextProvider>
 );
 
