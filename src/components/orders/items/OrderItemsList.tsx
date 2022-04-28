@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
-import {MdPostAdd} from "react-icons/all";
+import {MdPostAdd} from "react-icons/md";
 import {OrderItemWizard} from "./OrderItemWizard";
 import Modal from "../../ui/Modal";
 

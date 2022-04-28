@@ -1,6 +1,6 @@
 import {useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {BiEdit, BiLockOpen, BiTrash} from "react-icons/all";
+import {BiEdit, BiLockOpen, BiTrash} from "react-icons/bi";
 
 export const UserRow = (props) => {
     const user = props.user;

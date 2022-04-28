@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {BiTrash} from "react-icons/all";
+import {BiTrash} from "react-icons/bi";
 
 export const OrderItemRow = (props) => {
     const [item, setItem] = useState({

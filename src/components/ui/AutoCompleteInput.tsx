@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import styles from "./autoCompleteInput.module.css";
 import {IconContext} from "react-icons";
-import {BsCaretDown, GrFormClose} from "react-icons/all";
+import {BsCaretDown} from "react-icons/bs";
+import {GrFormClose} from "react-icons/gr";
 
 export const AutoCompleteInput = (props) => {
     const [suggestions, setSuggestions] = useState([]);

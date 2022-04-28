@@ -1,6 +1,6 @@
 import {useContext, useEffect, useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {BiEdit, BiTrash} from "react-icons/all";
+import {BiEdit, BiTrash} from "react-icons/bi";
 import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {Role} from "../../domain/User";
