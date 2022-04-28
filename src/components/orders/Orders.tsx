@@ -45,10 +45,10 @@ export const Orders = () => {
         op: "",
         orderId: ""
     })
-    const { handleAlert } = appCtx;
+    const { handleAlert, getToken } = appCtx;
 
     const loadOrders = useCallback((page: number, filter?: string) => {
-        if (!appCtx.userData.authToken) {
+        if (!getToken()) {
             setOrders([]);
             return;
         }
@@ -58,7 +58,7 @@ export const Orders = () => {
             currPage: page
         }));
 
-        ordersApi.withToken(appCtx.userData.authToken).listByFilter(page, filter)
+        ordersApi.withToken(getToken()).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode === StatusCodes.UNAUTHORIZED) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -71,10 +71,10 @@ export const Orders = () => {
                     setOrders(result.data);
                 }
             });
-    },[handleAlert, appCtx.userData.authToken, history])
+    },[handleAlert, getToken, history])
 
     const updateOrder = (orderId: string, order, callback) => {
-        ordersApi.withToken(appCtx.userData.authToken).update(orderId, order)
+        ordersApi.withToken(getToken()).update(orderId, order)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -87,7 +87,7 @@ export const Orders = () => {
     }
 
     const getTotalPages = useCallback(() => {
-        ordersApi.withToken(appCtx.userData.authToken).count()
+        ordersApi.withToken(getToken()).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -99,7 +99,7 @@ export const Orders = () => {
                     });
                 }
             });
-    }, [handleAlert, appCtx.userData.authToken])
+    }, [handleAlert, getToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setShowAlert(false);
@@ -112,7 +112,7 @@ export const Orders = () => {
 
     const handleSave = (order: Order) => {
         if (edit.op === OpType.NEW) {
-            ordersApi.withToken(appCtx.userData.authToken).create(order)
+            ordersApi.withToken(getToken()).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
                         handleAlert(false);
@@ -180,7 +180,7 @@ export const Orders = () => {
     }
 
     const handleDeleteOrder = async (orderId: string) => {
-        ordersApi.withToken(appCtx.userData.authToken).delete(orderId)
+        ordersApi.withToken(getToken()).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);

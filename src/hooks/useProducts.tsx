@@ -7,17 +7,17 @@ import {Product} from "../domain/Product";
 const useProducts = () => {
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState<Product[]>([]);
-    const { handleAlert } = appCtx;
+    const { handleAlert, getToken } = appCtx;
 
     const loadProducts = useCallback(async () => {
-        const result = await productsApi.withToken(appCtx.userData.authToken).list();
+        const result = await productsApi.withToken(getToken()).list();
         if (result.statusCode !== StatusCodes.OK) {
             handleAlert(true, AlertType.DANGER, result.name, result.description);
             setProducts([]);
         } else {
             setProducts(result.data);
         }
-    },[appCtx.userData.authToken, handleAlert])
+    },[getToken, handleAlert])
 
     const findProduct = (name): Product => {
         return products.find(p => p.name === name);

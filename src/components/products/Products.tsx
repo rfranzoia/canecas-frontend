@@ -25,7 +25,7 @@ export const Products = () => {
         price: 0,
         image: ""
     });
-    const {handleAlert} = appCtx;
+    const {handleAlert, getToken} = appCtx;
 
     const loadProducts = useCallback(async () => {
         productsApi.list()
@@ -39,9 +39,9 @@ export const Products = () => {
     }, []);
 
     const handleDelete = async (product) => {
-        if (!appCtx.userData.authToken) return;
+        if (!getToken()) return;
 
-        const result = await productsApi.withToken(appCtx.userData.authToken).delete(product._id);
+        const result = await productsApi.withToken(getToken()).delete(product._id);
         if (!result) {
             handleAlert(true, AlertType.WARNING, "Delete Product", `Product '${product.name}' deleted successfully`);
             setShowAlert(true);
@@ -84,9 +84,9 @@ export const Products = () => {
         const save = async (product) => {
             let result;
             if (editViewOp.op === "edit") {
-                result = await productsApi.withToken(appCtx.userData.authToken).update(editViewOp.productId, product)
+                result = await productsApi.withToken(getToken()).update(editViewOp.productId, product)
             } else if (editViewOp.op === "new") {
-                result = await productsApi.withToken(appCtx.userData.authToken).create(product);
+                result = await productsApi.withToken(getToken()).create(product);
             }
             if (result.statusCode !== StatusCodes.OK) {
                 handleSave(result);

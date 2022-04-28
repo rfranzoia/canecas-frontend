@@ -22,7 +22,7 @@ const useServiceApi = (origin: string) => {
             const res = await axios.post("/services/file/upload", obj, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${appCtx.userData.authToken}`
+                    "Authorization": `Bearer ${appCtx.getToken()}`
                 }
             });
 

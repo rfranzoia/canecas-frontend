@@ -25,6 +25,7 @@ export interface AppCtx {
     removeUser: Function,
     isLoggedIn: Function,
     handleAlert: Function,
+    getToken: Function,
 }
 
 const defaultValue: AppCtx = {
@@ -45,6 +46,7 @@ const defaultValue: AppCtx = {
     removeUser: () => {},
     isLoggedIn: () => {},
     handleAlert: () => {},
+    getToken: () => {},
 }
 
 export const ALERT_TIMEOUT = 5 * 1000;
@@ -108,6 +110,10 @@ export const ApplicationContextProvider = (props) => {
         return (userData.userEmail !== "" && userData.authToken !== "");
     }
 
+    const getToken = useCallback(() => {
+        return userData.authToken;
+    }, [userData.authToken]);
+
     const handleAlert = useCallback((show: boolean, type?: AlertType, title?: string, message?: string) => {
         setAlert({
             show: show,
@@ -167,6 +173,7 @@ export const ApplicationContextProvider = (props) => {
         addUser: addUser,
         removeUser: removeUser,
         handleAlert: handleAlert,
+        getToken: getToken,
     }
 
     return (
@@ -175,3 +182,4 @@ export const ApplicationContextProvider = (props) => {
         </ApplicationContext.Provider>
     );
 }
+

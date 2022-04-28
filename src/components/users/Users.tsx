@@ -24,10 +24,10 @@ export const Users = () => {
         op: "",
     });
 
-    const {handleAlert} = appCtx;
+    const {handleAlert, getToken} = appCtx;
 
     const loadData = useCallback(async () => {
-        const result = await usersApi.withToken(appCtx.userData.authToken).list();
+        const result = await usersApi.withToken(getToken()).list();
         if (result.statusCode === StatusCodes.OK) {
             setUsers(result.data);
         } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
@@ -38,7 +38,7 @@ export const Users = () => {
             setShowAlert(true);
             setUsers([]);
         }
-    }, [appCtx.userData.authToken, handleAlert, history]);
+    }, [getToken, handleAlert, history]);
 
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);

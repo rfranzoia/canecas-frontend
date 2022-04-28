@@ -32,7 +32,7 @@ export const VariationEditForm = (props) => {
         selectedFile: null
     });
 
-    const {handleAlert} = appCtx;
+    const {handleAlert, getToken} = appCtx;
 
     const isValidData = (): boolean => {
         const { product, drawings, background, price, image } = formData;
@@ -149,7 +149,7 @@ export const VariationEditForm = (props) => {
 
     const getVariation = useCallback(async () => {
         if (!props.variationId && props.op !== OpType.EDIT) return;
-        variationsApi.withToken(appCtx.userData.authToken)
+        variationsApi.withToken(getToken())
             .get(props.variationId)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
@@ -169,7 +169,7 @@ export const VariationEditForm = (props) => {
                     imageHelper.getImage(loadImage, result.data.image);
                 }
             })
-    }, [appCtx.userData.authToken, handleAlert, props.op, props.variationId])
+    }, [getToken, handleAlert, props.op, props.variationId])
 
     useEffect(() => {
         getVariation().then(undefined);

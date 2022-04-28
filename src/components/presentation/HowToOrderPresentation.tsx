@@ -25,9 +25,8 @@ export const HowToOrderPresentation = () => {
                                     title: "Previous Step"})}>
             {howToOrderImages.map(i => {
                 return (
-                    <Carousel.Item>
-                        <Image key={i.id}
-                               src={imageHelper.getImageFromClient(i.name)}
+                    <Carousel.Item key={i.id}>
+                        <Image src={imageHelper.getImageFromClient(i.name)}
                                fluid
                                width="715"
                                title={i.title}/>

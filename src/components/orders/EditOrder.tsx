@@ -9,7 +9,7 @@ import {Order} from "../../domain/Order";
 const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
-    const { handleAlert } = appCtx;
+    const { handleAlert, getToken } = appCtx;
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",
@@ -33,7 +33,7 @@ const EditOrder = (props) => {
     const loadData = useCallback(async () => {
         if (!props.id) return;
 
-        const result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
+        const result = await ordersApi.withToken(getToken()).get(props.id);
         if (result?.statusCode !== StatusCodes.OK) {
             handleAlert(true, AlertType.DANGER, result.name, result.description);
             setShowAlert(true);
@@ -46,7 +46,7 @@ const EditOrder = (props) => {
             }
             setShowAlert(false);
         }
-    }, [props.id, appCtx.userData.authToken, handleAlert])
+    }, [props.id, getToken, handleAlert])
 
     useEffect(() => {
         loadData().then(() => undefined);

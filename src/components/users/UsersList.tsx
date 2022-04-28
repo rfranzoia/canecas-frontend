@@ -6,6 +6,7 @@ import {UserRow} from "./UserRow";
 
 export const UsersList = (props) => {
     const appCtx = useContext(ApplicationContext)
+    const {getToken} = appCtx;
 
     const handleOnEdit = (op, id) => {
         props.onEdit(op, id);
@@ -16,11 +17,11 @@ export const UsersList = (props) => {
     }
 
     const handleOnDelete = async (user) => {
-        if (!appCtx.userData.authToken) {
+        if (!getToken()) {
             return;
         }
 
-        const result = await usersApi.withToken(appCtx.userData.authToken).delete(user._id);
+        const result = await usersApi.withToken(getToken()).delete(user._id);
         if (result === null) {
             props.onDelete(true, `User '${user.name}' deleted successfully`);
 

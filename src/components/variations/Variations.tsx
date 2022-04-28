@@ -23,7 +23,7 @@ export const Variations = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [variations, setVariations] = useState([]);
     const [variationId, setVariationId] = useState(null);
-    const {handleAlert} = appCtx;
+    const {handleAlert, getToken} = appCtx;
 
     const loadVariations = useCallback((currPage: number, filter?: string) => {
         const pageSize = props.isModal ? DEFAULT_PAGE_SIZE / 2 : DEFAULT_PAGE_SIZE;
@@ -55,7 +55,7 @@ export const Variations = (props) => {
         setShowVariationFormModal(false);
 
         if (variationFormOp === OpType.NEW) {
-            variationsApi.withToken(appCtx.userData.authToken)
+            variationsApi.withToken(getToken())
                 .create(variation)
                 .then(result => {
                     if (result.statusCode !== StatusCodes.CREATED) {
@@ -69,7 +69,7 @@ export const Variations = (props) => {
                     }
                 });
         } else if (variationFormOp === OpType.EDIT) {
-            variationsApi.withToken(appCtx.userData.authToken)
+            variationsApi.withToken(getToken())
                 .update(variation._id, variation)
                 .then(result => {
                     if (result.statusCode !== StatusCodes.OK) {
@@ -132,7 +132,7 @@ export const Variations = (props) => {
     }
 
     const handleConfirmDelete = (id: string) => {
-        variationsApi.withToken(appCtx.userData.authToken)
+        variationsApi.withToken(getToken())
             .delete(id)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.OK) {

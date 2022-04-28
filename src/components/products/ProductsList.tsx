@@ -6,13 +6,14 @@ import {Role} from "../../domain/User";
 
 export const ProductsList = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const {getToken} = appCtx;
 
     const handleEdit = (op, id) => {
         props.onEdit(op, id);
     }
 
     const handleDelete = async (product) => {
-        if (!appCtx.userData.authToken) return;
+        if (!getToken()) return;
         props.onDelete(product);
     }
 

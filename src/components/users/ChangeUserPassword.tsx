@@ -9,6 +9,8 @@ import styles from "./users.module.css"
 
 export const ChangeUserPassword = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const {getToken} = appCtx;
+
     const [showError, setShowError] = useState({
         show: false,
         title: "",
@@ -60,7 +62,7 @@ export const ChangeUserPassword = (props) => {
             return;
         }
 
-        usersApi.withToken(appCtx.userData.authToken)
+        usersApi.withToken(getToken())
             .updatePassword(props.email, user.password, user.newPassword)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
