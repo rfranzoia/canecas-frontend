@@ -102,6 +102,7 @@ export const Orders = () => {
     }, [handleAlert, appCtx.userData.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
+        setShowAlert(false);
         setEdit({
             show: true,
             op: op,

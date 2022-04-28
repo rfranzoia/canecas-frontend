@@ -1,13 +1,9 @@
 import {useEffect, useState} from "react";
 import {Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
-import {OrderItemWizard} from "./OrderItemWizard";
-import Modal from "../../ui/Modal";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 
 export const OrderItemsList = (props) => {
     const [orderItems, setOrderItems] = useState([]);
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         setOrderItems([
@@ -15,32 +11,12 @@ export const OrderItemsList = (props) => {
         ]);
     }, [props.items]);
 
-    const handleShowModal = () => {
-        setShowModal(true);
-    }
-
-    const handleCloseModal = () => {
-      setShowModal(false);
-    }
-
-    const handleItemAdded = (item) => {
-        setShowModal(false);
-        props.onItemAdd(item);
-    }
-
     return (
         <div>
             <div><h5>Items
                 <span aria-hidden="true" className="required">*</span>
             </h5></div>
             <div>
-                { showModal &&
-                    <Modal
-                        onClose={handleCloseModal} >
-                        <OrderItemWizard onCancel={handleCloseModal} onItemAdd={handleItemAdded} />
-                    </Modal>
-                }
-
                 <Table striped bordered hover size="sm">
                     <thead>
                     <tr>
@@ -62,18 +38,6 @@ export const OrderItemsList = (props) => {
                     </tbody>
                 </Table>
             </div>
-            {!props.viewOnly &&
-                <div>
-                    <hr />
-                    {
-                        getActionIcon(ActionIconType.ADD_ITEM,
-                            "Add Item",
-                            true,
-                            () => handleShowModal())
-                    }
-
-                </div>
-            }
         </div>
     )
 }

@@ -11,12 +11,15 @@ import Modal from "../ui/Modal";
 import useUsers from "../../hooks/useUsers";
 
 import styles from "./orders.module.css";
+import {OrderItemWizard} from "./items/OrderItemWizard";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 
 const EditOrderForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const {users} = useUsers();
     const order = props.order;
     const [showAlert, setShowAlert] = useState(false);
+    const [showWizardModal, setShowWizardModal] = useState(false);
     const [formData, setFormData] = useState({
         _id: "",
         orderDate: "",
@@ -43,6 +46,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleItemAdd = (item) => {
+        setShowWizardModal(false);
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
             handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
@@ -107,6 +111,16 @@ const EditOrderForm = (props) => {
         });
     }
 
+    const handleShowWizardModal = () => {
+        setShowAlert(false);
+        setShowWizardModal(true);
+    }
+
+    const handleCloseWizardModal = () => {
+        setShowAlert(false);
+        setShowWizardModal(false);
+    }
+
     const handleCloseToast = () => {
         handleAlert(false);
         setShowAlert(false);
@@ -139,6 +153,7 @@ const EditOrderForm = (props) => {
             items: order.items,
             statusHistory: order.statusHistory
         });
+        setShowAlert(false);
     }, [order])
 
     const viewOnly = props.op === "view";
@@ -147,6 +162,12 @@ const EditOrderForm = (props) => {
     return (
         <>
             <AlertToast showAlert={showAlert}/>
+            { showWizardModal &&
+                <Modal
+                    onClose={handleCloseWizardModal} >
+                    <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd} />
+                </Modal>
+            }
             <Card border="dark" className="align-content-center" >
                 <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
                 <Card.Body>
@@ -223,6 +244,18 @@ const EditOrderForm = (props) => {
                                                     viewOnly={viewOnly}
                                                     onItemRemove={handleItemRemove}
                                                     onItemAdd={handleItemAdd}/>
+                                    {!props.viewOnly &&
+                                        <div>
+                                            <hr />
+                                            {
+                                                getActionIcon(ActionIconType.ADD_ITEM,
+                                                    "Add Item",
+                                                    true,
+                                                    () => handleShowWizardModal())
+                                            }
+
+                                        </div>
+                                    }
                                 </Col>
                             </Row>
                         </Container>
