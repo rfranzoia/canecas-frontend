@@ -114,7 +114,8 @@ export const Presentation = () => {
                             )
                         })}
                     </div>
-                    <p style={{textAlign: "center", fontSize: "16px"}}>Clique na imagem para saber mais</p>
+                    <br/>
+                    <p style={{textAlign: "center", fontSize: "16px"}}>For a list of available options click on the image</p>
                 </Card.Body>
             </Card>
             { showHowToOrder &&
