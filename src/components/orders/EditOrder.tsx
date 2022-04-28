@@ -8,6 +8,7 @@ import {Order} from "../../domain/Order";
 
 const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const { handleAlert } = appCtx;
     const [order, setOrder] = useState({
         _id: "",
@@ -34,7 +35,8 @@ const EditOrder = (props) => {
 
         const result = await ordersApi.withToken(appCtx.userData.authToken).get(props.id);
         if (result?.statusCode !== StatusCodes.OK) {
-            handleAlert(true, AlertType.DANGER, result.name, result.description)
+            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            setShowAlert(true);
         } else {
             if (result.data && !Array.isArray(result.data)) {
                 setOrder({
@@ -42,6 +44,7 @@ const EditOrder = (props) => {
                     orderDate: result.data.orderDate.split("T")[0]
                 });
             }
+            setShowAlert(false);
         }
     }, [props.id, appCtx.userData.authToken, handleAlert])
 
@@ -53,7 +56,7 @@ const EditOrder = (props) => {
 
     return (
         <>
-            {appCtx.alert.show && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <div>
                 <EditOrderForm title={title}
                                order={order}

@@ -9,9 +9,12 @@ import styles from "./users.module.css"
 
 export const EditUserForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const user = props.user;
     const viewOnly = props.op === "view";
     const isEdit = props.op === "edit";
+
+    const {handleAlert} = appCtx;
 
     const [formData, setFormData] = useState({
         role: "",
@@ -44,13 +47,15 @@ export const EditUserForm = (props) => {
 
         if (role.trim().length === 0 || name.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Role, Name, Email and Password are required!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Role, Name, Email and Password are required!");
+            setShowAlert(true);
             return false;
         }
 
         if (!isEdit) {
             if (password !== confirmPassword) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+                handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+                setShowAlert(true);
                 return false;
             }
         }
@@ -90,7 +95,7 @@ export const EditUserForm = (props) => {
 
     return (
         <>
-            <AlertToast/>
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark" className={styles["registration-width-signup"]}>
                 <Card.Header as="h3">{`${title} User`}</Card.Header>
                 <Card.Body>

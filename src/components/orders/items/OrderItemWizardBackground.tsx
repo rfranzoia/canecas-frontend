@@ -1,14 +1,11 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
-import {ApplicationContext} from "../../../context/ApplicationContext";
 import {CustomButton} from "../../ui/CustomButton";
-import {AlertToast} from "../../ui/AlertToast";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 import {imageHelper} from "../../ui/ImageHelper";
 import {BorderedRow} from "../../ui/BorderedRow";
 
 export const OrderItemWizardBackground = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         product: "",
         drawings: 0,
@@ -86,7 +83,6 @@ export const OrderItemWizardBackground = (props) => {
 
     return (
         <>
-            {appCtx.alert.show && <AlertToast/>}
             <Card className="order-item-wizard-card">
                 <Card.Header>
                     Select the BACKGROUND type

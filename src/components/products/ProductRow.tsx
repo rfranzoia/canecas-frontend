@@ -1,10 +1,10 @@
 import {useContext, useEffect, useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
-import {BiEdit, BiTrash} from "react-icons/bi";
 import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
 import {Role} from "../../domain/User";
 import {ApplicationContext} from "../../context/ApplicationContext";
+import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 
 export const ProductRow = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -31,37 +31,38 @@ export const ProductRow = (props) => {
 
     useEffect(() => {
         imageHelper.getImage(loadImage, props.product.image);
-    },[props]);
+    }, [props]);
 
     return (
-        <tr key={product._id} style={{ verticalAlign: "middle" }}>
+        <tr key={product._id} style={{verticalAlign: "middle"}}>
             <td>{product.name}</td>
-            <td><span style={{cursor: "pointer", color: "blue"}} onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
+            <td width={"50%"}><span style={{cursor: "pointer", color: "blue"}}
+                      onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
             <td align="right">{product.price.toFixed(2)}</td>
             <td align="center">
                 <Image src={image}
                        fluid width="60" title={product.name}/>
             </td>
-            {appCtx.userData.role !== Role.GUEST &&
-                <td align="center">
-                    <BiEdit
-                        onClick={() => props.onEdit("edit", product._id)}
-                        title="Edit Product"
-                        size="2em"
-                        cursor="pointer"
-                        color="blue"/>
-                    <span> | </span>
-                    <BiTrash
-                        onClick={handleDelete}
-                        title="Delete Product"
-                        size="2em"
-                        cursor="pointer"
-                        color="red"
-                    />
+            {appCtx.userData.role === Role.ADMIN &&
+                <td align="center" width={"10%"}>
+                    {
+                        getActionIcon(ActionIconType.EDIT,
+                            "Edit Product",
+                            true,
+                            () => props.onEdit("edit", product._id))
+                    }
+                    {
+                        getActionIcon(ActionIconType.DELETE,
+                            "Delete Product",
+                            true,
+                            () => handleDelete())
+                    }
                 </td>
             }
-            <ConfirmModal show={showConfirmation} handleClose={handleNotConfirmDelete} handleConfirm={handleConfirmDelete}
-                title="Delete Product"  message={`Are you sure you want to delete the product '${product.name}'?`}/>
+            <ConfirmModal show={showConfirmation} handleClose={handleNotConfirmDelete}
+                          handleConfirm={handleConfirmDelete}
+                          title="Delete Product"
+                          message={`Are you sure you want to delete the product '${product.name}'?`}/>
         </tr>
     );
 }

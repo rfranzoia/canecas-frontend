@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {BiTrash} from "react-icons/bi";
+import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 
 export const OrderItemRow = (props) => {
     const [item, setItem] = useState({
@@ -32,13 +32,12 @@ export const OrderItemRow = (props) => {
             <td style={{ textAlign: "right"}}>{item.price.toFixed(2)}</td>
             <td style={{ textAlign: "right"}}>{item.amount}</td>
             <td>
-                <BiTrash
-                    onClick={props.onDelete}
-                    style={props.viewOnly && { pointerEvents: "none" }}
-                    title="Delete Item"
-                    size="2em"
-                    cursor="pointer"
-                    color={props.viewOnly?"#a2a0a0":"red"}/>
+                {
+                    getActionIcon(ActionIconType.DELETE,
+                        "Delete Item",
+                        !props.viewOnly,
+                        () => props.onDelete(props.item._id))
+                }
             </td>
         </tr>
     );

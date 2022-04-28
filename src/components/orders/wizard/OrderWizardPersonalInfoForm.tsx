@@ -7,6 +7,7 @@ import {AlertToast} from "../../ui/AlertToast";
 
 export const OrderWizardPersonalInfoForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         role: "",
         name: "",
@@ -15,6 +16,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
         phone: "",
         address: ""
     });
+    const {handleAlert} = appCtx;
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -29,7 +31,8 @@ export const OrderWizardPersonalInfoForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -47,7 +50,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
 
     return (
         <>
-            { appCtx.alert.show && <AlertToast /> }
+            <AlertToast showAlert={showAlert}/>
             <Card>
                 <Card.Header>
                     First we need some information so we can start your order.

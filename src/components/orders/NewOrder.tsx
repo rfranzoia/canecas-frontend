@@ -53,7 +53,7 @@ export const NewOrder = (props) => {
 
     const handleSave = (event) => {
         event.preventDefault();
-        if (!isValidData()) return;
+        if (!isDataValid()) return;
         const orderItems = formData.items.map(i => (
             {
                 product: i.product,
@@ -75,14 +75,28 @@ export const NewOrder = (props) => {
 
     }
 
-    const isValidData = (): boolean => {
+    const isDataValid = (): boolean => {
         const { userEmail, orderDate, items } = formData;
+
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
             handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
             setShowAlert(true);
             return false;
         }
+        try {
+            const d = new Date(orderDate);
+            if (d.valueOf() > Date.now().valueOf()) {
+                handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
+                setShowAlert(true);
+                return false;
+            }
+        } catch (error) {
+            handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
+            setShowAlert(true);
+            return false;
+        }
+
         return true;
     }
 
@@ -117,7 +131,7 @@ export const NewOrder = (props) => {
 
     return (
         <>
-            {showAlert && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">New Order</Card.Header>
                 <Card.Body>

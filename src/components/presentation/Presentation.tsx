@@ -73,7 +73,7 @@ export const Presentation = () => {
 
     return (
         <div>
-            {showAlert && <AlertToast/> }
+            <AlertToast showAlert={showAlert}/>
             <div>
                 <h1>Caricanecas Manauara</h1>
                 <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>

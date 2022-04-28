@@ -1,12 +1,9 @@
-import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
 import {CustomButton} from "../../ui/CustomButton";
-import {useContext, useState} from "react";
-import {ApplicationContext} from "../../../context/ApplicationContext";
+import {useState} from "react";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 
 export const OrderWizardBackground = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         background: "",
         backgroundDescription: "",
@@ -54,7 +51,6 @@ export const OrderWizardBackground = (props) => {
 
     return (
         <>
-            {appCtx.alert.show && <AlertToast/>}
             <Card>
                 <Card.Header>
                     Now tell us how do you wish the BACKGROUND of the product to be

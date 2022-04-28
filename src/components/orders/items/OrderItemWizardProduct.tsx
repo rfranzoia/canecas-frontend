@@ -15,12 +15,14 @@ import useProducts from "../../../hooks/useProducts";
 
 export const OrderItemWizardProduct = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const {products, findProduct} = useProducts();
     const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
     });
+    const {handleAlert} = appCtx;
 
     const handleSearchVariations = () => {
         setShowVariationsModal(true);
@@ -55,7 +57,8 @@ export const OrderItemWizardProduct = (props) => {
     const isValidData = (): boolean => {
         const { product } = formData;
         if (product.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -89,7 +92,7 @@ export const OrderItemWizardProduct = (props) => {
 
     return (
         <>
-            { appCtx.alert.show && <AlertToast /> }
+            <AlertToast showAlert={showAlert}/>
             <Card className="order-item-wizard-card">
                 <Card.Header>Select the PRODUCT</Card.Header>
                 <Card.Body>

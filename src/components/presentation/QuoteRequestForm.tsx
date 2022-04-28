@@ -9,6 +9,7 @@ import {Role} from "../../domain/User";
 
 export const QuoteRequestForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         role: "",
         name: "",
@@ -17,6 +18,7 @@ export const QuoteRequestForm = (props) => {
         phone: "",
         address: ""
     });
+    const {handleAlert} = appCtx;
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -39,7 +41,7 @@ export const QuoteRequestForm = (props) => {
         if (res.email && res.email === formData.email) {
             props.onConfirm();
         } else {
-            appCtx.handleAlert(true, AlertType.DANGER, res.name, res.description);
+            handleAlert(true, AlertType.DANGER, res.name, res.description);
         }
     }
 
@@ -47,7 +49,8 @@ export const QuoteRequestForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -61,7 +64,7 @@ export const QuoteRequestForm = (props) => {
         <Container style={{justifyContent: "center"}}>
             <Row>
                 <Col>
-                    <AlertToast/>
+                    <AlertToast showAlert={showAlert}/>
                 </Col>
             </Row>
             <Row>

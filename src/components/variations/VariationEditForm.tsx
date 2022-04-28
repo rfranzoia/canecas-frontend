@@ -16,6 +16,7 @@ import styles from "./variations.module.css"
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
     const {uploadImage} = useServiceApi("variation");
+    const [showAlert, setShowAlert] = useState(false);
     const {products, findProduct} = useProducts();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
@@ -38,14 +39,17 @@ export const VariationEditForm = (props) => {
         if (product.trim().length === 0 || background.trim().length === 0 ||
             image.trim().length === 0) {
             handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required to save the variation!");
+            setShowAlert(true);
             return false;
         }
         if (isNaN(drawings) || isNaN(price)) {
             handleAlert(true, AlertType.DANGER, "Validation Error!", "You must inform valid number of Drawings and Price!");
+            setShowAlert(true);
             return false;
         }
         if (price <= 0) {
             handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, Price value must be greater than zero!");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -83,6 +87,7 @@ export const VariationEditForm = (props) => {
 
             if (!selectedProduct) {
                 handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
+                setShowAlert(true);
                 return;
             }
 
@@ -90,10 +95,12 @@ export const VariationEditForm = (props) => {
 
             if (sendResult instanceof Error) {
                 handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                setShowAlert(true);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
                 handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                setShowAlert(true);
                 return;
             }
         }
@@ -148,6 +155,7 @@ export const VariationEditForm = (props) => {
                 if (result.statusCode !== StatusCodes.OK) {
                     console.error(result.name, JSON.stringify(result.description));
                     handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    setShowAlert(true);
                 } else {
                     setFormData({
                         _id: result.data._id,
@@ -157,6 +165,7 @@ export const VariationEditForm = (props) => {
                         price: result.data.price,
                         image: result.data.image,
                     })
+                    setShowAlert(false);
                     imageHelper.getImage(loadImage, result.data.image);
                 }
             })
@@ -172,7 +181,7 @@ export const VariationEditForm = (props) => {
 
     return (
         <>
-            <AlertToast />
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark" className={styles["variations-edit-modal"]}>
                 <Card.Header as="h3">{props.op === OpType.NEW?"New":"Edit"} Variation</Card.Header>
                 <Card.Body>

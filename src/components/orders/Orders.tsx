@@ -236,7 +236,7 @@ export const Orders = () => {
     return (
         <>
             <div>
-                {showAlert && <AlertToast/> }
+                <AlertToast showAlert={showAlert}/>
                 <OrdersList
                     orders={orders}
                     totalPages={pageControl.totalPages}

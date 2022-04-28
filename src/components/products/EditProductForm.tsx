@@ -10,6 +10,7 @@ import useServiceApi from "../../hooks/useServiceApi";
 
 export const EditProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const product = props.product;
     const {uploadImage} = useServiceApi("product");
     const [image, setImage] = useState(null);
@@ -23,17 +24,20 @@ export const EditProductForm = (props) => {
     const [file, setFile] = useState({
         selectedFile: null
     });
+    const {handleAlert} = appCtx;
 
     const isDataValid = (): boolean => {
         const {name, description, price, image} = formData;
 
         if (name.trim().length === 0 || description.trim().length === 0 || image.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
+            setShowAlert(true);
             return false;
         }
 
         if (Number(price) <= 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Product price must be greater than zero!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Product price must be greater than zero!");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -52,11 +56,13 @@ export const EditProductForm = (props) => {
             const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                setShowAlert(true);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
-                appCtx.handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                setShowAlert(true);
                 return;
             }
         }
@@ -132,7 +138,7 @@ export const EditProductForm = (props) => {
 
     return (
         <>
-            <AlertToast/>
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">{`${title} Product`}</Card.Header>
                 <Card.Body>

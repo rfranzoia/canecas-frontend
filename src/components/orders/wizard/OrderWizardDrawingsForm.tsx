@@ -1,12 +1,9 @@
 import {CustomButton} from "../../ui/CustomButton";
-import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {useContext, useState} from "react";
-import {ApplicationContext} from "../../../context/ApplicationContext";
+import {useState} from "react";
 import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 
 export const OrderWizardDrawingsForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         drawings: 0,
         drawingsImages: "",
@@ -53,7 +50,6 @@ export const OrderWizardDrawingsForm = (props) => {
 
     return (
         <>
-            { appCtx.alert.show && <AlertToast /> }
             <Card>
                 <Card.Header>
                     And how many DRAWINGS you want in your product??

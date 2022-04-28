@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {Table} from "react-bootstrap";
 import {OrderItemRow} from "./OrderItemRow";
-import {MdPostAdd} from "react-icons/md";
 import {OrderItemWizard} from "./OrderItemWizard";
 import Modal from "../../ui/Modal";
+import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
 
 export const OrderItemsList = (props) => {
     const [orderItems, setOrderItems] = useState([]);
@@ -30,8 +30,9 @@ export const OrderItemsList = (props) => {
 
     return (
         <div>
-            <div><h5>Items<span aria-hidden="true"
-                                className="required">*</span></h5></div>
+            <div><h5>Items
+                <span aria-hidden="true" className="required">*</span>
+            </h5></div>
             <div>
                 { showModal &&
                     <Modal
@@ -64,13 +65,13 @@ export const OrderItemsList = (props) => {
             {!props.viewOnly &&
                 <div>
                     <hr />
-                    <MdPostAdd
-                        onClick={handleShowModal}
-                        style={props.viewOnly && { pointerEvents: "none" }}
-                        title="Add Item"
-                        size="2em"
-                        cursor="pointer"
-                        color={props.viewOnly?"#cdcdcd":"blue"}/>
+                    {
+                        getActionIcon(ActionIconType.ADD_ITEM,
+                            "Add Item",
+                            true,
+                            () => handleShowModal())
+                    }
+
                 </div>
             }
         </div>

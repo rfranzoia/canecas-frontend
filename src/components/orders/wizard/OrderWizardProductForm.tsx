@@ -1,18 +1,20 @@
 import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {CustomButton} from "../../ui/CustomButton";
-import {productsApi} from "../../../api/ProductsAPI";
+import useProducts from "../../../hooks/useProducts";
 
 export const OrderWizardProductForm = (props) => {
     const appCtx = useContext(ApplicationContext);
-    const [products, setProducts] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
+    const {products} = useProducts();
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
     });
+    const {handleAlert} = appCtx;
 
     const handleSelectProduct = (product) => {
         const selectedProduct = products.find(p => p.name === product);
@@ -28,7 +30,8 @@ export const OrderWizardProductForm = (props) => {
     const isValidData = (): boolean => {
         const { product } = formData;
         if (product.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            setShowAlert(true);
             return false;
         }
         return true;
@@ -57,23 +60,9 @@ export const OrderWizardProductForm = (props) => {
         props.onBackward();
     }
 
-    useEffect(() => {
-        const load = async () => {
-            const res = await productsApi.list();
-            if (res) {
-                setProducts(res);
-            } else {
-                setProducts([]);
-            }
-        }
-
-        load().then(() => undefined);
-
-    }, []);
-
     return (
         <>
-            { appCtx.alert.show && <AlertToast /> }
+            <AlertToast showAlert={showAlert}/>
             <Card>
                 <Card.Header>
                     Now we need to know WHAT you want to buy from us

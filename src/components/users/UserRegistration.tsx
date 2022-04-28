@@ -15,8 +15,11 @@ export const enum ShowType { SIGN_IN, SIGN_UP}
 
 export const UserRegistration = (props) => {
     const history = useHistory();
+    const [showAlert, setShowAlert] = useState(false);
     const appCtx = useContext(ApplicationContext);
     const [showType, setShowType] = useState(ShowType.SIGN_IN);
+
+    const {handleAlert} = appCtx;
 
     const [user, setUser] = useState({
         email: "",
@@ -49,7 +52,8 @@ export const UserRegistration = (props) => {
             props.handleClose();
             history.replace("/");
         } else {
-            appCtx.handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+            handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+            setShowAlert(true);
         }
     }
 
@@ -67,8 +71,10 @@ export const UserRegistration = (props) => {
 
         const res = await usersApi.create(user);
         if (res.statusCode !== StatusCodes.CREATED) {
-            appCtx.handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+            handleAlert(true, AlertType.DANGER, res?.name, res?.description);
+            setShowAlert(true);
         } else {
+            setShowAlert(false);
             handleShowType(ShowType.SIGN_IN);
         }
     }
@@ -78,12 +84,14 @@ export const UserRegistration = (props) => {
 
         if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 ||
             phone.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Name, Email, Phone and Password are required!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Name, Email, Phone and Password are required!");
+            setShowAlert(true);
             return false;
         }
 
         if (password !== confirmPassword) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+            setShowAlert(true);
             return false;
         }
 
@@ -91,7 +99,8 @@ export const UserRegistration = (props) => {
     }
 
     const handleHideError = () => {
-        appCtx.handleAlert(false);
+        handleAlert(false);
+        setShowAlert(false);
     }
 
     const handleChangeRegister = (event) => {
@@ -120,7 +129,7 @@ export const UserRegistration = (props) => {
             <Card border="dark" className={styles["registration-width-login"]}>
                 <Card.Header as="h4">Sign In</Card.Header>
                 <Card.Body>
-                    {appCtx.alert.show && <AlertToast/>}
+                    <AlertToast showAlert={showAlert}/>
                     <Form>
                         <Form.Group className="spaced-form-group">
                             <Form.Label>Email</Form.Label>
@@ -166,7 +175,7 @@ export const UserRegistration = (props) => {
             <Card border="dark" className={styles["registration-width-signup"]}>
                 <Card.Header as="h4">Sign Up</Card.Header>
                 <Card.Body>
-                    {appCtx.alert.show && <AlertToast/>}
+                    <AlertToast showAlert={showAlert}/>
                     <Form>
                         <Row>
                             <Form.Group className="spaced-form-group">

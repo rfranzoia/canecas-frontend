@@ -60,7 +60,7 @@ export const Variations = (props) => {
                 .then(result => {
                     if (result.statusCode !== StatusCodes.CREATED) {
                         console.error(result.name, result.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
                         setShowAlert(false);
@@ -74,7 +74,7 @@ export const Variations = (props) => {
                 .then(result => {
                     if (result.statusCode !== StatusCodes.OK) {
                         console.error(result.name, result.description)
-                        appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                         setShowAlert(true);
                     } else {
                         setShowAlert(false);
@@ -137,9 +137,9 @@ export const Variations = (props) => {
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.OK) {
                     console.error(result.name, result.description)
-                    appCtx.handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
                 } else {
-                    appCtx.handleAlert(true, AlertType.WARNING, "Delete Variation", "Variation deleted successfully");
+                    handleAlert(true, AlertType.WARNING, "Delete Variation", "Variation deleted successfully");
                     getTotalPages();
                     loadVariations(1);
                 }
@@ -163,7 +163,7 @@ export const Variations = (props) => {
 
     return (
         <div>
-            {showAlert && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">Product Variations</Card.Header>
                 <Card.Body>

@@ -23,7 +23,7 @@ const matrix = [
     { type: ActionIconType.USER_CHECK, class: "fa fa-user-check", color: "green", size: "1.7rem" },
     { type: ActionIconType.ACTION_FORWARD, class: "fa fa-forward", color: "orange", size: "1.7rem"},
     { type: ActionIconType.ACTION_BACKWARD, class: "fa fa-backward", color: "orange", size: "1.7rem" },
-    { type: ActionIconType.ADD_ITEM, class: "fa fa-cart-circle-plus", color: "blue", size: "1.7rem" },
+    { type: ActionIconType.ADD_ITEM, class: "fa fa-cart-plus", color: "blue", size: "1.7rem" },
     { type: ActionIconType.SELECT, class: "fa fa-square-plus", color: "black", size: "1.5rem" },
     { type: ActionIconType.EXPAND, class: "fa fa-caret-down", color: "black", size: "1.5rem" },
     { type: ActionIconType.COLLAPSE, class: "fa fa-caret-up", color: "black", size: "1.5rem" },

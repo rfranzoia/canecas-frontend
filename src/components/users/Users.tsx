@@ -43,7 +43,7 @@ export const Users = () => {
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);
         if (success) {
-            appCtx.handleAlert(true, AlertType.WARNING, "Delete User!", message);
+            handleAlert(true, AlertType.WARNING, "Delete User!", message);
             setShowAlert(true);
         }
     }
@@ -52,7 +52,7 @@ export const Users = () => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
         if (success) {
-            appCtx.handleAlert(true, AlertType.SUCCESS, "Password Change", message);
+            handleAlert(true, AlertType.SUCCESS, "Password Change", message);
             setShowAlert(true);
         }
     }
@@ -60,7 +60,7 @@ export const Users = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+            handleAlert(true, AlertType.DANGER, error.name, error.description);
             setShowAlert(true);
         }
         loadData().then(undefined);
@@ -100,7 +100,7 @@ export const Users = () => {
 
     return (
         <div>
-            {showAlert && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">Users</Card.Header>
                 <Card.Body>

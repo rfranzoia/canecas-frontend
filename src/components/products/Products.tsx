@@ -25,6 +25,7 @@ export const Products = () => {
         price: 0,
         image: ""
     });
+    const {handleAlert} = appCtx;
 
     const loadProducts = useCallback(async () => {
         productsApi.list()
@@ -42,11 +43,11 @@ export const Products = () => {
 
         const result = await productsApi.withToken(appCtx.userData.authToken).delete(product._id);
         if (!result) {
-            appCtx.handleAlert(true, AlertType.WARNING, "Delete Product", `Product '${product.name}' deleted successfully`);
+            handleAlert(true, AlertType.WARNING, "Delete Product", `Product '${product.name}' deleted successfully`);
             setShowAlert(true);
 
         } else {
-            appCtx.handleAlert(true, AlertType.DANGER, result.name, result.description);
+            handleAlert(true, AlertType.DANGER, result.name, result.description);
             setShowAlert(true);
         }
         loadProducts().then(undefined);
@@ -99,7 +100,7 @@ export const Products = () => {
     const handleSave = (error?) => {
         setShowEditModal(false);
         if (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+            handleAlert(true, AlertType.DANGER, error.name, error.description);
             setShowAlert(true);
         }
     }
@@ -124,7 +125,7 @@ export const Products = () => {
 
     return (
         <div>
-            {showAlert && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">Products</Card.Header>
                 <Card.Body>

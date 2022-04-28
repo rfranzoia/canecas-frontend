@@ -26,6 +26,7 @@ const EditOrderForm = (props) => {
         items: [],
         statusHistory: []
     });
+    const {handleAlert} = appCtx;
 
     const [showStatusHistory, setShowStatusHistory] = useState(false);
 
@@ -44,7 +45,7 @@ const EditOrderForm = (props) => {
     const handleItemAdd = (item) => {
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
             setShowAlert(true);
         } else {
             handleCloseToast();
@@ -76,19 +77,19 @@ const EditOrderForm = (props) => {
         const { userEmail, orderDate } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date and Customer Email must be provided!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date and Customer Email must be provided!");
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
-            if (d.getDate() > Date.now()) {
-                appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
+            if (d.valueOf() > Date.now().valueOf()) {
+                handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
+            handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
             setShowAlert(true);
             return false;
         }
@@ -107,7 +108,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleCloseToast = () => {
-        appCtx.handleAlert(false);
+        handleAlert(false);
         setShowAlert(false);
     }
 
@@ -145,7 +146,7 @@ const EditOrderForm = (props) => {
 
     return (
         <>
-            {showAlert && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark" className="align-content-center" >
                 <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
                 <Card.Body>

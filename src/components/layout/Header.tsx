@@ -18,6 +18,7 @@ export const Header = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const {handleAlert} = appCtx;
 
     const handleClose = () => {
         setShowLoginModal(false);
@@ -36,7 +37,7 @@ export const Header = () => {
         setShowEditModal(false);
         if (error) {
             if (error.name && error.description) {
-                appCtx.handleAlert(true, AlertType.DANGER, error.name, error.description);
+                handleAlert(true, AlertType.DANGER, error.name, error.description);
                 setShowAlert(true);
             } else {
                 console.warn("warning", error);
@@ -46,7 +47,7 @@ export const Header = () => {
 
     const handlePasswordChanged = () => {
         setShowChangePassword(false);
-        appCtx.handleAlert(true, AlertType.SUCCESS, "Password Update", "User password has been updated successfully");
+        handleAlert(true, AlertType.SUCCESS, "Password Update", "User password has been updated successfully");
         setShowAlert(true);
     }
 
@@ -74,7 +75,7 @@ export const Header = () => {
 
     return (
         <header>
-            {(showAlert || (appCtx.alert.show && appCtx.alert.type === AlertType.INFO)) && <AlertToast/>}
+            {(showAlert || (appCtx.alert.show && appCtx.alert.type === AlertType.INFO)) && <AlertToast showAlert={showAlert}/>}
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
@@ -88,6 +89,7 @@ export const Header = () => {
                         <Nav
                             className="me-auto my-2 my-lg-0"
                             style={{ maxHeight: '100px' }}
+                            navbarScroll
                         >
 
                             {appCtx.isLoggedIn() && appCtx.userData.role === Role.ADMIN && adminUser }

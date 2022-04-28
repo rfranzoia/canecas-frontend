@@ -1,11 +1,8 @@
 import {CustomButton} from "../../ui/CustomButton";
-import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {useContext, useState} from "react";
-import {ApplicationContext} from "../../../context/ApplicationContext";
+import {useState} from "react";
 
 export const OrderWizardAmount = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const [formData, setFormData] = useState({
         amount: 0,
     });
@@ -33,7 +30,6 @@ export const OrderWizardAmount = (props) => {
 
     return (
         <>
-            { appCtx.alert.show && <AlertToast /> }
             <Card>
                 <Card.Header>
                     And finally tell us HOW MANY of these you're interested

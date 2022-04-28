@@ -7,6 +7,7 @@ import {BorderedRow} from "../../ui/BorderedRow";
 
 export const OrderItemWizardAmount = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
@@ -19,6 +20,7 @@ export const OrderItemWizardAmount = (props) => {
         backgroundImageFile: null,
         amount: 0,
     });
+    const {handleAlert} = appCtx;
 
     const handleChangeNumber = (event) => {
         const {name, value} = event.target;
@@ -42,7 +44,8 @@ export const OrderItemWizardAmount = (props) => {
 
     const handleAddItem = () => {
         if (Number(formData.amount) <= 0 || Number(formData.price) <= 0) {
-            appCtx.handleAlert(true, AlertType.DANGER, "Validation Error", "Price and Amount must be greater than zero!");
+            handleAlert(true, AlertType.DANGER, "Validation Error", "Price and Amount must be greater than zero!");
+            setShowAlert(true);
             return;
         }
 
@@ -75,7 +78,7 @@ export const OrderItemWizardAmount = (props) => {
 
     return (
         <>
-            {appCtx.alert.show && <AlertToast/>}
+            <AlertToast showAlert={showAlert}/>
             <Card className="order-item-wizard-card">
                 <Card.Header>
                     Inform the final PRICE and AMOUNT
@@ -207,7 +210,7 @@ export const OrderItemWizardAmount = (props) => {
                 />
                 <CustomButton caption="Add Item"
                               type="custom-primary"
-                              customClass="fa fa-forward"
+                              customClass="fa fa-circle-plus"
                               onClick={handleAddItem}
                 />
             </div>
