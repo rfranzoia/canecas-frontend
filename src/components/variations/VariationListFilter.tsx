@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
-import useProducts from "../../hooks/useProducts";
+import useProductsApi from "../../hooks/useProductsApi";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
 import { CustomButton } from "../ui/CustomButton";
 
@@ -13,7 +13,7 @@ export interface VariationsFilter {
 }
 
 export const VariationListFilter = (props) => {
-    const { products } = useProducts();
+    const { products } = useProductsApi();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByProductCheck: false,

@@ -6,7 +6,7 @@ import { User } from "../domain/User";
 import { RootState } from "../store";
 import { AlertType, uiActions } from "../store/uiSlice";
 
-const useUsers = () => {
+const useUsersApi = () => {
     const dispatch = useDispatch();
     const [users, setUsers] = useState<User[]>([]);
     const user = useSelector<RootState, User>(state => state.auth.user);
@@ -40,4 +40,4 @@ const useUsers = () => {
     };
 }
 
-export default useUsers;
+export default useUsersApi;

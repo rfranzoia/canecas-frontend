@@ -3,7 +3,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { evaluateTotalPrice, Order } from "../../domain/Order";
 import { Role, User } from "../../domain/User";
-import useUsers from "../../hooks/useUsers";
+import useUsersApi from "../../hooks/useUsersApi";
 import { RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
@@ -18,7 +18,7 @@ import styles from "./orders.module.css";
 
 export const NewOrder = (props) => {
     const dispatch = useDispatch();
-    const { users } = useUsers();
+    const { users } = useUsersApi();
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);
     const user = useSelector<RootState, User>(state => state.auth.user);

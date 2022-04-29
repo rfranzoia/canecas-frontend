@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import useProducts from "../../../hooks/useProducts";
+import useProductsApi from "../../../hooks/useProductsApi";
 import { AlertType, uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { AutoCompleteInput } from "../../ui/AutoCompleteInput";
@@ -10,7 +10,7 @@ import { CustomButton } from "../../ui/CustomButton";
 export const OrderWizardProductForm = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const { products } = useProducts();
+    const { products } = useProductsApi();
     const [formData, setFormData] = useState({
         product: "",
         price: 0,

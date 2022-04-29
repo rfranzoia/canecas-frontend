@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, Form, Image, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Variation } from "../../domain/Variation";
-import useProducts from "../../hooks/useProducts";
+import useProductsApi from "../../hooks/useProductsApi";
 import useServiceApi from "../../hooks/useServiceApi";
 import useVariationsApi from "../../hooks/useVariationsApi";
 import { OpType } from "../../store";
@@ -26,7 +26,7 @@ const emptyFormData = {
 
 export const VariationEditForm = (props) => {
     const { uploadImage } = useServiceApi("variation");
-    const { products, findProduct } = useProducts();
+    const { products, findProduct } = useProductsApi();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
     const [showAlert, setShowAlert] = useState(false);

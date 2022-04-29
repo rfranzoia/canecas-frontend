@@ -1,7 +1,7 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
 import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
-import useUsers from "../../hooks/useUsers";
+import useUsersApi from "../../hooks/useUsersApi";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
 import { CustomButton } from "../ui/CustomButton";
 import styles from "./ordersFilter.module.css";
@@ -14,7 +14,7 @@ export interface OrdersFilter {
 }
 
 const OrdersListFilter = (props) => {
-    const { users } = useUsers();
+    const { users } = useUsersApi();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByDateCheck: false,

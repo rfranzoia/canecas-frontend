@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { evaluateTotalPrice, OrderStatus, orderStatusAsArray } from "../../domain/Order";
-import useUsers from "../../hooks/useUsers";
+import useUsersApi from "../../hooks/useUsersApi";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
 import { AlertToast } from "../ui/AlertToast";
@@ -16,7 +16,7 @@ import styles from "./orders.module.css";
 
 const EditOrderForm = (props) => {
     const dispatch = useDispatch();
-    const { users } = useUsers();
+    const { users } = useUsersApi();
     const order = props.order;
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);

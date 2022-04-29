@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Variation } from "../../../domain/Variation";
-import useProducts from "../../../hooks/useProducts";
+import useProductsApi from "../../../hooks/useProductsApi";
 import { AlertType, uiActions } from "../../../store/uiSlice";
 import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { AlertToast } from "../../ui/AlertToast";
@@ -17,7 +17,7 @@ import styles from "../orders.module.css";
 export const OrderItemWizardProduct = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const { products, findProduct } = useProducts();
+    const { products, findProduct } = useProductsApi();
     const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
