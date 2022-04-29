@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { OpType } from "../../context/ApplicationContext";
 import { Role, User } from "../../domain/User";
 import { Variation } from "../../domain/Variation";
 import useVariationsApi from "../../hooks/useVariationsApi";
-import { RootState } from "../../store";
+import { OpType, RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";

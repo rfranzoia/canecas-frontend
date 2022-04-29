@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { OpType } from "../../context/ApplicationContext";
 import { Role, User } from "../../domain/User";
-import { RootState } from "../../store";
+import { OpType, RootState } from "../../store";
 import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
 import { imageHelper } from "../ui/ImageHelper";
 import classes from "./variations.module.css";

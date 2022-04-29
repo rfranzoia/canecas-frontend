@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { OpType } from "../../context/ApplicationContext";
 import { Role, User } from "../../domain/User";
-import { RootState } from "../../store";
+import { OpType, RootState } from "../../store";
 import { ConfirmModal } from "../ui/ConfirmModal";
 import { VariationListFilter } from "./VariationListFilter";
 import { VariationRow } from "./VariationRow";

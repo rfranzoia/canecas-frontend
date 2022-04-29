@@ -1,9 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { productsApi } from "../../api/ProductsAPI";
-import { ApplicationContext } from "../../context/ApplicationContext";
 import { Role, User } from "../../domain/User";
 import { RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
@@ -14,8 +13,7 @@ import { EditProductForm } from "./EditProductForm";
 import { ProductsList } from "./ProductsList";
 
 export const Products = () => {
-    const appCtx = useContext(ApplicationContext);
-    const user = useSelector<RootState, User>(state => state.auth.user);
+    const loggedUser = useSelector<RootState, User>((state) => state.auth.user);
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -30,7 +28,6 @@ export const Products = () => {
         price: 0,
         image: ""
     });
-    const { getToken } = appCtx;
 
     const loadProducts = useCallback(async () => {
         productsApi.list()
@@ -44,9 +41,9 @@ export const Products = () => {
     }, []);
 
     const handleDelete = async (product) => {
-        if (!getToken()) return;
+        if (!loggedUser.authToken) return;
 
-        const result = await productsApi.withToken(getToken()).delete(product._id);
+        const result = await productsApi.withToken(loggedUser.authToken).delete(product._id);
         if (!result) {
             dispatch(uiActions.handleAlert({
                 show: true,
@@ -99,9 +96,9 @@ export const Products = () => {
         const save = async (product) => {
             let result;
             if (editViewOp.op === "edit") {
-                result = await productsApi.withToken(getToken()).update(editViewOp.productId, product)
+                result = await productsApi.withToken(loggedUser.authToken).update(editViewOp.productId, product)
             } else if (editViewOp.op === "new") {
-                result = await productsApi.withToken(getToken()).create(product);
+                result = await productsApi.withToken(loggedUser.authToken).create(product);
             }
             if (result.statusCode !== StatusCodes.OK) {
                 handleSave(result);
@@ -143,7 +140,7 @@ export const Products = () => {
             <Card border="dark">
                 <Card.Header as="h3">Products</Card.Header>
                 <Card.Body>
-                    {user.role === Role.ADMIN &&
+                    {loggedUser.role === Role.ADMIN &&
                         <Card.Title>
                             <CustomButton
                                 caption="New Product"

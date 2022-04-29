@@ -1,19 +1,19 @@
 import { StatusCodes } from "http-status-codes";
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { productsApi } from "../api/ProductsAPI";
-import { ApplicationContext } from "../context/ApplicationContext";
 import { Product } from "../domain/Product";
+import { User } from "../domain/User";
+import { RootState } from "../store";
 import { AlertType, uiActions } from "../store/uiSlice";
 
 const useProducts = () => {
     const dispatch = useDispatch();
-    const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState<Product[]>([]);
-    const { getToken } = appCtx;
+    const loggedUser = useSelector<RootState, User>((state) => state.auth.user);
 
     const loadProducts = useCallback(async () => {
-        const result = await productsApi.withToken(getToken()).list();
+        const result = await productsApi.withToken(loggedUser.authToken).list();
         if (result.statusCode !== StatusCodes.OK) {
             dispatch(uiActions.handleAlert({
                 show: true,
@@ -25,7 +25,7 @@ const useProducts = () => {
         } else {
             setProducts(result.data);
         }
-    }, [getToken, dispatch])
+    }, [loggedUser.authToken, dispatch])
 
     const findProduct = (name): Product => {
         return products.find(p => p.name === name);

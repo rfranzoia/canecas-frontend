@@ -1,18 +1,18 @@
 import { StatusCodes } from "http-status-codes";
-import { memo, useCallback, useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { memo, useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ordersApi } from "../../api/OrdersAPI";
-import { ApplicationContext } from "../../context/ApplicationContext";
 import { Order } from "../../domain/Order";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import EditOrderForm from "./EditOrderForm";
 
 const EditOrder = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const dispatch = useDispatch();
+    const loggedUser = useSelector<RootState, User>((state) => state.auth.user);
     const [showAlert, setShowAlert] = useState(false);
-    const { getToken } = appCtx;
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",
@@ -36,7 +36,7 @@ const EditOrder = (props) => {
     const loadData = useCallback(async () => {
         if (!props.id) return;
 
-        const result = await ordersApi.withToken(getToken()).get(props.id);
+        const result = await ordersApi.withToken(loggedUser.authToken).get(props.id);
         if (result?.statusCode !== StatusCodes.OK) {
             dispatch(uiActions.handleAlert({
                 show: true,
@@ -54,7 +54,7 @@ const EditOrder = (props) => {
             }
             setShowAlert(false);
         }
-    }, [props.id, getToken, dispatch])
+    }, [props.id, loggedUser.authToken, dispatch])
 
     useEffect(() => {
         loadData().then(() => undefined);
