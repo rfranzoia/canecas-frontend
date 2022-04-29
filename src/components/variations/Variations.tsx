@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
-import { CustomButton } from "../ui/CustomButton";
-import { AlertToast } from "../ui/AlertToast";
-import { CustomPagination } from "../ui/CustomPagination";
-import { Variation } from "../../domain/Variation";
-import { OpType } from "../../context/ApplicationContext";
-import { VariationsList } from "./VariationsList";
-import Modal from "../ui/Modal";
-import { VariationEditForm } from "./VariationEditForm";
-import { Role, User } from "../../domain/User";
-import { VariationsFilter } from "./VariationListFilter";
 import { useDispatch, useSelector } from "react-redux";
+import { OpType } from "../../context/ApplicationContext";
+import { Role, User } from "../../domain/User";
+import { Variation } from "../../domain/Variation";
+import useVariationsApi from "../../hooks/useVariationsApi";
 import { RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
-import useVariationsApi from "../../hooks/useVariationsApi";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
+import { CustomPagination } from "../ui/CustomPagination";
+import Modal from "../ui/Modal";
+import { VariationEditForm } from "./VariationEditForm";
+import { VariationsFilter } from "./VariationListFilter";
+import { VariationsList } from "./VariationsList";
 
 export const Variations = (props) => {
     const user = useSelector<RootState, User>((state) => state.auth.user);

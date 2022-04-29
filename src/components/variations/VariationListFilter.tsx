@@ -1,10 +1,10 @@
-import { Col, Container, Form, Row } from "react-bootstrap";
 import { useCallback, useEffect, useState } from "react";
-import { CustomButton } from "../ui/CustomButton";
+import { Col, Container, Form, Row } from "react-bootstrap";
+import useProducts from "../../hooks/useProducts";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { CustomButton } from "../ui/CustomButton";
 
 import styles from "./variationListFilter.module.css";
-import useProducts from "../../hooks/useProducts";
 
 export interface VariationsFilter {
     product?: string;

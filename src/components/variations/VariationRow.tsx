@@ -1,12 +1,12 @@
-import { Image } from "react-bootstrap";
-import classes from "./variations.module.css";
-import { imageHelper } from "../ui/ImageHelper";
 import { useEffect, useState } from "react";
-import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { Image } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { OpType } from "../../context/ApplicationContext";
 import { Role, User } from "../../domain/User";
-import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { imageHelper } from "../ui/ImageHelper";
+import classes from "./variations.module.css";
 
 export const VariationRow = (props) => {
     const user = useSelector<RootState, User>((state) => state.auth.user);
