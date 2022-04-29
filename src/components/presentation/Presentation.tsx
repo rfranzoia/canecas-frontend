@@ -73,7 +73,7 @@ export const Presentation = () => {
             <AlertToast showAlert={showAlert}/>
             <div>
                 <h1>Caricanecas Manauara</h1>
-                <p style={{textAlign: "center"}}>Caricanecas Manaus/AM<br/>
+                <p style={{ textAlign: "center" }}>Caricanecas Manaus/AM<br/>
                     ✏️ Usamos a arte para encantar com um produto que é a sua cara!
                     Um brinde que é a sua cara!❤️<br/>
                     Gostou da ideia? Peça uma cotação pra gente!👇
@@ -82,8 +82,8 @@ export const Presentation = () => {
                     <CustomButton caption="Request Quote" customClass="fa fa-money-check-dollar"
                                   onClick={handleShowRequestQuote} type="custom-success"/>
                 </div>
-                <p style={{textAlign: "center"}}>You can also send us a message on &nbsp;
-                    <span style={{cursor: "pointer"}}
+                <p style={{ textAlign: "center" }}>You can also send us a message on &nbsp;
+                    <span style={{ cursor: "pointer" }}
                           onClick={handleWhatsappClick}>{getActionIcon(ActionIconType.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
                 </p>
             </div>
@@ -113,7 +113,7 @@ export const Presentation = () => {
                         })}
                     </div>
                     <br/>
-                    <p style={{textAlign: "center", fontSize: "16px"}}>For a list of available options click on the
+                    <p style={{ textAlign: "center", fontSize: "16px" }}>For a list of available options click on the
                         image</p>
                 </Card.Body>
             </Card>

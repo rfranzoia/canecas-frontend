@@ -10,7 +10,7 @@ import { CustomButton } from "../../ui/CustomButton";
 export const OrderWizardProductForm = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const {products} = useProducts();
+    const { products } = useProducts();
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
@@ -28,7 +28,7 @@ export const OrderWizardProductForm = (props) => {
     }
 
     const isValidData = (): boolean => {
-        const {product} = formData;
+        const { product } = formData;
         if (product.trim().length === 0) {
             dispatch(uiActions.handleAlert({
                 show: true,
@@ -43,7 +43,7 @@ export const OrderWizardProductForm = (props) => {
     }
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -102,7 +102,7 @@ export const OrderWizardProductForm = (props) => {
                                         value={formData.price}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
-                                        style={{textAlign: "right"}}
+                                        style={{ textAlign: "right" }}
                                         disabled
                                     />
                                     <small>We will call you to offer better price if you order more than one

@@ -90,7 +90,7 @@ export const Header = () => {
     return (
         <header>
             {(showAlert) && <AlertToast showAlert={showAlert}/>}
-            <Navbar className="color-nav" variant="dark" expand="lg" style={{marginBottom: "0.5rem"}}>
+            <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem" }}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
                         <Image src={`${CONTENT_SERVER_ADDRESS}/logo.jpg`}
@@ -102,7 +102,7 @@ export const Header = () => {
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
                             className="me-auto my-2 my-lg-0"
-                            style={{maxHeight: '100px'}}
+                            style={{ maxHeight: '100px' }}
                             navbarScroll
                         >
 

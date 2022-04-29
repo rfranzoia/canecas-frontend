@@ -30,7 +30,7 @@ export const Products = () => {
         price: 0,
         image: ""
     });
-    const {getToken} = appCtx;
+    const { getToken } = appCtx;
 
     const loadProducts = useCallback(async () => {
         productsApi.list()

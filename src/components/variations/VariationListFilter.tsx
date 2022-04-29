@@ -13,7 +13,7 @@ export interface VariationsFilter {
 }
 
 export const VariationListFilter = (props) => {
-    const {products} = useProducts();
+    const { products } = useProducts();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByProductCheck: false,
@@ -24,7 +24,7 @@ export const VariationListFilter = (props) => {
         background: "empty",
     });
 
-    const {onFilterChange} = props;
+    const { onFilterChange } = props;
     const handleFilterChange = useCallback(
         (filter?: VariationsFilter) => {
             onFilterChange(filter);
@@ -33,7 +33,7 @@ export const VariationListFilter = (props) => {
     );
 
     const handleChange = (event) => {
-        const {name, value, type, checked} = event.target;
+        const { name, value, type, checked } = event.target;
         setFormData((prevFormData) => {
             return {
                 ...prevFormData,
@@ -149,7 +149,7 @@ export const VariationListFilter = (props) => {
                                             />
                                             <AutoCompleteInput
                                                 className={styles["bigger-input longer-input"]}
-                                                style={{width: "25rem"}}
+                                                style={{ width: "25rem" }}
                                                 data={products}
                                                 displayFields="name"
                                                 value={formData.product}

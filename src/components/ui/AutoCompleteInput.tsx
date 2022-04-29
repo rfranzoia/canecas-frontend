@@ -62,7 +62,7 @@ export const AutoCompleteInput = (props) => {
             const inner = displayFields.map(df => {
                 return s[df];
             })
-            return {_id: s._id, value: inner.join((AUTOCOMPLETE_FIELD_JOINER))}
+            return { _id: s._id, value: inner.join((AUTOCOMPLETE_FIELD_JOINER)) }
         })
 
         return (
@@ -103,7 +103,7 @@ export const AutoCompleteInput = (props) => {
 
     return (
         <div className={styles.AutoCompleteText}>
-            <IconContext.Provider value={{color: "black", size: '1.8rem'}}>
+            <IconContext.Provider value={{ color: "black", size: '1.8rem' }}>
                 <input type="text"
                        id="autocompleteInput"
                        onChange={handleChange}
@@ -119,11 +119,11 @@ export const AutoCompleteInput = (props) => {
                 {suggestions.length === 0 ?
                     <BsCaretDown className={styles.iconText}
                                  onClick={handleClickIcon}
-                                 style={{pointerEvents: (props.disabled) ? "none" : "all"}}/>
+                                 style={{ pointerEvents: (props.disabled) ? "none" : "all" }}/>
                     :
                     <GrFormClose className={styles.iconText}
                                  onClick={handleClickIcon}
-                                 style={{pointerEvents: (props.disabled) ? "none" : "all"}}/>
+                                 style={{ pointerEvents: (props.disabled) ? "none" : "all" }}/>
                 }
 
             </IconContext.Provider>

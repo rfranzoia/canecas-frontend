@@ -107,7 +107,7 @@ export const OrderItemWizard = (props) => {
     ]
 
     return (
-        <div style={{width: "35rem"}}>
+        <div style={{ width: "35rem" }}>
             {steps[currStep]}
         </div>
     );

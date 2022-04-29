@@ -43,7 +43,7 @@ export const EditUserForm = (props) => {
     };
 
     const isDataValid = (): boolean => {
-        const {role, name, email, password, confirmPassword} = formData;
+        const { role, name, email, password, confirmPassword } = formData;
 
         if (role.trim().length === 0 || name.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
@@ -79,7 +79,7 @@ export const EditUserForm = (props) => {
     };
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData((prevState) => {
             return {
                 ...prevState,

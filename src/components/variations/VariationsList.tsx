@@ -65,13 +65,13 @@ export const VariationsList = (props) => {
                 <Table bordered striped hover className="table-small-font table-sm">
                     <thead>
                     <tr>
-                        <th style={{width: "35%"}} colSpan={2}>
+                        <th style={{ width: "35%" }} colSpan={2}>
                             Product
                         </th>
-                        <th style={{width: "20%", textAlign: "center"}}>Drawings</th>
-                        <th style={{width: "20%", textAlign: "center"}}>Background</th>
-                        <th style={{width: "10%", textAlign: "right"}}>Price</th>
-                        {user.role === Role.ADMIN && <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>}
+                        <th style={{ width: "20%", textAlign: "center" }}>Drawings</th>
+                        <th style={{ width: "20%", textAlign: "center" }}>Background</th>
+                        <th style={{ width: "10%", textAlign: "right" }}>Price</th>
+                        {user.role === Role.ADMIN && <th style={{ width: "10%", textAlign: "right" }}>&nbsp;</th>}
                     </tr>
                     </thead>
                     <tbody>

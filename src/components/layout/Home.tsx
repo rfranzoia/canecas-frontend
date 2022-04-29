@@ -11,7 +11,7 @@ export const Home = () => {
             <div className="container4">
                 {isLoggedIn &&
                     (
-                        <p style={{textAlign: "center"}}>Welcome Back {user.name}</p>
+                        <p style={{ textAlign: "center" }}>Welcome Back {user.name}</p>
                     )}
             </div>
             <div>

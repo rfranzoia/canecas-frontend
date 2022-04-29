@@ -19,7 +19,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
     });
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -28,7 +28,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
         });
     }
     const isValidData = () => {
-        const {name, phone, email} = formData;
+        const { name, phone, email } = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
             dispatch(uiActions.handleAlert({
@@ -50,7 +50,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
             password: "password",
             role: Role.GUEST
         }
-        props.onForward({user: user})
+        props.onForward({ user: user })
     }
 
     return (

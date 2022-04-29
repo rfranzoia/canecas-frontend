@@ -10,7 +10,7 @@ const useProducts = () => {
     const dispatch = useDispatch();
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState<Product[]>([]);
-    const {getToken} = appCtx;
+    const { getToken } = appCtx;
 
     const loadProducts = useCallback(async () => {
         const result = await productsApi.withToken(getToken()).list();

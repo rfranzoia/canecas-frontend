@@ -91,7 +91,7 @@ export const UserRegistration = (props) => {
     }
 
     const isDataValid = (): boolean => {
-        const {name, email, password, confirmPassword, phone} = userRegister;
+        const { name, email, password, confirmPassword, phone } = userRegister;
 
         if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 ||
             phone.trim().length === 0) {
@@ -120,12 +120,12 @@ export const UserRegistration = (props) => {
     }
 
     const handleHideError = () => {
-        dispatch(uiActions.handleAlert({show: false}));
+        dispatch(uiActions.handleAlert({ show: false }));
         setShowAlert(false);
     }
 
     const handleChangeRegister = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setUserRegister((prevState) => {
             return {
                 ...prevState,
@@ -135,7 +135,7 @@ export const UserRegistration = (props) => {
     };
 
     const handleChangeLogin = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         handleHideError();
         setUser(prevState => {
             return {

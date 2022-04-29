@@ -8,7 +8,7 @@ export const OrderWizardAmount = (props) => {
     });
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -21,7 +21,7 @@ export const OrderWizardAmount = (props) => {
         const amount = {
             amount: formData.amount,
         }
-        props.onFinish({amount: amount});
+        props.onFinish({ amount: amount });
     }
 
     const handleBackward = () => {
@@ -50,7 +50,7 @@ export const OrderWizardAmount = (props) => {
                                         value={formData.amount}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
-                                        style={{textAlign: "right"}}
+                                        style={{ textAlign: "right" }}
                                     />
                                 </Form.Group>
                             </Col>

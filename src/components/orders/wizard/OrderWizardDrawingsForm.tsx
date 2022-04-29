@@ -11,7 +11,7 @@ export const OrderWizardDrawingsForm = (props) => {
     });
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -90,7 +90,7 @@ export const OrderWizardDrawingsForm = (props) => {
                                                     placeholder="Enter the file name here"
                                                     name="file"
                                                     onChange={handleChangeFile}
-                                                    style={{display: 'none'}}
+                                                    style={{ display: 'none' }}
                                                 />
                                                 {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
                                             </div>

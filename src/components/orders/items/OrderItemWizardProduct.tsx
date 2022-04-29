@@ -17,7 +17,7 @@ import styles from "../orders.module.css";
 export const OrderItemWizardProduct = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const {products, findProduct} = useProducts();
+    const { products, findProduct } = useProducts();
     const [showVariationsModal, setShowVariationsModal] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
@@ -55,7 +55,7 @@ export const OrderItemWizardProduct = (props) => {
     }
 
     const isValidData = (): boolean => {
-        const {product} = formData;
+        const { product } = formData;
         if (product.trim().length === 0) {
             dispatch(uiActions.handleAlert({
                 show: true,
@@ -70,7 +70,7 @@ export const OrderItemWizardProduct = (props) => {
     }
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -121,7 +121,7 @@ export const OrderItemWizardProduct = (props) => {
                             <Col md={1}>
                                 <Form.Group>
                                     <Form.Label>&nbsp;&nbsp;</Form.Label>
-                                    <div style={{marginTop: "0.5rem", marginLeft: "-1rem"}}>
+                                    <div style={{ marginTop: "0.5rem", marginLeft: "-1rem" }}>
                                         {getActionIcon(ActionIconType.SEARCH, {
                                             title: "search",
                                             canClick: true,
@@ -142,7 +142,7 @@ export const OrderItemWizardProduct = (props) => {
                                         value={formData.price}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
-                                        style={{textAlign: "right"}}
+                                        style={{ textAlign: "right" }}
                                         disabled
                                     />
                                     <small>You will be able to change this in the last step</small>
@@ -162,7 +162,7 @@ export const OrderItemWizardProduct = (props) => {
             </div>
             {showVariationsModal &&
                 <Modal
-                    style={{width: "45rem", maxHeight: "45rem", overflow: "scroll"}}
+                    style={{ width: "45rem", maxHeight: "45rem", overflow: "scroll" }}
                     onClose={handleCloseVariationsModal}>
                     <Variations onClose={handleCloseVariationsModal}
                                 onSelect={handleSelectVariation}

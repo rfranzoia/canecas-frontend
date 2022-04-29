@@ -5,11 +5,11 @@ import { imageHelper } from "../ui/ImageHelper";
 export const HowToOrderPresentation = () => {
 
     const howToOrderImages = [
-        {id: 1, name: "como-pedir-1.png", title: "Step 1"},
-        {id: 2, name: "como-pedir-2.png", title: "Step 2"},
-        {id: 3, name: "como-pedir-3.png", title: "Step 3"},
-        {id: 4, name: "como-pedir-4.png", title: "Step 4"},
-        {id: 5, name: "como-pedir-5.png", title: "Step 5"},
+        { id: 1, name: "como-pedir-1.png", title: "Step 1" },
+        { id: 2, name: "como-pedir-2.png", title: "Step 2" },
+        { id: 3, name: "como-pedir-3.png", title: "Step 3" },
+        { id: 4, name: "como-pedir-4.png", title: "Step 4" },
+        { id: 5, name: "como-pedir-5.png", title: "Step 5" },
     ];
 
     const howToOrderCarousel = (
@@ -43,13 +43,13 @@ export const HowToOrderPresentation = () => {
 
 
     return (
-        <div className="flex-centered-container black-shadow" style={{width: "47rem"}}>
+        <div className="flex-centered-container black-shadow" style={{ width: "47rem" }}>
             <div>
-                <h2 style={{textAlign: "center"}}>How To Order</h2>
+                <h2 style={{ textAlign: "center" }}>How To Order</h2>
                 <div className="two-items-container">
                     {howToOrderCarousel}
                 </div>
-                <div style={{textAlign: "center"}}>
+                <div style={{ textAlign: "center" }}>
                     <small>Press ESC to close this window</small>
                 </div>
             </div>

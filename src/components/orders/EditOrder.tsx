@@ -12,7 +12,7 @@ const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const {getToken} = appCtx;
+    const { getToken } = appCtx;
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",

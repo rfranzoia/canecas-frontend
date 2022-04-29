@@ -18,7 +18,7 @@ export const EditUser = (props) => {
         phone: "",
         address: "",
     });
-    const {op, id} = props;
+    const { op, id } = props;
 
     const handleSaveUser = (user) => {
         if (op === "view") return;

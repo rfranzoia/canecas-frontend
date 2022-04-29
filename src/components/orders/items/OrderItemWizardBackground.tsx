@@ -30,7 +30,7 @@ export const OrderItemWizardBackground = (props) => {
     };
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -181,7 +181,7 @@ export const OrderItemWizardBackground = (props) => {
                                                 name="file"
                                                 onChange={handleChangeFile}
                                                 disabled={formData.background === "empty"}
-                                                style={{display: 'none'}}
+                                                style={{ display: 'none' }}
                                             />
                                             {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", formData.background === "personalized", handleFileClick)}
                                         </div>

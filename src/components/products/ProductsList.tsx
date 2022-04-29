@@ -9,7 +9,7 @@ import { ProductRow } from "./ProductRow";
 export const ProductsList = (props) => {
     const appCtx = useContext(ApplicationContext);
     const user = useSelector<RootState, User>(state => state.auth.user);
-    const {getToken} = appCtx;
+    const { getToken } = appCtx;
 
     const handleEdit = (op, id) => {
         props.onEdit(op, id);
@@ -24,12 +24,12 @@ export const ProductsList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th style={{width: "20%"}}>Name</th>
-                <th style={{width: "30%"}}>Description</th>
-                <th style={{width: "7%"}}>Price</th>
-                <th style={{width: "10%"}}>Image</th>
+                <th style={{ width: "20%" }}>Name</th>
+                <th style={{ width: "30%" }}>Description</th>
+                <th style={{ width: "7%" }}>Price</th>
+                <th style={{ width: "10%" }}>Image</th>
                 {user.role === Role.ADMIN &&
-                    <th style={{width: "8%"}}>&nbsp;</th>
+                    <th style={{ width: "8%" }}>&nbsp;</th>
                 }
             </tr>
             </thead>

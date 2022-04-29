@@ -24,10 +24,10 @@ export const UserRow = (props) => {
     }
 
     return (
-        <tr key={user._id} style={{verticalAlign: "middle"}}>
+        <tr key={user._id} style={{ verticalAlign: "middle" }}>
             <td>{user.role}</td>
             <td>{user.name}</td>
-            <td><span style={{cursor: "pointer", color: "blue"}}
+            <td><span style={{ cursor: "pointer", color: "blue" }}
                       onClick={() => props.onEdit("view", user._id)}>{user.email}</span></td>
             <td align="right">{user.phone}</td>
             <td>{user.address}</td>

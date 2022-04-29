@@ -21,7 +21,7 @@ export const QuoteRequestForm = (props) => {
     });
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -51,7 +51,7 @@ export const QuoteRequestForm = (props) => {
     }
 
     const isValidData = () => {
-        const {name, phone, email} = formData;
+        const { name, phone, email } = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
             dispatch(uiActions.handleAlert({
@@ -71,7 +71,7 @@ export const QuoteRequestForm = (props) => {
     }
 
     return (
-        <Container style={{justifyContent: "center"}}>
+        <Container style={{ justifyContent: "center" }}>
             <Row>
                 <Col>
                     <AlertToast showAlert={showAlert}/>
@@ -79,8 +79,8 @@ export const QuoteRequestForm = (props) => {
             </Row>
             <Row>
                 <Col>
-                    <div style={{padding: "0.5rem", display: "flex", justifyContent: "center"}}>
-                        <DefaultCard title="Request Quote" style={{width: "30rem"}}>
+                    <div style={{ padding: "0.5rem", display: "flex", justifyContent: "center" }}>
+                        <DefaultCard title="Request Quote" style={{ width: "30rem" }}>
                             <form>
                                 <div className="form-group spaced-form-group">
                                     <label>Name<span aria-hidden="true"

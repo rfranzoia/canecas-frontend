@@ -25,12 +25,12 @@ export const OrderItemRow = (props) => {
     }, [props.item]);
 
     return (
-        <tr key={props.item._id} style={{verticalAlign: "middle"}}>
+        <tr key={props.item._id} style={{ verticalAlign: "middle" }}>
             <td>{item.product}</td>
-            <td style={{textAlign: "center"}}>{item.drawings}</td>
-            <td style={{textAlign: "center"}}>{item.background}</td>
-            <td style={{textAlign: "right"}}>{item.price.toFixed(2)}</td>
-            <td style={{textAlign: "right"}}>{item.amount}</td>
+            <td style={{ textAlign: "center" }}>{item.drawings}</td>
+            <td style={{ textAlign: "center" }}>{item.background}</td>
+            <td style={{ textAlign: "right" }}>{item.price.toFixed(2)}</td>
+            <td style={{ textAlign: "right" }}>{item.amount}</td>
             <td>
                 {
                     getActionIcon(ActionIconType.DELETE,

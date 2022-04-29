@@ -85,7 +85,7 @@ export class UsersAPI extends DefaultAPI {
         }
         try {
             const res = await axios.post(`${USERS_URL}/login`, JSON.stringify(credentials), {
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
             return res.data;
         } catch (error: any) {
@@ -99,7 +99,7 @@ export class UsersAPI extends DefaultAPI {
         }
         try {
             const res = await axios.post(`${USERS_URL}/validateToken`, JSON.stringify(body), {
-                headers: {"Content-Type": "application/json"}
+                headers: { "Content-Type": "application/json" }
             });
             return res.data;
         } catch (error: any) {

@@ -18,7 +18,7 @@ import styles from "./orders.module.css";
 
 export const NewOrder = (props) => {
     const dispatch = useDispatch();
-    const {users} = useUsers();
+    const { users } = useUsers();
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);
     const user = useSelector<RootState, User>(state => state.auth.user);
@@ -91,7 +91,7 @@ export const NewOrder = (props) => {
     }
 
     const isDataValid = (): boolean => {
-        const {userEmail, orderDate, items} = formData;
+        const { userEmail, orderDate, items } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
@@ -135,7 +135,7 @@ export const NewOrder = (props) => {
     }
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -211,7 +211,7 @@ export const NewOrder = (props) => {
                                         <label htmlFor="totalPrice">Total Price</label>
                                         <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
                                                required type="number"
-                                               style={{textAlign: "right"}}
+                                               style={{ textAlign: "right" }}
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
                                     </div>
                                 </Col>

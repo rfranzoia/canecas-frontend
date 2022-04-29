@@ -25,7 +25,7 @@ export const ChangeUserPassword = (props) => {
     });
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         handleHideError();
         setUser(prevState => {
             return {

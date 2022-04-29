@@ -35,9 +35,9 @@ export const ProductRow = (props) => {
     }, [props]);
 
     return (
-        <tr key={product._id} style={{verticalAlign: "middle"}}>
+        <tr key={product._id} style={{ verticalAlign: "middle" }}>
             <td>{product.name}</td>
-            <td width={"50%"}><span style={{cursor: "pointer", color: "blue"}}
+            <td width={"50%"}><span style={{ cursor: "pointer", color: "blue" }}
                                     onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
             <td align="right">{product.price.toFixed(2)}</td>
             <td align="center">

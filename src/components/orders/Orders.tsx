@@ -137,7 +137,7 @@ export const Orders = () => {
             ordersApi.withToken(user.authToken).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
-                        dispatch(uiActions.handleAlert({show: false}));
+                        dispatch(uiActions.handleAlert({ show: false }));
                         getTotalPages();
                         loadOrders(pageControl.currPage);
                         setSaved(true);
@@ -154,7 +154,7 @@ export const Orders = () => {
                 })
         } else if (edit.op === OpType.EDIT) {
             updateOrder(order._id, order, () => {
-                dispatch(uiActions.handleAlert({show: false}));
+                dispatch(uiActions.handleAlert({ show: false }));
                 loadOrders(pageControl.currPage);
                 setSaved(true);
             })

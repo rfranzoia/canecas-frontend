@@ -14,7 +14,7 @@ export interface OrdersFilter {
 }
 
 const OrdersListFilter = (props) => {
-    const {users} = useUsers();
+    const { users } = useUsers();
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByDateCheck: false,
@@ -26,13 +26,13 @@ const OrdersListFilter = (props) => {
         userEmail: "",
     });
 
-    const {onFilterChange} = props;
+    const { onFilterChange } = props;
     const handleFilterChange = useCallback((filter?: OrdersFilter) => {
         onFilterChange(filter);
     }, [onFilterChange])
 
     const handleChange = (event) => {
-        const {name, value, type, checked} = event.target
+        const { name, value, type, checked } = event.target
         setFormData(prevFormData => {
             return {
                 ...prevFormData,

@@ -188,7 +188,8 @@ export const OrderRow = (props) => {
                         }
                     </td>
                     <td width="15%">
-                            <span style={{cursor: "pointer", color: "blue"}} onClick={() => handleViewOrder(order._id)}>
+                            <span style={{ cursor: "pointer", color: "blue" }}
+                                  onClick={() => handleViewOrder(order._id)}>
                                 Order#: {order._id}
                             </span>
                     </td>

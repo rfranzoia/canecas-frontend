@@ -23,7 +23,7 @@ export const OrderItemWizardAmount = (props) => {
     });
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -33,7 +33,7 @@ export const OrderItemWizardAmount = (props) => {
     }
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -181,7 +181,7 @@ export const OrderItemWizardAmount = (props) => {
                                         value={formData.price}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
-                                        style={{textAlign: "right"}}
+                                        style={{ textAlign: "right" }}
                                     />
                                 </Form.Group>
                             </Col>
@@ -198,7 +198,7 @@ export const OrderItemWizardAmount = (props) => {
                                         value={formData.amount}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
-                                        style={{textAlign: "right"}}
+                                        style={{ textAlign: "right" }}
                                     />
                                 </Form.Group>
                             </Col>

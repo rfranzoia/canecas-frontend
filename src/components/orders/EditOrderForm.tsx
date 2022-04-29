@@ -16,7 +16,7 @@ import styles from "./orders.module.css";
 
 const EditOrderForm = (props) => {
     const dispatch = useDispatch();
-    const {users} = useUsers();
+    const { users } = useUsers();
     const order = props.order;
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);
@@ -82,7 +82,7 @@ const EditOrderForm = (props) => {
     }
 
     const isDataValid = (): boolean => {
-        const {userEmail, orderDate} = formData;
+        const { userEmail, orderDate } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
             dispatch(uiActions.handleAlert({
@@ -121,7 +121,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleChange = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -141,7 +141,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleCloseToast = () => {
-        dispatch(uiActions.handleAlert({show: false}));
+        dispatch(uiActions.handleAlert({ show: false }));
         setShowAlert(false);
     }
 

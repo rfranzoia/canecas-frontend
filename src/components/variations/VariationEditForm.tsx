@@ -25,20 +25,20 @@ const emptyFormData = {
 };
 
 export const VariationEditForm = (props) => {
-    const {uploadImage} = useServiceApi("variation");
-    const {products, findProduct} = useProducts();
+    const { uploadImage } = useServiceApi("variation");
+    const { products, findProduct } = useProducts();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const dispatch = useDispatch();
-    const {get} = useVariationsApi(false);
+    const { get } = useVariationsApi(false);
     const [formData, setFormData] = useState(emptyFormData);
     const [file, setFile] = useState({
         selectedFile: null,
     });
 
     const isValidData = (): boolean => {
-        const {product, drawings, background, price, image} = formData;
+        const { product, drawings, background, price, image } = formData;
         if (product.trim().length === 0 || background.trim().length === 0 || image.trim().length === 0) {
             dispatch(
                 uiActions.handleAlert({
@@ -79,7 +79,7 @@ export const VariationEditForm = (props) => {
     };
 
     const handleChange = (event) => {
-        const {name, value, type, checked} = event.target;
+        const { name, value, type, checked } = event.target;
         setFormData((prevFormData) => {
             return {
                 ...prevFormData,
@@ -161,7 +161,7 @@ export const VariationEditForm = (props) => {
     };
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData((prevState) => {
             return {
                 ...prevState,
@@ -172,7 +172,7 @@ export const VariationEditForm = (props) => {
 
     const handleChangeFile = async (event) => {
         event.preventDefault();
-        setFile({selectedFile: event.target.files[0]});
+        setFile({ selectedFile: event.target.files[0] });
         setImage(await imageHelper.convertToBase64(event.target.files[0]));
         setFormData((prevState) => {
             return {
@@ -284,7 +284,7 @@ export const VariationEditForm = (props) => {
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <div style={{padding: "0.5rem", border: "1px solid #cdcdcd"}}>
+                                            <div style={{ padding: "0.5rem", border: "1px solid #cdcdcd" }}>
                                                 <Form.Check
                                                     type="radio"
                                                     label="Empty"
@@ -326,7 +326,7 @@ export const VariationEditForm = (props) => {
                                                 value={formData.price}
                                                 onChange={handleChangeNumber}
                                                 autoComplete="off"
-                                                style={{textAlign: "right"}}
+                                                style={{ textAlign: "right" }}
                                             />
                                         </Form.Group>
                                     </Col>
@@ -356,7 +356,7 @@ export const VariationEditForm = (props) => {
                                                     placeholder="Enter the file name here"
                                                     name="file"
                                                     onChange={handleChangeFile}
-                                                    style={{display: "none"}}
+                                                    style={{ display: "none" }}
                                                 />
                                                 {props.op !== OpType.VIEW &&
                                                     getActionIcon(

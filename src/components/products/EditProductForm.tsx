@@ -13,7 +13,7 @@ import { imageHelper, ImageOpType } from "../ui/ImageHelper";
 export const EditProductForm = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const product = props.product;
-    const {uploadImage} = useServiceApi("product");
+    const { uploadImage } = useServiceApi("product");
     const [image, setImage] = useState(null);
     const [imageOpType, setImageOpType] = useState(ImageOpType.VIEW);
     const dispatch = useDispatch();
@@ -28,7 +28,7 @@ export const EditProductForm = (props) => {
     });
 
     const isDataValid = (): boolean => {
-        const {name, description, price, image} = formData;
+        const { name, description, price, image } = formData;
 
         if (name.trim().length === 0 || description.trim().length === 0 || image.trim().length === 0) {
             dispatch(uiActions.handleAlert({
@@ -99,7 +99,7 @@ export const EditProductForm = (props) => {
 
     const handleChange = (event) => {
         event.preventDefault();
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -109,7 +109,7 @@ export const EditProductForm = (props) => {
     }
 
     const handleChangeNumber = (event) => {
-        const {name, value} = event.target;
+        const { name, value } = event.target;
         setFormData(prevState => {
             return {
                 ...prevState,
@@ -120,7 +120,7 @@ export const EditProductForm = (props) => {
 
     const handleChangeFile = async (event) => {
         event.preventDefault();
-        setFile({selectedFile: event.target.files[0]});
+        setFile({ selectedFile: event.target.files[0] });
         setImage(await imageHelper.convertToBase64(event.target.files[0]))
         setFormData(prevState => {
             return {
@@ -220,7 +220,7 @@ export const EditProductForm = (props) => {
                                                 value={viewOnly ? formData.price.toFixed(2) : formData.price}
                                                 onChange={handleChangeNumber}
                                                 autoComplete={"off"}
-                                                style={{textAlign: "right"}}
+                                                style={{ textAlign: "right" }}
                                                 disabled={viewOnly}/>
                                         </Form.Group>
                                     </Col>
@@ -244,7 +244,7 @@ export const EditProductForm = (props) => {
                                                     placeholder="Enter your name here"
                                                     name="file"
                                                     onChange={handleChangeFile}
-                                                    style={{display: 'none'}}
+                                                    style={{ display: 'none' }}
                                                 />
                                                 {props.op !== OpType.VIEW &&
                                                     getActionIcon(ActionIconType.IMAGE_EDIT, "Select Image", true, handleFileClick)
