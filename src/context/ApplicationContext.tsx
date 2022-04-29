@@ -11,9 +11,9 @@ export interface GlobalAlert {
 }
 
 export interface UserData {
-    userId: string,
+    _id: string,
     name: string,
-    userEmail: string,
+    email: string,
     role: string,
     authToken: string
 }
@@ -21,8 +21,6 @@ export interface UserData {
 export interface AppCtx {
     userData: UserData,
     alert: GlobalAlert,
-    addUser: Function,
-    removeUser: Function,
     isLoggedIn: Function,
     handleAlert: Function,
     getToken: Function,
@@ -30,9 +28,9 @@ export interface AppCtx {
 
 const defaultValue: AppCtx = {
     userData: {
-        userId: "",
+        _id: "",
         name: "",
-        userEmail: "",
+        email: "",
         role: "",
         authToken: ""
     },
@@ -42,8 +40,6 @@ const defaultValue: AppCtx = {
         title: "",
         message: "",
     },
-    addUser: () => {},
-    removeUser: () => {},
     isLoggedIn: () => {},
     handleAlert: () => {},
     getToken: () => {},
@@ -72,8 +68,8 @@ export const ApplicationContextProvider = (props) => {
     const history = useHistory();
 
     const [userData, setUserData] = useState({
-        userId: "",
-        userEmail: "",
+        _id: "",
+        email: "",
         name: "",
         role: "",
         authToken: ""
@@ -86,28 +82,8 @@ export const ApplicationContextProvider = (props) => {
         message: "",
     });
 
-    const addUser = (user) => {
-        setUserData({
-            userId: user.userId,
-            name: user.name,
-            userEmail: user.userEmail,
-            role: user.role,
-            authToken: user.authToken
-        })
-    }
-
-    const removeUser = () => {
-        setUserData({
-            userId: "",
-            userEmail: "",
-            name: "",
-            role: "",
-            authToken: ""
-        });
-    }
-
     const isLoggedIn = () => {
-        return (userData.userEmail !== "" && userData.authToken !== "");
+        return (userData.email !== "" && userData.authToken !== "");
     }
 
     const getToken = useCallback(() => {
@@ -130,13 +106,6 @@ export const ApplicationContextProvider = (props) => {
         }
     },[]);
 
-    useEffect(() => {
-        const storage = JSON.parse(localStorage.getItem("userData"));
-        if (storage) {
-            addUser(storage);
-        }
-    }, []);
-
     const isTokenValid = useCallback(async (token) => {
         const res = await usersApi.validateToken(token);
         return res.statusCode === StatusCodes.OK;
@@ -144,7 +113,7 @@ export const ApplicationContextProvider = (props) => {
 
     useEffect(() => {
         localStorage.setItem("userData", JSON.stringify(userData));
-        if (!userData.userId || !userData.authToken) {
+        if (!userData._id || !userData.authToken) {
             let t = setTimeout(() => {
                 handleAlert(false);
                 clearTimeout(t);
@@ -157,7 +126,13 @@ export const ApplicationContextProvider = (props) => {
                         handleAlert(true, AlertType.INFO, "Login Expired", "Authentication Expired");
                         let t = setTimeout(() => {
                             handleAlert(false);
-                            removeUser();
+                            setUserData({
+                                _id: "",
+                                email: "",
+                                name: "",
+                                role: "",
+                                authToken: ""
+                            });
                             clearTimeout(t);
                             if (history) history.replace("/");
                         }, ALERT_TIMEOUT);
@@ -170,8 +145,6 @@ export const ApplicationContextProvider = (props) => {
         userData: userData,
         alert: alert,
         isLoggedIn: isLoggedIn,
-        addUser: addUser,
-        removeUser: removeUser,
         handleAlert: handleAlert,
         getToken: getToken,
     }

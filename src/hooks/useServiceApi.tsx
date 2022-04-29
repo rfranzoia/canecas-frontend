@@ -1,10 +1,11 @@
 import {imageHelper} from "../components/ui/ImageHelper";
 import axios, {processRequestError} from "../api/axios";
-import {useContext} from "react";
-import {ApplicationContext} from "../context/ApplicationContext";
+import {useSelector} from "react-redux";
+import {RootState} from "../store";
+import {User} from "../domain/User";
 
 const useServiceApi = (origin: string) => {
-    const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
 
     const uploadImage = async (file) => {
         try {
@@ -22,7 +23,7 @@ const useServiceApi = (origin: string) => {
             const res = await axios.post("/services/file/upload", obj, {
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${appCtx.getToken()}`
+                    "Authorization": `Bearer ${user.authToken}`
                 }
             });
 

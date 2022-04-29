@@ -4,12 +4,15 @@ import {useContext, useState} from "react";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import { CustomButton } from "../ui/CustomButton";
 import {ShowType, UserRegistration} from "../users/UserRegistration";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
 import {EditUser} from "../users/EditUser";
 import {AlertToast} from "../ui/AlertToast";
 import {ChangeUserPassword} from "../users/ChangeUserPassword";
 import {CONTENT_SERVER_ADDRESS} from "../../api/axios";
 import Modal from "../ui/Modal";
+import {useDispatch, useSelector} from "react-redux";
+import {authActions} from "../../store/authSlice";
+import {RootState} from "../../store";
 
 export const Header = () => {
     const history = useHistory();
@@ -19,6 +22,9 @@ export const Header = () => {
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const {handleAlert} = appCtx;
+    const dispatch = useDispatch();
+    const isLoggedIn = useSelector<RootState, Boolean>(state => state.auth.isLoggedIn);
+    const user = useSelector<RootState, User>(state => state.auth.user);
 
     const handleClose = () => {
         setShowLoginModal(false);
@@ -29,7 +35,7 @@ export const Header = () => {
     }
 
     const handleLogout = () => {
-        appCtx.removeUser();
+        dispatch(authActions.logout());
         history.replace("/");
     }
 
@@ -92,17 +98,17 @@ export const Header = () => {
                             navbarScroll
                         >
 
-                            {appCtx.isLoggedIn() && appCtx.userData.role === Role.ADMIN && adminUser }
-                            {appCtx.isLoggedIn() && appCtx.userData.role !== Role.ADMIN && simpleUser }
+                            {isLoggedIn && user.role === Role.ADMIN && adminUser }
+                            {isLoggedIn && user.role !== Role.ADMIN && simpleUser }
 
                         </Nav>
-                        {appCtx.isLoggedIn() ?
+                        {isLoggedIn ?
                             (
                                 <>
                                     <Navbar.Collapse className="justify-content-end">
                                         <Dropdown>
                                             <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                {appCtx.userData.name}
+                                                {user.name}
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
@@ -131,7 +137,7 @@ export const Header = () => {
                         onClose={handleCloseEditModal}
                         size="sm" >
                         <div>
-                            <EditUser id={appCtx.userData.userId} op="edit" onCloseModal={handleCloseEditModal}/>
+                            <EditUser id={user._id} op="edit" onCloseModal={handleCloseEditModal}/>
                         </div>
                     </Modal>
                 </div>
@@ -142,7 +148,7 @@ export const Header = () => {
                         onClose={() => setShowChangePassword(false)}
                         size="tn" >
                         <div>
-                            <ChangeUserPassword email={appCtx.userData.userEmail} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
+                            <ChangeUserPassword email={user.email} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
                         </div>
                     </Modal>
 

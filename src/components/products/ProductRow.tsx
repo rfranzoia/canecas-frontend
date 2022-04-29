@@ -1,13 +1,14 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {ConfirmModal} from "../ui/ConfirmModal";
 import {Image} from "react-bootstrap";
 import {imageHelper} from "../ui/ImageHelper";
-import {Role} from "../../domain/User";
-import {ApplicationContext} from "../../context/ApplicationContext";
+import {Role, User} from "../../domain/User";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const ProductRow = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const product = props.product;
     const [image, setImage] = useState(null);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -43,7 +44,7 @@ export const ProductRow = (props) => {
                 <Image src={image}
                        fluid width="60" title={product.name}/>
             </td>
-            {appCtx.userData.role === Role.ADMIN &&
+            {user.role === Role.ADMIN &&
                 <td align="center" width={"10%"}>
                     {
                         getActionIcon(ActionIconType.EDIT,

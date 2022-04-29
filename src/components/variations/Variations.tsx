@@ -10,12 +10,15 @@ import {DEFAULT_PAGE_SIZE} from "../../api/axios";
 import {VariationsList} from "./VariationsList";
 import Modal from "../ui/Modal";
 import {VariationEditForm} from "./VariationEditForm";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
 import {VariationsFilter} from "./VariationListFilter";
 import {StatusCodes} from "http-status-codes";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const Variations = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [showAlert, setShowAlert] = useState(false);
     const [showVariationFormModal, setShowVariationFormModal] = useState(false);
     const [variationFormOp, setVariationFormOp] = useState(OpType.VIEW);
@@ -169,7 +172,7 @@ export const Variations = (props) => {
                 <Card.Body>
                     <Card.Title>
                         <div className="two-items-container">
-                            {props.isModal !== "yes" && appCtx.userData.role === Role.ADMIN &&
+                            {props.isModal !== "yes" && user.role === Role.ADMIN &&
                                 <CustomButton caption="New Variation" type="new" customClass="fa-brands fa-hive"
                                               onClick={handleNewVariation}/>
                             }

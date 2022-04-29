@@ -14,6 +14,8 @@ import Modal from "../ui/Modal";
 
 import styles from "./orders.module.css"
 import {useHistory} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export interface WizardFormData {
     _id?: string,
@@ -33,6 +35,7 @@ export interface WizardFormData {
 export const Orders = () => {
     const [orders, setOrders] = useState([]);
     const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -45,10 +48,10 @@ export const Orders = () => {
         op: "",
         orderId: ""
     })
-    const { handleAlert, getToken } = appCtx;
+    const { handleAlert } = appCtx;
 
     const loadOrders = useCallback((page: number, filter?: string) => {
-        if (!getToken()) {
+        if (!user.authToken) {
             setOrders([]);
             return;
         }
@@ -58,7 +61,7 @@ export const Orders = () => {
             currPage: page
         }));
 
-        ordersApi.withToken(getToken()).listByFilter(page, filter)
+        ordersApi.withToken(user.authToken).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode === StatusCodes.UNAUTHORIZED) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -71,10 +74,10 @@ export const Orders = () => {
                     setOrders(result.data);
                 }
             });
-    },[handleAlert, getToken, history])
+    },[handleAlert, history, user.authToken])
 
     const updateOrder = (orderId: string, order, callback) => {
-        ordersApi.withToken(getToken()).update(orderId, order)
+        ordersApi.withToken(user.authToken).update(orderId, order)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -87,7 +90,7 @@ export const Orders = () => {
     }
 
     const getTotalPages = useCallback(() => {
-        ordersApi.withToken(getToken()).count()
+        ordersApi.withToken(user.authToken).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);
@@ -99,7 +102,7 @@ export const Orders = () => {
                     });
                 }
             });
-    }, [handleAlert, getToken])
+    }, [handleAlert, user.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setShowAlert(false);
@@ -112,7 +115,7 @@ export const Orders = () => {
 
     const handleSave = (order: Order) => {
         if (edit.op === OpType.NEW) {
-            ordersApi.withToken(getToken()).create(order)
+            ordersApi.withToken(user.authToken).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
                         handleAlert(false);
@@ -180,7 +183,7 @@ export const Orders = () => {
     }
 
     const handleDeleteOrder = async (orderId: string) => {
-        ordersApi.withToken(getToken()).delete(orderId)
+        ordersApi.withToken(user.authToken).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
                     handleAlert(true, AlertType.DANGER, result.name, result.description);

@@ -3,12 +3,15 @@ import {Card, Col, Form, Row} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
 import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
 
 import styles from "./users.module.css"
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const EditUserForm = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
     const [showAlert, setShowAlert] = useState(false);
     const user = props.user;
     const viewOnly = props.op === "view";
@@ -112,7 +115,7 @@ export const EditUserForm = (props) => {
                                         name="role"
                                         required
                                         value={formData.role}
-                                        disabled={viewOnly || appCtx.userData.role !== Role.ADMIN}
+                                        disabled={viewOnly || loggedUser.role !== Role.ADMIN}
                                         onChange={handleChange}>
                                         <option value="">Please Select</option>
                                         <option value="ADMIN">Admin</option>

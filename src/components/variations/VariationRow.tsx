@@ -1,13 +1,15 @@
 import {Image} from "react-bootstrap";
 import classes from "./variations.module.css"
 import {imageHelper} from "../ui/ImageHelper";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {ApplicationContext, OpType} from "../../context/ApplicationContext";
-import {Role} from "../../domain/User";
+import {OpType} from "../../context/ApplicationContext";
+import {Role, User} from "../../domain/User";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const VariationRow = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [image, setImage] = useState(null);
     const variation = props.variation;
 
@@ -45,7 +47,7 @@ export const VariationRow = (props) => {
                 <td width="20%" align="center">{variation.drawings}</td>
                 <td width="20%" align="center">{variation.background}</td>
                 <td width="10%" align="right">{variation.price.toFixed(2)}</td>
-                { appCtx.userData.role === Role.ADMIN &&
+                { user.role === Role.ADMIN &&
                     <td width="15%" align="center">
                         { props.op === OpType.SELECT &&
                             getActionIcon(ActionIconType.SELECT, {

@@ -1,13 +1,13 @@
 import {Redirect, Route} from "react-router-dom";
-import {useContext} from "react";
-import {ApplicationContext, AppCtx} from "../context/ApplicationContext";
+import {useSelector} from "react-redux";
+import {RootState} from "../store";
 
 export const ProtectedRoute = ({component: Component, ...rest}) => {
-    const appCtx: AppCtx = useContext(ApplicationContext);
+    const isLoggedIn = useSelector<RootState, Boolean>(state => state.auth.isLoggedIn);
     return (<Route
         {...rest}
         render={props => {
-            if (appCtx.isLoggedIn()) {
+            if (isLoggedIn) {
                 return <Component {...props} />;
             } else {
                 return (

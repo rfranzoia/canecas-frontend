@@ -8,10 +8,13 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {EditProductForm} from "./EditProductForm";
 import Modal from "../ui/Modal";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const Products = () => {
     const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [products, setProducts] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -129,7 +132,7 @@ export const Products = () => {
             <Card border="dark">
                 <Card.Header as="h3">Products</Card.Header>
                 <Card.Body>
-                    {appCtx.userData.role === Role.ADMIN &&
+                    {user.role === Role.ADMIN &&
                         <Card.Title>
                             <CustomButton
                                 caption="New Product"

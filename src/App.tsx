@@ -6,8 +6,12 @@ import { Products } from "./components/products/Products";
 import {Home} from "./components/layout/Home";
 import {Variations} from "./components/variations/Variations";
 import {OrdersMain} from "./components/orders/OrdersMain";
+import {useDispatch} from "react-redux";
+import {authActions} from "./store/authSlice";
 
 function App() {
+    const dispatch = useDispatch();
+    dispatch(authActions.checkLocalStorage());
     return (
         <Layout>
             <Switch>

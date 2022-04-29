@@ -1,16 +1,17 @@
 import {Card} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
 import {OrderRow} from "./OrderRow";
-import {useContext, useEffect, useState} from "react";
-import {ApplicationContext} from "../../context/ApplicationContext";
-import {Role} from "../../domain/User";
+import {useEffect, useState} from "react";
+import {Role, User} from "../../domain/User";
 import {CustomPagination} from "../ui/CustomPagination";
 
 import classes from "./orders.module.css";
 import OrdersListFilter from "./OrdersListFilter";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const OrdersList = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [orders, setOrders] = useState([]);
     const [pageControl, setPageControl] = useState({
         totalPages: 0,
@@ -58,7 +59,7 @@ export const OrdersList = (props) => {
             <Card border="dark">
                 <Card.Header as="h3">Orders</Card.Header>
                 <Card.Body>
-                    {appCtx.userData.role !== Role.GUEST &&
+                    {user.role === Role.ADMIN &&
                         <div className="two-items-container">
                             <CustomButton
                                 caption="New Order"

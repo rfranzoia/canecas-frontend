@@ -10,6 +10,9 @@ import {ChangeUserPassword} from "./ChangeUserPassword";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 import {useHistory} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
+import {User} from "../../domain/User";
 
 export const Users = () => {
     const appCtx = useContext(ApplicationContext);
@@ -18,16 +21,17 @@ export const Users = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
     const [editViewOp, setEditViewOp] = useState({
         userId: "",
         email: "",
         op: "",
     });
 
-    const {handleAlert, getToken} = appCtx;
+    const {handleAlert} = appCtx;
 
     const loadData = useCallback(async () => {
-        const result = await usersApi.withToken(getToken()).list();
+        const result = await usersApi.withToken(loggedUser.authToken).list();
         if (result.statusCode === StatusCodes.OK) {
             setUsers(result.data);
         } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
@@ -38,7 +42,7 @@ export const Users = () => {
             setShowAlert(true);
             setUsers([]);
         }
-    }, [getToken, handleAlert, history]);
+    }, [loggedUser.authToken, handleAlert, history]);
 
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);

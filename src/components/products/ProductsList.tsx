@@ -2,10 +2,13 @@ import {useContext} from "react";
 import {Table} from "react-bootstrap";
 import {ApplicationContext} from "../../context/ApplicationContext";
 import {ProductRow} from "./ProductRow";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const ProductsList = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const {getToken} = appCtx;
 
     const handleEdit = (op, id) => {
@@ -25,7 +28,7 @@ export const ProductsList = (props) => {
                 <th style={{ width: "30%" }}>Description</th>
                 <th style={{ width: "7%" }}>Price</th>
                 <th style={{ width: "10%" }}>Image</th>
-                {appCtx.userData.role === Role.ADMIN &&
+                {user.role === Role.ADMIN &&
                     <th style={{width: "8%"}}>&nbsp;</th>
                 }
             </tr>

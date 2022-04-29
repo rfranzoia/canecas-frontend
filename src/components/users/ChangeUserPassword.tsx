@@ -1,15 +1,16 @@
 import {Alert, Card, Col, Form, Row} from "react-bootstrap";
-import {useContext, useEffect, useState} from "react";
-import {ApplicationContext} from "../../context/ApplicationContext";
+import {useEffect, useState} from "react";
 import {CustomButton} from "../ui/CustomButton";
 import {usersApi} from "../../api/UsersAPI";
 import {StatusCodes} from "http-status-codes";
 
 import styles from "./users.module.css"
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
+import {User} from "../../domain/User";
 
 export const ChangeUserPassword = (props) => {
-    const appCtx = useContext(ApplicationContext);
-    const {getToken} = appCtx;
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
 
     const [showError, setShowError] = useState({
         show: false,
@@ -62,7 +63,7 @@ export const ChangeUserPassword = (props) => {
             return;
         }
 
-        usersApi.withToken(getToken())
+        usersApi.withToken(loggedUser.authToken)
             .updatePassword(props.email, user.password, user.newPassword)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {

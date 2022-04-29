@@ -1,14 +1,15 @@
-import classes from "./orders.module.css";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import {OrderItems} from "./OrderItems";
-import {ApplicationContext} from "../../context/ApplicationContext";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
 import {ConfirmModal} from "../ui/ConfirmModal";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
+import classes from "./orders.module.css";
 
 export const OrderRow = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",
@@ -137,19 +138,19 @@ export const OrderRow = (props) => {
     }
 
     const canCancelOrder =
-        (appCtx.userData.role === Role.ADMIN && order.status > OrderStatus.NEW && order.status < OrderStatus.FINISHED) ||
+        (user.role === Role.ADMIN && order.status > OrderStatus.NEW && order.status < OrderStatus.FINISHED) ||
         (order.status === OrderStatus.NEW || order.status === OrderStatus.CONFIRMED);
 
     const actions =
             <td width="15%" align="right">
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                     getActionIcon(ActionIconType.EDIT,
                         "Edit Order",
                         order.status === OrderStatus.NEW,
                         () => handleEditOrder(order._id))
                 }
                 <span>&nbsp;</span>
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                         getActionIcon(order.status === OrderStatus.NEW?
                                 ActionIconType.DELETE:
                                 ActionIconType.CANCEL_ITEM,
@@ -158,13 +159,13 @@ export const OrderRow = (props) => {
                             () => handleDeleteOrCancel())
                 }
                 <span>&nbsp;</span>
-                {(appCtx.userData.role === Role.ADMIN || order.userEmail === appCtx.userData.userEmail) &&
+                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                     getActionIcon(ActionIconType.USER_CHECK,
                     "Confirm Order",
                     order.status === OrderStatus.NEW,
                     () => handleConfirmOrderDialog())}
                 <span>&nbsp;</span>
-                {appCtx.userData.role === Role.ADMIN &&
+                {user.role === Role.ADMIN &&
                     getActionIcon(ActionIconType.ACTION_FORWARD,
                     `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
                     (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
@@ -195,7 +196,7 @@ export const OrderRow = (props) => {
                     <td width="20%">Customer: {order.userEmail}</td>
                     <td width="15%">Status: {OrderStatus[order.status]}</td>
                     <td width="8%" align="right">Total: {order.totalPrice.toFixed(2)}</td>
-                    {appCtx.userData.role !== Role.GUEST && actions}
+                    {user.role === Role.ADMIN && actions}
                 </tr>
                 </tbody>
             </table>

@@ -7,9 +7,11 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {Role} from "../../domain/User";
 import Modal from "../ui/Modal";
+import {StatusCodes} from "http-status-codes";
+import {authActions} from "../../store/authSlice";
+import {useDispatch} from "react-redux";
 
 import styles from "./users.module.css"
-import {StatusCodes} from "http-status-codes";
 
 export const enum ShowType { SIGN_IN, SIGN_UP}
 
@@ -18,6 +20,7 @@ export const UserRegistration = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const appCtx = useContext(ApplicationContext);
     const [showType, setShowType] = useState(ShowType.SIGN_IN);
+    const dispatch = useDispatch();
 
     const {handleAlert} = appCtx;
 
@@ -42,13 +45,14 @@ export const UserRegistration = (props) => {
     const handleSignIn = async (credentials) => {
         const res = await usersApi.login(credentials.email, credentials.password);
         if (res.statusCode === StatusCodes.OK) {
-            appCtx.addUser({
+            const user = {
                 userId: res.data._id,
                 name: res.data.name,
                 userEmail: res.data.email,
                 authToken: res.data.authToken,
                 role: res.data.role
-            });
+            };
+            dispatch(authActions.login(user));
             props.handleClose();
             history.replace("/");
         } else {

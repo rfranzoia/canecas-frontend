@@ -6,22 +6,25 @@ import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import {evaluateTotalPrice, Order} from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
-import {Role} from "../../domain/User";
+import {Role, User} from "../../domain/User";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 
 import styles from "./orders.module.css";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import Modal from "../ui/Modal";
 import {OrderItemWizard} from "./items/OrderItemWizard";
+import {useSelector} from "react-redux";
+import {RootState} from "../../store";
 
 export const NewOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
     const {users} = useUsers();
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);
+    const user = useSelector<RootState, User>(state => state.auth.user);
     const [formData, setFormData] = useState({
         orderDate: "",
-        userEmail: appCtx.userData.role === Role.ADMIN? "": appCtx.userData.userEmail,
+        userEmail: user.role === Role.ADMIN? "": user.email,
         totalPrice: 0,
         items: []
     });
