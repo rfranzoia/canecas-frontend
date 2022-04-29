@@ -1,12 +1,12 @@
-import { VariationListFilter } from "./VariationListFilter";
-import { Table } from "react-bootstrap";
-import { VariationRow } from "./VariationRow";
-import { OpType } from "../../context/ApplicationContext";
-import { ConfirmModal } from "../ui/ConfirmModal";
 import { useEffect, useState } from "react";
-import { Role, User } from "../../domain/User";
+import { Table } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { OpType } from "../../context/ApplicationContext";
+import { Role, User } from "../../domain/User";
 import { RootState } from "../../store";
+import { ConfirmModal } from "../ui/ConfirmModal";
+import { VariationListFilter } from "./VariationListFilter";
+import { VariationRow } from "./VariationRow";
 
 export const VariationsList = (props) => {
     const user = useSelector<RootState, User>((state) => state.auth.user);
@@ -60,39 +60,39 @@ export const VariationsList = (props) => {
 
     return (
         <>
-            <VariationListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError} />
+            <VariationListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>
             <div>
                 <Table bordered striped hover className="table-small-font table-sm">
                     <thead>
-                        <tr>
-                            <th style={{ width: "35%" }} colSpan={2}>
-                                Product
-                            </th>
-                            <th style={{ width: "20%", textAlign: "center" }}>Drawings</th>
-                            <th style={{ width: "20%", textAlign: "center" }}>Background</th>
-                            <th style={{ width: "10%", textAlign: "right" }}>Price</th>
-                            {user.role === Role.ADMIN && <th style={{ width: "10%", textAlign: "right" }}>&nbsp;</th>}
-                        </tr>
+                    <tr>
+                        <th style={{width: "35%"}} colSpan={2}>
+                            Product
+                        </th>
+                        <th style={{width: "20%", textAlign: "center"}}>Drawings</th>
+                        <th style={{width: "20%", textAlign: "center"}}>Background</th>
+                        <th style={{width: "10%", textAlign: "right"}}>Price</th>
+                        {user.role === Role.ADMIN && <th style={{width: "10%", textAlign: "right"}}>&nbsp;</th>}
+                    </tr>
                     </thead>
                     <tbody>
-                        {variations.length > 0 &&
-                            variations.map((v) => {
-                                return (
-                                    <VariationRow
-                                        key={v._id}
-                                        variation={v}
-                                        onEdit={props.onEdit}
-                                        onDelete={handDeleteVariation}
-                                        onSelect={handleSelect}
-                                        op={props.isModal === "yes" ? OpType.SELECT : "none"}
-                                    />
-                                );
-                            })}
-                        {(!variations || variations.length === 0) && (
-                            <tr>
-                                <td colSpan={6}>No variations were found</td>
-                            </tr>
-                        )}
+                    {variations.length > 0 &&
+                        variations.map((v) => {
+                            return (
+                                <VariationRow
+                                    key={v._id}
+                                    variation={v}
+                                    onEdit={props.onEdit}
+                                    onDelete={handDeleteVariation}
+                                    onSelect={handleSelect}
+                                    op={props.isModal === "yes" ? OpType.SELECT : "none"}
+                                />
+                            );
+                        })}
+                    {(!variations || variations.length === 0) && (
+                        <tr>
+                            <td colSpan={6}>No variations were found</td>
+                        </tr>
+                    )}
                     </tbody>
                 </Table>
                 {confirmationDialog.show && (

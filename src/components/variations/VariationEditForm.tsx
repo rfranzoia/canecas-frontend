@@ -1,19 +1,19 @@
-import {useEffect, useState} from "react";
-import {Card, Col, Form, Image, Row} from "react-bootstrap";
-import {StatusCodes} from "http-status-codes";
-import {Variation} from "../../domain/Variation";
-import {OpType} from "../../context/ApplicationContext";
-import {AutoCompleteInput} from "../ui/AutoCompleteInput";
-import {CustomButton} from "../ui/CustomButton";
-import {AlertToast} from "../ui/AlertToast";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {imageHelper} from "../ui/ImageHelper";
+import { StatusCodes } from "http-status-codes";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Image, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { OpType } from "../../context/ApplicationContext";
+import { Variation } from "../../domain/Variation";
 import useProducts from "../../hooks/useProducts";
 import useServiceApi from "../../hooks/useServiceApi";
-import styles from "./variations.module.css";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../store/uiSlice";
 import useVariationsApi from "../../hooks/useVariationsApi";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { AlertToast } from "../ui/AlertToast";
+import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { CustomButton } from "../ui/CustomButton";
+import { imageHelper } from "../ui/ImageHelper";
+import styles from "./variations.module.css";
 
 const emptyFormData = {
     _id: null,
