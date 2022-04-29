@@ -1,8 +1,8 @@
-import {createContext, useCallback, useEffect, useState} from "react";
-import {useHistory} from "react-router-dom";
-import {usersApi} from "../api/UsersAPI";
-import {StatusCodes} from "http-status-codes";
-import {ALERT_TIMEOUT} from "../store/uiSlice";
+import { StatusCodes } from "http-status-codes";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { usersApi } from "../api/UsersAPI";
+import { ALERT_TIMEOUT } from "../store/uiSlice";
 
 export interface UserData {
     _id: string,
@@ -26,20 +26,22 @@ const defaultValue: AppCtx = {
         role: "",
         authToken: ""
     },
-    isLoggedIn: () => {},
-    getToken: () => {},
+    isLoggedIn: () => {
+    },
+    getToken: () => {
+    },
 }
 
 
-
-export enum OpType { NEW = "new",
-                        EDIT = "edit",
-                        VIEW = "view",
-                        DELETE = "delete",
-                        UPDATE = "update",
-                        CANCEL = "cancel",
-                        SELECT = "select"
-                        }
+export enum OpType {
+    NEW = "new",
+    EDIT = "edit",
+    VIEW = "view",
+    DELETE = "delete",
+    UPDATE = "update",
+    CANCEL = "cancel",
+    SELECT = "select"
+}
 
 export const ApplicationContext = createContext(defaultValue);
 

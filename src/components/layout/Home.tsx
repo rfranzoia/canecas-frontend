@@ -1,7 +1,7 @@
-import {Presentation} from "../presentation/Presentation";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {User} from "../../domain/User";
+import { useSelector } from "react-redux";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
+import { Presentation } from "../presentation/Presentation";
 
 export const Home = () => {
     const isLoggedIn = useSelector<RootState, Boolean>(state => state.auth.isLoggedIn);
@@ -15,7 +15,7 @@ export const Home = () => {
                     )}
             </div>
             <div>
-                <Presentation />
+                <Presentation/>
             </div>
 
         </>

@@ -1,17 +1,17 @@
-import {CustomButton} from "../ui/CustomButton";
-import {Card, Image} from "react-bootstrap";
-import {useCallback, useEffect, useState} from "react";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useEffect, useState } from "react";
+import { Card, Image } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { productsApi } from "../../api/ProductsAPI";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { OrderWizard } from "../orders/wizard/OrderWizard";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
+import { imageHelper } from "../ui/ImageHelper";
 import Modal from "../ui/Modal";
-import {AlertToast} from "../ui/AlertToast";
-import {imageHelper} from "../ui/ImageHelper";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {HowToOrderPresentation} from "./HowToOrderPresentation";
-import {OrderWizard} from "../orders/wizard/OrderWizard";
-import {ProductShowCaseRow} from "./ProductShowCaseRow";
-import {StatusCodes} from "http-status-codes";
-import {productsApi} from "../../api/ProductsAPI";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import { HowToOrderPresentation } from "./HowToOrderPresentation";
+import { ProductShowCaseRow } from "./ProductShowCaseRow";
 
 export const Presentation = () => {
     const [showFormQuote, setShowFormQuote] = useState(false);
@@ -25,8 +25,10 @@ export const Presentation = () => {
     }
 
     const handleConfirm = () => {
-        dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Request Quote",
-            message:"Congratulations! Your quote has been sent. You'll be hearing from us soon"}));
+        dispatch(uiActions.handleAlert({
+            show: true, type: AlertType.SUCCESS, title: "Request Quote",
+            message: "Congratulations! Your quote has been sent. You'll be hearing from us soon"
+        }));
         setShowAlert(true);
         handleCancel();
     }
@@ -39,7 +41,7 @@ export const Presentation = () => {
         const link = "https://api.whatsapp.com/send/?phone=5592996317532&text=";
         const message = `Olá,\neu gostaria de mais informações sobre os produtos de vocês`
 
-        window.location.href=link.concat(message);
+        window.location.href = link.concat(message);
     }
 
     const handleShowHowToOrder = (show: boolean) => {
@@ -49,7 +51,12 @@ export const Presentation = () => {
     const loadProducts = useCallback(async () => {
         const products = await productsApi.list();
         if (products.statusCode !== StatusCodes.OK) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Load Products: ".concat(products.name), message:products.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Load Products: ".concat(products.name),
+                message: products.description
+            }));
             setProducts([]);
             return
         } else {
@@ -76,7 +83,8 @@ export const Presentation = () => {
                                   onClick={handleShowRequestQuote} type="custom-success"/>
                 </div>
                 <p style={{textAlign: "center"}}>You can also send us a message on &nbsp;
-                    <span style={{cursor: "pointer"}} onClick={handleWhatsappClick}>{getActionIcon(ActionIconType.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
+                    <span style={{cursor: "pointer"}}
+                          onClick={handleWhatsappClick}>{getActionIcon(ActionIconType.WHATSAPP, "Whatsapp", true, handleWhatsappClick)}&nbsp;&nbsp;Whatsapp</span>
                 </p>
             </div>
             <br/>
@@ -105,16 +113,17 @@ export const Presentation = () => {
                         })}
                     </div>
                     <br/>
-                    <p style={{textAlign: "center", fontSize: "16px"}}>For a list of available options click on the image</p>
+                    <p style={{textAlign: "center", fontSize: "16px"}}>For a list of available options click on the
+                        image</p>
                 </Card.Body>
             </Card>
-            { showHowToOrder &&
-                <Modal onClose={() => handleShowHowToOrder(false)} >
-                    <HowToOrderPresentation />
+            {showHowToOrder &&
+                <Modal onClose={() => handleShowHowToOrder(false)}>
+                    <HowToOrderPresentation/>
                 </Modal>
             }
-            { showFormQuote &&
-                <Modal onClose={handleCancel} >
+            {showFormQuote &&
+                <Modal onClose={handleCancel}>
                     <OrderWizard onCancel={handleConfirm}/>
                 </Modal>
             }

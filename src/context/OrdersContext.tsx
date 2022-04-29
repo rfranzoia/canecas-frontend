@@ -1,6 +1,7 @@
-import {createContext} from "react";
+import { createContext } from "react";
 
-export interface OrdersCtx {}
+export interface OrdersCtx {
+}
 
 const defaultValue: OrdersCtx = {}
 

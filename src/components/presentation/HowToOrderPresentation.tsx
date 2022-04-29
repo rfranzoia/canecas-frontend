@@ -1,6 +1,6 @@
-import {Carousel, Image} from "react-bootstrap";
-import {imageHelper} from "../ui/ImageHelper";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import { Carousel, Image } from "react-bootstrap";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { imageHelper } from "../ui/ImageHelper";
 
 export const HowToOrderPresentation = () => {
 
@@ -16,13 +16,17 @@ export const HowToOrderPresentation = () => {
         <Carousel variant="dark"
                   pause="hover"
                   nextIcon={getActionIcon(ActionIconType.ACTION_FORWARD,
-                                { canClick: true,
-                                    color: "#000",
-                                    title: "Next Step"})}
+                      {
+                          canClick: true,
+                          color: "#000",
+                          title: "Next Step"
+                      })}
                   prevIcon={getActionIcon(ActionIconType.ACTION_BACKWARD,
-                                { canClick: true,
-                                    color: "#000",
-                                    title: "Previous Step"})}>
+                      {
+                          canClick: true,
+                          color: "#000",
+                          title: "Previous Step"
+                      })}>
             {howToOrderImages.map(i => {
                 return (
                     <Carousel.Item key={i.id}>

@@ -1,13 +1,13 @@
-import {Card} from "react-bootstrap";
-import {CustomButton} from "../ui/CustomButton";
-import {OrderRow} from "./OrderRow";
-import {useEffect, useState} from "react";
-import {Role, User} from "../../domain/User";
-import {CustomPagination} from "../ui/CustomPagination";
-import OrdersListFilter from "./OrdersListFilter";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import { useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { CustomButton } from "../ui/CustomButton";
+import { CustomPagination } from "../ui/CustomPagination";
+import { OrderRow } from "./OrderRow";
 import classes from "./orders.module.css";
+import OrdersListFilter from "./OrdersListFilter";
 
 export const OrdersList = (props) => {
     const user = useSelector<RootState, User>(state => state.auth.user);
@@ -66,7 +66,8 @@ export const OrdersList = (props) => {
                                 customClass="fa fa-file-invoice"
                                 onClick={() => handleEditOrder("new", "")}
                             />
-                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange} currPage={1}/>
+                            <CustomPagination totalPages={pageControl.totalPages} onPageChange={handlePageChange}
+                                              currPage={1}/>
                         </div>
                     }
                     <OrdersListFilter onFilterChange={props.onFilterChange} onFilterError={props.onFilterError}/>

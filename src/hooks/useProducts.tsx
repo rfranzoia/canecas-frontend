@@ -1,26 +1,31 @@
-import {useCallback, useContext, useEffect, useState} from "react";
-import {StatusCodes} from "http-status-codes";
-import {ApplicationContext} from "../context/ApplicationContext";
-import {productsApi} from "../api/ProductsAPI";
-import {Product} from "../domain/Product";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../store/uiSlice";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { productsApi } from "../api/ProductsAPI";
+import { ApplicationContext } from "../context/ApplicationContext";
+import { Product } from "../domain/Product";
+import { AlertType, uiActions } from "../store/uiSlice";
 
 const useProducts = () => {
     const dispatch = useDispatch();
     const appCtx = useContext(ApplicationContext);
     const [products, setProducts] = useState<Product[]>([]);
-    const { getToken } = appCtx;
+    const {getToken} = appCtx;
 
     const loadProducts = useCallback(async () => {
         const result = await productsApi.withToken(getToken()).list();
         if (result.statusCode !== StatusCodes.OK) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: result.name,
+                message: result.description
+            }));
             setProducts([]);
         } else {
             setProducts(result.data);
         }
-    },[getToken, dispatch])
+    }, [getToken, dispatch])
 
     const findProduct = (name): Product => {
         return products.find(p => p.name === name);

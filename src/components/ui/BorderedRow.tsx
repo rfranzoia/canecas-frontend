@@ -1,4 +1,4 @@
-import {Row} from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import styles from "./borderedRow.module.css";
 
 export const BorderedRow = (props) => {

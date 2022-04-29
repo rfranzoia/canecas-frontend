@@ -1,9 +1,9 @@
-import {memo, useCallback, useEffect, useState} from "react";
-import {OrderStatus, orderStatusAsArray} from "../../domain/Order";
-import {Col, Container, Form, Row} from "react-bootstrap";
-import {AutoCompleteInput} from "../ui/AutoCompleteInput";
-import {CustomButton} from "../ui/CustomButton";
+import { memo, useCallback, useEffect, useState } from "react";
+import { Col, Container, Form, Row } from "react-bootstrap";
+import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
 import useUsers from "../../hooks/useUsers";
+import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { CustomButton } from "../ui/CustomButton";
 import styles from "./ordersFilter.module.css";
 
 export interface OrdersFilter {

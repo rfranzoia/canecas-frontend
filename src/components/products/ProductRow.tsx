@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
-import {ConfirmModal} from "../ui/ConfirmModal";
-import {Image} from "react-bootstrap";
-import {imageHelper} from "../ui/ImageHelper";
-import {Role, User} from "../../domain/User";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import { useEffect, useState } from "react";
+import { Image } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { ConfirmModal } from "../ui/ConfirmModal";
+import { imageHelper } from "../ui/ImageHelper";
 
 export const ProductRow = (props) => {
     const user = useSelector<RootState, User>(state => state.auth.user);
@@ -38,7 +38,7 @@ export const ProductRow = (props) => {
         <tr key={product._id} style={{verticalAlign: "middle"}}>
             <td>{product.name}</td>
             <td width={"50%"}><span style={{cursor: "pointer", color: "blue"}}
-                      onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
+                                    onClick={() => props.onEdit("view", product._id)}>{product.description}</span></td>
             <td align="right">{product.price.toFixed(2)}</td>
             <td align="center">
                 <Image src={image}

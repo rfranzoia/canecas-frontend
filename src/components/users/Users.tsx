@@ -1,18 +1,18 @@
-import {useCallback, useEffect, useState} from "react";
-import {Card} from "react-bootstrap";
-import {usersApi} from "../../api/UsersAPI";
-import {UsersList} from "./UsersList";
-import {EditUser} from "./EditUser";
-import {StatusCodes} from "http-status-codes";
-import {CustomButton} from "../ui/CustomButton";
-import {ChangeUserPassword} from "./ChangeUserPassword";
-import {AlertToast} from "../ui/AlertToast";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { usersApi } from "../../api/UsersAPI";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
-import {useHistory} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {User} from "../../domain/User";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import { ChangeUserPassword } from "./ChangeUserPassword";
+import { EditUser } from "./EditUser";
+import { UsersList } from "./UsersList";
 
 export const Users = () => {
     const history = useHistory();
@@ -33,10 +33,20 @@ export const Users = () => {
         if (result.statusCode === StatusCodes.OK) {
             setUsers(result.data);
         } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: result.name,
+                message: result.description
+            }));
             history.replace("/");
         } else {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: result.name,
+                message: result.description
+            }));
             setShowAlert(true);
             setUsers([]);
         }
@@ -45,7 +55,12 @@ export const Users = () => {
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);
         if (success) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete User!", message:message}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.WARNING,
+                title: "Delete User!",
+                message: message
+            }));
             setShowAlert(true);
         }
     }
@@ -54,7 +69,12 @@ export const Users = () => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
         if (success) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Password Change", message:message}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.SUCCESS,
+                title: "Password Change",
+                message: message
+            }));
             setShowAlert(true);
         }
     }
@@ -62,7 +82,12 @@ export const Users = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: error.name,
+                message: error.description
+            }));
             setShowAlert(true);
         }
         loadData().then(undefined);

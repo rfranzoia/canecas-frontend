@@ -1,4 +1,4 @@
-import {DEFAULT_PAGE_SIZE} from "./axios";
+import { DEFAULT_PAGE_SIZE } from "./axios";
 
 export class DefaultAPI {
 

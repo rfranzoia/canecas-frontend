@@ -1,5 +1,5 @@
-import {Pagination} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { Pagination } from "react-bootstrap";
 import "./customPagination.css"
 
 const DEFAULT_AROUND = 1;
@@ -128,7 +128,7 @@ export const CustomPagination = (props) => {
                                              active={page === pageControl.currPage}
                                              onClick={() => handleCurrPage(page)}>
                                 {page}
-                            </Pagination.Item>:
+                            </Pagination.Item> :
                             <Pagination.Ellipsis key={page} disabled={true}/>
                     )
                 })}

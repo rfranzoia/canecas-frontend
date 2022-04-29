@@ -22,7 +22,7 @@ export const Variations = (props) => {
     const [variationId, setVariationId] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const dispatch = useDispatch();
-    const { variations, list, create, update, remove, currentPage, totalPages } = useVariationsApi(props.isModal);
+    const {variations, list, create, update, remove, currentPage, totalPages} = useVariationsApi(props.isModal);
 
     const handleSaveVariation = async (variation: Variation) => {
         setShowVariationFormModal(false);
@@ -120,7 +120,7 @@ export const Variations = (props) => {
 
     return (
         <div>
-            <AlertToast showAlert={showAlert} />
+            <AlertToast showAlert={showAlert}/>
             <Card border="dark">
                 <Card.Header as="h3">Product Variations</Card.Header>
                 <Card.Body>
@@ -157,12 +157,12 @@ export const Variations = (props) => {
                     <small>
                         Click on the &nbsp;
                         <span>
-                            <i className={"fa fa-square-plus"} style={{ color: "black", fontSize: "1rem" }} />
+                            <i className={"fa fa-square-plus"} style={{color: "black", fontSize: "1rem"}}/>
                         </span>
                         &nbsp; to select a product variation
                     </small>
                     <div className="actions">
-                        <CustomButton caption="Cancel" onClick={props.onClose} type="close" />
+                        <CustomButton caption="Cancel" onClick={props.onClose} type="close"/>
                     </div>
                 </>
             )}

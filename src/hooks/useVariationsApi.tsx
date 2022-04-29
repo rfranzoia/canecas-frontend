@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { User } from "../domain/User";
+import { StatusCodes } from "http-status-codes";
 import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DEFAULT_PAGE_SIZE } from "../api/axios";
 import { variationsApi } from "../api/VariationAPI";
-import { StatusCodes } from "http-status-codes";
-import { AlertType, uiActions } from "../store/uiSlice";
+import { User } from "../domain/User";
 import { Variation } from "../domain/Variation";
+import { RootState } from "../store";
+import { AlertType, uiActions } from "../store/uiSlice";
 
 const useVariationsApi = (isModal: boolean) => {
     const dispatch = useDispatch();

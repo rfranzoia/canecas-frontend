@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import { IconContext } from "react-icons";
+import { BsCaretDown } from "react-icons/bs";
+import { GrFormClose } from "react-icons/gr";
 import styles from "./autoCompleteInput.module.css";
-import {IconContext} from "react-icons";
-import {BsCaretDown} from "react-icons/bs";
-import {GrFormClose} from "react-icons/gr";
 
 export const AutoCompleteInput = (props) => {
     const [suggestions, setSuggestions] = useState([]);
@@ -23,7 +23,7 @@ export const AutoCompleteInput = (props) => {
             setDisplayFields([props.displayField])
         }
 
-    },[props.data, props.value, props.displayField, props.displayFields]);
+    }, [props.data, props.value, props.displayField, props.displayFields]);
 
     useEffect(() => {
         if (data && data.length > 0) {
@@ -33,7 +33,7 @@ export const AutoCompleteInput = (props) => {
                 return a === b ? 0 : a > b ? 1 : -1;
             })
         }
-    },[data, displayFields])
+    }, [data, displayFields])
 
     const handleChange = (event) => {
         const value = event.target.value;
@@ -62,14 +62,15 @@ export const AutoCompleteInput = (props) => {
             const inner = displayFields.map(df => {
                 return s[df];
             })
-            return { _id: s._id, value: inner.join((AUTOCOMPLETE_FIELD_JOINER))}
+            return {_id: s._id, value: inner.join((AUTOCOMPLETE_FIELD_JOINER))}
         })
 
         return (
             <ul>
                 {arr.map(a => {
                     return (
-                        <li key={a._id} onClick={() => handleFieldSelected(a.value.split(AUTOCOMPLETE_FIELD_JOINER)[0])}>{a.value}</li>
+                        <li key={a._id}
+                            onClick={() => handleFieldSelected(a.value.split(AUTOCOMPLETE_FIELD_JOINER)[0])}>{a.value}</li>
                     )
                 })}
             </ul>
@@ -102,27 +103,27 @@ export const AutoCompleteInput = (props) => {
 
     return (
         <div className={styles.AutoCompleteText}>
-            <IconContext.Provider value={{ color: "black", size: '1.8rem' }}>
-            <input type="text"
-                   id="autocompleteInput"
-                   onChange={handleChange}
-                   value={field}
-                   className={props.className}
-                   style={props.style}
-                   disabled={props.disabled}
-                   required={props.required}
-                   placeholder={props.placeholder}
-                   autoComplete="off"
-                   onKeyUp={handleKeyPress}
-                    />
-                {suggestions.length === 0?
+            <IconContext.Provider value={{color: "black", size: '1.8rem'}}>
+                <input type="text"
+                       id="autocompleteInput"
+                       onChange={handleChange}
+                       value={field}
+                       className={props.className}
+                       style={props.style}
+                       disabled={props.disabled}
+                       required={props.required}
+                       placeholder={props.placeholder}
+                       autoComplete="off"
+                       onKeyUp={handleKeyPress}
+                />
+                {suggestions.length === 0 ?
                     <BsCaretDown className={styles.iconText}
-                                     onClick={handleClickIcon}
-                                     style={{ pointerEvents: (props.disabled)?"none":"all"}} />
-                :
+                                 onClick={handleClickIcon}
+                                 style={{pointerEvents: (props.disabled) ? "none" : "all"}}/>
+                    :
                     <GrFormClose className={styles.iconText}
-                                     onClick={handleClickIcon}
-                                     style={{ pointerEvents: (props.disabled)?"none":"all"}} />
+                                 onClick={handleClickIcon}
+                                 style={{pointerEvents: (props.disabled) ? "none" : "all"}}/>
                 }
 
             </IconContext.Provider>

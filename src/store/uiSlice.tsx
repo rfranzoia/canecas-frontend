@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export enum AlertType { DANGER = "danger", SUCCESS = "success", WARNING = "warning",  INFO = "info", }
+export enum AlertType { DANGER = "danger", SUCCESS = "success", WARNING = "warning", INFO = "info", }
 
 export const ALERT_TIMEOUT = 5 * 1000;
 
@@ -28,7 +28,7 @@ const uiSlice = createSlice({
     reducers: {
         handleAlert(state, action) {
             const alert = action.payload;
-            state.alert = alert.show? alert: initAlert;
+            state.alert = alert.show ? alert : initAlert;
         }
     }
 });

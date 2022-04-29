@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
-import {Card, Col, Form, Image, Row} from "react-bootstrap";
-import {CustomButton} from "../../ui/CustomButton";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
-import {imageHelper} from "../../ui/ImageHelper";
-import {BorderedRow} from "../../ui/BorderedRow";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Image, Row } from "react-bootstrap";
+import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { BorderedRow } from "../../ui/BorderedRow";
+import { CustomButton } from "../../ui/CustomButton";
+import { imageHelper } from "../../ui/ImageHelper";
 
 export const OrderItemWizardBackground = (props) => {
     const [formData, setFormData] = useState({

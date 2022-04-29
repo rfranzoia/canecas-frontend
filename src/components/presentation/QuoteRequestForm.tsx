@@ -1,12 +1,12 @@
-import {Col, Container, Row} from "react-bootstrap";
-import {useState} from "react";
-import {AlertToast} from "../ui/AlertToast";
-import {usersApi} from "../../api/UsersAPI";
-import {DefaultCard} from "../ui/DefaultCard";
-import {CustomButton} from "../ui/CustomButton";
-import {Role} from "../../domain/User";
-import {uiActions, AlertType} from "../../store/uiSlice";
-import {useDispatch} from "react-redux";
+import { useState } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { usersApi } from "../../api/UsersAPI";
+import { Role } from "../../domain/User";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
+import { DefaultCard } from "../ui/DefaultCard";
 
 export const QuoteRequestForm = (props) => {
     const dispatch = useDispatch();
@@ -41,7 +41,12 @@ export const QuoteRequestForm = (props) => {
         if (res.email && res.email === formData.email) {
             props.onConfirm();
         } else {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:res.name, message:res.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: res.name,
+                message: res.description
+            }));
         }
     }
 
@@ -49,7 +54,12 @@ export const QuoteRequestForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"All fields are required"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error!",
+                message: "All fields are required"
+            }));
             setShowAlert(true);
             return false;
         }

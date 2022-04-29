@@ -1,5 +1,5 @@
-import {useEffect, useState} from "react";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
+import { useEffect, useState } from "react";
+import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 
 export const OrderItemRow = (props) => {
     const [item, setItem] = useState({
@@ -22,15 +22,15 @@ export const OrderItemRow = (props) => {
             price: +props.item.price,
             amount: +props.item.amount
         })
-    },[props.item]);
+    }, [props.item]);
 
     return (
         <tr key={props.item._id} style={{verticalAlign: "middle"}}>
             <td>{item.product}</td>
-            <td style={{ textAlign: "center"}}>{item.drawings}</td>
-            <td style={{ textAlign: "center"}}>{item.background}</td>
-            <td style={{ textAlign: "right"}}>{item.price.toFixed(2)}</td>
-            <td style={{ textAlign: "right"}}>{item.amount}</td>
+            <td style={{textAlign: "center"}}>{item.drawings}</td>
+            <td style={{textAlign: "center"}}>{item.background}</td>
+            <td style={{textAlign: "right"}}>{item.price.toFixed(2)}</td>
+            <td style={{textAlign: "right"}}>{item.amount}</td>
             <td>
                 {
                     getActionIcon(ActionIconType.DELETE,

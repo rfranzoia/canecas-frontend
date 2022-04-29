@@ -1,20 +1,20 @@
-import {Card, Col, Container, Row} from "react-bootstrap";
-import {OrderItemsList} from "./items/OrderItemsList";
-import {useState} from "react";
+import { useState } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { evaluateTotalPrice, Order } from "../../domain/Order";
+import { Role, User } from "../../domain/User";
 import useUsers from "../../hooks/useUsers";
-import {CustomButton} from "../ui/CustomButton";
-import {evaluateTotalPrice, Order} from "../../domain/Order";
-import {AlertToast} from "../ui/AlertToast";
-import {Role, User} from "../../domain/User";
-import {AutoCompleteInput} from "../ui/AutoCompleteInput";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { AlertToast } from "../ui/AlertToast";
+import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { CustomButton } from "../ui/CustomButton";
+import Modal from "../ui/Modal";
+import { OrderItemsList } from "./items/OrderItemsList";
+import { OrderItemWizard } from "./items/OrderItemWizard";
 
 import styles from "./orders.module.css";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import Modal from "../ui/Modal";
-import {OrderItemWizard} from "./items/OrderItemWizard";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const NewOrder = (props) => {
     const dispatch = useDispatch();
@@ -24,11 +24,11 @@ export const NewOrder = (props) => {
     const user = useSelector<RootState, User>(state => state.auth.user);
     const [formData, setFormData] = useState({
         orderDate: "",
-        userEmail: user.role === Role.ADMIN? "": user.email,
+        userEmail: user.role === Role.ADMIN ? "" : user.email,
         totalPrice: 0,
         items: []
     });
-    
+
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
             const items = prevState.items.filter(item => item._id !== itemId);
@@ -45,7 +45,12 @@ export const NewOrder = (props) => {
         setShowWizardModal(false);
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"The selected product is already on the list"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "The selected product is already on the list"
+            }));
             setShowAlert(true);
         } else {
             setFormData(prevState => {
@@ -86,23 +91,38 @@ export const NewOrder = (props) => {
     }
 
     const isDataValid = (): boolean => {
-        const { userEmail, orderDate, items } = formData;
+        const {userEmail, orderDate, items} = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"The customer email, order date and items must be provided"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error!",
+                message: "The customer email, order date and items must be provided"
+            }));
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
             if (d.valueOf() > Date.now().valueOf()) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date cannot be after today"}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: "Validation Error",
+                    message: "Order Date cannot be after today"
+                }));
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:`Order Date is not valid!\n${error.message}`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: `Order Date is not valid!\n${error.message}`
+            }));
             setShowAlert(true);
             return false;
         }
@@ -111,7 +131,7 @@ export const NewOrder = (props) => {
     }
 
     const handleCancel = () => {
-       props.onCancel();
+        props.onCancel();
     }
 
     const handleChange = (event) => {
@@ -146,10 +166,10 @@ export const NewOrder = (props) => {
     return (
         <>
             <AlertToast showAlert={showAlert}/>
-            { showWizardModal &&
+            {showWizardModal &&
                 <Modal
-                    onClose={handleCloseWizardModal} >
-                    <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd} />
+                    onClose={handleCloseWizardModal}>
+                    <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd}/>
                 </Modal>
             }
             <Card border="dark">
@@ -180,7 +200,8 @@ export const NewOrder = (props) => {
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="orderDate">Date<span aria-hidden="true"
                                                                              className="required">*</span></label>
-                                        <input className="form-control bigger-input" id="orderDate" name="orderDate" required type="date"
+                                        <input className="form-control bigger-input" id="orderDate" name="orderDate"
+                                               required type="date"
                                                value={formData.orderDate} onChange={handleChange}/>
                                     </div>
 
@@ -188,7 +209,8 @@ export const NewOrder = (props) => {
                                 <Col>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="totalPrice">Total Price</label>
-                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice" required type="number"
+                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
+                                               required type="number"
                                                style={{textAlign: "right"}}
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
                                     </div>
@@ -202,7 +224,7 @@ export const NewOrder = (props) => {
                                                     onItemAdd={handleItemAdd}/>
                                     {!props.viewOnly &&
                                         <div>
-                                            <hr />
+                                            <hr/>
                                             {
                                                 getActionIcon(ActionIconType.ADD_ITEM,
                                                     "Add Item",

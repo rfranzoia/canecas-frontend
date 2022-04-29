@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {imageHelper} from "../ui/ImageHelper";
-import {Image} from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Image } from "react-bootstrap";
+import { imageHelper } from "../ui/ImageHelper";
 
 export const ProductShowCaseRow = (props) => {
     const [product, setProduct] = useState({
@@ -26,7 +26,7 @@ export const ProductShowCaseRow = (props) => {
 
     return (
         <div className="card d-flex custom-shadow"
-             style={{ width: "15%", padding: "1rem", minWidth: "15rem"}}>
+             style={{width: "15%", padding: "1rem", minWidth: "15rem"}}>
             <div className={"d-flex align-items-stretch"}>
                 <Image src={image}
                        fluid width="200px" title={product.name}/>

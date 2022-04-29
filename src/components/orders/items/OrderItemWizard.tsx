@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {WizardFormData} from "../Orders";
-import {OrderItemWizardProduct} from "./OrderItemWizardProduct";
-import {OrderItemWizardDrawings} from "./OrderItemWizardDrawings";
-import {OrderItemWizardBackground} from "./OrderItemWizardBackground";
-import {OrderItemWizardAmount} from "./OrderItemWizardAmount";
+import { useState } from "react";
+import { WizardFormData } from "../Orders";
+import { OrderItemWizardAmount } from "./OrderItemWizardAmount";
+import { OrderItemWizardBackground } from "./OrderItemWizardBackground";
+import { OrderItemWizardDrawings } from "./OrderItemWizardDrawings";
+import { OrderItemWizardProduct } from "./OrderItemWizardProduct";
 
 export const OrderItemWizard = (props) => {
     const [currStep, setCurrStep] = useState(0);
@@ -96,14 +96,18 @@ export const OrderItemWizard = (props) => {
     }
 
     const steps = [
-        <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect} orderItem={wizardFormData} />,
-        <OrderItemWizardDrawings onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} orderItem={wizardFormData} />,
-        <OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} orderItem={wizardFormData} />,
-        <OrderItemWizardAmount onFinish={handleFinish} onCancel={handleCancel} orderItem={wizardFormData} onBackward={handleBackward} />,
+        <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect}
+                                orderItem={wizardFormData}/>,
+        <OrderItemWizardDrawings onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
+                                 orderItem={wizardFormData}/>,
+        <OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
+                                   orderItem={wizardFormData}/>,
+        <OrderItemWizardAmount onFinish={handleFinish} onCancel={handleCancel} orderItem={wizardFormData}
+                               onBackward={handleBackward}/>,
     ]
 
     return (
-        <div style={{ width: "35rem"}}>
+        <div style={{width: "35rem"}}>
             {steps[currStep]}
         </div>
     );

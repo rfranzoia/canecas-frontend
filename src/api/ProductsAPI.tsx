@@ -1,6 +1,6 @@
-import axios, {processRequestError} from "./axios";
 import { Product } from "../domain/Product";
-import {DefaultAPI} from "./DefaultAPI";
+import axios, { processRequestError } from "./axios";
+import { DefaultAPI } from "./DefaultAPI";
 
 const PRODUCTS_URL = "/products";
 
@@ -29,7 +29,8 @@ export class ProductsAPI extends DefaultAPI {
     create = async (product: Product) => {
         try {
             const res = await axios.post(PRODUCTS_URL, JSON.stringify(product), {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -43,7 +44,8 @@ export class ProductsAPI extends DefaultAPI {
     update = async (id: string, product: Product) => {
         try {
             const res = await axios.put(`${PRODUCTS_URL}/${id}`, JSON.stringify(product), {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -56,7 +58,8 @@ export class ProductsAPI extends DefaultAPI {
     delete = async (id: string) => {
         try {
             await axios.delete(`${PRODUCTS_URL}/${id}`, {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });

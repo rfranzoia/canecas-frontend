@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {CustomButton} from "../ui/CustomButton";
-import {AlertToast} from "../ui/AlertToast";
-import {Role, User} from "../../domain/User";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
 import styles from "./users.module.css"
 
 export const EditUserForm = (props) => {
@@ -47,14 +47,24 @@ export const EditUserForm = (props) => {
 
         if (role.trim().length === 0 || name.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Role, Name, Email and Password are required!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "Role, Name, Email and Password are required!"
+            }));
             setShowAlert(true);
             return false;
         }
 
         if (!isEdit) {
             if (password !== confirmPassword) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Password and Password confirmation don't match!"}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: "Validation Error",
+                    message: "Password and Password confirmation don't match!"
+                }));
                 setShowAlert(true);
                 return false;
             }
@@ -234,7 +244,7 @@ export const EditUserForm = (props) => {
                     </Form>
                 </Card.Body>
             </Card>
-            { !viewOnly &&
+            {!viewOnly &&
                 <p aria-hidden="true" id="required-description">
                     <span aria-hidden="true" className="required">*</span>Required field(s)
                 </p>

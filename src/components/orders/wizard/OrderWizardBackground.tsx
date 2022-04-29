@@ -1,7 +1,7 @@
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {CustomButton} from "../../ui/CustomButton";
-import {useState} from "react";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
+import { useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { CustomButton } from "../../ui/CustomButton";
 
 export const OrderWizardBackground = (props) => {
     const [formData, setFormData] = useState({
@@ -76,7 +76,7 @@ export const OrderWizardBackground = (props) => {
                                                 value="personalized"
                                                 checked={formData.background === "personalized"}
                                                 onChange={handleChange}/>
-                                    { formData.background === "personalized" &&
+                                    {formData.background === "personalized" &&
                                         <>
                                             <label htmlFor="description">Tell us your idea</label>
                                             <textarea className="form-control bigger-input"
@@ -84,7 +84,7 @@ export const OrderWizardBackground = (props) => {
                                                       name="backgroundDescription"
                                                       rows={3}
                                                       value={formData.backgroundDescription}
-                                                      onChange={handleChange} />
+                                                      onChange={handleChange}/>
 
                                             <label htmlFor="image">Do you have a picture of your idea?</label>
                                             <div className="flex-control">
@@ -105,7 +105,7 @@ export const OrderWizardBackground = (props) => {
                                                     onChange={handleChangeFile}
                                                     style={{display: 'none'}}
                                                 />
-                                                { getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick) }
+                                                {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
                                             </div>
                                         </>
                                     }

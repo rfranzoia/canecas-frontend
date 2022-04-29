@@ -1,7 +1,7 @@
-import {CustomButton} from "../../ui/CustomButton";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {useState} from "react";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
+import { useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { CustomButton } from "../../ui/CustomButton";
 
 export const OrderWizardDrawingsForm = (props) => {
     const [formData, setFormData] = useState({
@@ -92,7 +92,7 @@ export const OrderWizardDrawingsForm = (props) => {
                                                     onChange={handleChangeFile}
                                                     style={{display: 'none'}}
                                                 />
-                                                { getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick) }
+                                                {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
                                             </div>
                                         </>
                                     }

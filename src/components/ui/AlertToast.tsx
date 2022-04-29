@@ -1,8 +1,8 @@
-import {Alert} from "react-bootstrap";
-import {useDispatch, useSelector} from "react-redux";
-import {uiActions, ToastAlert, ALERT_TIMEOUT} from "../../store/uiSlice";
-import {RootState} from "../../store";
-import {useEffect} from "react";
+import { useEffect } from "react";
+import { Alert } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { ALERT_TIMEOUT, ToastAlert, uiActions } from "../../store/uiSlice";
 
 export const AlertToast = (props) => {
     const customClass = "alert-top".concat(` ${props.className}`).trim();
@@ -12,17 +12,18 @@ export const AlertToast = (props) => {
     useEffect(() => {
         if (alert.show && props.showAlert) {
             let t = setTimeout(() => {
-                dispatch(uiActions.handleAlert({show:false}))
+                dispatch(uiActions.handleAlert({show: false}))
                 clearTimeout(t);
             }, ALERT_TIMEOUT);
         }
-    },[alert.show, dispatch, props.showAlert])
+    }, [alert.show, dispatch, props.showAlert])
 
     return (
         <>
-            { alert.show && props.showAlert &&
+            {alert.show && props.showAlert &&
                 <div>
-                    <Alert variant={alert.type} onClose={() => dispatch(uiActions.handleAlert({show: false}))} dismissible
+                    <Alert variant={alert.type} onClose={() => dispatch(uiActions.handleAlert({show: false}))}
+                           dismissible
                            transition className={customClass}>
                         <Alert.Heading>{alert.title}</Alert.Heading>
                         <p>{alert.message}</p>

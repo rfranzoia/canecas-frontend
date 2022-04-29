@@ -1,14 +1,14 @@
-import {useEffect, useState} from "react";
-import {Card, Col, Form, Image, Row} from "react-bootstrap";
-import {imageHelper, ImageOpType} from "../ui/ImageHelper";
-import {CustomButton} from "../ui/CustomButton";
-import {OpType} from "../../context/ApplicationContext";
-import {AlertToast} from "../ui/AlertToast";
-import {StatusCodes} from "http-status-codes";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import { StatusCodes } from "http-status-codes";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Image, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { OpType } from "../../context/ApplicationContext";
 import useServiceApi from "../../hooks/useServiceApi";
-import {useDispatch} from "react-redux";
-import {uiActions, AlertType} from "../../store/uiSlice";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
+import { imageHelper, ImageOpType } from "../ui/ImageHelper";
 
 export const EditProductForm = (props) => {
     const [showAlert, setShowAlert] = useState(false);
@@ -31,13 +31,23 @@ export const EditProductForm = (props) => {
         const {name, description, price, image} = formData;
 
         if (name.trim().length === 0 || description.trim().length === 0 || image.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"All fields are required to save!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "All fields are required to save!"
+            }));
             setShowAlert(true);
             return false;
         }
 
         if (Number(price) <= 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Product price must be greater than zero!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "Product price must be greater than zero!"
+            }));
             setShowAlert(true);
             return false;
         }
@@ -57,12 +67,22 @@ export const EditProductForm = (props) => {
             const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Upload File Error!", message:sendResult}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: "Upload File Error!",
+                    message: sendResult
+                }));
                 setShowAlert(true);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:sendResult.name, message:sendResult.description}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: sendResult.name,
+                    message: sendResult.description
+                }));
                 setShowAlert(true);
                 return;
             }
@@ -147,7 +167,7 @@ export const EditProductForm = (props) => {
                         <Row>
                             <Col md={"auto"}>
                                 <div className="bordered-panel bordered-panel-lg">
-                                    { formData.image &&
+                                    {formData.image &&
                                         <Image src={image}
                                                fluid width="500" title={product.image}/>
                                     }
@@ -191,7 +211,7 @@ export const EditProductForm = (props) => {
                                     <Col>
                                         <Form.Group className="spaced-form-group">
                                             <label htmlFor="price">Starting Price<span aria-hidden="true"
-                                                                              className="required">*</span></label>
+                                                                                       className="required">*</span></label>
                                             <input
                                                 className="form-control bigger-input"
                                                 required
@@ -201,7 +221,7 @@ export const EditProductForm = (props) => {
                                                 onChange={handleChangeNumber}
                                                 autoComplete={"off"}
                                                 style={{textAlign: "right"}}
-                                                disabled={viewOnly} />
+                                                disabled={viewOnly}/>
                                         </Form.Group>
                                     </Col>
                                     <Col>
@@ -238,7 +258,7 @@ export const EditProductForm = (props) => {
                     </Form>
                 </Card.Body>
             </Card>
-            { !viewOnly &&
+            {!viewOnly &&
                 <p aria-hidden="true" id="required-description">
                     <span aria-hidden="true" className="required">*</span>Required field(s)
                 </p>

@@ -1,6 +1,6 @@
-import axios, {DEFAULT_PAGE_SIZE, processRequestError} from "./axios";
-import {Order} from "../domain/Order";
-import {DefaultAPI} from "./DefaultAPI";
+import { Order } from "../domain/Order";
+import axios, { DEFAULT_PAGE_SIZE, processRequestError } from "./axios";
+import { DefaultAPI } from "./DefaultAPI";
 
 const ORDERS_URL = "/orders";
 
@@ -38,7 +38,7 @@ export class OrdersAPI extends DefaultAPI {
 
     listByFilter = async (currPage: number = 1, filter?: string) => {
 
-        const pageFilter = (filter && filter.startsWith("?"))?filter.concat("&"):"?";
+        const pageFilter = (filter && filter.startsWith("?")) ? filter.concat("&") : "?";
         const url = `${ORDERS_URL}/filterBy${pageFilter}pageSize=${DEFAULT_PAGE_SIZE}&pageNumber=${currPage}`;
 
         try {

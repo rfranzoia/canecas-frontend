@@ -1,17 +1,17 @@
-import {memo, useEffect, useState} from "react";
-import {Card, Col, Container, Row} from "react-bootstrap";
-import {OrderItemsList} from "./items/OrderItemsList";
-import {StatusChangeList} from "./history/StatusChangeList";
-import {evaluateTotalPrice, OrderStatus, orderStatusAsArray} from "../../domain/Order";
-import {AlertToast} from "../ui/AlertToast";
-import {CustomButton} from "../ui/CustomButton";
-import {AutoCompleteInput} from "../ui/AutoCompleteInput";
-import Modal from "../ui/Modal";
+import { memo, useEffect, useState } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { evaluateTotalPrice, OrderStatus, orderStatusAsArray } from "../../domain/Order";
 import useUsers from "../../hooks/useUsers";
-import {OrderItemWizard} from "./items/OrderItemWizard";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { AlertToast } from "../ui/AlertToast";
+import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { CustomButton } from "../ui/CustomButton";
+import Modal from "../ui/Modal";
+import { StatusChangeList } from "./history/StatusChangeList";
+import { OrderItemsList } from "./items/OrderItemsList";
+import { OrderItemWizard } from "./items/OrderItemWizard";
 import styles from "./orders.module.css";
 
 const EditOrderForm = (props) => {
@@ -48,7 +48,12 @@ const EditOrderForm = (props) => {
         setShowWizardModal(false);
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"The selected product is already on the list"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "The selected product is already on the list"
+            }));
             setShowAlert(true);
         } else {
             handleCloseToast();
@@ -77,22 +82,37 @@ const EditOrderForm = (props) => {
     }
 
     const isDataValid = (): boolean => {
-        const { userEmail, orderDate } = formData;
+        const {userEmail, orderDate} = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date and Customer Email must be provided!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "Order Date and Customer Email must be provided!"
+            }));
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
             if (d.valueOf() > Date.now().valueOf()) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date cannot be after today"}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: "Validation Error",
+                    message: "Order Date cannot be after today"
+                }));
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:`"Order Date is not valid!\n${error.message}`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: `"Order Date is not valid!\n${error.message}`
+            }));
             setShowAlert(true);
             return false;
         }
@@ -121,7 +141,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleCloseToast = () => {
-        dispatch(uiActions.handleAlert({show:false}));
+        dispatch(uiActions.handleAlert({show: false}));
         setShowAlert(false);
     }
 
@@ -161,13 +181,13 @@ const EditOrderForm = (props) => {
     return (
         <>
             <AlertToast showAlert={showAlert}/>
-            { showWizardModal &&
+            {showWizardModal &&
                 <Modal
-                    onClose={handleCloseWizardModal} >
-                    <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd} />
+                    onClose={handleCloseWizardModal}>
+                    <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd}/>
                 </Modal>
             }
-            <Card border="dark" className="align-content-center" >
+            <Card border="dark" className="align-content-center">
                 <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
                 <Card.Body>
                     <form onSubmit={handleSave}>
@@ -176,7 +196,8 @@ const EditOrderForm = (props) => {
                                 <Col>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="_id">ID #</label>
-                                        <input className="form-control bigger-input" id="_id" name="_id" required type="text"
+                                        <input className="form-control bigger-input" id="_id" name="_id" required
+                                               type="text"
                                                value={formData._id} onChange={handleChange} disabled/>
                                     </div>
                                 </Col>
@@ -185,7 +206,8 @@ const EditOrderForm = (props) => {
                                         <label htmlFor="orderDate">Date
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
-                                        <input className="form-control bigger-input" id="orderDate" name="orderDate" required
+                                        <input className="form-control bigger-input" id="orderDate" name="orderDate"
+                                               required
                                                type="date"
                                                value={formData.orderDate}
                                                onChange={handleChange}
@@ -245,7 +267,7 @@ const EditOrderForm = (props) => {
                                                     onItemAdd={handleItemAdd}/>
                                     {!props.viewOnly &&
                                         <div>
-                                            <hr />
+                                            <hr/>
                                             {
                                                 getActionIcon(ActionIconType.ADD_ITEM,
                                                     "Add Item",
@@ -281,7 +303,7 @@ const EditOrderForm = (props) => {
                                   type="list"/>
                 }
             </div>
-            { showStatusHistory &&
+            {showStatusHistory &&
                 <Modal onClose={handleCloseViewStatusHistory}>
                     <StatusChangeList statusHistory={order.statusHistory} onClick={handleCloseViewStatusHistory}/>
                 </Modal>

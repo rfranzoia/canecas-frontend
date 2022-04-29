@@ -1,15 +1,15 @@
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {CustomButton} from "../ui/CustomButton";
-import {Link, useHistory} from "react-router-dom";
-import {usersApi} from "../../api/UsersAPI";
-import {useEffect, useState} from "react";
-import {AlertToast} from "../ui/AlertToast";
-import {Role} from "../../domain/User";
+import { StatusCodes } from "http-status-codes";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { usersApi } from "../../api/UsersAPI";
+import { Role } from "../../domain/User";
+import { authActions } from "../../store/authSlice";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
-import {StatusCodes} from "http-status-codes";
-import {authActions} from "../../store/authSlice";
-import {useDispatch} from "react-redux";
-import {uiActions, AlertType} from "../../store/uiSlice";
 
 import styles from "./users.module.css"
 
@@ -53,7 +53,12 @@ export const UserRegistration = (props) => {
             props.handleClose();
             history.replace("/");
         } else {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:res?.name, message:res?.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: res?.name,
+                message: res?.description
+            }));
             setShowAlert(true);
         }
     }
@@ -72,7 +77,12 @@ export const UserRegistration = (props) => {
 
         const res = await usersApi.create(user);
         if (res.statusCode !== StatusCodes.CREATED) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:res?.name, message:res?.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: res?.name,
+                message: res?.description
+            }));
             setShowAlert(true);
         } else {
             setShowAlert(false);
@@ -85,13 +95,23 @@ export const UserRegistration = (props) => {
 
         if (name.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0 ||
             phone.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Name, Email, Phone and Password are required!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "Name, Email, Phone and Password are required!"
+            }));
             setShowAlert(true);
             return false;
         }
 
         if (password !== confirmPassword) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Password and Password confirmation don't match!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error",
+                message: "Password and Password confirmation don't match!"
+            }));
             setShowAlert(true);
             return false;
         }
@@ -100,7 +120,7 @@ export const UserRegistration = (props) => {
     }
 
     const handleHideError = () => {
-        dispatch(uiActions.handleAlert({show:false}));
+        dispatch(uiActions.handleAlert({show: false}));
         setShowAlert(false);
     }
 
@@ -127,7 +147,7 @@ export const UserRegistration = (props) => {
 
     const formSignIn = (
         <>
-            <AlertToast />
+            <AlertToast/>
             <Card border="dark" className={styles["registration-width-login"]}>
                 <Card.Header as="h4">Sign In</Card.Header>
                 <Card.Body>

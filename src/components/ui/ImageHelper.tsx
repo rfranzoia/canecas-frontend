@@ -1,4 +1,4 @@
-import {API_SERVER_ADDRESS, CONTENT_SERVER_ADDRESS} from "../../api/axios";
+import { API_SERVER_ADDRESS, CONTENT_SERVER_ADDRESS } from "../../api/axios";
 
 class ImageHelper {
 

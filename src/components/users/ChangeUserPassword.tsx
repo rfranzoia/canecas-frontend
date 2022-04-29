@@ -1,13 +1,13 @@
-import {Alert, Card, Col, Form, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
-import {CustomButton} from "../ui/CustomButton";
-import {usersApi} from "../../api/UsersAPI";
-import {StatusCodes} from "http-status-codes";
+import { StatusCodes } from "http-status-codes";
+import { useEffect, useState } from "react";
+import { Alert, Card, Col, Form, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { usersApi } from "../../api/UsersAPI";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
+import { CustomButton } from "../ui/CustomButton";
 
 import styles from "./users.module.css"
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {User} from "../../domain/User";
 
 export const ChangeUserPassword = (props) => {
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);
@@ -93,7 +93,7 @@ export const ChangeUserPassword = (props) => {
             <Card className={styles["registration-width-signup"]}>
                 <Card.Header as="h3">Change Password</Card.Header>
                 {showError.show &&
-                    <Alert variant="danger" onClose={handleHideError} dismissible transition  className="alert-top">
+                    <Alert variant="danger" onClose={handleHideError} dismissible transition className="alert-top">
                         <Alert.Heading>{showError.title}</Alert.Heading>
                         <p>{showError.message}</p>
                     </Alert>

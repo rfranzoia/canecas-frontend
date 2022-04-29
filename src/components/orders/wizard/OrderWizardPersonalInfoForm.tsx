@@ -1,10 +1,10 @@
-import {Card} from "react-bootstrap";
-import {CustomButton} from "../../ui/CustomButton";
-import {Role} from "../../../domain/User";
-import {useState} from "react";
-import {AlertToast} from "../../ui/AlertToast";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../../store/uiSlice";
+import { useState } from "react";
+import { Card } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Role } from "../../../domain/User";
+import { AlertType, uiActions } from "../../../store/uiSlice";
+import { AlertToast } from "../../ui/AlertToast";
+import { CustomButton } from "../../ui/CustomButton";
 
 export const OrderWizardPersonalInfoForm = (props) => {
     const dispatch = useDispatch();
@@ -31,7 +31,12 @@ export const OrderWizardPersonalInfoForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"All fields are required"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error!",
+                message: "All fields are required"
+            }));
             setShowAlert(true);
             return false;
         }

@@ -1,11 +1,11 @@
-import {usersApi} from "../../api/UsersAPI";
-import {EditUserForm} from "./EditUserForm";
-import {useCallback, useEffect, useState} from "react";
-import {StatusCodes} from "http-status-codes";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {User} from "../../domain/User";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { usersApi } from "../../api/UsersAPI";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { EditUserForm } from "./EditUserForm";
 
 export const EditUser = (props) => {
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);
@@ -46,7 +46,12 @@ export const EditUser = (props) => {
         if (op === "edit" || op === "view") {
             const result = await usersApi.withToken(loggedUser.authToken).get(id);
             if (result.statusCode !== StatusCodes.OK) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: result.name,
+                    message: result.description
+                }));
             } else {
                 setUser(result.data);
             }
@@ -68,7 +73,7 @@ export const EditUser = (props) => {
 
     return (
         <>
-            <EditUserForm user={user} op={op} onSaveUser={handleSaveUser} onCancel={handleCloseModal} />
+            <EditUserForm user={user} op={op} onSaveUser={handleSaveUser} onCancel={handleCloseModal}/>
         </>
     );
 };

@@ -1,10 +1,10 @@
-import {OrderWizardPersonalInfoForm} from "./OrderWizardPersonalInfoForm";
-import {useState} from "react";
-import {OrderWizardProductForm} from "./OrderWizardProductForm";
-import {OrderWizardDrawingsForm} from "./OrderWizardDrawingsForm";
-import {OrderWizardBackground} from "./OrderWizardBackground";
-import {OrderWizardAmount} from "./OrderWizardAmount";
-import {WizardFormData} from "../Orders";
+import { useState } from "react";
+import { WizardFormData } from "../Orders";
+import { OrderWizardAmount } from "./OrderWizardAmount";
+import { OrderWizardBackground } from "./OrderWizardBackground";
+import { OrderWizardDrawingsForm } from "./OrderWizardDrawingsForm";
+import { OrderWizardPersonalInfoForm } from "./OrderWizardPersonalInfoForm";
+import { OrderWizardProductForm } from "./OrderWizardProductForm";
 
 const initWizardFormData: WizardFormData = {
     user: null,
@@ -76,9 +76,9 @@ export const OrderWizard = (props) => {
     }
 
     const handleBackward = () => {
-      if (currStep === 0) return;
-      const previous = currStep - 1;
-      setCurrStep(previous);
+        if (currStep === 0) return;
+        const previous = currStep - 1;
+        setCurrStep(previous);
     }
 
     const handleFinishWizard = (formData: WizardFormData) => {
@@ -92,7 +92,7 @@ export const OrderWizard = (props) => {
     }
 
     const steps = [
-        <OrderWizardPersonalInfoForm onForward={handleForward} onCancel={handleCancel} />,
+        <OrderWizardPersonalInfoForm onForward={handleForward} onCancel={handleCancel}/>,
         <OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,
         <OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,
         <OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,

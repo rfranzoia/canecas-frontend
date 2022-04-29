@@ -1,6 +1,6 @@
-import axios, {processRequestError} from "./axios";
 import { User } from "../domain/User";
-import {DefaultAPI} from "./DefaultAPI";
+import axios, { processRequestError } from "./axios";
+import { DefaultAPI } from "./DefaultAPI";
 
 const USERS_URL = "/users";
 
@@ -10,7 +10,8 @@ export class UsersAPI extends DefaultAPI {
 
         try {
             const res = await axios.get(USERS_URL, {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -24,7 +25,8 @@ export class UsersAPI extends DefaultAPI {
     get = async (id: string) => {
         try {
             const res = await axios.get(`${USERS_URL}/${id}`, {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -37,7 +39,8 @@ export class UsersAPI extends DefaultAPI {
     create = async (user: User) => {
         try {
             const res = await axios.post(USERS_URL, JSON.stringify(user), {
-                headers: { "Content-Type": "application/json"
+                headers: {
+                    "Content-Type": "application/json"
                 }
             });
             return res.data;
@@ -50,7 +53,8 @@ export class UsersAPI extends DefaultAPI {
     update = async (id: string, user: User) => {
         try {
             const res = await axios.put(`${USERS_URL}/${id}`, JSON.stringify(user), {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -63,7 +67,8 @@ export class UsersAPI extends DefaultAPI {
     delete = async (id: string) => {
         try {
             await axios.delete(`${USERS_URL}/${id}`, {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });
@@ -80,7 +85,7 @@ export class UsersAPI extends DefaultAPI {
         }
         try {
             const res = await axios.post(`${USERS_URL}/login`, JSON.stringify(credentials), {
-                headers: { "Content-Type": "application/json" }
+                headers: {"Content-Type": "application/json"}
             });
             return res.data;
         } catch (error: any) {
@@ -94,7 +99,7 @@ export class UsersAPI extends DefaultAPI {
         }
         try {
             const res = await axios.post(`${USERS_URL}/validateToken`, JSON.stringify(body), {
-                headers: { "Content-Type": "application/json" }
+                headers: {"Content-Type": "application/json"}
             });
             return res.data;
         } catch (error: any) {
@@ -110,7 +115,8 @@ export class UsersAPI extends DefaultAPI {
         }
         try {
             const res = await axios.post(`${USERS_URL}/password`, JSON.stringify(credentials), {
-                headers: { "Content-Type": "application/json",
+                headers: {
+                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${this.authToken}`
                 }
             });

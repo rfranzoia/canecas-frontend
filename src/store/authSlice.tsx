@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import {User} from "../domain/User";
+import { User } from "../domain/User";
 
 interface AuthSlice {
     isLoggedIn: boolean,

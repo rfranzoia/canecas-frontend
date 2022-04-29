@@ -1,8 +1,8 @@
-import {imageHelper} from "../components/ui/ImageHelper";
-import axios, {processRequestError} from "../api/axios";
-import {useSelector} from "react-redux";
-import {RootState} from "../store";
-import {User} from "../domain/User";
+import { useSelector } from "react-redux";
+import axios, { processRequestError } from "../api/axios";
+import { imageHelper } from "../components/ui/ImageHelper";
+import { User } from "../domain/User";
+import { RootState } from "../store";
 
 const useServiceApi = (origin: string) => {
     const user = useSelector<RootState, User>(state => state.auth.user);

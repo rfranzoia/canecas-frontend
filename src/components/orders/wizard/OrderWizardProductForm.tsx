@@ -1,11 +1,11 @@
-import {AlertToast} from "../../ui/AlertToast";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {useState} from "react";
-import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
-import {CustomButton} from "../../ui/CustomButton";
+import { useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import useProducts from "../../../hooks/useProducts";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../../store/uiSlice";
+import { AlertType, uiActions } from "../../../store/uiSlice";
+import { AlertToast } from "../../ui/AlertToast";
+import { AutoCompleteInput } from "../../ui/AutoCompleteInput";
+import { CustomButton } from "../../ui/CustomButton";
 
 export const OrderWizardProductForm = (props) => {
     const dispatch = useDispatch();
@@ -28,9 +28,14 @@ export const OrderWizardProductForm = (props) => {
     }
 
     const isValidData = (): boolean => {
-        const { product } = formData;
+        const {product} = formData;
         if (product.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"Product must be provided!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error!",
+                message: "Product must be provided!"
+            }));
             setShowAlert(true);
             return false;
         }
@@ -88,7 +93,8 @@ export const OrderWizardProductForm = (props) => {
                         <Row>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Suggested Price<span aria-hidden="true" className="required">*</span></Form.Label>
+                                    <Form.Label>Suggested Price<span aria-hidden="true"
+                                                                     className="required">*</span></Form.Label>
                                     <input
                                         className="form-control bigger-input"
                                         type="text"
@@ -99,7 +105,8 @@ export const OrderWizardProductForm = (props) => {
                                         style={{textAlign: "right"}}
                                         disabled
                                     />
-                                    <small>We will call you to offer better price if you order more than one product</small>
+                                    <small>We will call you to offer better price if you order more than one
+                                        product</small>
                                 </Form.Group>
                             </Col>
                         </Row>

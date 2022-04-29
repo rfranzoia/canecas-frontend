@@ -1,18 +1,18 @@
-import {useEffect, useState} from "react";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {WizardFormData} from "../Orders";
-import {Variation} from "../../../domain/Variation";
-import {Variations} from "../../variations/Variations";
-import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
-import {ActionIconType, getActionIcon} from "../../ui/ActionIcon";
-import {AlertToast} from "../../ui/AlertToast";
-import {CustomButton} from "../../ui/CustomButton";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { Variation } from "../../../domain/Variation";
+import useProducts from "../../../hooks/useProducts";
+import { AlertType, uiActions } from "../../../store/uiSlice";
+import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { AlertToast } from "../../ui/AlertToast";
+import { AutoCompleteInput } from "../../ui/AutoCompleteInput";
+import { CustomButton } from "../../ui/CustomButton";
 import Modal from "../../ui/Modal";
+import { Variations } from "../../variations/Variations";
+import { WizardFormData } from "../Orders";
 
 import styles from "../orders.module.css";
-import useProducts from "../../../hooks/useProducts";
-import {useDispatch} from "react-redux";
-import {AlertType, uiActions} from "../../../store/uiSlice";
 
 export const OrderItemWizardProduct = (props) => {
     const dispatch = useDispatch();
@@ -55,9 +55,14 @@ export const OrderItemWizardProduct = (props) => {
     }
 
     const isValidData = (): boolean => {
-        const { product } = formData;
+        const {product} = formData;
         if (product.trim().length === 0) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"Product must be provided!"}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: "Validation Error!",
+                message: "Product must be provided!"
+            }));
             setShowAlert(true);
             return false;
         }
@@ -116,7 +121,7 @@ export const OrderItemWizardProduct = (props) => {
                             <Col md={1}>
                                 <Form.Group>
                                     <Form.Label>&nbsp;&nbsp;</Form.Label>
-                                    <div style={{ marginTop: "0.5rem", marginLeft: "-1rem"}}>
+                                    <div style={{marginTop: "0.5rem", marginLeft: "-1rem"}}>
                                         {getActionIcon(ActionIconType.SEARCH, {
                                             title: "search",
                                             canClick: true,
@@ -157,8 +162,8 @@ export const OrderItemWizardProduct = (props) => {
             </div>
             {showVariationsModal &&
                 <Modal
-                    style={{ width: "45rem", maxHeight: "45rem", overflow: "scroll"}}
-                    onClose={handleCloseVariationsModal} >
+                    style={{width: "45rem", maxHeight: "45rem", overflow: "scroll"}}
+                    onClose={handleCloseVariationsModal}>
                     <Variations onClose={handleCloseVariationsModal}
                                 onSelect={handleSelectVariation}
                                 isModal="yes"

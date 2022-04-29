@@ -1,10 +1,10 @@
-import {useContext} from "react";
-import {Table} from "react-bootstrap";
-import {ApplicationContext} from "../../context/ApplicationContext";
-import {ProductRow} from "./ProductRow";
-import {Role, User} from "../../domain/User";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import { useContext } from "react";
+import { Table } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { ApplicationContext } from "../../context/ApplicationContext";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { ProductRow } from "./ProductRow";
 
 export const ProductsList = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -24,10 +24,10 @@ export const ProductsList = (props) => {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th style={{ width: "20%" }}>Name</th>
-                <th style={{ width: "30%" }}>Description</th>
-                <th style={{ width: "7%" }}>Price</th>
-                <th style={{ width: "10%" }}>Image</th>
+                <th style={{width: "20%"}}>Name</th>
+                <th style={{width: "30%"}}>Description</th>
+                <th style={{width: "7%"}}>Price</th>
+                <th style={{width: "10%"}}>Image</th>
                 {user.role === Role.ADMIN &&
                     <th style={{width: "8%"}}>&nbsp;</th>
                 }

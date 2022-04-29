@@ -1,6 +1,6 @@
-import {CustomButton} from "../../ui/CustomButton";
-import {Card, Col, Form, Row} from "react-bootstrap";
-import {useState} from "react";
+import { useState } from "react";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { CustomButton } from "../../ui/CustomButton";
 
 export const OrderWizardAmount = (props) => {
     const [formData, setFormData] = useState({

@@ -1,21 +1,21 @@
-import {useCallback, useEffect, useState} from "react";
-import {StatusCodes} from "http-status-codes";
-import {ordersApi} from "../../api/OrdersAPI";
-import {DEFAULT_PAGE_SIZE} from "../../api/axios";
-import {OpType} from "../../context/ApplicationContext";
-import {OrdersList} from "./OrdersList";
-import {OrdersFilter} from "./OrdersListFilter";
-import {NewOrder} from "./NewOrder";
-import EditOrder from "./EditOrder";
-import {findNextOrderStatus, Order, OrderStatus} from "../../domain/Order";
-import {User} from "../../domain/User";
-import {AlertToast} from "../ui/AlertToast";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { DEFAULT_PAGE_SIZE } from "../../api/axios";
+import { ordersApi } from "../../api/OrdersAPI";
+import { OpType } from "../../context/ApplicationContext";
+import { findNextOrderStatus, Order, OrderStatus } from "../../domain/Order";
+import { User } from "../../domain/User";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
 import Modal from "../ui/Modal";
-import {useHistory} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {AlertType, uiActions} from "../../store/uiSlice";
+import EditOrder from "./EditOrder";
+import { NewOrder } from "./NewOrder";
 import styles from "./orders.module.css"
+import { OrdersList } from "./OrdersList";
+import { OrdersFilter } from "./OrdersListFilter";
 
 export interface WizardFormData {
     _id?: string,
@@ -63,23 +63,38 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.DANGER,
+                        title: result.name,
+                        message: result.description
+                    }));
                     history.replace("/");
                 } else if (result.statusCode !== StatusCodes.OK) {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.DANGER,
+                        title: result.name,
+                        message: result.description
+                    }));
                     setShowAlert(true);
                     setOrders([]);
                 } else {
                     setOrders(result.data);
                 }
             });
-    },[dispatch, history, user.authToken])
+    }, [dispatch, history, user.authToken])
 
     const updateOrder = (orderId: string, order, callback) => {
         ordersApi.withToken(user.authToken).update(orderId, order)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.DANGER,
+                        title: result.name,
+                        message: result.description
+                    }));
                     setShowAlert(true);
                 } else {
                     callback();
@@ -92,7 +107,12 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.DANGER,
+                        title: result.name,
+                        message: result.description
+                    }));
                     setShowAlert(true);
                 } else {
                     setPageControl({
@@ -117,19 +137,24 @@ export const Orders = () => {
             ordersApi.withToken(user.authToken).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
-                        dispatch(uiActions.handleAlert({show:false}));
+                        dispatch(uiActions.handleAlert({show: false}));
                         getTotalPages();
                         loadOrders(pageControl.currPage);
                         setSaved(true);
                     } else {
                         const error = result.data;
-                        dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
+                        dispatch(uiActions.handleAlert({
+                            show: true,
+                            type: AlertType.DANGER,
+                            title: error.name,
+                            message: error.description
+                        }));
                         setShowAlert(true);
                     }
                 })
         } else if (edit.op === OpType.EDIT) {
             updateOrder(order._id, order, () => {
-                dispatch(uiActions.handleAlert({show:false}));
+                dispatch(uiActions.handleAlert({show: false}));
                 loadOrders(pageControl.currPage);
                 setSaved(true);
             })
@@ -151,7 +176,12 @@ export const Orders = () => {
             status: OrderStatus.CONFIRMED
         }
         updateOrder(orderId, o, () => {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Update Order", message:`Order '${orderId}' is now CONFIRMED`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.SUCCESS,
+                title: "Update Order",
+                message: `Order '${orderId}' is now CONFIRMED`
+            }));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -163,7 +193,12 @@ export const Orders = () => {
             statusReason: cancelReason
         }
         updateOrder(orderId, o, () => {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Cancel Order", message:`Order '${orderId}' has been CANCELED`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.WARNING,
+                title: "Cancel Order",
+                message: `Order '${orderId}' has been CANCELED`
+            }));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -175,7 +210,12 @@ export const Orders = () => {
             statusReason: forwardReason
         }
         updateOrder(order._id, o, () => {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Update Order Status", message:`Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.SUCCESS,
+                title: "Update Order Status",
+                message: `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`
+            }));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -185,9 +225,19 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.DANGER,
+                        title: result.name,
+                        message: result.description
+                    }));
                 } else {
-                    dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete Order", message:`Order '${orderId}' has been successfully DELETED`}));
+                    dispatch(uiActions.handleAlert({
+                        show: true,
+                        type: AlertType.WARNING,
+                        title: "Delete Order",
+                        message: `Order '${orderId}' has been successfully DELETED`
+                    }));
                 }
                 setShowAlert(true);
                 getTotalPages();
@@ -218,10 +268,15 @@ export const Orders = () => {
         }
         f = "?".concat(f);
         loadOrders(1, f);
-    },[pageControl.currPage, loadOrders])
+    }, [pageControl.currPage, loadOrders])
 
     const handleFilterError = (errorMessage: string) => {
-        dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Filter Error", message:errorMessage}));
+        dispatch(uiActions.handleAlert({
+            show: true,
+            type: AlertType.WARNING,
+            title: "Filter Error",
+            message: errorMessage
+        }));
         setShowAlert(true);
     }
 
@@ -254,7 +309,7 @@ export const Orders = () => {
                 />
             </div>
             <div>
-                { edit.show &&
+                {edit.show &&
                     <Modal
                         onClose={handleCloseEditModal}>
                         <div className={styles["edit-order-modal"]}>

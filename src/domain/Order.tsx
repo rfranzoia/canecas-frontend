@@ -1,4 +1,3 @@
-
 export enum OrderStatus { NEW = 0, CONFIRMED = 1, IN_PRODUCTION = 2, READY_TO_DELIVER = 3, FINISHED = 8, CANCELED = 9 }
 
 export enum OrderAction {"DELETE" = "DELETE", "CONFIRM" = "CONFIRM", "FORWARD" = "FORWARD"}

@@ -1,11 +1,11 @@
-import {useEffect, useState} from "react";
-import {findNextOrderStatus, OrderStatus} from "../../domain/Order";
-import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-import {OrderItems} from "./OrderItems";
-import {Role, User} from "../../domain/User";
-import {ConfirmModal} from "../ui/ConfirmModal";
-import {useSelector} from "react-redux";
-import {RootState} from "../../store";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { findNextOrderStatus, OrderStatus } from "../../domain/Order";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
+import { ConfirmModal } from "../ui/ConfirmModal";
+import { OrderItems } from "./OrderItems";
 import classes from "./orders.module.css";
 
 export const OrderRow = (props) => {
@@ -142,35 +142,35 @@ export const OrderRow = (props) => {
         (order.status === OrderStatus.NEW || order.status === OrderStatus.CONFIRMED);
 
     const actions =
-            <td width="15%" align="right">
-                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
-                    getActionIcon(ActionIconType.EDIT,
-                        "Edit Order",
-                        order.status === OrderStatus.NEW,
-                        () => handleEditOrder(order._id))
-                }
-                <span>&nbsp;</span>
-                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
-                        getActionIcon(order.status === OrderStatus.NEW?
-                                ActionIconType.DELETE:
-                                ActionIconType.CANCEL_ITEM,
-                            order.status === OrderStatus.NEW?"Delete Order":"Cancel Order",
-                            canCancelOrder,
-                            () => handleDeleteOrCancel())
-                }
-                <span>&nbsp;</span>
-                {(user.role === Role.ADMIN || order.userEmail === user.email) &&
-                    getActionIcon(ActionIconType.USER_CHECK,
+        <td width="15%" align="right">
+            {(user.role === Role.ADMIN || order.userEmail === user.email) &&
+                getActionIcon(ActionIconType.EDIT,
+                    "Edit Order",
+                    order.status === OrderStatus.NEW,
+                    () => handleEditOrder(order._id))
+            }
+            <span>&nbsp;</span>
+            {(user.role === Role.ADMIN || order.userEmail === user.email) &&
+                getActionIcon(order.status === OrderStatus.NEW ?
+                        ActionIconType.DELETE :
+                        ActionIconType.CANCEL_ITEM,
+                    order.status === OrderStatus.NEW ? "Delete Order" : "Cancel Order",
+                    canCancelOrder,
+                    () => handleDeleteOrCancel())
+            }
+            <span>&nbsp;</span>
+            {(user.role === Role.ADMIN || order.userEmail === user.email) &&
+                getActionIcon(ActionIconType.USER_CHECK,
                     "Confirm Order",
                     order.status === OrderStatus.NEW,
                     () => handleConfirmOrderDialog())}
-                <span>&nbsp;</span>
-                {user.role === Role.ADMIN &&
-                    getActionIcon(ActionIconType.ACTION_FORWARD,
+            <span>&nbsp;</span>
+            {user.role === Role.ADMIN &&
+                getActionIcon(ActionIconType.ACTION_FORWARD,
                     `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
                     (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
                     () => handleMoveForward())}
-            </td>
+        </td>
 
     useEffect(() => {
         setOrder(props.order);
@@ -205,12 +205,13 @@ export const OrderRow = (props) => {
             )}
             {(confirmationDialog.op === "cancel" || confirmationDialog.op === "update") && (
                 <ConfirmModal show={confirmationDialog.show} handleClose={confirmationDialog.onCancel}
-                    handleConfirm={() => confirmationDialog.onConfirm(updateReason)} hasData={confirmationDialog.hasData}>
+                              handleConfirm={() => confirmationDialog.onConfirm(updateReason)}
+                              hasData={confirmationDialog.hasData}>
                     <form>
                         <p>{confirmationDialog.message}</p>
                         <div className="form-group spaced-form-group">
                             <label>Reason</label>
-                            <input className="form-control" value={updateReason} onChange={handleChangeReason} />
+                            <input className="form-control" value={updateReason} onChange={handleChangeReason}/>
                         </div>
                     </form>
                 </ConfirmModal>

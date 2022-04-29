@@ -1,18 +1,18 @@
-import {Container, Dropdown, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
-import {Link, useHistory} from "react-router-dom";
-import {useState} from "react";
+import { useState } from "react";
+import { Container, Dropdown, Image, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import { CONTENT_SERVER_ADDRESS } from "../../api/axios";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { authActions } from "../../store/authSlice";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
-import {ShowType, UserRegistration} from "../users/UserRegistration";
-import {Role, User} from "../../domain/User";
-import {EditUser} from "../users/EditUser";
-import {AlertToast} from "../ui/AlertToast";
-import {ChangeUserPassword} from "../users/ChangeUserPassword";
-import {CONTENT_SERVER_ADDRESS} from "../../api/axios";
 import Modal from "../ui/Modal";
-import {useDispatch, useSelector} from "react-redux";
-import {authActions} from "../../store/authSlice";
-import {RootState} from "../../store";
-import {uiActions, AlertType} from "../../store/uiSlice";
+import { ChangeUserPassword } from "../users/ChangeUserPassword";
+import { EditUser } from "../users/EditUser";
+import { ShowType, UserRegistration } from "../users/UserRegistration";
 
 export const Header = () => {
     const history = useHistory();
@@ -41,7 +41,12 @@ export const Header = () => {
         setShowEditModal(false);
         if (error) {
             if (error.name && error.description) {
-                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
+                dispatch(uiActions.handleAlert({
+                    show: true,
+                    type: AlertType.DANGER,
+                    title: error.name,
+                    message: error.description
+                }));
                 setShowAlert(true);
             } else {
                 console.warn("warning", error);
@@ -51,7 +56,12 @@ export const Header = () => {
 
     const handlePasswordChanged = () => {
         setShowChangePassword(false);
-        dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Password Update", message:"User password has been updated successfully"}));
+        dispatch(uiActions.handleAlert({
+            show: true,
+            type: AlertType.SUCCESS,
+            title: "Password Update",
+            message: "User password has been updated successfully"
+        }));
         setShowAlert(true);
     }
 
@@ -61,7 +71,7 @@ export const Header = () => {
             <NavDropdown title="Manage" id="navbarScrollingDropdown">
                 <NavDropdown.Item as={Link} to="/products">Products</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/variations">Product Variations</NavDropdown.Item>
-                <NavDropdown.Divider />
+                <NavDropdown.Divider/>
                 <NavDropdown.Item as={Link} to="/users">Users</NavDropdown.Item>
             </NavDropdown>
         </>
@@ -80,24 +90,24 @@ export const Header = () => {
     return (
         <header>
             {(showAlert) && <AlertToast showAlert={showAlert}/>}
-            <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
+            <Navbar className="color-nav" variant="dark" expand="lg" style={{marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">
-                            <Image src={`${CONTENT_SERVER_ADDRESS}/logo.jpg`}
-                                   title="Caricanecas Manauara"
-                                    roundedCircle
-                                    width="55"/>
+                        <Image src={`${CONTENT_SERVER_ADDRESS}/logo.jpg`}
+                               title="Caricanecas Manauara"
+                               roundedCircle
+                               width="55"/>
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll" />
+                    <Navbar.Toggle aria-controls="navbarScroll"/>
                     <Navbar.Collapse id="navbarScroll">
                         <Nav
                             className="me-auto my-2 my-lg-0"
-                            style={{ maxHeight: '100px' }}
+                            style={{maxHeight: '100px'}}
                             navbarScroll
                         >
 
-                            {isLoggedIn && user.role === Role.ADMIN && adminUser }
-                            {isLoggedIn && user.role !== Role.ADMIN && simpleUser }
+                            {isLoggedIn && user.role === Role.ADMIN && adminUser}
+                            {isLoggedIn && user.role !== Role.ADMIN && simpleUser}
 
                         </Nav>
                         {isLoggedIn ?
@@ -110,10 +120,12 @@ export const Header = () => {
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => setShowEditModal(true)}>Profile</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => setShowChangePassword(true)}>Change Password</Dropdown.Item>
-                                                <Dropdown.Divider />
-                                                <Dropdown.Item onClick={handleLogout} >Logout</Dropdown.Item>
+                                                <Dropdown.Item
+                                                    onClick={() => setShowEditModal(true)}>Profile</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => setShowChangePassword(true)}>Change
+                                                    Password</Dropdown.Item>
+                                                <Dropdown.Divider/>
+                                                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </Navbar.Collapse>
@@ -133,20 +145,21 @@ export const Header = () => {
                 <div>
                     <Modal
                         onClose={handleCloseEditModal}
-                        size="sm" >
+                        size="sm">
                         <div>
                             <EditUser id={user._id} op="edit" onCloseModal={handleCloseEditModal}/>
                         </div>
                     </Modal>
                 </div>
             }
-            { showChangePassword &&
+            {showChangePassword &&
                 <div>
                     <Modal
                         onClose={() => setShowChangePassword(false)}
-                        size="tn" >
+                        size="tn">
                         <div>
-                            <ChangeUserPassword email={user.email} onCancel={() => setShowChangePassword(false)} onSave={handlePasswordChanged}/>
+                            <ChangeUserPassword email={user.email} onCancel={() => setShowChangePassword(false)}
+                                                onSave={handlePasswordChanged}/>
                         </div>
                     </Modal>
 

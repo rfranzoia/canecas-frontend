@@ -1,17 +1,17 @@
-import {useCallback, useContext, useEffect, useState} from "react";
-import {Card} from "react-bootstrap";
-import {productsApi} from "../../api/ProductsAPI";
-import {ProductsList} from "./ProductsList";
-import {CustomButton} from "../ui/CustomButton";
-import {StatusCodes} from "http-status-codes";
-import {ApplicationContext} from "../../context/ApplicationContext";
-import {AlertToast} from "../ui/AlertToast";
-import {EditProductForm} from "./EditProductForm";
+import { StatusCodes } from "http-status-codes";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { productsApi } from "../../api/ProductsAPI";
+import { ApplicationContext } from "../../context/ApplicationContext";
+import { Role, User } from "../../domain/User";
+import { RootState } from "../../store";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
+import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
-import {Role, User} from "../../domain/User";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../store";
-import {uiActions, AlertType} from "../../store/uiSlice";
+import { EditProductForm } from "./EditProductForm";
+import { ProductsList } from "./ProductsList";
 
 export const Products = () => {
     const appCtx = useContext(ApplicationContext);
@@ -48,11 +48,21 @@ export const Products = () => {
 
         const result = await productsApi.withToken(getToken()).delete(product._id);
         if (!result) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete Product", message:`Product '${product.name}' deleted successfully`}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.WARNING,
+                title: "Delete Product",
+                message: `Product '${product.name}' deleted successfully`
+            }));
             setShowAlert(true);
 
         } else {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: result.name,
+                message: result.description
+            }));
             setShowAlert(true);
         }
         loadProducts().then(undefined);
@@ -105,7 +115,12 @@ export const Products = () => {
     const handleSave = (error?) => {
         setShowEditModal(false);
         if (error) {
-            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
+            dispatch(uiActions.handleAlert({
+                show: true,
+                type: AlertType.DANGER,
+                title: error.name,
+                message: error.description
+            }));
             setShowAlert(true);
         }
     }
