@@ -1,8 +1,7 @@
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
-import {useContext, useEffect, useState} from "react";
+import {useState} from "react";
 import useUsers from "../../hooks/useUsers";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {CustomButton} from "../ui/CustomButton";
 import {evaluateTotalPrice, Order} from "../../domain/Order";
 import {AlertToast} from "../ui/AlertToast";
@@ -13,11 +12,12 @@ import styles from "./orders.module.css";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import Modal from "../ui/Modal";
 import {OrderItemWizard} from "./items/OrderItemWizard";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const NewOrder = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const {users} = useUsers();
     const [showAlert, setShowAlert] = useState(false);
     const [showWizardModal, setShowWizardModal] = useState(false);
@@ -28,7 +28,6 @@ export const NewOrder = (props) => {
         totalPrice: 0,
         items: []
     });
-    const {handleAlert} = appCtx;
     
     const handleItemRemove = (itemId) => {
         setFormData(prevState => {
@@ -46,7 +45,7 @@ export const NewOrder = (props) => {
         setShowWizardModal(false);
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"The selected product is already on the list"}));
             setShowAlert(true);
         } else {
             setFormData(prevState => {
@@ -91,19 +90,19 @@ export const NewOrder = (props) => {
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0 ||
             items.length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "The customer email, order date and items must be provided");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"The customer email, order date and items must be provided"}));
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
             if (d.valueOf() > Date.now().valueOf()) {
-                handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date cannot be after today"}));
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:`Order Date is not valid!\n${error.message}`}));
             setShowAlert(true);
             return false;
         }
@@ -143,12 +142,6 @@ export const NewOrder = (props) => {
         setShowAlert(false);
         setShowWizardModal(false);
     }
-
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-    },[appCtx.alert.show])
 
     return (
         <>

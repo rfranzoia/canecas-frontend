@@ -1,36 +1,32 @@
 import {CustomButton} from "../ui/CustomButton";
 import {Card, Image} from "react-bootstrap";
-import {useCallback, useContext, useEffect, useState} from "react";
-
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
-
+import {useCallback, useEffect, useState} from "react";
 import Modal from "../ui/Modal";
 import {AlertToast} from "../ui/AlertToast";
 import {imageHelper} from "../ui/ImageHelper";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
-
 import {HowToOrderPresentation} from "./HowToOrderPresentation";
 import {OrderWizard} from "../orders/wizard/OrderWizard";
 import {ProductShowCaseRow} from "./ProductShowCaseRow";
 import {StatusCodes} from "http-status-codes";
 import {productsApi} from "../../api/ProductsAPI";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const Presentation = () => {
-    const appCtx = useContext(ApplicationContext);
     const [showFormQuote, setShowFormQuote] = useState(false);
     const [products, setProducts] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [showHowToOrder, setShowHowToOrder] = useState(false);
-
-    const {handleAlert} = appCtx;
+    const dispatch = useDispatch();
 
     const handleShowRequestQuote = () => {
         setShowFormQuote(true);
     }
 
     const handleConfirm = () => {
-        handleAlert(true, AlertType.SUCCESS, "Request Quote",
-            "Congratulations! Your quote has been sent. You'll be hearing from us soon");
+        dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Request Quote",
+            message:"Congratulations! Your quote has been sent. You'll be hearing from us soon"}));
         setShowAlert(true);
         handleCancel();
     }
@@ -53,23 +49,17 @@ export const Presentation = () => {
     const loadProducts = useCallback(async () => {
         const products = await productsApi.list();
         if (products.statusCode !== StatusCodes.OK) {
-            handleAlert(true, AlertType.DANGER, "Load Products: ".concat(products.name), products.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Load Products: ".concat(products.name), message:products.description}));
             setProducts([]);
             return
         } else {
             setProducts(products.data);
         }
-    }, [handleAlert]);
+    }, [dispatch]);
 
     useEffect(() => {
         loadProducts().then(undefined);
     }, [loadProducts])
-
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-    }, [appCtx.alert.show])
 
     return (
         <div>

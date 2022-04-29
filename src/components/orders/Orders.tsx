@@ -1,8 +1,8 @@
-import {useCallback, useContext, useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {StatusCodes} from "http-status-codes";
 import {ordersApi} from "../../api/OrdersAPI";
 import {DEFAULT_PAGE_SIZE} from "../../api/axios";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {OpType} from "../../context/ApplicationContext";
 import {OrdersList} from "./OrdersList";
 import {OrdersFilter} from "./OrdersListFilter";
 import {NewOrder} from "./NewOrder";
@@ -11,11 +11,11 @@ import {findNextOrderStatus, Order, OrderStatus} from "../../domain/Order";
 import {User} from "../../domain/User";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
-
-import styles from "./orders.module.css"
 import {useHistory} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {AlertType, uiActions} from "../../store/uiSlice";
+import styles from "./orders.module.css"
 
 export interface WizardFormData {
     _id?: string,
@@ -33,8 +33,8 @@ export interface WizardFormData {
 }
 
 export const Orders = () => {
+    const dispatch = useDispatch();
     const [orders, setOrders] = useState([]);
-    const appCtx = useContext(ApplicationContext);
     const user = useSelector<RootState, User>(state => state.auth.user);
     const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
@@ -48,7 +48,6 @@ export const Orders = () => {
         op: "",
         orderId: ""
     })
-    const { handleAlert } = appCtx;
 
     const loadOrders = useCallback((page: number, filter?: string) => {
         if (!user.authToken) {
@@ -64,23 +63,23 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
                     history.replace("/");
                 } else if (result.statusCode !== StatusCodes.OK) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
                     setShowAlert(true);
                     setOrders([]);
                 } else {
                     setOrders(result.data);
                 }
             });
-    },[handleAlert, history, user.authToken])
+    },[dispatch, history, user.authToken])
 
     const updateOrder = (orderId: string, order, callback) => {
         ordersApi.withToken(user.authToken).update(orderId, order)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
                     setShowAlert(true);
                 } else {
                     callback();
@@ -93,7 +92,7 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
                     setShowAlert(true);
                 } else {
                     setPageControl({
@@ -102,7 +101,7 @@ export const Orders = () => {
                     });
                 }
             });
-    }, [handleAlert, user.authToken])
+    }, [dispatch, user.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setShowAlert(false);
@@ -118,19 +117,19 @@ export const Orders = () => {
             ordersApi.withToken(user.authToken).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
-                        handleAlert(false);
+                        dispatch(uiActions.handleAlert({show:false}));
                         getTotalPages();
                         loadOrders(pageControl.currPage);
                         setSaved(true);
                     } else {
                         const error = result.data;
-                        handleAlert(true, AlertType.DANGER, error.name, error.description);
+                        dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
                         setShowAlert(true);
                     }
                 })
         } else if (edit.op === OpType.EDIT) {
             updateOrder(order._id, order, () => {
-                handleAlert(false);
+                dispatch(uiActions.handleAlert({show:false}));
                 loadOrders(pageControl.currPage);
                 setSaved(true);
             })
@@ -152,7 +151,7 @@ export const Orders = () => {
             status: OrderStatus.CONFIRMED
         }
         updateOrder(orderId, o, () => {
-            handleAlert(true, AlertType.SUCCESS, "Update Order", `Order '${orderId}' is now CONFIRMED`);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Update Order", message:`Order '${orderId}' is now CONFIRMED`}));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -164,7 +163,7 @@ export const Orders = () => {
             statusReason: cancelReason
         }
         updateOrder(orderId, o, () => {
-            handleAlert(true, AlertType.WARNING, "Cancel Order", `Order '${orderId}' has been CANCELED`);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Cancel Order", message:`Order '${orderId}' has been CANCELED`}));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -176,7 +175,7 @@ export const Orders = () => {
             statusReason: forwardReason
         }
         updateOrder(order._id, o, () => {
-            handleAlert(true, AlertType.SUCCESS, "Update Order Status", `Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Update Order Status", message:`Order '${order._id}' status updated to ${OrderStatus[o.status]} successfully`}));
             setShowAlert(true);
             loadOrders(pageControl.currPage);
         });
@@ -186,9 +185,9 @@ export const Orders = () => {
         ordersApi.withToken(user.authToken).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
-                    handleAlert(true, AlertType.DANGER, result.name, result.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
                 } else {
-                    handleAlert(true, AlertType.WARNING, "Delete Order", `Order '${orderId}' has been successfully DELETED`);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete Order", message:`Order '${orderId}' has been successfully DELETED`}));
                 }
                 setShowAlert(true);
                 getTotalPages();
@@ -222,7 +221,7 @@ export const Orders = () => {
     },[pageControl.currPage, loadOrders])
 
     const handleFilterError = (errorMessage: string) => {
-        handleAlert(true, AlertType.WARNING, "Filter Error", errorMessage);
+        dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Filter Error", message:errorMessage}));
         setShowAlert(true);
     }
 

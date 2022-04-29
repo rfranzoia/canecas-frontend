@@ -3,9 +3,8 @@ import {OrderStatus, orderStatusAsArray} from "../../domain/Order";
 import {Col, Container, Form, Row} from "react-bootstrap";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
-
-import styles from "./ordersFilter.module.css";
 import useUsers from "../../hooks/useUsers";
+import styles from "./ordersFilter.module.css";
 
 export interface OrdersFilter {
     startDate?: string,

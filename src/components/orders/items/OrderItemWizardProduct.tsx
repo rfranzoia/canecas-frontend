@@ -1,6 +1,5 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {WizardFormData} from "../Orders";
 import {Variation} from "../../../domain/Variation";
 import {Variations} from "../../variations/Variations";
@@ -12,9 +11,11 @@ import Modal from "../../ui/Modal";
 
 import styles from "../orders.module.css";
 import useProducts from "../../../hooks/useProducts";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../../store/uiSlice";
 
 export const OrderItemWizardProduct = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const {products, findProduct} = useProducts();
     const [showVariationsModal, setShowVariationsModal] = useState(false);
@@ -22,7 +23,6 @@ export const OrderItemWizardProduct = (props) => {
         product: "",
         price: 0,
     });
-    const {handleAlert} = appCtx;
 
     const handleSearchVariations = () => {
         setShowVariationsModal(true);
@@ -57,7 +57,7 @@ export const OrderItemWizardProduct = (props) => {
     const isValidData = (): boolean => {
         const { product } = formData;
         if (product.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"Product must be provided!"}));
             setShowAlert(true);
             return false;
         }

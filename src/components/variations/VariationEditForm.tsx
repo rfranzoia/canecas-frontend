@@ -2,7 +2,7 @@ import {useCallback, useContext, useEffect, useState} from "react";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {StatusCodes} from "http-status-codes";
 import {Variation} from "../../domain/Variation";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {variationsApi} from "../../api/VariationAPI";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import {CustomButton} from "../ui/CustomButton";
@@ -12,6 +12,8 @@ import {imageHelper} from "../ui/ImageHelper";
 import useProducts from "../../hooks/useProducts";
 import useServiceApi from "../../hooks/useServiceApi";
 import styles from "./variations.module.css"
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const VariationEditForm = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -20,6 +22,7 @@ export const VariationEditForm = (props) => {
     const {products, findProduct} = useProducts();
     const [viewOnly, setViewOnly] = useState(false);
     const [image, setImage] = useState(null);
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         _id: null,
         product: "",
@@ -32,23 +35,23 @@ export const VariationEditForm = (props) => {
         selectedFile: null
     });
 
-    const {handleAlert, getToken} = appCtx;
+    const {getToken} = appCtx;
 
     const isValidData = (): boolean => {
         const { product, drawings, background, price, image } = formData;
         if (product.trim().length === 0 || background.trim().length === 0 ||
             image.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required to save the variation!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"All fields are required to save the variation!"}));
             setShowAlert(true);
             return false;
         }
         if (isNaN(drawings) || isNaN(price)) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "You must inform valid number of Drawings and Price!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"You must inform valid number of Drawings and Price!"}));
             setShowAlert(true);
             return false;
         }
         if (price <= 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product, Price value must be greater than zero!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"Product, Price value must be greater than zero!"}));
             setShowAlert(true);
             return false;
         }
@@ -86,7 +89,7 @@ export const VariationEditForm = (props) => {
             const selectedProduct = findProduct(formData.product);
 
             if (!selectedProduct) {
-                handleAlert(true, AlertType.DANGER, "Adding Error!", "Error adding product!");
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Adding Error!", message:"Error adding product!"}));
                 setShowAlert(true);
                 return;
             }
@@ -94,12 +97,12 @@ export const VariationEditForm = (props) => {
             const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
-                handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Upload File Error!", message:sendResult}));
                 setShowAlert(true);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
-                handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:sendResult.name, message:sendResult.description}));
                 setShowAlert(true);
                 return;
             }
@@ -154,7 +157,7 @@ export const VariationEditForm = (props) => {
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     console.error(result.name, JSON.stringify(result.description));
-                    handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:JSON.stringify(result.description)}));
                     setShowAlert(true);
                 } else {
                     setFormData({
@@ -169,7 +172,7 @@ export const VariationEditForm = (props) => {
                     imageHelper.getImage(loadImage, result.data.image);
                 }
             })
-    }, [getToken, handleAlert, props.op, props.variationId])
+    }, [dispatch, getToken, props.op, props.variationId])
 
     useEffect(() => {
         getVariation().then(undefined);

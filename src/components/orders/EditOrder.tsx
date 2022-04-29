@@ -1,15 +1,18 @@
 import {ordersApi} from "../../api/OrdersAPI";
 import {memo, useCallback, useContext, useEffect, useState} from "react";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 import {AlertToast} from "../ui/AlertToast";
 import EditOrderForm from "./EditOrderForm";
 import {Order} from "../../domain/Order";
+import {AlertType, uiActions} from "../../store/uiSlice";
+import {useDispatch} from "react-redux";
 
 const EditOrder = (props) => {
     const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
-    const { handleAlert, getToken } = appCtx;
+    const { getToken } = appCtx;
     const [order, setOrder] = useState({
         _id: "",
         orderDate: "",
@@ -35,7 +38,7 @@ const EditOrder = (props) => {
 
         const result = await ordersApi.withToken(getToken()).get(props.id);
         if (result?.statusCode !== StatusCodes.OK) {
-            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
             setShowAlert(true);
         } else {
             if (result.data && !Array.isArray(result.data)) {
@@ -46,7 +49,7 @@ const EditOrder = (props) => {
             }
             setShowAlert(false);
         }
-    }, [props.id, getToken, handleAlert])
+    }, [props.id, getToken, dispatch])
 
     useEffect(() => {
         loadData().then(() => undefined);

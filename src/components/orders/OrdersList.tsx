@@ -4,11 +4,10 @@ import {OrderRow} from "./OrderRow";
 import {useEffect, useState} from "react";
 import {Role, User} from "../../domain/User";
 import {CustomPagination} from "../ui/CustomPagination";
-
-import classes from "./orders.module.css";
 import OrdersListFilter from "./OrdersListFilter";
 import {useSelector} from "react-redux";
 import {RootState} from "../../store";
+import classes from "./orders.module.css";
 
 export const OrdersList = (props) => {
     const user = useSelector<RootState, User>(state => state.auth.user);

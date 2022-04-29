@@ -5,7 +5,7 @@ import {CustomButton} from "../ui/CustomButton";
 import {AlertToast} from "../ui/AlertToast";
 import {CustomPagination} from "../ui/CustomPagination";
 import {Variation} from "../../domain/Variation";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {ApplicationContext, OpType} from "../../context/ApplicationContext";
 import {DEFAULT_PAGE_SIZE} from "../../api/axios";
 import {VariationsList} from "./VariationsList";
 import Modal from "../ui/Modal";
@@ -13,8 +13,9 @@ import {VariationEditForm} from "./VariationEditForm";
 import {Role, User} from "../../domain/User";
 import {VariationsFilter} from "./VariationListFilter";
 import {StatusCodes} from "http-status-codes";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const Variations = (props) => {
     const appCtx = useContext(ApplicationContext);
@@ -26,7 +27,8 @@ export const Variations = (props) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [variations, setVariations] = useState([]);
     const [variationId, setVariationId] = useState(null);
-    const {handleAlert, getToken} = appCtx;
+    const {getToken} = appCtx;
+    const dispatch = useDispatch();
 
     const loadVariations = useCallback((currPage: number, filter?: string) => {
         const pageSize = props.isModal ? DEFAULT_PAGE_SIZE / 2 : DEFAULT_PAGE_SIZE;
@@ -34,13 +36,13 @@ export const Variations = (props) => {
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     const error = result?.response?.data;
-                    handleAlert(true, AlertType.DANGER, error.name, error.description);
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
                 } else {
                     setVariations(result.data);
                     setCurrentPage(currPage);
                 }
             })
-    }, [handleAlert, props.isModal])
+    }, [dispatch, props.isModal])
 
     const getTotalPages = useCallback(() => {
         const pageSize = props.isModal ? DEFAULT_PAGE_SIZE / 2 : DEFAULT_PAGE_SIZE;
@@ -63,7 +65,7 @@ export const Variations = (props) => {
                 .then(result => {
                     if (result.statusCode !== StatusCodes.CREATED) {
                         console.error(result.name, result.description)
-                        handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:JSON.stringify(result.description)}));
                         setShowAlert(true);
                     } else {
                         setShowAlert(false);
@@ -77,7 +79,7 @@ export const Variations = (props) => {
                 .then(result => {
                     if (result.statusCode !== StatusCodes.OK) {
                         console.error(result.name, result.description)
-                        handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                        dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:JSON.stringify(result.description)}));
                         setShowAlert(true);
                     } else {
                         setShowAlert(false);
@@ -140,9 +142,9 @@ export const Variations = (props) => {
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.OK) {
                     console.error(result.name, result.description)
-                    handleAlert(true, AlertType.DANGER, result.name, JSON.stringify(result.description));
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:JSON.stringify(result.description)}));
                 } else {
-                    handleAlert(true, AlertType.WARNING, "Delete Variation", "Variation deleted successfully");
+                    dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete Variation", message:"Variation deleted successfully"}));
                     getTotalPages();
                     loadVariations(1);
                 }
@@ -155,7 +157,7 @@ export const Variations = (props) => {
     }
 
     const handleFilterError = () => {
-        handleAlert(true, AlertType.WARNING, "Filter Error", "You must select at least one filter type");
+        dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Filter Error", message:"You must select at least one filter type"}));
         setShowAlert(true);
     }
 

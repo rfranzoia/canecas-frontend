@@ -1,20 +1,20 @@
 import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Row} from "react-bootstrap";
-import {useContext, useState} from "react";
-import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
+import {useState} from "react";
 import {AutoCompleteInput} from "../../ui/AutoCompleteInput";
 import {CustomButton} from "../../ui/CustomButton";
 import useProducts from "../../../hooks/useProducts";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../../store/uiSlice";
 
 export const OrderWizardProductForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const {products} = useProducts();
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
     });
-    const {handleAlert} = appCtx;
 
     const handleSelectProduct = (product) => {
         const selectedProduct = products.find(p => p.name === product);
@@ -30,7 +30,7 @@ export const OrderWizardProductForm = (props) => {
     const isValidData = (): boolean => {
         const { product } = formData;
         if (product.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "Product must be provided!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"Product must be provided!"}));
             setShowAlert(true);
             return false;
         }

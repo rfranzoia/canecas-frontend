@@ -1,12 +1,13 @@
 import {Card} from "react-bootstrap";
 import {CustomButton} from "../../ui/CustomButton";
-import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
 import {Role} from "../../../domain/User";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {AlertToast} from "../../ui/AlertToast";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../../store/uiSlice";
 
 export const OrderWizardPersonalInfoForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         role: "",
@@ -16,7 +17,6 @@ export const OrderWizardPersonalInfoForm = (props) => {
         phone: "",
         address: ""
     });
-    const {handleAlert} = appCtx;
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -31,7 +31,7 @@ export const OrderWizardPersonalInfoForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"All fields are required"}));
             setShowAlert(true);
             return false;
         }

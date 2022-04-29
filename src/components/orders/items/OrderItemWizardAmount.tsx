@@ -1,12 +1,13 @@
 import {CustomButton} from "../../ui/CustomButton";
-import {useContext, useEffect, useState} from "react";
-import {AlertType, ApplicationContext} from "../../../context/ApplicationContext";
+import {useEffect, useState} from "react";
 import {AlertToast} from "../../ui/AlertToast";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {BorderedRow} from "../../ui/BorderedRow";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../../store/uiSlice";
 
 export const OrderItemWizardAmount = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         product: "",
@@ -20,7 +21,6 @@ export const OrderItemWizardAmount = (props) => {
         backgroundImageFile: null,
         amount: 0,
     });
-    const {handleAlert} = appCtx;
 
     const handleChangeNumber = (event) => {
         const {name, value} = event.target;
@@ -44,7 +44,7 @@ export const OrderItemWizardAmount = (props) => {
 
     const handleAddItem = () => {
         if (Number(formData.amount) <= 0 || Number(formData.price) <= 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "Price and Amount must be greater than zero!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Price and Amount must be greater than zero!"}));
             setShowAlert(true);
             return;
         }

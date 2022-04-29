@@ -1,53 +1,51 @@
-import {useCallback, useContext, useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {usersApi} from "../../api/UsersAPI";
 import {UsersList} from "./UsersList";
 import {EditUser} from "./EditUser";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {StatusCodes} from "http-status-codes";
 import {CustomButton} from "../ui/CustomButton";
 import {ChangeUserPassword} from "./ChangeUserPassword";
 import {AlertToast} from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 import {useHistory} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {User} from "../../domain/User";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const Users = () => {
-    const appCtx = useContext(ApplicationContext);
     const history = useHistory();
     const [users, setUsers] = useState([]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);
+    const dispatch = useDispatch();
     const [editViewOp, setEditViewOp] = useState({
         userId: "",
         email: "",
         op: "",
     });
 
-    const {handleAlert} = appCtx;
-
     const loadData = useCallback(async () => {
         const result = await usersApi.withToken(loggedUser.authToken).list();
         if (result.statusCode === StatusCodes.OK) {
             setUsers(result.data);
         } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
             history.replace("/");
         } else {
-            handleAlert(true, AlertType.DANGER, result.name, result.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
             setShowAlert(true);
             setUsers([]);
         }
-    }, [loggedUser.authToken, handleAlert, history]);
+    }, [loggedUser.authToken, dispatch, history]);
 
     const handleDelete = (success, message?) => {
         loadData().then(() => undefined);
         if (success) {
-            handleAlert(true, AlertType.WARNING, "Delete User!", message);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.WARNING, title:"Delete User!", message:message}));
             setShowAlert(true);
         }
     }
@@ -56,7 +54,7 @@ export const Users = () => {
         loadData().then(() => undefined);
         setShowChangePassword(false);
         if (success) {
-            handleAlert(true, AlertType.SUCCESS, "Password Change", message);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Password Change", message:message}));
             setShowAlert(true);
         }
     }
@@ -64,7 +62,7 @@ export const Users = () => {
     const handleCloseEditModal = (error?) => {
         setShowEditModal(false);
         if (error) {
-            handleAlert(true, AlertType.DANGER, error.name, error.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
             setShowAlert(true);
         }
         loadData().then(undefined);
@@ -95,12 +93,6 @@ export const Users = () => {
     useEffect(() => {
         loadData().then(undefined);
     }, [loadData]);
-
-    useEffect(() => {
-        if (!appCtx.alert.show) {
-            setShowAlert(false)
-        }
-    }, [appCtx.alert.show])
 
     return (
         <div>

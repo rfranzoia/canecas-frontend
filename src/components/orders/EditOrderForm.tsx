@@ -1,21 +1,21 @@
-import {memo, useContext, useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import {Card, Col, Container, Row} from "react-bootstrap";
 import {OrderItemsList} from "./items/OrderItemsList";
 import {StatusChangeList} from "./history/StatusChangeList";
 import {evaluateTotalPrice, OrderStatus, orderStatusAsArray} from "../../domain/Order";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {CustomButton} from "../ui/CustomButton";
 import {AutoCompleteInput} from "../ui/AutoCompleteInput";
 import Modal from "../ui/Modal";
 import useUsers from "../../hooks/useUsers";
-
-import styles from "./orders.module.css";
 import {OrderItemWizard} from "./items/OrderItemWizard";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
+import {useDispatch} from "react-redux";
+import {AlertType, uiActions} from "../../store/uiSlice";
+import styles from "./orders.module.css";
 
 const EditOrderForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const {users} = useUsers();
     const order = props.order;
     const [showAlert, setShowAlert] = useState(false);
@@ -29,7 +29,6 @@ const EditOrderForm = (props) => {
         items: [],
         statusHistory: []
     });
-    const {handleAlert} = appCtx;
 
     const [showStatusHistory, setShowStatusHistory] = useState(false);
 
@@ -49,7 +48,7 @@ const EditOrderForm = (props) => {
         setShowWizardModal(false);
         const existingItem = formData.items.find((i) => i._id === item._id);
         if (existingItem) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "The selected product is already on the list");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"The selected product is already on the list"}));
             setShowAlert(true);
         } else {
             handleCloseToast();
@@ -81,19 +80,19 @@ const EditOrderForm = (props) => {
         const { userEmail, orderDate } = formData;
 
         if (userEmail.trim().length === 0 || orderDate.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date and Customer Email must be provided!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date and Customer Email must be provided!"}));
             setShowAlert(true);
             return false;
         }
         try {
             const d = new Date(orderDate);
             if (d.valueOf() > Date.now().valueOf()) {
-                handleAlert(true, AlertType.DANGER, "Validation Error", "Order Date cannot be after today");
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Order Date cannot be after today"}));
                 setShowAlert(true);
                 return false;
             }
         } catch (error) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", `"Order Date is not valid!\n${error.message}`);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:`"Order Date is not valid!\n${error.message}`}));
             setShowAlert(true);
             return false;
         }
@@ -122,7 +121,7 @@ const EditOrderForm = (props) => {
     }
 
     const handleCloseToast = () => {
-        handleAlert(false);
+        dispatch(uiActions.handleAlert({show:false}));
         setShowAlert(false);
     }
 

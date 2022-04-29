@@ -1,14 +1,15 @@
 import {Col, Container, Row} from "react-bootstrap";
-import {useContext, useState} from "react";
+import {useState} from "react";
 import {AlertToast} from "../ui/AlertToast";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {usersApi} from "../../api/UsersAPI";
 import {DefaultCard} from "../ui/DefaultCard";
 import {CustomButton} from "../ui/CustomButton";
 import {Role} from "../../domain/User";
+import {uiActions, AlertType} from "../../store/uiSlice";
+import {useDispatch} from "react-redux";
 
 export const QuoteRequestForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
+    const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
         role: "",
@@ -18,7 +19,6 @@ export const QuoteRequestForm = (props) => {
         phone: "",
         address: ""
     });
-    const {handleAlert} = appCtx;
 
     const handleChange = (event) => {
         const {name, value} = event.target;
@@ -41,7 +41,7 @@ export const QuoteRequestForm = (props) => {
         if (res.email && res.email === formData.email) {
             props.onConfirm();
         } else {
-            handleAlert(true, AlertType.DANGER, res.name, res.description);
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:res.name, message:res.description}));
         }
     }
 
@@ -49,7 +49,7 @@ export const QuoteRequestForm = (props) => {
         const {name, phone, email} = formData;
         if (name.trim().length === 0 || phone.trim().length === 0 ||
             email.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error!", "All fields are required");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error!", message:"All fields are required"}));
             setShowAlert(true);
             return false;
         }

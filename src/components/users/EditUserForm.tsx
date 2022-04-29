@@ -1,23 +1,20 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, Col, Form, Row} from "react-bootstrap";
 import {CustomButton} from "../ui/CustomButton";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {Role, User} from "../../domain/User";
-
-import styles from "./users.module.css"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
+import {AlertType, uiActions} from "../../store/uiSlice";
+import styles from "./users.module.css"
 
 export const EditUserForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);
     const [showAlert, setShowAlert] = useState(false);
     const user = props.user;
     const viewOnly = props.op === "view";
     const isEdit = props.op === "edit";
-
-    const {handleAlert} = appCtx;
+    const dispatch = useDispatch();
 
     const [formData, setFormData] = useState({
         role: "",
@@ -50,14 +47,14 @@ export const EditUserForm = (props) => {
 
         if (role.trim().length === 0 || name.trim().length === 0 ||
             email.trim().length === 0 || password.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "Role, Name, Email and Password are required!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Role, Name, Email and Password are required!"}));
             setShowAlert(true);
             return false;
         }
 
         if (!isEdit) {
             if (password !== confirmPassword) {
-                handleAlert(true, AlertType.DANGER, "Validation Error", "Password and Password confirmation don't match!");
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Password and Password confirmation don't match!"}));
                 setShowAlert(true);
                 return false;
             }

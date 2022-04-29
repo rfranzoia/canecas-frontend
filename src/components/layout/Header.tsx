@@ -1,7 +1,6 @@
 import {Container, Dropdown, Image, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
-import {useContext, useState} from "react";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {useState} from "react";
 import { CustomButton } from "../ui/CustomButton";
 import {ShowType, UserRegistration} from "../users/UserRegistration";
 import {Role, User} from "../../domain/User";
@@ -13,15 +12,14 @@ import Modal from "../ui/Modal";
 import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "../../store/authSlice";
 import {RootState} from "../../store";
+import {uiActions, AlertType} from "../../store/uiSlice";
 
 export const Header = () => {
     const history = useHistory();
-    const appCtx = useContext(ApplicationContext);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const {handleAlert} = appCtx;
     const dispatch = useDispatch();
     const isLoggedIn = useSelector<RootState, Boolean>(state => state.auth.isLoggedIn);
     const user = useSelector<RootState, User>(state => state.auth.user);
@@ -43,7 +41,7 @@ export const Header = () => {
         setShowEditModal(false);
         if (error) {
             if (error.name && error.description) {
-                handleAlert(true, AlertType.DANGER, error.name, error.description);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:error.name, message:error.description}));
                 setShowAlert(true);
             } else {
                 console.warn("warning", error);
@@ -53,7 +51,7 @@ export const Header = () => {
 
     const handlePasswordChanged = () => {
         setShowChangePassword(false);
-        handleAlert(true, AlertType.SUCCESS, "Password Update", "User password has been updated successfully");
+        dispatch(uiActions.handleAlert({show:true, type:AlertType.SUCCESS, title:"Password Update", message:"User password has been updated successfully"}));
         setShowAlert(true);
     }
 
@@ -81,7 +79,7 @@ export const Header = () => {
 
     return (
         <header>
-            {(showAlert || (appCtx.alert.show && appCtx.alert.type === AlertType.INFO)) && <AlertToast showAlert={showAlert}/>}
+            {(showAlert) && <AlertToast showAlert={showAlert}/>}
             <Navbar className="color-nav" variant="dark" expand="lg" style={{ marginBottom: "0.5rem"}}>
                 <Container fluid>
                     <Navbar.Brand as={Link} to="/">

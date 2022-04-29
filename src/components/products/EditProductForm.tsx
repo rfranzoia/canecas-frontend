@@ -1,20 +1,22 @@
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Card, Col, Form, Image, Row} from "react-bootstrap";
 import {imageHelper, ImageOpType} from "../ui/ImageHelper";
 import {CustomButton} from "../ui/CustomButton";
-import {AlertType, ApplicationContext, OpType} from "../../context/ApplicationContext";
+import {OpType} from "../../context/ApplicationContext";
 import {AlertToast} from "../ui/AlertToast";
 import {StatusCodes} from "http-status-codes";
 import {ActionIconType, getActionIcon} from "../ui/ActionIcon";
 import useServiceApi from "../../hooks/useServiceApi";
+import {useDispatch} from "react-redux";
+import {uiActions, AlertType} from "../../store/uiSlice";
 
 export const EditProductForm = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const [showAlert, setShowAlert] = useState(false);
     const product = props.product;
     const {uploadImage} = useServiceApi("product");
     const [image, setImage] = useState(null);
     const [imageOpType, setImageOpType] = useState(ImageOpType.VIEW);
+    const dispatch = useDispatch();
     const [formData, setFormData] = useState({
         name: product.name,
         description: "",
@@ -24,19 +26,18 @@ export const EditProductForm = (props) => {
     const [file, setFile] = useState({
         selectedFile: null
     });
-    const {handleAlert} = appCtx;
 
     const isDataValid = (): boolean => {
         const {name, description, price, image} = formData;
 
         if (name.trim().length === 0 || description.trim().length === 0 || image.trim().length === 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "All fields are required to save!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"All fields are required to save!"}));
             setShowAlert(true);
             return false;
         }
 
         if (Number(price) <= 0) {
-            handleAlert(true, AlertType.DANGER, "Validation Error", "Product price must be greater than zero!");
+            dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Validation Error", message:"Product price must be greater than zero!"}));
             setShowAlert(true);
             return false;
         }
@@ -56,12 +57,12 @@ export const EditProductForm = (props) => {
             const sendResult = await uploadImage(file.selectedFile);
 
             if (sendResult instanceof Error) {
-                handleAlert(true, AlertType.DANGER, "Upload File Error!", sendResult);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:"Upload File Error!", message:sendResult}));
                 setShowAlert(true);
                 return;
 
             } else if (sendResult.statusCode !== StatusCodes.OK) {
-                handleAlert(true, AlertType.DANGER, sendResult.name, sendResult.description);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:sendResult.name, message:sendResult.description}));
                 setShowAlert(true);
                 return;
             }

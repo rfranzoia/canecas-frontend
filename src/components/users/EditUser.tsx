@@ -1,15 +1,15 @@
 import {usersApi} from "../../api/UsersAPI";
 import {EditUserForm} from "./EditUserForm";
-import {useCallback, useContext, useEffect, useState} from "react";
-import {AlertType, ApplicationContext} from "../../context/ApplicationContext";
+import {useCallback, useEffect, useState} from "react";
 import {StatusCodes} from "http-status-codes";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../store";
 import {User} from "../../domain/User";
+import {AlertType, uiActions} from "../../store/uiSlice";
 
 export const EditUser = (props) => {
-    const appCtx = useContext(ApplicationContext);
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);
+    const dispatch = useDispatch();
     const [user, setUser] = useState({
         role: "",
         name: "",
@@ -18,7 +18,6 @@ export const EditUser = (props) => {
         phone: "",
         address: "",
     });
-    const {handleAlert} = appCtx;
     const {op, id} = props;
 
     const handleSaveUser = (user) => {
@@ -47,7 +46,7 @@ export const EditUser = (props) => {
         if (op === "edit" || op === "view") {
             const result = await usersApi.withToken(loggedUser.authToken).get(id);
             if (result.statusCode !== StatusCodes.OK) {
-                handleAlert(true, AlertType.DANGER, result.name, result.description);
+                dispatch(uiActions.handleAlert({show:true, type:AlertType.DANGER, title:result.name, message:result.description}));
             } else {
                 setUser(result.data);
             }
@@ -61,7 +60,7 @@ export const EditUser = (props) => {
                 address: "",
             });
         }
-    }, [id, op, loggedUser.authToken, handleAlert])
+    }, [id, op, loggedUser.authToken, dispatch])
 
     useEffect(() => {
         getUser().then(undefined);
