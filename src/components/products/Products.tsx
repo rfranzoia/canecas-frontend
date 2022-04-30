@@ -1,11 +1,9 @@
-import { StatusCodes } from "http-status-codes";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Card } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { productsApi } from "../../api/ProductsAPI";
+import { useSelector } from "react-redux";
 import { Role, User } from "../../domain/User";
+import useProductsApi from "../../hooks/useProductsApi";
 import { RootState } from "../../store";
-import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
@@ -14,8 +12,7 @@ import { ProductsList } from "./ProductsList";
 
 export const Products = () => {
     const loggedUser = useSelector<RootState, User>((state) => state.auth.user);
-    const dispatch = useDispatch();
-    const [products, setProducts] = useState([]);
+    const { products, list, create, update, get, remove } = useProductsApi();
     const [showEditModal, setShowEditModal] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [editViewOp, setEditViewOp] = useState({
@@ -29,62 +26,26 @@ export const Products = () => {
         image: ""
     });
 
-    const loadProducts = useCallback(async () => {
-        productsApi.list()
-            .then(result => {
-                if (result.statusCode === StatusCodes.OK) {
-                    setProducts(result.data);
-                } else {
-                    setProducts([]);
-                }
-            });
-    }, []);
-
     const handleDelete = async (product) => {
-        if (!loggedUser.authToken) return;
-
-        const result = await productsApi.withToken(loggedUser.authToken).delete(product._id);
-        if (!result) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.WARNING,
-                title: "Delete Product",
-                message: `Product '${product.name}' deleted successfully`
-            }));
-            setShowAlert(true);
-
-        } else {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: result.name,
-                message: result.description
-            }));
-            setShowAlert(true);
-        }
-        loadProducts().then(undefined);
+        const result = await remove(product);
+        result();
+        setShowAlert(true);
     }
 
-    const handleShowEditModal = (op: string, id?: string) => {
-        const callback = async () => {
-            if (op === "edit" || op === "view") {
-                const result = await productsApi.get(id);
-                if (result.statusCode === StatusCodes.OK) {
-                    setProduct(result.data);
-                }
-            } else {
-                setProduct({
-                    name: "",
-                    description: "",
-                    price: 0,
-                    image: ""
-                })
+    const handleShowEditModal = async (op: string, id?: string) => {
+        if (op === "edit" || op === "view") {
+            const product = await get(id);
+            if (product) {
+                setProduct(product);
             }
+        } else {
+            setProduct({
+                name: "",
+                description: "",
+                price: 0,
+                image: ""
+            })
         }
-        callback()
-            .then(() => {
-                return undefined
-            });
         setEditViewOp({
             productId: id,
             op: op
@@ -92,47 +53,32 @@ export const Products = () => {
         setShowEditModal(true);
     }
 
-    const handleSaveProduct = (product) => {
-        const save = async (product) => {
-            let result;
-            if (editViewOp.op === "edit") {
-                result = await productsApi.withToken(loggedUser.authToken).update(editViewOp.productId, product)
-            } else if (editViewOp.op === "new") {
-                result = await productsApi.withToken(loggedUser.authToken).create(product);
-            }
-            if (result.statusCode !== StatusCodes.OK) {
-                handleSave(result);
-            } else {
-                handleSave();
-            }
-        }
-        save(product).then(undefined);
-    }
+    const handleSaveProduct = async (product) => {
+        let error;
+        if (editViewOp.op === "edit") {
+            error = await update(editViewOp.productId, product);
 
-    const handleSave = (error?) => {
-        setShowEditModal(false);
+        } else if (editViewOp.op === "new") {
+            error = await create(product);
+        }
+
         if (error) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: error.name,
-                message: error.description
-            }));
+            error();
             setShowAlert(true);
         }
+
+        setShowEditModal(false);
+        await list();
     }
+
 
     const handleCancel = () => {
         setShowEditModal(false);
     }
 
-    const handleNewProduct = () => {
-        handleShowEditModal("new");
+    const handleNewProduct = async () => {
+        await handleShowEditModal("new");
     }
-
-    useEffect(() => {
-        loadProducts().then(undefined);
-    }, [showEditModal, loadProducts])
 
     return (
         <div>
@@ -160,7 +106,9 @@ export const Products = () => {
                     <Modal
                         onClose={handleCancel}>
                         <div>
-                            <EditProductForm product={product} op={editViewOp.op} onSave={handleSaveProduct}
+                            <EditProductForm product={product}
+                                             op={editViewOp.op}
+                                             onSave={handleSaveProduct}
                                              onCancel={handleCancel}/>
                         </div>
                     </Modal>

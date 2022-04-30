@@ -36,15 +36,14 @@ const useVariationsApi = (isModal: boolean) => {
         async (currPage: number, filter?: string) => {
             const result = await variationsApi.withPageSize(pageSize).listByFilter(currPage, filter);
             if (result.statusCode !== StatusCodes.OK) {
-                const error = result?.response?.data;
                 setVariations([]);
                 return () =>
                     dispatch(
                         uiActions.handleAlert({
                             show: true,
                             type: AlertType.DANGER,
-                            title: error.name,
-                            message: error.description,
+                            title: result.name,
+                            message: JSON.stringify(result.description),
                         })
                     );
             } else {
@@ -112,7 +111,7 @@ const useVariationsApi = (isModal: boolean) => {
         async (variation: Variation) => {
             try {
                 const result = await variationsApi.withToken(loggedUser.authToken).update(variation._id, variation);
-                if (result.statusCode !== StatusCodes.CREATED) {
+                if (result.statusCode !== StatusCodes.OK) {
                     return () =>
                         dispatch(
                             uiActions.handleAlert({
