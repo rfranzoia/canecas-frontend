@@ -11,7 +11,7 @@ const useUsersApi = () => {
     const [users, setUsers] = useState<User[]>([]);
     const user = useSelector<RootState, User>(state => state.auth.user);
 
-    const loadUsers = useCallback(async () => {
+    const list = useCallback(async () => {
         const result = await usersApi.withToken(user.authToken).list();
         if (result.statusCode !== StatusCodes.OK) {
             dispatch(uiActions.handleAlert({
@@ -31,8 +31,8 @@ const useUsersApi = () => {
     }
 
     useEffect(() => {
-        loadUsers().then(undefined)
-    }, [loadUsers]);
+        list().then(undefined)
+    }, [list]);
 
     return {
         users,
