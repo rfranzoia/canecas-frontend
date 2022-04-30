@@ -14,27 +14,27 @@ import { HowToOrderPresentation } from "./HowToOrderPresentation";
 import { ProductShowCaseRow } from "./ProductShowCaseRow";
 
 export const Presentation = () => {
-    const [showFormQuote, setShowFormQuote] = useState(false);
+    const [showQuoteWizard, setShowQuoteWizard] = useState(false);
     const [products, setProducts] = useState([]);
     const [showAlert, setShowAlert] = useState(false);
     const [showHowToOrder, setShowHowToOrder] = useState(false);
     const dispatch = useDispatch();
 
-    const handleShowRequestQuote = () => {
-        setShowFormQuote(true);
+    const handleShowQuoteWizard = () => {
+        setShowQuoteWizard(true);
     }
 
-    const handleConfirm = () => {
+    const handleFinishQuoteWizard = () => {
         dispatch(uiActions.handleAlert({
             show: true, type: AlertType.SUCCESS, title: "Request Quote",
             message: "Congratulations! Your quote has been sent. You'll be hearing from us soon"
         }));
         setShowAlert(true);
-        handleCancel();
+        handleCancelQuoteWizard();
     }
 
-    const handleCancel = () => {
-        setShowFormQuote(false);
+    const handleCancelQuoteWizard = () => {
+        setShowQuoteWizard(false);
     }
 
     const handleWhatsappClick = () => {
@@ -80,7 +80,7 @@ export const Presentation = () => {
                 </p>
                 <div className="d-flex justify-content-center">
                     <CustomButton caption="Request Quote" customClass="fa fa-money-check-dollar"
-                                  onClick={handleShowRequestQuote} type="custom-success"/>
+                                  onClick={handleShowQuoteWizard} type="custom-success"/>
                 </div>
                 <p style={{ textAlign: "center" }}>You can also send us a message on &nbsp;
                     <span style={{ cursor: "pointer" }}
@@ -122,9 +122,9 @@ export const Presentation = () => {
                     <HowToOrderPresentation/>
                 </Modal>
             }
-            {showFormQuote &&
-                <Modal onClose={handleCancel}>
-                    <OrderWizard onCancel={handleConfirm}/>
+            {showQuoteWizard &&
+                <Modal onClose={handleCancelQuoteWizard}>
+                    <OrderWizard onCancel={handleCancelQuoteWizard} onFinishWizard={handleFinishQuoteWizard}/>
                 </Modal>
             }
 
