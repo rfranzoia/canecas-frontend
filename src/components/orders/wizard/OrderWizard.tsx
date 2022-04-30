@@ -8,12 +8,13 @@ import { OrderWizardProductForm } from "./OrderWizardProductForm";
 
 const initWizardFormData: WizardFormData = {
     user: null,
+    _id: "",
     product: "",
     price: 0,
     drawings: 0,
     drawingsImages: "",
     drawingsImagesFile: null,
-    background: "",
+    background: "empty",
     backgroundDescription: "",
     backgroundImage: "",
     backgroundImageFile: null,
@@ -24,17 +25,22 @@ export const OrderWizard = (props) => {
     const [currStep, setCurrStep] = useState(0);
     const [wizardFormData, setWizardFormData] = useState(initWizardFormData)
 
-    const save = () => {
-        console.log(wizardFormData);
-        props.onCancel();
+    const handleFinishWizard = (formData: WizardFormData) => {
+        const _id = wizardFormData.product.trim().concat(wizardFormData.drawings.toString()).concat(wizardFormData.background);
+        const data = {
+            ...wizardFormData,
+            _id: _id,
+            price: formData.price,
+            amount: formData.amount,
+        }
+        props.onFinishWizard(data);
     }
+
     const handleCancel = () => {
         props.onCancel();
     }
 
-    const handleForward = (formData: WizardFormData) => {
-        if (currStep === (steps.length - 1)) return;
-        const next = currStep + 1;
+    const updateFormData = (formData: WizardFormData) => {
         if (formData.user) {
             setWizardFormData(prevState => {
                 return {
@@ -68,10 +74,17 @@ export const OrderWizard = (props) => {
                     ...prevState,
                     background: formData.background,
                     backgroundImage: formData.backgroundImage,
+                    backgroundDescription: formData.backgroundDescription,
                     backgroundImageFile: formData.backgroundImageFile,
                 }
             })
         }
+    }
+
+    const handleForward = (formData: WizardFormData) => {
+        if (currStep === (steps.length - 1)) return;
+        const next = currStep + 1;
+        updateFormData(formData);
         setCurrStep(next);
     }
 
@@ -81,27 +94,17 @@ export const OrderWizard = (props) => {
         setCurrStep(previous);
     }
 
-    const handleFinishWizard = (formData: WizardFormData) => {
-        setWizardFormData(prevState => {
-            return {
-                ...prevState,
-                amount: formData.amount,
-            }
-        })
-        save();
-    }
-
     const steps = [
-        <OrderWizardPersonalInfoForm onForward={handleForward} onCancel={handleCancel}/>,
-        <OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,
-        <OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,
-        <OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}/>,
-        <OrderWizardAmount onCancel={handleCancel} onBackward={handleBackward} onFinish={handleFinishWizard}/>,
+        <OrderWizardPersonalInfoForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData}/>,
+        <OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
+        <OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
+        <OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
+        <OrderWizardAmount onCancel={handleCancel} onBackward={handleBackward} onFinishWizard={handleFinishWizard} wizardData={wizardFormData}/>,
     ]
 
     return (
-        <>
+        <div style={{ width: "35rem" }}>
             {steps[currStep]}
-        </>
+        </div>
     );
 }

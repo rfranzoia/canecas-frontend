@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Role } from "../../../domain/User";
@@ -53,12 +53,25 @@ export const OrderWizardPersonalInfoForm = (props) => {
         props.onForward({ user: user })
     }
 
+    useEffect(() => {
+        if (props.wizardData.user) {
+            setFormData({
+                role: props.wizardData.user.role,
+                name: props.wizardData.user.name,
+                email: props.wizardData.user.email,
+                password: props.wizardData.user.password,
+                phone: props.wizardData.user.phone,
+                address: props.wizardData.user.address,
+            })
+        }
+    }, [props.wizardData])
+
     return (
         <>
             <AlertToast showAlert={showAlert}/>
             <Card>
-                <Card.Header>
-                    First we need some information so we can start your order.
+                <Card.Header as={"h4"}>
+                    Lets start with some basic information of yours ...
                 </Card.Header>
                 <Card.Body>
                     <form>

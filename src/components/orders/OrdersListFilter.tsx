@@ -1,7 +1,10 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import { Col, Container, Form, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { OrderStatus, orderStatusAsArray } from "../../domain/Order";
+import { Role, User } from "../../domain/User";
 import useUsersApi from "../../hooks/useUsersApi";
+import { RootState } from "../../store";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
 import { CustomButton } from "../ui/CustomButton";
 import styles from "./ordersFilter.module.css";
@@ -15,6 +18,7 @@ export interface OrdersFilter {
 
 const OrdersListFilter = (props) => {
     const { users } = useUsersApi();
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByDateCheck: false,
@@ -192,29 +196,31 @@ const OrdersListFilter = (props) => {
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            <Row className="spaced-form-group">
-                                <Col>
-                                    <Form.Group>
-                                        <div className={styles["inline-filter"]}>
-                                            <Form.Check type="checkbox"
-                                                        label="Customer"
-                                                        id="checkCustomer"
-                                                        name="filterByCustomerCheck"
-                                                        checked={formData.filterByCustomerCheck}
-                                                        onChange={handleChange}/>
-                                            <AutoCompleteInput
-                                                data={users}
-                                                value={formData.userEmail}
-                                                displayFields="email,name"
-                                                onFieldSelected={handleSelectUser}
-                                                className={styles["custom-autocomplete"]}
-                                                disabled={!formData.filterByCustomerCheck}
-                                                placeholder="Please select an user email"/>
-                                        </div>
+                            { loggedUser.role === Role.ADMIN &&
+                                <Row className="spaced-form-group">
+                                    <Col>
+                                        <Form.Group>
+                                            <div className={styles["inline-filter"]}>
+                                                <Form.Check type="checkbox"
+                                                            label="Customer"
+                                                            id="checkCustomer"
+                                                            name="filterByCustomerCheck"
+                                                            checked={formData.filterByCustomerCheck}
+                                                            onChange={handleChange}/>
+                                                <AutoCompleteInput
+                                                    data={users}
+                                                    value={formData.userEmail}
+                                                    displayFields="email,name"
+                                                    onFieldSelected={handleSelectUser}
+                                                    className={styles["custom-autocomplete"]}
+                                                    disabled={!formData.filterByCustomerCheck}
+                                                    placeholder="Please select an user email"/>
+                                            </div>
 
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                            }
                             <Row className="spaced-form-group">
                                 <Col>
                                     <div className={"actions"}>

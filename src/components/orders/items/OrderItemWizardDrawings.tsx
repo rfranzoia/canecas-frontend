@@ -25,8 +25,8 @@ export const OrderItemWizardDrawings = (props) => {
             setFormData(prevState => (
                 {
                     ...prevState,
-                    imageFile: null,
-                    imageName: "",
+                    drawingsImagesFile: null,
+                    drawingsImages: "",
                 }
             ))
         }

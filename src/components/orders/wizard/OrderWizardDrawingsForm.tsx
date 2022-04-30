@@ -1,10 +1,15 @@
-import { useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Image } from "react-bootstrap";
 import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
+import { imageHelper } from "../../ui/ImageHelper";
 
 export const OrderWizardDrawingsForm = (props) => {
     const [formData, setFormData] = useState({
+        user: null,
+        product: "",
+        price: 0,
         drawings: 0,
         drawingsImages: "",
         drawingsImagesFile: null,
@@ -18,15 +23,25 @@ export const OrderWizardDrawingsForm = (props) => {
                 [name]: value
             }
         });
+        if (name === "drawings" && Number(value) === 0) {
+            setFormData(prevState => (
+                {
+                    ...prevState,
+                    drawingsImagesFile: null,
+                    drawingsImages: "",
+                }
+            ))
+        }
     }
 
-    const handleChangeFile = (event) => {
+    const handleChangeFile = async (event) => {
         event.preventDefault();
+        const image = await imageHelper.convertToBase64(event.target.files[0]);
         setFormData(prevState => {
             return {
                 ...prevState,
                 drawingsImages: event.target.files[0].name,
-                drawingsImagesFile: event.target.files[0]
+                drawingsImagesFile: image,
             }
         })
     };
@@ -48,19 +63,36 @@ export const OrderWizardDrawingsForm = (props) => {
         props.onBackward();
     }
 
+    useEffect(() => {
+        setFormData({
+            user: props.wizardData.user,
+            product: props.wizardData.product,
+            price: props.wizardData.price,
+            drawings: props.wizardData.drawings,
+            drawingsImages: props.wizardData.drawingsImages,
+            drawingsImagesFile: props.wizardData.drawingsImagesFile,
+        });
+    }, [props.wizardData])
+
     return (
         <>
             <Card>
-                <Card.Header>
-                    And how many DRAWINGS you want in your product??
+                <Card.Header as={"h4"}>
+                    Do you want any DRAWINGS in your product?
                 </Card.Header>
                 <Card.Body>
                     <Form>
-                        <Row>
+                        <BorderedRow title={"Drawings"}>
+                            <Col md="auto">
+                                <div className="bordered-panel">
+                                    {formData.drawingsImagesFile &&
+                                        <Image src={formData.drawingsImagesFile}
+                                               fluid width="200" title={formData.drawingsImages}/>
+                                    }
+                                </div>
+                            </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Drawings<span aria-hidden="true"
-                                                              className="required">*</span></Form.Label>
                                     <Form.Select value={formData.drawings}
                                                  className="bigger-select"
                                                  onChange={handleChange}
@@ -71,34 +103,33 @@ export const OrderWizardDrawingsForm = (props) => {
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
                                     </Form.Select>
-                                    {formData.drawings > 0 &&
-                                        <>
-                                            <label htmlFor="image">Do you have your photo(s) yet?</label>
-                                            <div className="flex-control">
-                                                <input className="form-control bigger-input"
-                                                       id="image"
-                                                       name="image"
-                                                       required type="url"
-                                                       value={formData.drawingsImages}
-                                                       onChange={handleChange}
-                                                       disabled
-                                                />
-                                                <input
-                                                    type="file"
-                                                    id="file"
-                                                    className="form-control bigger-input"
-                                                    placeholder="Enter the file name here"
-                                                    name="file"
-                                                    onChange={handleChangeFile}
-                                                    style={{ display: 'none' }}
-                                                />
-                                                {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
-                                            </div>
-                                        </>
-                                    }
+                                </Form.Group>
+                                <Form.Group className="spaced-form-group">
+                                    <Form.Label>Do you have a Photo?</Form.Label>
+                                    <div className="flex-control">
+                                        <input className="form-control bigger-input"
+                                               id="image"
+                                               name="image"
+                                               required type="url"
+                                               value={formData.drawingsImages}
+                                               onChange={handleChange}
+                                               disabled
+                                        />
+                                        <input
+                                            type="file"
+                                            id="file"
+                                            className="form-control bigger-input"
+                                            placeholder="Enter the file name here"
+                                            name="file"
+                                            onChange={handleChangeFile}
+                                            style={{ display: 'none' }}
+                                        />
+                                        {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", (formData.drawings > 0), handleFileClick)}
+                                    </div>
+                                    <small>If the photo is not available just ignore this</small>
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </BorderedRow>
                     </Form>
                 </Card.Body>
             </Card>

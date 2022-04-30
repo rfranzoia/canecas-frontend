@@ -1,23 +1,32 @@
-import { useState } from "react";
-import { Card, Col, Form, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Card, Col, Form, Image } from "react-bootstrap";
 import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
+import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
+import { imageHelper } from "../../ui/ImageHelper";
 
 export const OrderWizardBackground = (props) => {
     const [formData, setFormData] = useState({
-        background: "",
+        user: null,
+        product: "",
+        price: 0,
+        drawings: 0,
+        drawingsImages: "",
+        drawingsImagesFile: null,
+        background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
         backgroundImageFile: null,
     });
 
-    const handleChangeFile = (event) => {
+    const handleChangeFile = async (event) => {
         event.preventDefault();
+        const image = await imageHelper.convertToBase64(event.target.files[0]);
         setFormData(prevState => {
             return {
                 ...prevState,
-                drawingsImages: event.target.files[0].name,
-                drawingsImagesFile: event.target.files[0]
+                backgroundImage: event.target.files[0].name,
+                backgroundImageFile: image,
             }
         })
     };
@@ -30,6 +39,16 @@ export const OrderWizardBackground = (props) => {
                 [name]: value
             }
         });
+        if (name === "background" && value === "empty") {
+            setFormData(prevState => (
+                {
+                    ...prevState,
+                    backgroundDescription: "",
+                    backgroundImage: "",
+                    backgroundImageFile: null,
+                }
+            ))
+        }
     }
 
     const handleFileClick = () => {
@@ -39,6 +58,7 @@ export const OrderWizardBackground = (props) => {
     const handleForward = () => {
         const background = {
             background: formData.background,
+            backgroundDescription: formData.backgroundDescription,
             backgroundImage: formData.backgroundImage,
             backgroundImageFile: formData.backgroundImageFile,
         }
@@ -49,6 +69,22 @@ export const OrderWizardBackground = (props) => {
         props.onBackward();
     }
 
+    useEffect(() => {
+        setFormData({
+            user: props.wizardData.user,
+            product: props.wizardData.product,
+            price: props.wizardData.price,
+            drawings: props.wizardData.drawings,
+            drawingsImages: props.wizardData.drawingsImages,
+            drawingsImagesFile: props.wizardData.drawingsImagesFile,
+            background: props.wizardData.background,
+            backgroundDescription: props.wizardData.backgroundDescription,
+            backgroundImage: props.wizardData.backgroundImage,
+            backgroundImageFile: props.wizardData.backgroundImageFile,
+        });
+
+    }, [props.wizardData])
+
     return (
         <>
             <Card>
@@ -57,11 +93,17 @@ export const OrderWizardBackground = (props) => {
                 </Card.Header>
                 <Card.Body>
                     <Form>
-                        <Row>
+                        <BorderedRow title={"Background"} required>
+                            <Col md="auto">
+                                <div className="bordered-panel">
+                                    {formData.backgroundImage &&
+                                        <Image src={formData.backgroundImageFile}
+                                               fluid width="200" title={formData.backgroundImage}/>
+                                    }
+                                </div>
+                            </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Background<span aria-hidden="true"
-                                                                className="required">*</span></Form.Label>
                                     <Form.Check type="radio"
                                                 label="Empty"
                                                 id="bgEmpty"
@@ -76,42 +118,42 @@ export const OrderWizardBackground = (props) => {
                                                 value="personalized"
                                                 checked={formData.background === "personalized"}
                                                 onChange={handleChange}/>
-                                    {formData.background === "personalized" &&
-                                        <>
-                                            <label htmlFor="description">Tell us your idea</label>
-                                            <textarea className="form-control bigger-input"
-                                                      id="description"
-                                                      name="backgroundDescription"
-                                                      rows={3}
-                                                      value={formData.backgroundDescription}
-                                                      onChange={handleChange}/>
+                                    <Form.Group className="spaced-form-group">
+                                        <label htmlFor="description">Tell us your idea</label>
+                                        <textarea className="form-control bigger-input"
+                                                  id="description"
+                                                  name="backgroundDescription"
+                                                  rows={3}
+                                                  value={formData.backgroundDescription}
+                                                  disabled={formData.background === "empty"}
+                                                  onChange={handleChange}/>
 
-                                            <label htmlFor="image">Do you have a picture of your idea?</label>
-                                            <div className="flex-control">
-                                                <input className="form-control bigger-input"
-                                                       id="image"
-                                                       name="image"
-                                                       required type="url"
-                                                       value={formData.backgroundImage}
-                                                       onChange={handleChange}
-                                                       disabled
-                                                />
-                                                <input
-                                                    type="file"
-                                                    id="file"
-                                                    className="form-control bigger-input"
-                                                    placeholder="Enter the file name here"
-                                                    name="file"
-                                                    onChange={handleChangeFile}
-                                                    style={{ display: 'none' }}
-                                                />
-                                                {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
-                                            </div>
-                                        </>
-                                    }
+                                        <label htmlFor="image">Do you have a picture of your idea?</label>
+                                        <div className="flex-control">
+                                            <input className="form-control bigger-input"
+                                                   id="image"
+                                                   name="backgroundImage"
+                                                   required type="url"
+                                                   value={formData.backgroundImage}
+                                                   onChange={handleChange}
+                                                   disabled
+                                            />
+                                            <input
+                                                type="file"
+                                                id="file"
+                                                className="form-control bigger-input"
+                                                placeholder="Enter the file name here"
+                                                name="file"
+                                                onChange={handleChangeFile}
+                                                disabled={formData.background === "empty"}
+                                                style={{ display: 'none' }}
+                                            />
+                                            {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", formData.background === "personalized", handleFileClick)}
+                                        </div>
+                                    </Form.Group>
                                 </Form.Group>
                             </Col>
-                        </Row>
+                        </BorderedRow>
                     </Form>
                 </Card.Body>
             </Card>

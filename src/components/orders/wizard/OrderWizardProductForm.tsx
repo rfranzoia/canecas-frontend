@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import useProductsApi from "../../../hooks/useProductsApi";
@@ -6,12 +6,14 @@ import { AlertType, uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { AutoCompleteInput } from "../../ui/AutoCompleteInput";
 import { CustomButton } from "../../ui/CustomButton";
+import styles from "../orders.module.css";
 
 export const OrderWizardProductForm = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const { products } = useProductsApi();
     const [formData, setFormData] = useState({
+        user: null,
         product: "",
         price: 0,
     });
@@ -42,16 +44,6 @@ export const OrderWizardProductForm = (props) => {
         return true;
     }
 
-    const handleChangeNumber = (event) => {
-        const { name, value } = event.target;
-        setFormData(prevState => {
-            return {
-                ...prevState,
-                [name]: value.replace(/[^0-9.,]+/, "")
-            }
-        });
-    }
-
     const handleForward = () => {
         if (!isValidData()) return;
         const product = {
@@ -65,12 +57,20 @@ export const OrderWizardProductForm = (props) => {
         props.onBackward();
     }
 
+    useEffect(() => {
+        setFormData({
+            user: props.wizardData.user,
+            product: props.wizardData.product,
+            price: props.wizardData.price,
+        })
+    }, [props.wizardData])
+
     return (
         <>
             <AlertToast showAlert={showAlert}/>
             <Card>
-                <Card.Header>
-                    Now we need to know WHAT you want to buy from us
+                <Card.Header as={"h4"}>
+                    Now, tell us what PRODUCT are you interested in
                 </Card.Header>
                 <Card.Body>
                     <Form>
@@ -84,29 +84,10 @@ export const OrderWizardProductForm = (props) => {
                                         displayFields="name"
                                         value={formData.product}
                                         onFieldSelected={handleSelectProduct}
-                                        className="bigger-input"
+                                        className={styles["custom-autocomplete"]}
                                         required
-                                        placeholder="Please select a product"/>
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Suggested Price<span aria-hidden="true"
-                                                                     className="required">*</span></Form.Label>
-                                    <input
-                                        className="form-control bigger-input"
-                                        type="text"
-                                        name="price"
-                                        value={formData.price}
-                                        onChange={handleChangeNumber}
-                                        autoComplete="off"
-                                        style={{ textAlign: "right" }}
-                                        disabled
-                                    />
-                                    <small>We will call you to offer better price if you order more than one
-                                        product</small>
+                                        placeholder="Enter the product name"/>
+                                    <small>If you don't see all available products, try scrolling down the list</small>
                                 </Form.Group>
                             </Col>
                         </Row>

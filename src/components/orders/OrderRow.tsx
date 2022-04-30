@@ -81,7 +81,7 @@ export const OrderRow = (props) => {
     }
 
     const handleDeleteOrCancel = () => {
-        if (order.status === OrderStatus.NEW) {
+        if (order.status === OrderStatus.QUOTE_REQUEST) {
             setConfirmationDialog({
                 show: true,
                 title: "Delete Order",
@@ -138,23 +138,23 @@ export const OrderRow = (props) => {
     }
 
     const canCancelOrder =
-        (user.role === Role.ADMIN && order.status > OrderStatus.NEW && order.status < OrderStatus.FINISHED) ||
-        (order.status === OrderStatus.NEW || order.status === OrderStatus.CONFIRMED);
+        (user.role === Role.ADMIN && order.status > OrderStatus.QUOTE_REQUEST && order.status < OrderStatus.FINISHED) ||
+        (order.status === OrderStatus.QUOTE_REQUEST || order.status === OrderStatus.CONFIRMED_ORDER);
 
     const actions =
         <td width="15%" align="right">
             {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                 getActionIcon(ActionIconType.EDIT,
                     "Edit Order",
-                    order.status === OrderStatus.NEW,
+                    order.status === OrderStatus.QUOTE_REQUEST,
                     () => handleEditOrder(order._id))
             }
             <span>&nbsp;</span>
             {(user.role === Role.ADMIN || order.userEmail === user.email) &&
-                getActionIcon(order.status === OrderStatus.NEW ?
+                getActionIcon(order.status === OrderStatus.QUOTE_REQUEST ?
                         ActionIconType.DELETE :
                         ActionIconType.CANCEL_ITEM,
-                    order.status === OrderStatus.NEW ? "Delete Order" : "Cancel Order",
+                    order.status === OrderStatus.QUOTE_REQUEST ? "Delete Order" : "Cancel Order",
                     canCancelOrder,
                     () => handleDeleteOrCancel())
             }
@@ -162,13 +162,13 @@ export const OrderRow = (props) => {
             {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                 getActionIcon(ActionIconType.USER_CHECK,
                     "Confirm Order",
-                    order.status === OrderStatus.NEW,
+                    order.status === OrderStatus.QUOTE_REQUEST,
                     () => handleConfirmOrderDialog())}
             <span>&nbsp;</span>
             {user.role === Role.ADMIN &&
                 getActionIcon(ActionIconType.ACTION_FORWARD,
                     `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
-                    (order.status !== OrderStatus.NEW && order.status < OrderStatus.FINISHED),
+                    (order.status !== OrderStatus.QUOTE_REQUEST && order.status < OrderStatus.FINISHED),
                     () => handleMoveForward())}
         </td>
 

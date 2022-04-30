@@ -172,7 +172,7 @@ export const Orders = () => {
 
     const handleConfirmOrder = (orderId: string) => {
         const o = {
-            status: OrderStatus.CONFIRMED
+            status: OrderStatus.CONFIRMED_ORDER
         }
         updateOrder(orderId, o, () => {
             dispatch(uiActions.handleAlert({
