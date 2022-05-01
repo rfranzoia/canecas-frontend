@@ -8,9 +8,9 @@ import { imageHelper } from "../../ui/ImageHelper";
 export const OrderItemWizardBackground = (props) => {
     const [formData, setFormData] = useState({
         product: "",
-        drawings: 0,
-        drawingsImages: "",
-        drawingsImagesFile: null,
+        caricature: 0,
+        caricatureImages: "",
+        caricatureImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -70,9 +70,9 @@ export const OrderItemWizardBackground = (props) => {
     useEffect(() => {
         setFormData({
             product: props.orderItem.product,
-            drawings: props.orderItem.drawings,
-            drawingsImages: props.orderItem.drawingsImages,
-            drawingsImagesFile: props.orderItem.drawingsImagesFile,
+            caricature: props.orderItem.caricature,
+            caricatureImages: props.orderItem.caricatureImages,
+            caricatureImagesFile: props.orderItem.caricatureImagesFile,
             background: props.orderItem.background,
             backgroundDescription: props.orderItem.backgroundDescription,
             backgroundImage: props.orderItem.backgroundImage,
@@ -102,29 +102,29 @@ export const OrderItemWizardBackground = (props) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <BorderedRow title={"Drawings"}>
+                        <BorderedRow title={"Caricatures"}>
                             <Col md="auto">
                                 <div className="bordered-panel bordered-panel-tn">
-                                    {formData.drawingsImages &&
-                                        <Image src={formData.drawingsImagesFile}
-                                               fluid width="100" title={formData.drawingsImages}/>
+                                    {formData.caricatureImages &&
+                                        <Image src={formData.caricatureImagesFile}
+                                               fluid width="100" title={formData.caricatureImages}/>
                                     }
                                 </div>
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.drawings}
+                                    <Form.Select value={formData.caricature}
                                                  className="bigger-select"
                                                  disabled
                                                  onChange={handleChange}
-                                                 name="drawings">
-                                        <option value={0}>No drawings</option>
+                                                 name="caricature">
+                                        <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
                                     </Form.Select>
-                                    <small>{formData.drawingsImages}</small>
+                                    <small>{formData.caricatureImages}</small>
                                 </Form.Group>
                             </Col>
                         </BorderedRow>

@@ -72,8 +72,8 @@ export const NewOrder = (props) => {
         const orderItems = formData.items.map(i => (
             {
                 product: i.product,
-                drawings: i.drawings,
-                drawingsImages: i.drawingsImages,
+                caricature: i.caricature,
+                caricatureImages: i.caricatureImages,
                 background: i.background,
                 backgroundImage: i.backgroundImage,
                 price: +i.price,

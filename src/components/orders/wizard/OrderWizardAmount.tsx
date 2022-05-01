@@ -14,9 +14,9 @@ export const OrderWizardAmount = (props) => {
         user: null,
         product: "",
         price: 0,
-        drawings: 0,
-        drawingsImages: "",
-        drawingsImagesFile: null,
+        caricature: 0,
+        caricatureImages: "",
+        caricatureImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -73,9 +73,9 @@ export const OrderWizardAmount = (props) => {
             user: props.wizardData.user,
             product: props.wizardData.product,
             price: props.wizardData.price,
-            drawings: props.wizardData.drawings,
-            drawingsImages: props.wizardData.drawingsImages,
-            drawingsImagesFile: props.wizardData.drawingsImagesFile,
+            caricature: props.wizardData.caricature,
+            caricatureImages: props.wizardData.caricatureImages,
+            caricatureImagesFile: props.wizardData.caricatureImagesFile,
             background: props.wizardData.background,
             backgroundDescription: props.wizardData.backgroundDescription,
             backgroundImage: props.wizardData.backgroundImage,
@@ -105,29 +105,29 @@ export const OrderWizardAmount = (props) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-                        <BorderedRow title={"Drawings"}>
+                        <BorderedRow title={"Caricatures"}>
                             <Col md="auto">
                                 <div className="bordered-panel bordered-panel-sm">
-                                    {formData.drawingsImages &&
-                                        <Image src={formData.drawingsImagesFile}
-                                               fluid width="100" title={formData.drawingsImages}/>
+                                    {formData.caricatureImages &&
+                                        <Image src={formData.caricatureImagesFile}
+                                               fluid width="100" title={formData.caricatureImages}/>
                                     }
                                 </div>
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.drawings}
+                                    <Form.Select value={formData.caricature}
                                                  className="bigger-select"
                                                  disabled
                                                  onChange={handleChange}
-                                                 name="drawings">
-                                        <option value={0}>No drawings</option>
+                                                 name="caricature">
+                                        <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
                                     </Form.Select>
-                                    <small>{formData.drawingsImages}</small>
+                                    <small>{formData.caricatureImages}</small>
                                 </Form.Group>
                             </Col>
                         </BorderedRow>

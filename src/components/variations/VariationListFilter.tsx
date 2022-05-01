@@ -8,7 +8,7 @@ import styles from "./variationListFilter.module.css";
 
 export interface VariationsFilter {
     product?: string;
-    drawings?: number;
+    caricature?: number;
     background?: string;
 }
 
@@ -17,10 +17,10 @@ export const VariationListFilter = (props) => {
     const [formData, setFormData] = useState({
         filterCheck: false,
         filterByProductCheck: false,
-        filterByDrawingsCheck: false,
+        filterByCaricaturesCheck: false,
         filterByBackgroundCheck: false,
         product: "",
-        drawings: 0,
+        caricature: 0,
         background: "empty",
     });
 
@@ -49,10 +49,10 @@ export const VariationListFilter = (props) => {
                 product: formData.product,
             };
         }
-        if (formData.filterByDrawingsCheck) {
+        if (formData.filterByCaricaturesCheck) {
             filter = {
                 ...filter,
-                drawings: Number(formData.drawings),
+                caricature: Number(formData.caricature),
             };
         }
         if (formData.filterByBackgroundCheck) {
@@ -65,7 +65,7 @@ export const VariationListFilter = (props) => {
     };
 
     const handleApplyFilter = () => {
-        if (!formData.filterByProductCheck && !formData.filterByDrawingsCheck && !formData.filterByBackgroundCheck) {
+        if (!formData.filterByProductCheck && !formData.filterByCaricaturesCheck && !formData.filterByBackgroundCheck) {
             props.onFilterError();
             return;
         }
@@ -87,10 +87,10 @@ export const VariationListFilter = (props) => {
             return {
                 ...prevState,
                 filterByProductCheck: false,
-                filterByDrawingsCheck: false,
+                filterByCaricaturesCheck: false,
                 filterByBackgroundCheck: false,
                 product: "",
-                drawings: 0,
+                caricature: 0,
                 background: "empty",
             };
         });
@@ -103,10 +103,10 @@ export const VariationListFilter = (props) => {
                 return {
                     ...prevState,
                     filterByProductCheck: false,
-                    filterByDrawingsCheck: false,
+                    filterByCaricaturesCheck: false,
                     filterByBackgroundCheck: false,
                     product: "",
-                    drawings: 0,
+                    caricature: 0,
                     background: "empty",
                 };
             });
@@ -115,7 +115,7 @@ export const VariationListFilter = (props) => {
     }, [formData.filterCheck, handleFilterChange]);
 
     const disableClear =
-        !formData.filterByProductCheck && !formData.filterByDrawingsCheck && !formData.filterByBackgroundCheck;
+        !formData.filterByProductCheck && !formData.filterByCaricaturesCheck && !formData.filterByBackgroundCheck;
 
     return (
         <Container fluid className={styles["list-filter"]}>
@@ -167,19 +167,19 @@ export const VariationListFilter = (props) => {
                                         <div className={styles["inline-filter"]}>
                                             <Form.Check
                                                 type="checkbox"
-                                                label="Drawings"
-                                                id="checkDrawings"
-                                                name="filterByDrawingsCheck"
-                                                checked={formData.filterByDrawingsCheck}
+                                                label="Caricatures"
+                                                id="checkCaricatures"
+                                                name="filterByCaricaturesCheck"
+                                                checked={formData.filterByCaricaturesCheck}
                                                 onChange={handleChange}
                                             />
 
                                             <Form.Select
-                                                value={formData.drawings}
+                                                value={formData.caricature}
                                                 onChange={handleChange}
                                                 className={styles["custom-select"]}
-                                                disabled={!formData.filterByDrawingsCheck}
-                                                name="drawings"
+                                                disabled={!formData.filterByCaricaturesCheck}
+                                                name="caricature"
                                             >
                                                 <option value={0}>0</option>
                                                 <option value={1}>1</option>

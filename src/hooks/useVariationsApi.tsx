@@ -74,7 +74,7 @@ const useVariationsApi = (isModal: boolean) => {
                     _id: result.data._id,
                     product: result.data.product,
                     background: result.data.background,
-                    drawings: result.data.drawings,
+                    caricature: result.data.caricature,
                     price: result.data.price,
                     image: result.data.image,
                 };

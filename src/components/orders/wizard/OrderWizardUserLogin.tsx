@@ -10,7 +10,7 @@ import { AlertToast } from "../../ui/AlertToast";
 import { CustomButton } from "../../ui/CustomButton";
 import { ShowType } from "../../users/UserRegistration";
 
-export const OrderWizardUserLoginForm = (props) => {
+export const OrderWizardUserLogin = (props) => {
     const dispatch = useDispatch();
     const { login } = useUsersApi(false);
     const loggedUser = useSelector<RootState, User>(state => state.auth.user);

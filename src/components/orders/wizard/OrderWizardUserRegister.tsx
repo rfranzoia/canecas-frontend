@@ -8,7 +8,7 @@ import { AlertToast } from "../../ui/AlertToast";
 import { CustomButton } from "../../ui/CustomButton";
 import { ShowType } from "../../users/UserRegistration";
 
-export const OrderWizardUserRegisterForm = (props) => {
+export const OrderWizardUserRegister = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({

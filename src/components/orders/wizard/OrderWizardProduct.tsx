@@ -8,7 +8,7 @@ import { AutoCompleteInput } from "../../ui/AutoCompleteInput";
 import { CustomButton } from "../../ui/CustomButton";
 import styles from "../orders.module.css";
 
-export const OrderWizardProductForm = (props) => {
+export const OrderWizardProduct = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const { products } = useProductsApi();

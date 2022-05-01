@@ -57,11 +57,11 @@ export const Variations = (props) => {
             if (filter.product) {
                 g = g.concat(`product=${filter.product}`);
             }
-            if (filter.drawings >= 0) {
+            if (filter.caricature >= 0) {
                 if (g.trim().length > 0) {
                     g = g.concat("&");
                 }
-                g = g.concat(`drawings=${filter.drawings}`);
+                g = g.concat(`caricature=${filter.caricature}`);
             }
             if (filter.background) {
                 if (g.trim().length > 0) {

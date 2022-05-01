@@ -21,7 +21,7 @@ export const OrderItemsList = (props) => {
                     <thead>
                     <tr>
                         <th style={{ width: "30%" }}>Product</th>
-                        <th style={{ width: "5%", textAlign: "center" }}>Drawings</th>
+                        <th style={{ width: "5%", textAlign: "center" }}>Caricatures</th>
                         <th style={{ width: "5%", textAlign: "center" }}>Background</th>
                         <th style={{ width: "10%", textAlign: "right" }}>Price</th>
                         <th style={{ width: "5%", textAlign: "right" }}>Amount</th>

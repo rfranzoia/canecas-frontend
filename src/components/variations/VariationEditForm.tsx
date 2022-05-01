@@ -18,7 +18,7 @@ import styles from "./variations.module.css";
 const emptyFormData = {
     _id: null,
     product: "",
-    drawings: 0,
+    caricature: 0,
     background: "empty",
     price: 0,
     image: "",
@@ -38,7 +38,7 @@ export const VariationEditForm = (props) => {
     });
 
     const isValidData = (): boolean => {
-        const { product, drawings, background, price, image } = formData;
+        const { product, caricature, background, price, image } = formData;
         if (product.trim().length === 0 || background.trim().length === 0 || image.trim().length === 0) {
             dispatch(
                 uiActions.handleAlert({
@@ -51,13 +51,13 @@ export const VariationEditForm = (props) => {
             setShowAlert(true);
             return false;
         }
-        if (isNaN(drawings) || isNaN(price)) {
+        if (isNaN(caricature) || isNaN(price)) {
             dispatch(
                 uiActions.handleAlert({
                     show: true,
                     type: AlertType.DANGER,
                     title: "Validation Error!",
-                    message: "You must inform valid number of Drawings and Price!",
+                    message: "You must inform valid number of Caricatures and Price!",
                 })
             );
             setShowAlert(true);
@@ -151,7 +151,7 @@ export const VariationEditForm = (props) => {
         const variation: Variation = {
             _id: formData._id,
             product: formData.product,
-            drawings: Number(formData.drawings),
+            caricature: Number(formData.caricature),
             background: formData.background,
             price: Number(formData.price),
             image: formData.image,
@@ -202,7 +202,7 @@ export const VariationEditForm = (props) => {
                     _id: v._id,
                     product: v.product,
                     background: v.background,
-                    drawings: v.drawings,
+                    caricature: v.caricature,
                     price: v.price,
                     image: v.image,
                 });
@@ -256,19 +256,19 @@ export const VariationEditForm = (props) => {
                                     <Col md={4}>
                                         <Form.Group className="spaced-form-group">
                                             <Form.Label>
-                                                Drawings
+                                                Caricatures
                                                 <span aria-hidden="true" className="required">
                                                     *
                                                 </span>
                                             </Form.Label>
                                             <Form.Select
-                                                value={formData.drawings}
+                                                value={formData.caricature}
                                                 className="bigger-select"
                                                 onChange={handleChange}
                                                 disabled={viewOnly || props.op === OpType.EDIT}
-                                                name="drawings"
+                                                name="caricature"
                                             >
-                                                <option value={0}>No drawings</option>
+                                                <option value={0}>No caricature</option>
                                                 <option value={1}>1</option>
                                                 <option value={2}>2</option>
                                                 <option value={3}>3</option>

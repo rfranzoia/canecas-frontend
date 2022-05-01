@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { Card, Col, Form, Image, Row } from "react-bootstrap";
+import { Card, Col, Form, Image } from "react-bootstrap";
 import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
 import { imageHelper } from "../../ui/ImageHelper";
 
-export const OrderItemWizardDrawings = (props) => {
+export const OrderWizardCaricatures = (props) => {
     const [formData, setFormData] = useState({
+        user: null,
         product: "",
-        drawings: 0,
-        drawingsImages: "",
-        drawingsImagesFile: null,
+        price: 0,
+        caricature: 0,
+        caricatureImages: "",
+        caricatureImagesFile: null,
     });
 
     const handleChange = (event) => {
@@ -21,12 +23,12 @@ export const OrderItemWizardDrawings = (props) => {
                 [name]: value
             }
         });
-        if (name === "drawings" && Number(value) === 0) {
+        if (name === "caricature" && Number(value) === 0) {
             setFormData(prevState => (
                 {
                     ...prevState,
-                    drawingsImagesFile: null,
-                    drawingsImages: "",
+                    caricatureImagesFile: null,
+                    caricatureImages: "",
                 }
             ))
         }
@@ -38,8 +40,8 @@ export const OrderItemWizardDrawings = (props) => {
         setFormData(prevState => {
             return {
                 ...prevState,
-                drawingsImages: event.target.files[0].name,
-                drawingsImagesFile: image,
+                caricatureImages: event.target.files[0].name,
+                caricatureImagesFile: image,
             }
         })
     };
@@ -49,12 +51,12 @@ export const OrderItemWizardDrawings = (props) => {
     }
 
     const handleForward = () => {
-        const drawings = {
-            drawings: formData.drawings,
-            drawingsImages: formData.drawingsImages,
-            drawingsImagesFile: formData.drawingsImagesFile,
+        const caricature = {
+            caricature: formData.caricature,
+            caricatureImages: formData.caricatureImages,
+            caricatureImagesFile: formData.caricatureImagesFile,
         }
-        props.onForward(drawings)
+        props.onForward(caricature)
     }
 
     const handleBackward = () => {
@@ -63,50 +65,39 @@ export const OrderItemWizardDrawings = (props) => {
 
     useEffect(() => {
         setFormData({
-            product: props.orderItem.product,
-            drawings: props.orderItem.drawings,
-            drawingsImages: props.orderItem.drawingsImages,
-            drawingsImagesFile: props.orderItem.drawingsImagesFile,
+            user: props.wizardData.user,
+            product: props.wizardData.product,
+            price: props.wizardData.price,
+            caricature: props.wizardData.caricature,
+            caricatureImages: props.wizardData.caricatureImages,
+            caricatureImagesFile: props.wizardData.caricatureImagesFile,
         });
-    }, [props.orderItem])
+    }, [props.wizardData])
 
     return (
         <>
-            <Card className="order-item-wizard-card">
-                <Card.Header>
-                    Select the amount of DRAWINGS
+            <Card>
+                <Card.Header as={"h4"}>
+                    Do you want any CARICATURES in your product?
                 </Card.Header>
                 <Card.Body>
                     <Form>
-                        <Row>
-                            <Col>
-                                <Form.Group className="spaced-form-group">
-                                    <Form.Label>Product<span aria-hidden="true"
-                                                             className="required">*</span></Form.Label>
-                                    <Form.Control
-                                        value={formData.product}
-                                        onChange={handleChange}
-                                        disabled
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-                        <BorderedRow title={"Drawings"} required>
+                        <BorderedRow title={"Caricatures"}>
                             <Col md="auto">
                                 <div className="bordered-panel">
-                                    {formData.drawingsImagesFile &&
-                                        <Image src={formData.drawingsImagesFile}
-                                               fluid width="200" title={formData.drawingsImages}/>
+                                    {formData.caricatureImagesFile &&
+                                        <Image src={formData.caricatureImagesFile}
+                                               fluid width="200" title={formData.caricatureImages}/>
                                     }
                                 </div>
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.drawings}
+                                    <Form.Select value={formData.caricature}
                                                  className="bigger-select"
                                                  onChange={handleChange}
-                                                 name="drawings">
-                                        <option value={0}>No drawings</option>
+                                                 name="caricature">
+                                        <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
                                         <option value={3}>3</option>
@@ -114,13 +105,13 @@ export const OrderItemWizardDrawings = (props) => {
                                     </Form.Select>
                                 </Form.Group>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Label>Photo</Form.Label>
+                                    <Form.Label>Do you have a Photo?</Form.Label>
                                     <div className="flex-control">
                                         <input className="form-control bigger-input"
                                                id="image"
                                                name="image"
                                                required type="url"
-                                               value={formData.drawingsImages}
+                                               value={formData.caricatureImages}
                                                onChange={handleChange}
                                                disabled
                                         />
@@ -133,7 +124,7 @@ export const OrderItemWizardDrawings = (props) => {
                                             onChange={handleChangeFile}
                                             style={{ display: 'none' }}
                                         />
-                                        {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", true, handleFileClick)}
+                                        {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", (formData.caricature > 0), handleFileClick)}
                                     </div>
                                     <small>If the photo is not available just ignore this</small>
                                 </Form.Group>
@@ -142,14 +133,14 @@ export const OrderItemWizardDrawings = (props) => {
                     </Form>
                 </Card.Body>
             </Card>
-            <div className="actions action-justify-right order-item-wizard-card">
+            <div className="actions action-justify-right">
                 <CustomButton caption="Cancel" onClick={props.onCancel} type="close"/>
-                <CustomButton caption="Previous"
+                <CustomButton caption="Previous Step"
                               type="custom-success"
                               customClass="fa fa-backward"
                               onClick={handleBackward}
                 />
-                <CustomButton caption="Next"
+                <CustomButton caption="Next Step"
                               type="custom-success"
                               customClass="fa fa-forward"
                               onClick={handleForward}

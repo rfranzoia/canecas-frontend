@@ -3,19 +3,19 @@ import { ShowType } from "../../users/UserRegistration";
 import { WizardFormData } from "../Orders";
 import { OrderWizardAmount } from "./OrderWizardAmount";
 import { OrderWizardBackground } from "./OrderWizardBackground";
-import { OrderWizardDrawingsForm } from "./OrderWizardDrawingsForm";
-import { OrderWizardUserLoginForm } from "./OrderWizardUserLoginForm";
-import { OrderWizardUserRegisterForm } from "./OrderWizardUserRegisterForm";
-import { OrderWizardProductForm } from "./OrderWizardProductForm";
+import { OrderWizardCaricatures } from "./OrderWizardCaricatures";
+import { OrderWizardUserLogin } from "./OrderWizardUserLogin";
+import { OrderWizardUserRegister } from "./OrderWizardUserRegister";
+import { OrderWizardProduct } from "./OrderWizardProduct";
 
 const initWizardFormData: WizardFormData = {
     user: null,
     _id: "",
     product: "",
     price: 0,
-    drawings: 0,
-    drawingsImages: "",
-    drawingsImagesFile: null,
+    caricature: 0,
+    caricatureImages: "",
+    caricatureImagesFile: null,
     background: "empty",
     backgroundDescription: "",
     backgroundImage: "",
@@ -29,7 +29,7 @@ export const OrderWizard = (props) => {
     const [wizardFormData, setWizardFormData] = useState(initWizardFormData)
 
     const handleFinishWizard = (formData: WizardFormData) => {
-        const _id = wizardFormData.product.trim().concat(wizardFormData.drawings.toString()).concat(wizardFormData.background);
+        const _id = wizardFormData.product.trim().concat(wizardFormData.caricature.toString()).concat(wizardFormData.background);
         const data = {
             ...wizardFormData,
             _id: _id,
@@ -61,13 +61,13 @@ export const OrderWizard = (props) => {
                 }
             })
         }
-        if (formData.drawings) {
+        if (formData.caricature) {
             setWizardFormData(prevState => {
                 return {
                     ...prevState,
-                    drawings: formData.drawings,
-                    drawingsImages: formData.drawingsImages,
-                    drawingsImagesFile: formData.drawingsImagesFile,
+                    caricature: formData.caricature,
+                    caricatureImages: formData.caricatureImages,
+                    caricatureImagesFile: formData.caricatureImagesFile,
                 }
             })
         }
@@ -102,14 +102,14 @@ export const OrderWizard = (props) => {
     }
 
     const userFormType = [
-        <OrderWizardUserLoginForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
-        <OrderWizardUserRegisterForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
+        <OrderWizardUserLogin onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
+        <OrderWizardUserRegister onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
     ]
 
     const steps = [
         [userFormType[currUserFormType], "30rem"],
-        [<OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "30rem"],
-        [<OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "40rem"],
+        [<OrderWizardProduct onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "30rem"],
+        [<OrderWizardCaricatures onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "40rem"],
         [<OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "45rem"],
         [<OrderWizardAmount onCancel={handleCancel} onBackward={handleBackward} onFinishWizard={handleFinishWizard} wizardData={wizardFormData}/>, "40rem"],
     ]

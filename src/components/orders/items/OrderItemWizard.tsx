@@ -2,7 +2,7 @@ import { useState } from "react";
 import { WizardFormData } from "../Orders";
 import { OrderItemWizardAmount } from "./OrderItemWizardAmount";
 import { OrderItemWizardBackground } from "./OrderItemWizardBackground";
-import { OrderItemWizardDrawings } from "./OrderItemWizardDrawings";
+import { OrderItemWizardCaricatures } from "./OrderItemWizardCaricatures";
 import { OrderItemWizardProduct } from "./OrderItemWizardProduct";
 
 export const OrderItemWizard = (props) => {
@@ -11,9 +11,9 @@ export const OrderItemWizard = (props) => {
         _id: "",
         product: "",
         price: 0,
-        drawings: 0,
-        drawingsImages: "",
-        drawingsImagesFile: null,
+        caricature: 0,
+        caricatureImages: "",
+        caricatureImagesFile: null,
         background: "empty",
         backgroundDescription: "",
         backgroundImage: "",
@@ -22,7 +22,7 @@ export const OrderItemWizard = (props) => {
     })
 
     const handleFinish = (formData: WizardFormData) => {
-        const _id = wizardFormData.product.trim().concat(wizardFormData.drawings.toString()).concat(wizardFormData.background);
+        const _id = wizardFormData.product.trim().concat(wizardFormData.caricature.toString()).concat(wizardFormData.background);
         const data = {
             ...wizardFormData,
             _id: _id,
@@ -54,13 +54,13 @@ export const OrderItemWizard = (props) => {
                 }
             })
         }
-        if (formData.drawings) {
+        if (formData.caricature) {
             setWizardFormData(prevState => {
                 return {
                     ...prevState,
-                    drawings: formData.drawings,
-                    drawingsImages: formData.drawingsImages,
-                    drawingsImagesFile: formData.drawingsImagesFile,
+                    caricature: formData.caricature,
+                    caricatureImages: formData.caricatureImages,
+                    caricatureImagesFile: formData.caricatureImagesFile,
                 }
             })
         }
@@ -98,7 +98,7 @@ export const OrderItemWizard = (props) => {
     const steps = [
         <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect}
                                 orderItem={wizardFormData}/>,
-        <OrderItemWizardDrawings onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
+        <OrderItemWizardCaricatures onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
                                  orderItem={wizardFormData}/>,
         <OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
                                    orderItem={wizardFormData}/>,
