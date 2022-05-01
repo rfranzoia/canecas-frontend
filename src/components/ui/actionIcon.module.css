@@ -6,3 +6,7 @@
     overflow: hidden;
     outline: none;
 }
+
+.transparent-btn:disabled {
+    pointer-events: none;
+}
