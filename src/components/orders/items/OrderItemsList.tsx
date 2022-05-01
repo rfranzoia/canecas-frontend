@@ -20,10 +20,11 @@ export const OrderItemsList = (props) => {
                 <Table striped bordered hover size="sm">
                     <thead>
                     <tr>
-                        <th style={{ width: "30%" }}>Product</th>
+                        <th style={{ width: "25%" }}>Product</th>
                         <th style={{ width: "5%", textAlign: "center" }}>Caricatures</th>
                         <th style={{ width: "5%", textAlign: "center" }}>Background</th>
-                        <th style={{ width: "10%", textAlign: "right" }}>Price</th>
+                        <th style={{ width: "17%" }}>Description</th>
+                        <th style={{ width: "5%", textAlign: "right" }}>Price</th>
                         <th style={{ width: "5%", textAlign: "right" }}>Amount</th>
                         <th style={{ width: "5%" }}>&nbsp;</th>
                     </tr>

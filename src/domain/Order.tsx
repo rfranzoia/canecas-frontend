@@ -48,6 +48,7 @@ export interface OrderItem {
     caricatureImages?: string,
     background: string,
     backgroundImage?: string,
+    backgroundDescription?: string,
     price: number,
     amount: number
 }

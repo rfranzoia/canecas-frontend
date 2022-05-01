@@ -8,27 +8,26 @@ export const OrderItemRow = (props) => {
         caricatureImages: null,
         background: "",
         backgroundImage: null,
+        backgroundDescription: "",
         price: 0,
         amount: 0,
     });
 
     useEffect(() => {
         setItem({
-            product: props.item.product,
-            caricatures: props.item.caricatures,
-            caricatureImages: props.item.caricatureImages,
-            background: props.item.background,
-            backgroundImage: props.item.backgroundImage,
-            price: +props.item.price,
-            amount: +props.item.amount
+            ...props.item,
         })
     }, [props.item]);
+
+    const backgroundDescription = item.backgroundDescription.length <= 20? item.backgroundDescription:
+            item.backgroundDescription.substring(0, 18).concat("...");
 
     return (
         <tr key={props.item._id} style={{ verticalAlign: "middle" }}>
             <td>{item.product}</td>
             <td style={{ textAlign: "center" }}>{item.caricatures}</td>
             <td style={{ textAlign: "center" }}>{item.background}</td>
+            <td>{backgroundDescription}</td>
             <td style={{ textAlign: "right" }}>{item.price.toFixed(2)}</td>
             <td style={{ textAlign: "right" }}>{item.amount}</td>
             <td>

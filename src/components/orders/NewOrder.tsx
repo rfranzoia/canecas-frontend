@@ -76,8 +76,9 @@ export const NewOrder = (props) => {
                 caricatureImages: i.caricatureImages,
                 background: i.background,
                 backgroundImage: i.backgroundImage,
+                backgroundDescription: i.backgroundDescription,
                 price: +i.price,
-                amount: i.amount,
+                amount: +i.amount,
             }
         ))
         const order: Order = {

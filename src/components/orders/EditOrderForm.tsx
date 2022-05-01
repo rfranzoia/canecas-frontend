@@ -46,27 +46,15 @@ const EditOrderForm = (props) => {
 
     const handleItemAdd = (item) => {
         setShowWizardModal(false);
-        const existingItem = formData.items.find((i) => i._id === item._id);
-        if (existingItem) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: "Validation Error",
-                message: "The selected product is already on the list"
-            }));
-            setShowAlert(true);
-        } else {
-            handleCloseToast();
-            setFormData(prevState => {
-                const items = [...prevState.items, item];
-                const totalPrice = evaluateTotalPrice(items);
-                return {
-                    ...prevState,
-                    items: items,
-                    totalPrice: totalPrice
-                };
-            });
-        }
+        setFormData(prevState => {
+            const items = [...prevState.items, item];
+            const totalPrice = evaluateTotalPrice(items);
+            return {
+                ...prevState,
+                items: items,
+                totalPrice: totalPrice
+            };
+        });
     }
 
     const handleSave = () => {
@@ -138,11 +126,6 @@ const EditOrderForm = (props) => {
     const handleCloseWizardModal = () => {
         setShowAlert(false);
         setShowWizardModal(false);
-    }
-
-    const handleCloseToast = () => {
-        dispatch(uiActions.handleAlert({ show: false }));
-        setShowAlert(false);
     }
 
     const handleViewStatusHistory = () => {
