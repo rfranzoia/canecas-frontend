@@ -51,7 +51,7 @@ export const EditUserForm = (props) => {
                 show: true,
                 type: AlertType.DANGER,
                 title: "Validation Error",
-                message: "Role, Name, Email and Password are required!"
+                message: "Role, Name, Email, Password and Phone are required!"
             }));
             setShowAlert(true);
             return false;

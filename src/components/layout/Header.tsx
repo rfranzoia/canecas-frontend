@@ -10,7 +10,7 @@ import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
-import { ChangeUserPassword } from "../users/ChangeUserPassword";
+import { ChangeUserPasswordForm } from "../users/ChangeUserPasswordForm";
 import { EditUser } from "../users/EditUser";
 import { ShowType, UserRegistration } from "../users/UserRegistration";
 
@@ -22,7 +22,7 @@ export const Header = () => {
     const [showAlert, setShowAlert] = useState(false);
     const dispatch = useDispatch();
     const isLoggedIn = useSelector<RootState, Boolean>(state => state.auth.isLoggedIn);
-    const user = useSelector<RootState, User>(state => state.auth.user);
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
 
     const handleClose = () => {
         setShowLoginModal(false);
@@ -106,8 +106,8 @@ export const Header = () => {
                             navbarScroll
                         >
 
-                            {isLoggedIn && user.role === Role.ADMIN && adminUser}
-                            {isLoggedIn && user.role !== Role.ADMIN && simpleUser}
+                            {isLoggedIn && loggedUser.role === Role.ADMIN && adminUser}
+                            {isLoggedIn && loggedUser.role !== Role.ADMIN && simpleUser}
 
                         </Nav>
                         {isLoggedIn ?
@@ -116,7 +116,7 @@ export const Header = () => {
                                     <Navbar.Collapse className="justify-content-end">
                                         <Dropdown>
                                             <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                {user.name}
+                                                {loggedUser.name}
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
@@ -147,7 +147,7 @@ export const Header = () => {
                         onClose={handleCloseEditModal}
                         size="sm">
                         <div>
-                            <EditUser id={user._id} op="edit" onCloseModal={handleCloseEditModal}/>
+                            <EditUser id={loggedUser._id} op="edit" onCloseModal={handleCloseEditModal}/>
                         </div>
                     </Modal>
                 </div>
@@ -158,8 +158,8 @@ export const Header = () => {
                         onClose={() => setShowChangePassword(false)}
                         size="tn">
                         <div>
-                            <ChangeUserPassword email={user.email} onCancel={() => setShowChangePassword(false)}
-                                                onSave={handlePasswordChanged}/>
+                            <ChangeUserPasswordForm email={loggedUser.email} onCancel={() => setShowChangePassword(false)}
+                                                    onSave={handlePasswordChanged}/>
                         </div>
                     </Modal>
 

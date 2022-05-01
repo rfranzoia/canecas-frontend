@@ -1,12 +1,7 @@
 import { Table } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { usersApi } from "../../api/UsersAPI";
-import { User } from "../../domain/User";
-import { RootState } from "../../store";
 import { UserRow } from "./UserRow";
 
 export const UsersList = (props) => {
-    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
 
     const handleOnEdit = (op, id) => {
         props.onEdit(op, id);
@@ -17,17 +12,7 @@ export const UsersList = (props) => {
     }
 
     const handleOnDelete = async (user) => {
-        if (!loggedUser.authToken) {
-            return;
-        }
-
-        const result = await usersApi.withToken(loggedUser.authToken).delete(user._id);
-        if (result === null) {
-            props.onDelete(true, `User '${user.name}' deleted successfully`);
-
-        } else {
-            props.onDelete(false);
-        }
+        props.onDelete(user);
     }
 
     return (

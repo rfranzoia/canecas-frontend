@@ -1,15 +1,12 @@
-import { StatusCodes } from "http-status-codes";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { usersApi } from "../../api/UsersAPI";
-import { User } from "../../domain/User";
-import { RootState } from "../../store";
-import { AlertType, uiActions } from "../../store/uiSlice";
+import useUsersApi from "../../hooks/useUsersApi";
+import { OpType } from "../../store";
+import { AlertToast } from "../ui/AlertToast";
 import { EditUserForm } from "./EditUserForm";
 
 export const EditUser = (props) => {
-    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
-    const dispatch = useDispatch();
+    const { get, update, create } = useUsersApi();
+    const [showAlert, setShowAlert] = useState(false);
     const [user, setUser] = useState({
         role: "",
         name: "",
@@ -20,41 +17,34 @@ export const EditUser = (props) => {
     });
     const { op, id } = props;
 
-    const handleSaveUser = (user) => {
-        if (op === "view") return;
-        const save = async (user) => {
-            let result;
-            if (op === "edit") {
-                result = await usersApi.withToken(loggedUser.authToken).update(id, user);
-            } else if (op === "new") {
-                result = await usersApi.withToken(loggedUser.authToken).create(user);
-            }
-            if (result.statusCode !== StatusCodes.OK && result.statusCode !== StatusCodes.CREATED) {
-                handleCloseModal(result)
-            } else {
-                handleCloseModal();
-            }
-        };
-        save(user).then(undefined);
-    };
+    const handleSaveUser = async (user) => {
+        if (op === OpType.VIEW) return;
 
-    const handleCloseModal = (error?) => {
-        props.onCloseModal(error);
+        let error;
+        if (op === OpType.EDIT) {
+            error = await update(id, user);
+        } else if (op === OpType.NEW) {
+            error = await create(user);
+        }
+        if (error) {
+            error();
+            setShowAlert(true);
+        } else {
+            props.onCloseModal(true);
+        }
+
     };
 
     const getUser = useCallback(async () => {
-        if (op === "edit" || op === "view") {
-            const result = await usersApi.withToken(loggedUser.authToken).get(id);
-            if (result.statusCode !== StatusCodes.OK) {
-                dispatch(uiActions.handleAlert({
-                    show: true,
-                    type: AlertType.DANGER,
-                    title: result.name,
-                    message: result.description
-                }));
+        if (op === OpType.EDIT || op === OpType.VIEW) {
+            const result = await get(id);
+            if (result._id) {
+                setUser(result);
             } else {
-                setUser(result.data);
+                setShowAlert(true);
+                result();
             }
+
         } else {
             setUser({
                 role: "",
@@ -65,7 +55,7 @@ export const EditUser = (props) => {
                 address: "",
             });
         }
-    }, [id, op, loggedUser.authToken, dispatch])
+    }, [id, op, get])
 
     useEffect(() => {
         getUser().then(undefined);
@@ -73,7 +63,8 @@ export const EditUser = (props) => {
 
     return (
         <>
-            <EditUserForm user={user} op={op} onSaveUser={handleSaveUser} onCancel={handleCloseModal}/>
+            {showAlert && <AlertToast showAlert={showAlert} />}
+            <EditUserForm user={user} op={op} onSaveUser={handleSaveUser} onCancel={props.onCloseModal}/>
         </>
     );
 };

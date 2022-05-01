@@ -1,97 +1,55 @@
-import { StatusCodes } from "http-status-codes";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { Card } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { usersApi } from "../../api/UsersAPI";
 import { User } from "../../domain/User";
-import { RootState } from "../../store";
-import { AlertType, uiActions } from "../../store/uiSlice";
+import useUsersApi from "../../hooks/useUsersApi";
+import { OpType } from "../../store";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
-import { ChangeUserPassword } from "./ChangeUserPassword";
+import { ChangeUserPasswordForm } from "./ChangeUserPasswordForm";
 import { EditUser } from "./EditUser";
 import { UsersList } from "./UsersList";
 
 export const Users = () => {
-    const history = useHistory();
-    const [users, setUsers] = useState([]);
+    const { users, list, remove, changePassword } = useUsersApi();
     const [showEditModal, setShowEditModal] = useState(false);
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
-    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
-    const dispatch = useDispatch();
     const [editViewOp, setEditViewOp] = useState({
         userId: "",
         email: "",
         op: "",
     });
 
-    const loadData = useCallback(async () => {
-        const result = await usersApi.withToken(loggedUser.authToken).list();
-        if (result.statusCode === StatusCodes.OK) {
-            setUsers(result.data);
-        } else if (result.statusCode === StatusCodes.UNAUTHORIZED) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: result.name,
-                message: result.description
-            }));
-            history.replace("/");
-        } else {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: result.name,
-                message: result.description
-            }));
-            setShowAlert(true);
-            setUsers([]);
-        }
-    }, [loggedUser.authToken, dispatch, history]);
-
-    const handleDelete = (success, message?) => {
-        loadData().then(() => undefined);
-        if (success) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.WARNING,
-                title: "Delete User!",
-                message: message
-            }));
-            setShowAlert(true);
-        }
+    const handleDelete = async (user: User) => {
+        const result = await remove(user);
+        result();
+        setShowAlert(true);
     }
 
-    const handleChangePasswordSave = (success, message?) => {
-        loadData().then(() => undefined);
+    const handleChangePassword = async (email: string, password: string, newPassword: string) => {
+        const result = await changePassword(email, password, newPassword);
+        result();
         setShowChangePassword(false);
-        if (success) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.SUCCESS,
-                title: "Password Change",
-                message: message
-            }));
-            setShowAlert(true);
-        }
+        setShowAlert(true);
     }
 
-    const handleCloseEditModal = (error?) => {
+    const handleCloseEditModal = async (success?: boolean) => {
         setShowEditModal(false);
-        if (error) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: error.name,
-                message: error.description
-            }));
-            setShowAlert(true);
+        if (success) {
+            await list();
         }
-        loadData().then(undefined);
     };
+
+    const handleShowNewUserModal = () => {
+        setEditViewOp({
+            userId: "",
+            email: "",
+            op: OpType.NEW,
+        })
+        setShowAlert(false);
+        setShowEditModal(true);
+    }
 
     const handleShowEditModal = (op: string, id?: string) => {
         setEditViewOp({
@@ -108,16 +66,13 @@ export const Users = () => {
             email: email,
             op: "change-password",
         });
+        setShowAlert(false);
         setShowChangePassword(true);
     };
 
     const handleChangePasswordCancel = () => {
         setShowChangePassword(false);
     };
-
-    useEffect(() => {
-        loadData().then(undefined);
-    }, [loadData]);
 
     return (
         <div>
@@ -130,7 +85,7 @@ export const Users = () => {
                             caption="New User"
                             type="new"
                             customClass="fa fa-user-plus"
-                            onClick={() => handleShowEditModal("new")}/>
+                            onClick={handleShowNewUserModal}/>
                     </Card.Title>
                     <UsersList
                         users={users}
@@ -154,9 +109,10 @@ export const Users = () => {
                 <Modal
                     onClose={handleChangePasswordCancel}>
                     <div>
-                        <ChangeUserPassword email={editViewOp.email}
-                                            onCancel={handleChangePasswordCancel}
-                                            onSave={handleChangePasswordSave}/>
+                        <ChangeUserPasswordForm email={editViewOp.email}
+                                                onCancel={handleChangePasswordCancel}
+                                                onChangePassword={handleChangePassword}
+                        />
                     </div>
                 </Modal>
             }

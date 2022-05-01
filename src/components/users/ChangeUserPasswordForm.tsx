@@ -1,22 +1,15 @@
-import { StatusCodes } from "http-status-codes";
 import { useEffect, useState } from "react";
-import { Alert, Card, Col, Form, Row } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { usersApi } from "../../api/UsersAPI";
-import { User } from "../../domain/User";
-import { RootState } from "../../store";
+import { Card, Col, Form, Row } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { AlertType, uiActions } from "../../store/uiSlice";
+import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 
 import styles from "./users.module.css"
 
-export const ChangeUserPassword = (props) => {
-    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
-
-    const [showError, setShowError] = useState({
-        show: false,
-        title: "",
-        message: ""
-    });
+export const ChangeUserPasswordForm = (props) => {
+    const dispatch = useDispatch();
+    const [showAlert, setShowAlert] = useState(false);
     const [user, setUser] = useState({
         email: "",
         password: "",
@@ -36,47 +29,35 @@ export const ChangeUserPassword = (props) => {
     }
 
     const handleHideError = () => {
-        setShowError({
-            show: false,
-            title: "",
-            message: ""
-        })
+        dispatch(uiActions.handleAlert({ show: false, }));
     }
 
     const handleConfirm = () => {
-
+        setShowAlert(false);
         if (user.newPassword.trim().length === 0 || user.confirmNewPassword.trim().length === 0) {
-            setShowError({
+            dispatch(uiActions.handleAlert({
                 show: true,
+                type: AlertType.DANGER,
                 title: "Validation Error!",
                 message: "New Password can't be empty"
-            });
+            }));
+            setShowAlert(true);
             return;
         }
 
         if (user.newPassword !== user.confirmNewPassword) {
-            setShowError({
+            dispatch(uiActions.handleAlert({
                 show: true,
+                type: AlertType.DANGER,
                 title: "Validation Error!",
                 message: "New password and confirmation don't match"
-            });
+            }));
+            setShowAlert(true);
             return;
         }
 
-        usersApi.withToken(loggedUser.authToken)
-            .updatePassword(props.email, user.password, user.newPassword)
-            .then(result => {
-                if (result.statusCode !== StatusCodes.OK) {
-                    setShowError({
-                        show: true,
-                        title: result.name,
-                        message: result.description
-                    });
+        props.onChangePassword(props.email, user.password, user.newPassword);
 
-                } else {
-                    props.onSave(true, "User password has been changed successfully");
-                }
-            })
     }
 
     useEffect(() => {
@@ -90,14 +71,9 @@ export const ChangeUserPassword = (props) => {
 
     return (
         <>
+            {showAlert && <AlertToast showAlert={showAlert}/>}
             <Card className={styles["registration-width-signup"]}>
                 <Card.Header as="h3">Change Password</Card.Header>
-                {showError.show &&
-                    <Alert variant="danger" onClose={handleHideError} dismissible transition className="alert-top">
-                        <Alert.Heading>{showError.title}</Alert.Heading>
-                        <p>{showError.message}</p>
-                    </Alert>
-                }
                 <Card.Body>
                     <Form>
                         <Row>

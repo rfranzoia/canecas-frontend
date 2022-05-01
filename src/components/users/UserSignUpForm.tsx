@@ -1,10 +1,9 @@
-import { StatusCodes } from "http-status-codes";
 import { useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { usersApi } from "../../api/UsersAPI";
 import { Role } from "../../domain/User";
+import useUsersApi from "../../hooks/useUsersApi";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
@@ -14,6 +13,7 @@ import styles from "./users.module.css";
 export const UserSignUpForm = (props) => {
     const [showAlert, setShowAlert] = useState(false);
     const dispatch = useDispatch();
+    const { create } = useUsersApi(false);
 
     const [userRegister, setUserRegister] = useState({
         name: "",
@@ -65,19 +65,15 @@ export const UserSignUpForm = (props) => {
             address: userRegister.address,
         };
 
-        const res = await usersApi.create(user);
-        if (res.statusCode !== StatusCodes.CREATED) {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: res?.name,
-                message: res?.description
-            }));
+        const error = await create(user);
+        if (error) {
+            error();
             setShowAlert(true);
         } else {
             setShowAlert(false);
             props.onShowType(ShowType.SIGN_IN);
         }
+
     }
 
     const handleChangeRegister = (event) => {

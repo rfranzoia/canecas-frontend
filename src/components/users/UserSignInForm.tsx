@@ -1,11 +1,9 @@
-import { StatusCodes } from "http-status-codes";
 import { useState } from "react";
 import { Card, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
-import { usersApi } from "../../api/UsersAPI";
-import { authActions } from "../../store/authSlice";
-import { AlertType, uiActions } from "../../store/uiSlice";
+import useUsersApi from "../../hooks/useUsersApi";
+import { uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 import { ShowType } from "./UserRegistration";
@@ -15,6 +13,7 @@ export const UserSignInForm = (props) => {
     const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
     const dispatch = useDispatch();
+    const { login } = useUsersApi(false);
     const [user, setUser] = useState({
         email: "",
         password: "",
@@ -26,26 +25,13 @@ export const UserSignInForm = (props) => {
     }
 
     const handleSignIn = async (credentials) => {
-        const res = await usersApi.login(credentials.email, credentials.password);
-        if (res.statusCode === StatusCodes.OK) {
-            const user = {
-                userId: res.data._id,
-                name: res.data.name,
-                userEmail: res.data.email,
-                authToken: res.data.authToken,
-                role: res.data.role
-            };
-            dispatch(authActions.login(user));
+        const result = await login(credentials.email, credentials.password);
+        if (result) {
+            result();
+            setShowAlert(true);
+        } else {
             props.onClose();
             history.replace("/");
-        } else {
-            dispatch(uiActions.handleAlert({
-                show: true,
-                type: AlertType.DANGER,
-                title: res?.name,
-                message: res?.description
-            }));
-            setShowAlert(true);
         }
     }
 
