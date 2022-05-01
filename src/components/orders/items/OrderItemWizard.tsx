@@ -11,7 +11,7 @@ export const OrderItemWizard = (props) => {
         _id: "",
         product: "",
         price: 0,
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: "",
         caricatureImagesFile: null,
         background: "empty",
@@ -22,7 +22,7 @@ export const OrderItemWizard = (props) => {
     })
 
     const handleFinish = (formData: WizardFormData) => {
-        const _id = wizardFormData.product.trim().concat(wizardFormData.caricature.toString()).concat(wizardFormData.background);
+        const _id = wizardFormData.product.trim().concat(wizardFormData.caricatures.toString()).concat(wizardFormData.background);
         const data = {
             ...wizardFormData,
             _id: _id,
@@ -54,11 +54,11 @@ export const OrderItemWizard = (props) => {
                 }
             })
         }
-        if (formData.caricature) {
+        if (formData.caricatures) {
             setWizardFormData(prevState => {
                 return {
                     ...prevState,
-                    caricature: formData.caricature,
+                    caricatures: formData.caricatures,
                     caricatureImages: formData.caricatureImages,
                     caricatureImagesFile: formData.caricatureImagesFile,
                 }

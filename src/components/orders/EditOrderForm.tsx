@@ -271,7 +271,7 @@ const EditOrderForm = (props) => {
                                             {
                                                 getActionIcon(ActionIconType.ADD_ITEM,
                                                     "Add Item",
-                                                    true,
+                                                    !viewOnly,
                                                     () => handleShowWizardModal())
                                             }
 

@@ -18,7 +18,7 @@ import styles from "./variations.module.css";
 const emptyFormData = {
     _id: null,
     product: "",
-    caricature: 0,
+    caricatures: 0,
     background: "empty",
     price: 0,
     image: "",
@@ -38,7 +38,7 @@ export const VariationEditForm = (props) => {
     });
 
     const isValidData = (): boolean => {
-        const { product, caricature, background, price, image } = formData;
+        const { product, caricatures, background, price, image } = formData;
         if (product.trim().length === 0 || background.trim().length === 0 || image.trim().length === 0) {
             dispatch(
                 uiActions.handleAlert({
@@ -51,7 +51,7 @@ export const VariationEditForm = (props) => {
             setShowAlert(true);
             return false;
         }
-        if (isNaN(caricature) || isNaN(price)) {
+        if (isNaN(caricatures) || isNaN(price)) {
             dispatch(
                 uiActions.handleAlert({
                     show: true,
@@ -151,7 +151,7 @@ export const VariationEditForm = (props) => {
         const variation: Variation = {
             _id: formData._id,
             product: formData.product,
-            caricature: Number(formData.caricature),
+            caricatures: Number(formData.caricatures),
             background: formData.background,
             price: Number(formData.price),
             image: formData.image,
@@ -202,7 +202,7 @@ export const VariationEditForm = (props) => {
                     _id: v._id,
                     product: v.product,
                     background: v.background,
-                    caricature: v.caricature,
+                    caricatures: v.caricatures,
                     price: v.price,
                     image: v.image,
                 });
@@ -262,11 +262,11 @@ export const VariationEditForm = (props) => {
                                                 </span>
                                             </Form.Label>
                                             <Form.Select
-                                                value={formData.caricature}
+                                                value={formData.caricatures}
                                                 className="bigger-select"
                                                 onChange={handleChange}
                                                 disabled={viewOnly || props.op === OpType.EDIT}
-                                                name="caricature"
+                                                name="caricatures"
                                             >
                                                 <option value={0}>No caricature</option>
                                                 <option value={1}>1</option>

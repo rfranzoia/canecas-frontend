@@ -44,7 +44,7 @@ export interface Order {
 
 export interface OrderItem {
     product: string,
-    caricature: number,
+    caricatures: number,
     caricatureImages?: string,
     background: string,
     backgroundImage?: string,

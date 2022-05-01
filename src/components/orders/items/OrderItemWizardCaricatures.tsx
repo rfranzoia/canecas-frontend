@@ -8,7 +8,7 @@ import { imageHelper } from "../../ui/ImageHelper";
 export const OrderItemWizardCaricatures = (props) => {
     const [formData, setFormData] = useState({
         product: "",
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: "",
         caricatureImagesFile: null,
     });
@@ -21,7 +21,7 @@ export const OrderItemWizardCaricatures = (props) => {
                 [name]: value
             }
         });
-        if (name === "caricature" && Number(value) === 0) {
+        if (name === "caricatures" && Number(value) === 0) {
             setFormData(prevState => (
                 {
                     ...prevState,
@@ -49,12 +49,12 @@ export const OrderItemWizardCaricatures = (props) => {
     }
 
     const handleForward = () => {
-        const caricature = {
-            caricature: formData.caricature,
+        const caricatures = {
+            caricatures: formData.caricatures,
             caricatureImages: formData.caricatureImages,
             caricatureImagesFile: formData.caricatureImagesFile,
         }
-        props.onForward(caricature)
+        props.onForward(caricatures)
     }
 
     const handleBackward = () => {
@@ -64,7 +64,7 @@ export const OrderItemWizardCaricatures = (props) => {
     useEffect(() => {
         setFormData({
             product: props.orderItem.product,
-            caricature: props.orderItem.caricature,
+            caricatures: props.orderItem.caricatures,
             caricatureImages: props.orderItem.caricatureImages,
             caricatureImagesFile: props.orderItem.caricatureImagesFile,
         });
@@ -102,10 +102,10 @@ export const OrderItemWizardCaricatures = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricature}
+                                    <Form.Select value={formData.caricatures}
                                                  className="bigger-select"
                                                  onChange={handleChange}
-                                                 name="caricature">
+                                                 name="caricatures">
                                         <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>

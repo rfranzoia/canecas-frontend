@@ -37,7 +37,7 @@ export const OrderItemWizardProduct = (props) => {
         const selectedVariation: WizardFormData = {
             product: variation.product,
             background: variation.background,
-            caricature: variation.caricature,
+            caricatures: variation.caricatures,
             price: variation.price,
         }
         props.onSelect(selectedVariation);

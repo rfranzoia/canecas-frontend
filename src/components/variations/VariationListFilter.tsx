@@ -8,7 +8,7 @@ import styles from "./variationListFilter.module.css";
 
 export interface VariationsFilter {
     product?: string;
-    caricature?: number;
+    caricatures?: number;
     background?: string;
 }
 
@@ -20,7 +20,7 @@ export const VariationListFilter = (props) => {
         filterByCaricaturesCheck: false,
         filterByBackgroundCheck: false,
         product: "",
-        caricature: 0,
+        caricatures: 0,
         background: "empty",
     });
 
@@ -52,7 +52,7 @@ export const VariationListFilter = (props) => {
         if (formData.filterByCaricaturesCheck) {
             filter = {
                 ...filter,
-                caricature: Number(formData.caricature),
+                caricatures: +formData.caricatures,
             };
         }
         if (formData.filterByBackgroundCheck) {
@@ -90,7 +90,7 @@ export const VariationListFilter = (props) => {
                 filterByCaricaturesCheck: false,
                 filterByBackgroundCheck: false,
                 product: "",
-                caricature: 0,
+                caricatures: 0,
                 background: "empty",
             };
         });
@@ -106,7 +106,7 @@ export const VariationListFilter = (props) => {
                     filterByCaricaturesCheck: false,
                     filterByBackgroundCheck: false,
                     product: "",
-                    caricature: 0,
+                    caricatures: 0,
                     background: "empty",
                 };
             });
@@ -175,11 +175,11 @@ export const VariationListFilter = (props) => {
                                             />
 
                                             <Form.Select
-                                                value={formData.caricature}
+                                                value={formData.caricatures}
                                                 onChange={handleChange}
                                                 className={styles["custom-select"]}
                                                 disabled={!formData.filterByCaricaturesCheck}
-                                                name="caricature"
+                                                name="caricatures"
                                             >
                                                 <option value={0}>0</option>
                                                 <option value={1}>1</option>

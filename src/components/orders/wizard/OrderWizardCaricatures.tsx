@@ -10,7 +10,7 @@ export const OrderWizardCaricatures = (props) => {
         user: null,
         product: "",
         price: 0,
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: "",
         caricatureImagesFile: null,
     });
@@ -23,7 +23,7 @@ export const OrderWizardCaricatures = (props) => {
                 [name]: value
             }
         });
-        if (name === "caricature" && Number(value) === 0) {
+        if (name === "caricatures" && Number(value) === 0) {
             setFormData(prevState => (
                 {
                     ...prevState,
@@ -51,12 +51,12 @@ export const OrderWizardCaricatures = (props) => {
     }
 
     const handleForward = () => {
-        const caricature = {
-            caricature: formData.caricature,
+        const caricatures = {
+            caricatures: formData.caricatures,
             caricatureImages: formData.caricatureImages,
             caricatureImagesFile: formData.caricatureImagesFile,
         }
-        props.onForward(caricature)
+        props.onForward(caricatures)
     }
 
     const handleBackward = () => {
@@ -68,7 +68,7 @@ export const OrderWizardCaricatures = (props) => {
             user: props.wizardData.user,
             product: props.wizardData.product,
             price: props.wizardData.price,
-            caricature: props.wizardData.caricature,
+            caricatures: props.wizardData.caricatures,
             caricatureImages: props.wizardData.caricatureImages,
             caricatureImagesFile: props.wizardData.caricatureImagesFile,
         });
@@ -93,10 +93,10 @@ export const OrderWizardCaricatures = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricature}
+                                    <Form.Select value={formData.caricatures}
                                                  className="bigger-select"
                                                  onChange={handleChange}
-                                                 name="caricature">
+                                                 name="caricatures">
                                         <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
@@ -124,7 +124,7 @@ export const OrderWizardCaricatures = (props) => {
                                             onChange={handleChangeFile}
                                             style={{ display: 'none' }}
                                         />
-                                        {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", (formData.caricature > 0), handleFileClick)}
+                                        {getActionIcon(ActionIconType.IMAGE_EDIT, "Select Variation Image", (formData.caricatures > 0), handleFileClick)}
                                     </div>
                                     <small>If the photo is not available just ignore this</small>
                                 </Form.Group>

@@ -44,7 +44,7 @@ export const VariationRow = (props) => {
                 </td>
                 <td width="30%">{variation.product}</td>
                 <td width="20%" align="center">
-                    {variation.caricature}
+                    {variation.caricatures}
                 </td>
                 <td width="20%" align="center">
                     {variation.background}

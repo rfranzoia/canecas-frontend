@@ -4,7 +4,7 @@ import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 export const OrderItemRow = (props) => {
     const [item, setItem] = useState({
         product: "",
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: null,
         background: "",
         backgroundImage: null,
@@ -15,7 +15,7 @@ export const OrderItemRow = (props) => {
     useEffect(() => {
         setItem({
             product: props.item.product,
-            caricature: props.item.caricature,
+            caricatures: props.item.caricatures,
             caricatureImages: props.item.caricatureImages,
             background: props.item.background,
             backgroundImage: props.item.backgroundImage,
@@ -27,7 +27,7 @@ export const OrderItemRow = (props) => {
     return (
         <tr key={props.item._id} style={{ verticalAlign: "middle" }}>
             <td>{item.product}</td>
-            <td style={{ textAlign: "center" }}>{item.caricature}</td>
+            <td style={{ textAlign: "center" }}>{item.caricatures}</td>
             <td style={{ textAlign: "center" }}>{item.background}</td>
             <td style={{ textAlign: "right" }}>{item.price.toFixed(2)}</td>
             <td style={{ textAlign: "right" }}>{item.amount}</td>

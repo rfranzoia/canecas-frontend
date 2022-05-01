@@ -72,7 +72,7 @@ export const NewOrder = (props) => {
         const orderItems = formData.items.map(i => (
             {
                 product: i.product,
-                caricature: i.caricature,
+                caricatures: i.caricatures,
                 caricatureImages: i.caricatureImages,
                 background: i.background,
                 backgroundImage: i.backgroundImage,

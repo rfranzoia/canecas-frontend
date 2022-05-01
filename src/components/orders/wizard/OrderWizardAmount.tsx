@@ -14,7 +14,7 @@ export const OrderWizardAmount = (props) => {
         user: null,
         product: "",
         price: 0,
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: "",
         caricatureImagesFile: null,
         background: "empty",
@@ -73,7 +73,7 @@ export const OrderWizardAmount = (props) => {
             user: props.wizardData.user,
             product: props.wizardData.product,
             price: props.wizardData.price,
-            caricature: props.wizardData.caricature,
+            caricatures: props.wizardData.caricatures,
             caricatureImages: props.wizardData.caricatureImages,
             caricatureImagesFile: props.wizardData.caricatureImagesFile,
             background: props.wizardData.background,
@@ -116,11 +116,11 @@ export const OrderWizardAmount = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricature}
+                                    <Form.Select value={formData.caricatures}
                                                  className="bigger-select"
                                                  disabled
                                                  onChange={handleChange}
-                                                 name="caricature">
+                                                 name="caricatures">
                                         <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>

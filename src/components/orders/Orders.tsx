@@ -21,7 +21,7 @@ export interface WizardFormData {
     user?: User,
     product?: string,
     price?: number,
-    caricature?: number,
+    caricatures?: number,
     caricatureImages?: string,
     caricatureImagesFile?: object,
     background?: string,

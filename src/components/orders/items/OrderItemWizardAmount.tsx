@@ -12,7 +12,7 @@ export const OrderItemWizardAmount = (props) => {
     const [formData, setFormData] = useState({
         product: "",
         price: 0,
-        caricature: 0,
+        caricatures: 0,
         caricatureImages: "",
         caricatureImagesFile: null,
         background: "empty",
@@ -70,7 +70,7 @@ export const OrderItemWizardAmount = (props) => {
         setFormData({
             product: props.orderItem.product,
             price: props.orderItem.price,
-            caricature: props.orderItem.caricature,
+            caricatures: props.orderItem.caricatures,
             caricatureImages: props.orderItem.caricatureImages,
             caricatureImagesFile: props.orderItem.caricatureImagesFile,
             background: props.orderItem.background,
@@ -113,11 +113,11 @@ export const OrderItemWizardAmount = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricature}
+                                    <Form.Select value={formData.caricatures}
                                                  className="bigger-select"
                                                  disabled
                                                  onChange={handleChange}
-                                                 name="caricature">
+                                                 name="caricatures">
                                         <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
