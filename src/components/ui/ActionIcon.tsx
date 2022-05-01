@@ -14,7 +14,8 @@ export enum ActionIconType {
     UNDO,
     IMAGE_EDIT,
     SEARCH,
-    SELECT
+    SELECT,
+    CHANGE_PASSWORD,
 }
 
 const matrix = [
@@ -32,6 +33,7 @@ const matrix = [
     { type: ActionIconType.UNDO, class: "fa fa-rotate-left", color: "red", size: "1.7rem" },
     { type: ActionIconType.SEARCH, class: "fa fa-binoculars", color: "black", size: "1.5rem" },
     { type: ActionIconType.WHATSAPP, class: "fa-brands fa-whatsapp", color: "green", size: "1.7rem" },
+    { type: ActionIconType.CHANGE_PASSWORD, class: "fa fa-lock-open", color: "green", size: "1.7rem" },
 ]
 
 export interface CustomActionIcon {
