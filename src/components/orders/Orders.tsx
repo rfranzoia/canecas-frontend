@@ -34,7 +34,7 @@ export interface WizardFormData {
 export const Orders = () => {
     const dispatch = useDispatch();
     const [orders, setOrders] = useState([]);
-    const user = useSelector<RootState, User>(state => state.auth.user);
+    const loggedUser = useSelector<RootState, User>(state => state.auth.user);
     const history = useHistory();
     const [showAlert, setShowAlert] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -49,7 +49,7 @@ export const Orders = () => {
     })
 
     const loadOrders = useCallback((page: number, filter?: string) => {
-        if (!user.authToken) {
+        if (!loggedUser.authToken) {
             setOrders([]);
             return;
         }
@@ -59,7 +59,7 @@ export const Orders = () => {
             currPage: page
         }));
 
-        ordersApi.withToken(user.authToken).listByFilter(page, filter)
+        ordersApi.withToken(loggedUser.authToken).listByFilter(page, filter)
             .then((result) => {
                 if (result.statusCode === StatusCodes.UNAUTHORIZED) {
                     dispatch(uiActions.handleAlert({
@@ -82,10 +82,10 @@ export const Orders = () => {
                     setOrders(result.data);
                 }
             });
-    }, [dispatch, history, user.authToken])
+    }, [dispatch, history, loggedUser.authToken])
 
     const updateOrder = (orderId: string, order, callback) => {
-        ordersApi.withToken(user.authToken).update(orderId, order)
+        ordersApi.withToken(loggedUser.authToken).update(orderId, order)
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     dispatch(uiActions.handleAlert({
@@ -103,7 +103,7 @@ export const Orders = () => {
     }
 
     const getTotalPages = useCallback(() => {
-        ordersApi.withToken(user.authToken).count()
+        ordersApi.withToken(loggedUser.authToken).count()
             .then(result => {
                 if (result.statusCode !== StatusCodes.OK) {
                     dispatch(uiActions.handleAlert({
@@ -120,7 +120,7 @@ export const Orders = () => {
                     });
                 }
             });
-    }, [dispatch, user.authToken])
+    }, [dispatch, loggedUser.authToken])
 
     const handleEdit = (op: string, orderId: string) => {
         setShowAlert(false);
@@ -133,7 +133,7 @@ export const Orders = () => {
 
     const handleSave = (order: Order) => {
         if (edit.op === OpType.NEW) {
-            ordersApi.withToken(user.authToken).create(order)
+            ordersApi.withToken(loggedUser.authToken).create(order)
                 .then(result => {
                     if (result.statusCode === StatusCodes.CREATED) {
                         dispatch(uiActions.handleAlert({ show: false }));
@@ -221,7 +221,7 @@ export const Orders = () => {
     }
 
     const handleDeleteOrder = async (orderId: string) => {
-        ordersApi.withToken(user.authToken).delete(orderId)
+        ordersApi.withToken(loggedUser.authToken).delete(orderId)
             .then(result => {
                 if (result && result.statusCode !== StatusCodes.NO_CONTENT) {
                     dispatch(uiActions.handleAlert({

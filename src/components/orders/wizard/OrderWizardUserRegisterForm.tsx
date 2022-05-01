@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { Role } from "../../../domain/User";
 import { AlertType, uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { CustomButton } from "../../ui/CustomButton";
+import { ShowType } from "../../users/UserRegistration";
 
-export const OrderWizardPersonalInfoForm = (props) => {
+export const OrderWizardUserRegisterForm = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [formData, setFormData] = useState({
@@ -51,6 +53,10 @@ export const OrderWizardPersonalInfoForm = (props) => {
             role: Role.GUEST
         }
         props.onForward({ user: user })
+    }
+
+    const handleChangeToSignIn = () => {
+        props.onChangeUserForm(ShowType.SIGN_IN);
     }
 
     useEffect(() => {
@@ -116,6 +122,12 @@ export const OrderWizardPersonalInfoForm = (props) => {
                     </form>
                 </Card.Body>
             </Card>
+            <p aria-hidden="true" id="required-description">
+                <span aria-hidden="true" className="required">*</span>Required field(s)<br/>
+                Already a customer?click&nbsp;
+                <span onClick={() => handleChangeToSignIn()}><Link to="#">here</Link></span>
+                &nbsp;to sign in
+            </p>
             <div className="actions action-justify-right">
                 <CustomButton caption="Cancel" onClick={props.onCancel} type="close"/>
                 <CustomButton caption="Next Step"

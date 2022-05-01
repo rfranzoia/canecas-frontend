@@ -107,7 +107,7 @@ export const OrderWizardAmount = (props) => {
                         </Row>
                         <BorderedRow title={"Drawings"}>
                             <Col md="auto">
-                                <div className="bordered-panel bordered-panel-tn">
+                                <div className="bordered-panel bordered-panel-sm">
                                     {formData.drawingsImages &&
                                         <Image src={formData.drawingsImagesFile}
                                                fluid width="100" title={formData.drawingsImages}/>
@@ -133,7 +133,7 @@ export const OrderWizardAmount = (props) => {
                         </BorderedRow>
                         <BorderedRow title={"Background"}>
                             <Col md="auto">
-                                <div className="bordered-panel bordered-panel-tn">
+                                <div className="bordered-panel bordered-panel-sm">
                                     {formData.backgroundImage &&
                                         <Image src={formData.backgroundImageFile}
                                                fluid width="100" title={formData.backgroundImage}/>
@@ -172,8 +172,8 @@ export const OrderWizardAmount = (props) => {
                                 </Form.Group>
                             </Col>
                         </BorderedRow>
-                        <Row>
-                            <Col>
+                        <Row className={"flex action-justify-right"}>
+                            <Col md={4}>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Amount<span aria-hidden="true"
                                                             className="required">*</span></Form.Label>

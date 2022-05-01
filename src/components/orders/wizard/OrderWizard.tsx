@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { ShowType } from "../../users/UserRegistration";
 import { WizardFormData } from "../Orders";
 import { OrderWizardAmount } from "./OrderWizardAmount";
 import { OrderWizardBackground } from "./OrderWizardBackground";
 import { OrderWizardDrawingsForm } from "./OrderWizardDrawingsForm";
-import { OrderWizardPersonalInfoForm } from "./OrderWizardPersonalInfoForm";
+import { OrderWizardUserLoginForm } from "./OrderWizardUserLoginForm";
+import { OrderWizardUserRegisterForm } from "./OrderWizardUserRegisterForm";
 import { OrderWizardProductForm } from "./OrderWizardProductForm";
 
 const initWizardFormData: WizardFormData = {
@@ -23,6 +25,7 @@ const initWizardFormData: WizardFormData = {
 
 export const OrderWizard = (props) => {
     const [currStep, setCurrStep] = useState(0);
+    const [currUserFormType, setCurrUserFormType] = useState(ShowType.SIGN_UP);
     const [wizardFormData, setWizardFormData] = useState(initWizardFormData)
 
     const handleFinishWizard = (formData: WizardFormData) => {
@@ -81,6 +84,10 @@ export const OrderWizard = (props) => {
         }
     }
 
+    const handleChangeUserForm = (showType: ShowType) => {
+        setCurrUserFormType(showType);
+    }
+
     const handleForward = (formData: WizardFormData) => {
         if (currStep === (steps.length - 1)) return;
         const next = currStep + 1;
@@ -94,17 +101,22 @@ export const OrderWizard = (props) => {
         setCurrStep(previous);
     }
 
+    const userFormType = [
+        <OrderWizardUserLoginForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
+        <OrderWizardUserRegisterForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData} onChangeUserForm={handleChangeUserForm}/>,
+    ]
+
     const steps = [
-        <OrderWizardPersonalInfoForm onForward={handleForward} onCancel={handleCancel} wizardData={wizardFormData}/>,
-        <OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
-        <OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
-        <OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>,
-        <OrderWizardAmount onCancel={handleCancel} onBackward={handleBackward} onFinishWizard={handleFinishWizard} wizardData={wizardFormData}/>,
+        [userFormType[currUserFormType], "30rem"],
+        [<OrderWizardProductForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "30rem"],
+        [<OrderWizardDrawingsForm onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "40rem"],
+        [<OrderWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward} wizardData={wizardFormData}/>, "45rem"],
+        [<OrderWizardAmount onCancel={handleCancel} onBackward={handleBackward} onFinishWizard={handleFinishWizard} wizardData={wizardFormData}/>, "40rem"],
     ]
 
     return (
-        <div style={{ width: "35rem" }}>
-            {steps[currStep]}
+        <div style={{ width: `${steps[currStep][1]}` }}>
+            {steps[currStep][0]}
         </div>
     );
 }

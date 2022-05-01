@@ -124,6 +124,11 @@ h4 {
     width: 110px;
 }
 
+.bordered-panel-sm {
+    width: 150px;
+    min-height: 100px;
+}
+
 .list-image-panel {
     width: 60px;
     height: 60px;
