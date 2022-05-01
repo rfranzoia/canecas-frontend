@@ -66,12 +66,12 @@ export const EditProductForm = (props) => {
         if (imageOpType === ImageOpType.NEW) {
             const sendResult = await uploadImage(file.selectedFile);
 
-            if (sendResult instanceof Error) {
+            if (sendResult.statusCode !== StatusCodes.OK) {
                 dispatch(uiActions.handleAlert({
                     show: true,
                     type: AlertType.DANGER,
-                    title: "Upload File Error!",
-                    message: sendResult
+                    title: sendResult.name,
+                    message: sendResult.description,
                 }));
                 setShowAlert(true);
                 return;

@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { useSelector } from "react-redux";
 import axios, { processRequestError } from "../api/axios";
 import { imageHelper } from "../components/ui/ImageHelper";
@@ -29,9 +30,9 @@ const useServiceApi = (origin: string) => {
 
             return res.data;
         } catch (error: any) {
-            console.error("Upload to server ERROR", error)
+            console.error("Upload to server Error", JSON.stringify(error.stack))
             if (!error.statusCode) {
-                return error;
+                return { statusCode: StatusCodes.BAD_REQUEST, name: "Error uploading", description: error.stack };
             }
             return processRequestError(error, "send:file");
         }
