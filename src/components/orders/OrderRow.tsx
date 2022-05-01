@@ -149,7 +149,6 @@ export const OrderRow = (props) => {
                     order.status === OrderStatus.QUOTE_REQUEST,
                     () => handleEditOrder(order._id))
             }
-            <span>&nbsp;</span>
             {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                 getActionIcon(order.status === OrderStatus.QUOTE_REQUEST ?
                         ActionIconType.DELETE :
@@ -158,13 +157,11 @@ export const OrderRow = (props) => {
                     canCancelOrder,
                     () => handleDeleteOrCancel())
             }
-            <span>&nbsp;</span>
             {(user.role === Role.ADMIN || order.userEmail === user.email) &&
                 getActionIcon(ActionIconType.USER_CHECK,
                     "Confirm Order",
                     order.status === OrderStatus.QUOTE_REQUEST,
                     () => handleConfirmOrderDialog())}
-            <span>&nbsp;</span>
             {user.role === Role.ADMIN &&
                 getActionIcon(ActionIconType.ACTION_FORWARD,
                     `Move Order to next Status (${OrderStatus[findNextOrderStatus(order.status)]})`,
