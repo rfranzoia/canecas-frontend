@@ -104,6 +104,7 @@ export const Products = () => {
             <div>
                 {showEditModal &&
                     <Modal
+                        style={{width: "50rem"}}
                         onClose={handleCancel}>
                         <div>
                             <EditProductForm product={product}
