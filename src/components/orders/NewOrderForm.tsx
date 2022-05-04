@@ -22,7 +22,7 @@ interface NewOrderProps {
     onCancel: Function,
 }
 
-export const NewOrder: FC<NewOrderProps> = (props) => {
+export const NewOrderForm: FC<NewOrderProps> = (props) => {
     const dispatch = useDispatch();
     const { users } = useUsersApi();
     const [showAlert, setShowAlert] = useState(false);
@@ -175,6 +175,7 @@ export const NewOrder: FC<NewOrderProps> = (props) => {
             <AlertToast showAlert={showAlert}/>
             {showWizardModal &&
                 <Modal
+                    keyboard={"true"}
                     onClose={handleCloseWizardModal}>
                     <OrderItemWizard onCancel={handleCloseWizardModal} onItemAdd={handleItemAdd}/>
                 </Modal>

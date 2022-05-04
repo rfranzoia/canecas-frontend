@@ -11,7 +11,7 @@ import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import Modal from "../ui/Modal";
 import EditOrder from "./EditOrder";
-import { NewOrder } from "./NewOrder";
+import { NewOrderForm } from "./NewOrderForm";
 import styles from "./orders.module.css"
 import { OrdersList } from "./OrdersList";
 import { OrdersFilter } from "./OrdersListFilter";
@@ -313,7 +313,7 @@ export const Orders = () => {
                         onClose={handleCloseEditModal}>
                         <div className={styles["edit-order-modal"]}>
                             {edit.op === OpType.NEW ?
-                                <NewOrder
+                                <NewOrderForm
                                     onSave={handleSave}
                                     onCancel={handleCloseEditModal}/> :
                                 <EditOrder
