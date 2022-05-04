@@ -96,19 +96,19 @@ export const OrderItemWizard = (props) => {
     }
 
     const steps = [
-        <OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect}
-                                orderItem={wizardFormData}/>,
-        <OrderItemWizardCaricatures onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
-                                 orderItem={wizardFormData}/>,
-        <OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
-                                   orderItem={wizardFormData}/>,
-        <OrderItemWizardAmount onFinish={handleFinish} onCancel={handleCancel} orderItem={wizardFormData}
-                               onBackward={handleBackward}/>,
+        [<OrderItemWizardProduct onForward={handleForward} onCancel={handleCancel} onSelect={handleSelect}
+                                orderItem={wizardFormData}/>, "30rem"],
+        [<OrderItemWizardCaricatures onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
+                                 orderItem={wizardFormData}/>, "40rem"],
+        [<OrderItemWizardBackground onForward={handleForward} onCancel={handleCancel} onBackward={handleBackward}
+                                   orderItem={wizardFormData}/>, "45rem"],
+        [<OrderItemWizardAmount onFinish={handleFinish} onCancel={handleCancel} orderItem={wizardFormData}
+                               onBackward={handleBackward}/>, "40rem"],
     ]
 
     return (
-        <div style={{ width: "35rem" }}>
-            {steps[currStep]}
+        <div style={{ width: `${steps[currStep][1]}` }}>
+            {steps[currStep][0]}
         </div>
     );
 }

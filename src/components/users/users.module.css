@@ -9,6 +9,7 @@
 .fancy-input {
     display: block;
     width: 100%;
+    height: 2.5rem;
     font: inherit;
     padding: 0.5rem;
     background-color: #f7f5ef;
@@ -22,7 +23,7 @@
     outline: 1px solid #000;
 }
 
-.fancy-input input:disabled {
+.fancy-input:disabled {
     background-color: #dcdcdc;
     color: #ababab;
 }

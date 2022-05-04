@@ -48,6 +48,7 @@
 .fancy-input {
     display: block;
     width: 100%;
+    height: 2.5rem;
     font: inherit;
     font-size: 1.2rem;
     padding: 0.5rem;
@@ -58,7 +59,7 @@
     margin-bottom: 0.5rem;
 }
 
-.fancy-input input:disabled {
+.fancy-input:disabled {
     background-color: #dcdcdc;
     color: #ababab;
 }

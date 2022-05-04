@@ -202,7 +202,7 @@ const EditOrderForm: FC<EditOrderFormProps> = (props) => {
                                         <label htmlFor="orderDate">Date
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
-                                        <input className={styles["fancy-input"]}
+                                        <input className={`${styles["fancy-input"]}`}
                                                id="orderDate"
                                                name="orderDate"
                                                required
@@ -293,6 +293,7 @@ const EditOrderForm: FC<EditOrderFormProps> = (props) => {
                 </p>
             }
             <div className="actions">
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
                 {!viewOnly && (
                     <>
                         <CustomButton caption="Save" onClick={handleSave} type="save"/>
@@ -304,7 +305,6 @@ const EditOrderForm: FC<EditOrderFormProps> = (props) => {
                                   onClick={handleViewStatusHistory}
                                   type="list"/>
                 }
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
             </div>
             {showStatusHistory &&
                 <Modal onClose={handleCloseViewStatusHistory}>
