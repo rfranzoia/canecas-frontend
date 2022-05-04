@@ -4,7 +4,7 @@ export enum OrderAction {"DELETE" = "DELETE", "CONFIRM" = "CONFIRM", "FORWARD" =
 
 export const findNextOrderStatus = (currStatus: OrderStatus): OrderStatus => {
     let leaveOnNext = false;
-    for (var s in OrderStatus) {
+    for (let s in OrderStatus) {
         if (leaveOnNext) {
             return OrderStatus[OrderStatus[s]];
         }
@@ -23,7 +23,7 @@ export const evaluateTotalPrice = (items: OrderItem[]) => {
 
 export const orderStatusAsArray = (): number[] => {
     const statuses = [];
-    for (var s in OrderStatus) {
+    for (let s in OrderStatus) {
         if (!isNaN(Number(s))) {
             statuses.push(s);
         }
@@ -33,7 +33,7 @@ export const orderStatusAsArray = (): number[] => {
 
 export interface Order {
     _id?: string,
-    orderDate?: Date,
+    orderDate?: string,
     userEmail?: string,
     status?: number,
     statusReason?: string,

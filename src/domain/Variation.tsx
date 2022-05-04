@@ -1,4 +1,4 @@
-export enum BackgroundType { EMPTY = "empty", PERSONALIZED = "personalized" }
+export enum BackgroundType { EMPTY = "EMPTY", PERSONALIZED = "PERSONALIZED" }
 
 export interface Variation {
     _id?: string,
