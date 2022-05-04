@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { useEffect, useState } from "react";
 import { Card, Col, Form, Image, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Variation } from "../../domain/Variation";
+import { BackgroundType, Variation } from "../../domain/Variation";
 import useProductsApi from "../../hooks/useProductsApi";
 import useServiceApi from "../../hooks/useServiceApi";
 import useVariationsApi from "../../hooks/useVariationsApi";
@@ -19,7 +19,7 @@ const emptyFormData = {
     _id: null,
     product: "",
     caricatures: 0,
-    background: "empty",
+    background: BackgroundType.EMPTY,
     price: 0,
     image: "",
 };
@@ -261,9 +261,9 @@ export const VariationEditForm = (props) => {
                                                     *
                                                 </span>
                                             </Form.Label>
-                                            <Form.Select
+                                            <select
                                                 value={formData.caricatures}
-                                                className="bigger-select"
+                                                className={styles["fancy-input"]}
                                                 onChange={handleChange}
                                                 disabled={viewOnly || props.op === OpType.EDIT}
                                                 name="caricatures"
@@ -273,7 +273,7 @@ export const VariationEditForm = (props) => {
                                                 <option value={2}>2</option>
                                                 <option value={3}>3</option>
                                                 <option value={9}>+3</option>
-                                            </Form.Select>
+                                            </select>
                                         </Form.Group>
                                     </Col>
                                     <Col md={8}>
@@ -290,9 +290,9 @@ export const VariationEditForm = (props) => {
                                                     label="Empty"
                                                     id="bgEmpty"
                                                     name="background"
-                                                    value="empty"
+                                                    value={BackgroundType.EMPTY}
                                                     disabled={viewOnly || props.op === OpType.EDIT}
-                                                    checked={formData.background === "empty"}
+                                                    checked={formData.background === BackgroundType.EMPTY}
                                                     onChange={handleChange}
                                                 />
                                                 <Form.Check
@@ -301,8 +301,8 @@ export const VariationEditForm = (props) => {
                                                     id="bgPersonalized"
                                                     name="background"
                                                     disabled={viewOnly || props.op === OpType.EDIT}
-                                                    value="personalized"
-                                                    checked={formData.background === "personalized"}
+                                                    value={BackgroundType.PERSONALIZED}
+                                                    checked={formData.background === BackgroundType.PERSONALIZED}
                                                     onChange={handleChange}
                                                 />
                                             </div>
@@ -319,7 +319,7 @@ export const VariationEditForm = (props) => {
                                                 </span>
                                             </Form.Label>
                                             <input
-                                                className="form-control bigger-input"
+                                                className={styles["fancy-input"]}
                                                 required
                                                 type="text"
                                                 name="price"
@@ -340,7 +340,7 @@ export const VariationEditForm = (props) => {
                                             </Form.Label>
                                             <div className="flex-control">
                                                 <input
-                                                    className="form-control bigger-input"
+                                                    className={styles["fancy-input"]}
                                                     id="image"
                                                     name="image"
                                                     required
@@ -362,10 +362,11 @@ export const VariationEditForm = (props) => {
                                                     getActionIcon(
                                                         ActionIconType.IMAGE_EDIT,
                                                         "Select Variation Image",
-                                                        !viewOnly,
+                                                        !viewOnly && formData.background !== BackgroundType.EMPTY,
                                                         handleFileClick
                                                     )}
                                             </div>
+                                            <small>Click the icon to select an image</small>
                                         </Form.Group>
                                     </Col>
                                 </Row>

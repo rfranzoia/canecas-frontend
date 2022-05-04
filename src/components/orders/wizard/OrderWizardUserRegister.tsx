@@ -7,6 +7,7 @@ import { AlertType, uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { CustomButton } from "../../ui/CustomButton";
 import { ShowType } from "../../users/UserRegistration";
+import styles from "./orderWizard.module.css";
 
 export const OrderWizardUserRegister = (props) => {
     const dispatch = useDispatch();
@@ -87,10 +88,11 @@ export const OrderWizardUserRegister = (props) => {
                             <input
                                 required
                                 type="text"
-                                className="form-control bigger-input"
+                                className={styles["fancy-input"]}
                                 placeholder="Enter your name here"
                                 name="name"
                                 value={formData.name}
+                                autoComplete={"off"}
                                 onChange={handleChange}/>
                         </div>
                         <div className="form-group spaced-form-group">
@@ -99,10 +101,11 @@ export const OrderWizardUserRegister = (props) => {
                             <input
                                 required
                                 type="email"
-                                className="form-control bigger-input"
+                                className={styles["fancy-input"]}
                                 placeholder="Enter email for login"
                                 name="email"
                                 value={formData.email}
+                                autoComplete={"off"}
                                 onChange={handleChange}/>
                             <small>This will be your login information</small>
                         </div>
@@ -111,14 +114,14 @@ export const OrderWizardUserRegister = (props) => {
                                               className="required">*</span></label>
                             <input
                                 type="text"
-                                className="form-control bigger-input"
+                                className={styles["fancy-input"]}
                                 placeholder="Please enter you Phone number"
                                 name="phone"
                                 value={formData.phone}
+                                autoComplete={"off"}
                                 onChange={handleChange}/>
                             <small>This is how we'll mainly contact you</small>
                         </div>
-                        <br/>
                     </form>
                 </Card.Body>
             </Card>

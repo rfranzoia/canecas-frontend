@@ -117,7 +117,7 @@ export const EditUserForm = (props) => {
                                         <span aria-hidden="true" className="required">*</span>
                                     </label>
                                     <select
-                                        className="form-select"
+                                        className={styles["fancy-input"]}
                                         id="role"
                                         name="role"
                                         required
@@ -139,7 +139,7 @@ export const EditUserForm = (props) => {
                                     <input
                                         required
                                         type="text"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Enter your name here"
                                         name="name"
                                         value={formData.name}
@@ -157,7 +157,7 @@ export const EditUserForm = (props) => {
                                 <input
                                     required
                                     type="email"
-                                    className="form-control bigger-input"
+                                    className={styles["fancy-input"]}
                                     placeholder="Enter email for login"
                                     name="email"
                                     value={formData.email}
@@ -176,7 +176,7 @@ export const EditUserForm = (props) => {
                                         <input
                                             required
                                             type="password"
-                                            className="form-control bigger-input"
+                                            className={styles["fancy-input"]}
                                             placeholder="Enter a password"
                                             name="password"
                                             disabled={viewOnly || isEdit}
@@ -194,7 +194,7 @@ export const EditUserForm = (props) => {
                                         <input
                                             required
                                             type="password"
-                                            className="form-control bigger-input"
+                                            className={styles["fancy-input"]}
                                             placeholder="Confirm your password"
                                             name="confirmPassword"
                                             disabled={viewOnly || isEdit}
@@ -215,7 +215,7 @@ export const EditUserForm = (props) => {
                                     </label>
                                     <input
                                         type="text"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Phone"
                                         name="phone"
                                         value={formData.phone}
@@ -230,7 +230,7 @@ export const EditUserForm = (props) => {
                                     <label>Address</label>
                                     <input
                                         type="address"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Address"
                                         name="address"
                                         value={formData.address}

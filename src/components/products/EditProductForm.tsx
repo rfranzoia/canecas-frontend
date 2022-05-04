@@ -9,6 +9,7 @@ import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
 import { AlertToast } from "../ui/AlertToast";
 import { CustomButton } from "../ui/CustomButton";
 import { imageHelper, ImageOpType } from "../ui/ImageHelper";
+import styles from "./products.module.css";
 
 export const EditProductForm = (props) => {
     const [showAlert, setShowAlert] = useState(false);
@@ -179,7 +180,7 @@ export const EditProductForm = (props) => {
                                         <Form.Group className="spaced-form-group">
                                             <label htmlFor="name">Name<span aria-hidden="true"
                                                                             className="required">*</span></label>
-                                            <input className="form-control bigger-input"
+                                            <input className={styles["fancy-input"]}
                                                    id="name"
                                                    name="name"
                                                    required
@@ -197,7 +198,7 @@ export const EditProductForm = (props) => {
                                         <Form.Group className="spaced-form-group">
                                             <label htmlFor="description">Description<span aria-hidden="true"
                                                                                           className="required">*</span></label>
-                                            <textarea className="form-control bigger-input"
+                                            <textarea className={styles["fancy-input"]}
                                                       id="description"
                                                       name="description"
                                                       required
@@ -213,7 +214,7 @@ export const EditProductForm = (props) => {
                                             <label htmlFor="price">Starting Price<span aria-hidden="true"
                                                                                        className="required">*</span></label>
                                             <input
-                                                className="form-control bigger-input"
+                                                className={styles["fancy-input"]}
                                                 required
                                                 type="text"
                                                 name="price"
@@ -229,7 +230,7 @@ export const EditProductForm = (props) => {
                                             <label htmlFor="image">Image<span aria-hidden="true"
                                                                               className="required">*</span></label>
                                             <div className="flex-control">
-                                                <input className="form-control bigger-input"
+                                                <input className={styles["fancy-input"]}
                                                        id="image"
                                                        name="image"
                                                        required type="url"
@@ -240,7 +241,7 @@ export const EditProductForm = (props) => {
                                                 <input
                                                     type="file"
                                                     id="file"
-                                                    className="form-control bigger-input"
+                                                    className={styles["fancy-input"]}
                                                     placeholder="Enter your name here"
                                                     name="file"
                                                     onChange={handleChangeFile}

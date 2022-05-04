@@ -9,6 +9,7 @@ import { uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { CustomButton } from "../../ui/CustomButton";
 import { ShowType } from "../../users/UserRegistration";
+import styles from "./orderWizard.module.css";
 
 export const OrderWizardUserLogin = (props) => {
     const dispatch = useDispatch();
@@ -96,7 +97,7 @@ export const OrderWizardUserLogin = (props) => {
                             <Form.Control
                                 type="email"
                                 name="email"
-                                className="bigger-input"
+                                className={styles["fancy-input"]}
                                 value={formData.email}
                                 placeholder="Enter your e-mail address"
                                 onChange={handleChangeLogin}/>
@@ -108,7 +109,7 @@ export const OrderWizardUserLogin = (props) => {
                             <Form.Control
                                 type="password"
                                 name="password"
-                                className="bigger-input"
+                                className={styles["fancy-input"]}
                                 value={formData.password}
                                 placeholder="Please enter your password"
                                 onChange={handleChangeLogin}/>

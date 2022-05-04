@@ -5,6 +5,7 @@ import { AlertType, uiActions } from "../../../store/uiSlice";
 import { AlertToast } from "../../ui/AlertToast";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
+import styles from "../../users/users.module.css";
 
 export const OrderWizardAmount = (props) => {
     const dispatch = useDispatch();
@@ -98,6 +99,7 @@ export const OrderWizardAmount = (props) => {
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Product</Form.Label>
                                     <Form.Control
+                                        className={styles["fancy-input"]}
                                         value={formData.product}
                                         onChange={handleChange}
                                         disabled
@@ -117,7 +119,7 @@ export const OrderWizardAmount = (props) => {
                             <Col>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Select value={formData.caricatures}
-                                                 className="bigger-select"
+                                                 className={styles["fancy-input"]}
                                                  disabled
                                                  onChange={handleChange}
                                                  name="caricatures">
@@ -161,7 +163,7 @@ export const OrderWizardAmount = (props) => {
                                 </Form.Group>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Text muted>Tell us your idea</Form.Text>
-                                    <textarea className="form-control bigger-input"
+                                    <textarea className={styles["fancy-input"]}
                                               id="description"
                                               name="backgroundDescription"
                                               rows={3}
@@ -178,7 +180,7 @@ export const OrderWizardAmount = (props) => {
                                     <Form.Label>Amount<span aria-hidden="true"
                                                             className="required">*</span></Form.Label>
                                     <input
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         required
                                         type="text"
                                         name="amount"

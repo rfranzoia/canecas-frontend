@@ -44,7 +44,7 @@ export const Orders = () => {
     });
     const [edit, setEdit] = useState({
         show: false,
-        op: "",
+        op: OpType.VIEW,
         orderId: ""
     })
 
@@ -122,7 +122,7 @@ export const Orders = () => {
             });
     }, [dispatch, loggedUser.authToken])
 
-    const handleEdit = (op: string, orderId: string) => {
+    const handleEdit = (op: OpType, orderId: string) => {
         setShowAlert(false);
         setEdit({
             show: true,
@@ -164,7 +164,7 @@ export const Orders = () => {
     const handleCloseEditModal = () => {
         setEdit({
             show: false,
-            op: "",
+            op: OpType.VIEW,
             orderId: ""
         });
         setSaved(false);

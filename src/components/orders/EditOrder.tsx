@@ -1,19 +1,26 @@
 import { StatusCodes } from "http-status-codes";
-import { memo, useCallback, useEffect, useState } from "react";
+import { FC, memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ordersApi } from "../../api/OrdersAPI";
 import { Order } from "../../domain/Order";
 import { User } from "../../domain/User";
-import { RootState } from "../../store";
+import { OpType, RootState } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { AlertToast } from "../ui/AlertToast";
 import EditOrderForm from "./EditOrderForm";
 
-const EditOrder = (props) => {
+interface EditOrderProps {
+    id: string,
+    op: OpType,
+    onCancel: Function,
+    onSave: Function,
+}
+
+const EditOrder: FC<EditOrderProps> = (props) => {
     const dispatch = useDispatch();
     const loggedUser = useSelector<RootState, User>((state) => state.auth.user);
     const [showAlert, setShowAlert] = useState(false);
-    const [order, setOrder] = useState({
+    const [order, setOrder] = useState<Order>({
         _id: "",
         orderDate: "",
         userEmail: "",
@@ -28,7 +35,7 @@ const EditOrder = (props) => {
     }
 
     const handleSaveOrder = (order: Order) => {
-        if (props.op !== "view") {
+        if (props.op !== OpType.VIEW) {
             props.onSave(order);
         }
     }

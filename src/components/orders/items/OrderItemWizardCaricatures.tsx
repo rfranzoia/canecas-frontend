@@ -4,6 +4,7 @@ import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
 import { imageHelper } from "../../ui/ImageHelper";
+import styles from "../orders.module.css";
 
 export const OrderItemWizardCaricatures = (props) => {
     const [formData, setFormData] = useState({
@@ -102,8 +103,8 @@ export const OrderItemWizardCaricatures = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricatures}
-                                                 className="bigger-select"
+                                    <select value={formData.caricatures}
+                                                 className={styles["fancy-input"]}
                                                  onChange={handleChange}
                                                  name="caricatures">
                                         <option value={0}>No caricature</option>
@@ -111,12 +112,12 @@ export const OrderItemWizardCaricatures = (props) => {
                                         <option value={2}>2</option>
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
-                                    </Form.Select>
+                                    </select>
                                 </Form.Group>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Photo</Form.Label>
                                     <div className="flex-control">
-                                        <input className="form-control bigger-input"
+                                        <input className={styles["fancy-input"]}
                                                id="image"
                                                name="image"
                                                required type="url"
@@ -127,7 +128,7 @@ export const OrderItemWizardCaricatures = (props) => {
                                         <input
                                             type="file"
                                             id="file"
-                                            className="form-control bigger-input"
+                                            className={styles["fancy-input"]}
                                             placeholder="Enter the file name here"
                                             name="file"
                                             onChange={handleChangeFile}

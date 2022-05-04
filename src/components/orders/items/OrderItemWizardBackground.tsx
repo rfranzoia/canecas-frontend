@@ -4,6 +4,7 @@ import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
 import { imageHelper } from "../../ui/ImageHelper";
+import styles from "../orders.module.css";
 
 export const OrderItemWizardBackground = (props) => {
     const [formData, setFormData] = useState({
@@ -95,6 +96,7 @@ export const OrderItemWizardBackground = (props) => {
                                     <Form.Label>Product<span aria-hidden="true"
                                                              className="required">*</span></Form.Label>
                                     <Form.Control
+                                        className={styles["fancy-input"]}
                                         value={formData.product}
                                         onChange={handleChange}
                                         disabled
@@ -113,17 +115,17 @@ export const OrderItemWizardBackground = (props) => {
                             </Col>
                             <Col>
                                 <Form.Group className="spaced-form-group">
-                                    <Form.Select value={formData.caricatures}
-                                                 className="bigger-select"
-                                                 disabled
-                                                 onChange={handleChange}
-                                                 name="caricatures">
+                                    <select value={formData.caricatures}
+                                            className={styles["fancy-input"]}
+                                            disabled
+                                            onChange={handleChange}
+                                            name="caricatures">
                                         <option value={0}>No caricature</option>
                                         <option value={1}>1</option>
                                         <option value={2}>2</option>
                                         <option value={3}>3</option>
                                         <option value={9}>+ de 3</option>
-                                    </Form.Select>
+                                    </select>
                                     <small>{formData.caricatureImages}</small>
                                 </Form.Group>
                             </Col>
@@ -155,7 +157,7 @@ export const OrderItemWizardBackground = (props) => {
                                                 onChange={handleChange}/>
                                     <Form.Group className="spaced-form-group">
                                         <label htmlFor="description">Tell us your idea</label>
-                                        <textarea className="form-control bigger-input"
+                                        <textarea className={styles["fancy-input"]}
                                                   id="description"
                                                   name="backgroundDescription"
                                                   rows={3}
@@ -165,7 +167,7 @@ export const OrderItemWizardBackground = (props) => {
 
                                         <label htmlFor="image">Do you have a picture of your idea?</label>
                                         <div className="flex-control">
-                                            <input className="form-control bigger-input"
+                                            <input className={styles["fancy-input"]}
                                                    id="image"
                                                    name="backgroundImage"
                                                    required type="url"
@@ -176,7 +178,7 @@ export const OrderItemWizardBackground = (props) => {
                                             <input
                                                 type="file"
                                                 id="file"
-                                                className="form-control bigger-input"
+                                                className={styles["fancy-input"]}
                                                 placeholder="Enter the file name here"
                                                 name="file"
                                                 onChange={handleChangeFile}

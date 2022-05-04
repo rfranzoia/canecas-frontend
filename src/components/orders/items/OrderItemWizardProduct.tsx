@@ -139,7 +139,7 @@ export const OrderItemWizardProduct = (props) => {
                                         className="form-control bigger-input"
                                         type="text"
                                         name="price"
-                                        value={formData.price}
+                                        value={formData.price.toFixed(2)}
                                         onChange={handleChangeNumber}
                                         autoComplete="off"
                                         style={{ textAlign: "right" }}

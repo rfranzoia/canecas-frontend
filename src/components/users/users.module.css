@@ -5,3 +5,24 @@
 .registration-width-signup {
     width: 30rem;
 }
+
+.fancy-input {
+    display: block;
+    width: 100%;
+    font: inherit;
+    padding: 0.5rem;
+    background-color: #f7f5ef;
+    border: none;
+    border-bottom: 1px solid #494844;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0.5rem;
+}
+
+.fancy-input:focus {
+    outline: 1px solid #000;
+}
+
+.fancy-input input:disabled {
+    background-color: #dcdcdc;
+    color: #ababab;
+}

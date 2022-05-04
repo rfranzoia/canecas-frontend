@@ -19,8 +19,9 @@ export const OrderItemRow = (props) => {
         })
     }, [props.item]);
 
-    const backgroundDescription = item.backgroundDescription.length <= 20? item.backgroundDescription:
-            item.backgroundDescription.substring(0, 18).concat("...");
+    const backgroundDescription = (!item.backgroundDescription)?"":
+                                  (item.backgroundDescription.length <= 20)? item.backgroundDescription:
+                                      item.backgroundDescription.substring(0, 18).concat("...");
 
     return (
         <tr key={props.item._id} style={{ verticalAlign: "middle" }}>

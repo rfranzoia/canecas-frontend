@@ -159,7 +159,7 @@ export const Header = () => {
                         size="tn">
                         <div>
                             <ChangeUserPasswordForm email={loggedUser.email} onCancel={() => setShowChangePassword(false)}
-                                                    onSave={handlePasswordChanged}/>
+                                                    onChangePassword={handlePasswordChanged}/>
                         </div>
                     </Modal>
 

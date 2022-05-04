@@ -4,6 +4,7 @@ import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
 import { imageHelper } from "../../ui/ImageHelper";
+import styles from "../../users/users.module.css";
 
 export const OrderWizardCaricatures = (props) => {
     const [formData, setFormData] = useState({
@@ -94,7 +95,7 @@ export const OrderWizardCaricatures = (props) => {
                             <Col>
                                 <Form.Group className="spaced-form-group">
                                     <Form.Select value={formData.caricatures}
-                                                 className="bigger-select"
+                                                 className={styles["fancy-input"]}
                                                  onChange={handleChange}
                                                  name="caricatures">
                                         <option value={0}>No caricature</option>
@@ -107,7 +108,7 @@ export const OrderWizardCaricatures = (props) => {
                                 <Form.Group className="spaced-form-group">
                                     <Form.Label>Do you have a Photo?</Form.Label>
                                     <div className="flex-control">
-                                        <input className="form-control bigger-input"
+                                        <input className={styles["fancy-input"]}
                                                id="image"
                                                name="image"
                                                required type="url"
@@ -118,7 +119,7 @@ export const OrderWizardCaricatures = (props) => {
                                         <input
                                             type="file"
                                             id="file"
-                                            className="form-control bigger-input"
+                                            className={styles["fancy-input"]}
                                             placeholder="Enter the file name here"
                                             name="file"
                                             onChange={handleChangeFile}

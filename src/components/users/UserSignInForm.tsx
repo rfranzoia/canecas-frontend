@@ -59,7 +59,7 @@ export const UserSignInForm = (props) => {
                             <Form.Control
                                 type="email"
                                 name="email"
-                                className="bigger-input"
+                                className={styles["fancy-input"]}
                                 value={user.email}
                                 placeholder="Enter your e-mail address"
                                 onChange={handleChangeLogin}/>
@@ -69,7 +69,7 @@ export const UserSignInForm = (props) => {
                             <Form.Control
                                 type="password"
                                 name="password"
-                                className="bigger-input"
+                                className={styles["fancy-input"]}
                                 value={user.password}
                                 placeholder="Please enter your password"
                                 onChange={handleChangeLogin}/>

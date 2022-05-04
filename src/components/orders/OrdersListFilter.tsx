@@ -7,7 +7,7 @@ import useUsersApi from "../../hooks/useUsersApi";
 import { RootState } from "../../store";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
 import { CustomButton } from "../ui/CustomButton";
-import styles from "./ordersFilter.module.css";
+import styles from "./orders.module.css";
 
 export interface OrdersFilter {
     startDate?: string,
@@ -150,7 +150,8 @@ const OrdersListFilter = (props) => {
                                                         checked={formData.filterByDateCheck}
                                                         onChange={handleChange}/>
                                             <p>From:</p>
-                                            <input className={styles["custom-date"]}
+                                            <input className={styles["fancy-input"]}
+                                                   style={{ width: "30%"}}
                                                    id="startDate"
                                                    name="startDate"
                                                    type="date"
@@ -159,7 +160,8 @@ const OrdersListFilter = (props) => {
                                                    disabled={!formData.filterByDateCheck}
                                             />
                                             <p>To:</p>
-                                            <input className={styles["custom-date"]}
+                                            <input className={styles["fancy-input"]}
+                                                   style={{ width: "30%"}}
                                                    id="endDate"
                                                    name="endDate"
                                                    type="date"
@@ -174,7 +176,7 @@ const OrdersListFilter = (props) => {
                             <Row className="spaced-form-group">
                                 <Col>
                                     <Form.Group>
-                                        <div className={styles["inline-filter"]}>
+                                        <div className={styles["inline-filter"]} style={{ width: "25%"}}>
                                             <Form.Check type="checkbox"
                                                         label="Status"
                                                         id="checkStatus"
@@ -184,7 +186,7 @@ const OrdersListFilter = (props) => {
                                             <select id="orderStatus" name="orderStatus" required
                                                     value={formData.orderStatus}
                                                     onChange={handleChange}
-                                                    className={styles["custom-select"]}
+                                                    className={styles["fancy-input"]}
                                                     disabled={!formData.filterByStatusCheck}>
                                                 <option value="">Please Select</option>
                                                 {orderStatusAsArray().map((status, idx) => {
@@ -212,11 +214,11 @@ const OrdersListFilter = (props) => {
                                                     value={formData.userEmail}
                                                     displayFields="email,name"
                                                     onFieldSelected={handleSelectUser}
-                                                    className={styles["custom-autocomplete"]}
                                                     disabled={!formData.filterByCustomerCheck}
+                                                    className={styles["custom-filter-autocomplete"]}
+                                                    style={{ width: "40rem"}}
                                                     placeholder="Please select an user email"/>
                                             </div>
-
                                         </Form.Group>
                                     </Col>
                                 </Row>

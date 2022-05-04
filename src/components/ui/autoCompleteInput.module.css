@@ -4,13 +4,14 @@
     text-align: left;
     margin: 0;
     padding: 0;
-    border-top: 1px solid grey;
+    border-top: 1px solid #cdcdcd;
     position: absolute;
     display: block;
     background-color: white;
     width: 70%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     z-index: 100;
+    tab-index: 0;
     max-height: 15rem;
     overflow: auto;
 }
@@ -30,9 +31,24 @@
 }
 
 .AutoCompleteText input {
-    padding: 0 0.3rem;
-    tab-index: 0;
-    font-size: 23px;
+    width: 100%;
+    font: inherit;
+    font-size: 1.3rem;
+    padding: 0.5rem;
+    background-color: #f7f5ef;
+    border: none;
+    border-bottom: 1px solid #494844;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0.5rem;
+}
+
+.AutoCompleteText input:focus {
+    outline: 1px solid #000;
+}
+
+.AutoCompleteText input:disabled {
+    background-color: #dcdcdc;
+    color: #ababab;
 }
 
 .iconText {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, useState } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { evaluateTotalPrice, Order } from "../../domain/Order";
@@ -9,6 +9,7 @@ import { AlertType, uiActions } from "../../store/uiSlice";
 import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
 import { AlertToast } from "../ui/AlertToast";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { BorderedRow } from "../ui/BorderedRow";
 import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
 import { OrderItemsList } from "./items/OrderItemsList";
@@ -16,7 +17,12 @@ import { OrderItemWizard } from "./items/OrderItemWizard";
 
 import styles from "./orders.module.css";
 
-export const NewOrder = (props) => {
+interface NewOrderProps {
+    onSave: Function,
+    onCancel: Function,
+}
+
+export const NewOrder: FC<NewOrderProps> = (props) => {
     const dispatch = useDispatch();
     const { users } = useUsersApi();
     const [showAlert, setShowAlert] = useState(false);
@@ -82,7 +88,7 @@ export const NewOrder = (props) => {
             }
         ))
         const order: Order = {
-            orderDate: new Date(formData.orderDate),
+            orderDate: formData.orderDate,
             userEmail: formData.userEmail,
             totalPrice: +formData.totalPrice,
             items: orderItems,
@@ -201,7 +207,9 @@ export const NewOrder = (props) => {
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="orderDate">Date<span aria-hidden="true"
                                                                              className="required">*</span></label>
-                                        <input className="form-control bigger-input" id="orderDate" name="orderDate"
+                                        <input className={styles["fancy-input"]}
+                                               id="orderDate"
+                                               name="orderDate"
                                                required type="date"
                                                value={formData.orderDate} onChange={handleChange}/>
                                     </div>
@@ -210,33 +218,36 @@ export const NewOrder = (props) => {
                                 <Col>
                                     <div className="form-group spaced-form-group">
                                         <label htmlFor="totalPrice">Total Price</label>
-                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
+                                        <input className={styles["fancy-input"]}
+                                               id="totalPrice"
+                                               name="totalPrice"
                                                required type="number"
                                                style={{ textAlign: "right" }}
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange} disabled/>
                                     </div>
                                 </Col>
                             </Row>
-                            <Row>
+                            <br/>
+                            <BorderedRow required title={"Items"}>
                                 <Col>
-                                    <OrderItemsList items={formData.items}
-                                                    viewOnly={false}
-                                                    onItemRemove={handleItemRemove}
-                                                    onItemAdd={handleItemAdd}/>
-                                    {!props.viewOnly &&
-                                        <div>
-                                            <hr/>
-                                            {
-                                                getActionIcon(ActionIconType.ADD_ITEM,
-                                                    "Add Item",
-                                                    true,
-                                                    () => handleShowWizardModal())
-                                            }
-
-                                        </div>
+                                    {formData.items.length > 0 &&
+                                        <OrderItemsList items={formData.items}
+                                                        viewOnly={false}
+                                                        onItemRemove={handleItemRemove}
+                                                        onItemAdd={handleItemAdd}/>
                                     }
+                                    <div>
+                                        <hr/>
+                                        {
+                                            getActionIcon(ActionIconType.ADD_ITEM,
+                                                "Add Item",
+                                                true,
+                                                () => handleShowWizardModal())
+                                        }
+
+                                    </div>
                                 </Col>
-                            </Row>
+                            </BorderedRow>
                         </Container>
                     </form>
                 </Card.Body>
@@ -245,9 +256,8 @@ export const NewOrder = (props) => {
                 <span aria-hidden="true" className="required">*</span>Required field(s)
             </p>
             <div className="actions">
-                <CustomButton caption="Save" type="save" onClick={handleSave}/>
-                <span>&nbsp;</span>
                 <CustomButton caption="Cancel" onClick={handleCancel} type="close"/>
+                <CustomButton caption="Save" type="save" onClick={handleSave}/>
             </div>
         </>
     );

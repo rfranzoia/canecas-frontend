@@ -13,9 +13,6 @@ export const OrderItemsList = (props) => {
 
     return (
         <div>
-            <div><h5>Items
-                <span aria-hidden="true" className="required">*</span>
-            </h5></div>
             <div>
                 <Table striped bordered hover size="sm">
                     <thead>

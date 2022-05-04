@@ -1,7 +1,13 @@
+import { PropsWithChildren } from "react";
 import { Row } from "react-bootstrap";
 import styles from "./borderedRow.module.css";
 
-export const BorderedRow = (props) => {
+interface BorderedRowProps {
+    required?:boolean,
+    title:string,
+}
+
+export const BorderedRow = (props: PropsWithChildren<BorderedRowProps>) => {
     const required = props.required && <span aria-hidden="true" className="required">*</span>
     return (
         <Row className={styles["row-border"]}>

@@ -99,7 +99,7 @@ export const UserSignUpForm = (props) => {
                                 <input
                                     required
                                     type="text"
-                                    className="form-control bigger-input"
+                                    className={styles["fancy-input"]}
                                     placeholder="Enter your name here"
                                     name="name"
                                     value={userRegister.name}
@@ -113,7 +113,7 @@ export const UserSignUpForm = (props) => {
                                 <input
                                     required
                                     type="email"
-                                    className="form-control bigger-input"
+                                    className={styles["fancy-input"]}
                                     placeholder="Enter email for login"
                                     name="email"
                                     value={userRegister.email}
@@ -129,7 +129,7 @@ export const UserSignUpForm = (props) => {
                                     <input
                                         required
                                         type="password"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Enter a password"
                                         name="password"
                                         value={userRegister.password}
@@ -144,7 +144,7 @@ export const UserSignUpForm = (props) => {
                                     <input
                                         required
                                         type="password"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Confirm your password"
                                         name="confirmPassword"
                                         value={userRegister.confirmPassword}
@@ -160,7 +160,7 @@ export const UserSignUpForm = (props) => {
                                                       className="required">*</span></label>
                                     <input
                                         type="text"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Enter your Phone"
                                         name="phone"
                                         value={userRegister.phone}
@@ -174,7 +174,7 @@ export const UserSignUpForm = (props) => {
                                     <label>Address</label>
                                     <input
                                         type="address"
-                                        className="form-control bigger-input"
+                                        className={styles["fancy-input"]}
                                         placeholder="Enter your Address"
                                         name="address"
                                         value={userRegister.address}

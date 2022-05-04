@@ -1,12 +1,14 @@
-import { memo, useEffect, useState } from "react";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { FC, memo, useEffect, useState } from "react";
+import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { evaluateTotalPrice, OrderStatus, orderStatusAsArray } from "../../domain/Order";
+import { evaluateTotalPrice, Order, OrderStatus, orderStatusAsArray } from "../../domain/Order";
 import useUsersApi from "../../hooks/useUsersApi";
+import { OpType } from "../../store";
 import { AlertType, uiActions } from "../../store/uiSlice";
 import { ActionIconType, getActionIcon } from "../ui/ActionIcon";
 import { AlertToast } from "../ui/AlertToast";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
+import { BorderedRow } from "../ui/BorderedRow";
 import { CustomButton } from "../ui/CustomButton";
 import Modal from "../ui/Modal";
 import { StatusChangeList } from "./history/StatusChangeList";
@@ -14,7 +16,15 @@ import { OrderItemsList } from "./items/OrderItemsList";
 import { OrderItemWizard } from "./items/OrderItemWizard";
 import styles from "./orders.module.css";
 
-const EditOrderForm = (props) => {
+interface EditOrderFormProps {
+    order: Order,
+    op: OpType,
+    title: string,
+    onSaveOrder: Function,
+    onCancel: Function,
+}
+
+const EditOrderForm: FC<EditOrderFormProps> = (props) => {
     const dispatch = useDispatch();
     const { users } = useUsersApi();
     const order = props.order;
@@ -173,34 +183,39 @@ const EditOrderForm = (props) => {
             <Card border="dark" className="align-content-center">
                 <Card.Header as="h3">{`${props.title} Order`}</Card.Header>
                 <Card.Body>
-                    <form onSubmit={handleSave}>
+                    <Form onSubmit={handleSave}>
                         <Container>
                             <Row>
                                 <Col>
-                                    <div className="form-group spaced-form-group">
+                                    <Form.Group className="spaced-form-group">
                                         <label htmlFor="_id">ID #</label>
-                                        <input className="form-control bigger-input" id="_id" name="_id" required
+                                        <input className={styles["fancy-input"]}
+                                               id="_id"
+                                               name="_id"
+                                               required
                                                type="text"
                                                value={formData._id} onChange={handleChange} disabled/>
-                                    </div>
+                                    </Form.Group>
                                 </Col>
                                 <Col>
-                                    <div className="form-group spaced-form-group">
+                                    <Form.Group className="spaced-form-group">
                                         <label htmlFor="orderDate">Date
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
-                                        <input className="form-control bigger-input" id="orderDate" name="orderDate"
+                                        <input className={styles["fancy-input"]}
+                                               id="orderDate"
+                                               name="orderDate"
                                                required
                                                type="date"
                                                value={formData.orderDate}
                                                onChange={handleChange}
                                                disabled={viewOnly || lockChanges}/>
-                                    </div>
+                                    </Form.Group>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <div className="form-group spaced-form-group">
+                                    <Form.Group className="spaced-form-group">
                                         <label htmlFor="userEmail">Customer Email
                                             <span aria-hidden="true" className="required">*</span>
                                         </label>
@@ -213,24 +228,29 @@ const EditOrderForm = (props) => {
                                             required
                                             disabled={viewOnly}
                                             placeholder="Please select an user email"/>
-                                    </div>
+                                    </Form.Group>
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    <div className="form-group spaced-form-group">
+                                    <Form.Group className="spaced-form-group">
                                         <label htmlFor="totalPrice">Total Price</label>
-                                        <input className="form-control bigger-input" id="totalPrice" name="totalPrice"
+                                        <input className={styles["fancy-input"]}
+                                               id="totalPrice"
+                                               name="totalPrice"
                                                required type="number"
                                                value={formData.totalPrice.toFixed(2)} onChange={handleChange}
                                                disabled/>
-                                    </div>
+                                    </Form.Group>
 
                                 </Col>
                                 <Col>
-                                    <div className="form-group spaced-form-group">
+                                    <Form.Group className="spaced-form-group">
                                         <label htmlFor="status">Status</label>
-                                        <select className="form-select" id="status" name="status" required
+                                        <select className={styles["fancy-input"]}
+                                                id="status"
+                                                name="status"
+                                                required
                                                 value={formData.status}
                                                 onChange={handleChange} disabled>
                                             <option value="">Please Select</option>
@@ -239,16 +259,17 @@ const EditOrderForm = (props) => {
                                                                 value={status}>{OrderStatus[status]}</option>);
                                             })}
                                         </select>
-                                    </div>
+                                    </Form.Group>
                                 </Col>
                             </Row>
-                            <Row>
+                            <br/>
+                            <BorderedRow required title={"Items"}>
                                 <Col>
                                     <OrderItemsList items={formData.items}
                                                     viewOnly={viewOnly}
                                                     onItemRemove={handleItemRemove}
                                                     onItemAdd={handleItemAdd}/>
-                                    {!props.viewOnly &&
+                                    {!viewOnly &&
                                         <div>
                                             <hr/>
                                             {
@@ -261,9 +282,9 @@ const EditOrderForm = (props) => {
                                         </div>
                                     }
                                 </Col>
-                            </Row>
+                            </BorderedRow>
                         </Container>
-                    </form>
+                    </Form>
                 </Card.Body>
             </Card>
             {!viewOnly &&
@@ -278,13 +299,12 @@ const EditOrderForm = (props) => {
                         <span>&nbsp;</span>
                     </>
                 )}
-                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
-                <span>&nbsp;</span>
                 {(viewOnly && order.status > 0) &&
                     <CustomButton caption="Status Changes"
                                   onClick={handleViewStatusHistory}
                                   type="list"/>
                 }
+                <CustomButton caption={viewOnly ? "Close" : "Cancel"} onClick={() => props.onCancel()} type="close"/>
             </div>
             {showStatusHistory &&
                 <Modal onClose={handleCloseViewStatusHistory}>

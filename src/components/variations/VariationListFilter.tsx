@@ -4,7 +4,7 @@ import useProductsApi from "../../hooks/useProductsApi";
 import { AutoCompleteInput } from "../ui/AutoCompleteInput";
 import { CustomButton } from "../ui/CustomButton";
 
-import styles from "./variationListFilter.module.css";
+import styles from "./variations.module.css";
 
 export interface VariationsFilter {
     product?: string;
@@ -148,8 +148,7 @@ export const VariationListFilter = (props) => {
                                                 onChange={handleChange}
                                             />
                                             <AutoCompleteInput
-                                                className={styles["bigger-input longer-input"]}
-                                                style={{ width: "25rem" }}
+                                                style={{ width: "35rem" }}
                                                 data={products}
                                                 displayFields="name"
                                                 value={formData.product}
@@ -174,19 +173,20 @@ export const VariationListFilter = (props) => {
                                                 onChange={handleChange}
                                             />
 
-                                            <Form.Select
+                                            <select
                                                 value={formData.caricatures}
                                                 onChange={handleChange}
-                                                className={styles["custom-select"]}
+                                                className={styles["fancy-input"]}
+                                                style={{width: "25%"}}
                                                 disabled={!formData.filterByCaricaturesCheck}
                                                 name="caricatures"
                                             >
-                                                <option value={0}>0</option>
+                                                <option value={0}>No Caricatures</option>
                                                 <option value={1}>1</option>
                                                 <option value={2}>2</option>
                                                 <option value={3}>3</option>
                                                 <option value={9}>+ de 3</option>
-                                            </Form.Select>
+                                            </select>
                                         </div>
                                     </Form.Group>
                                 </Col>

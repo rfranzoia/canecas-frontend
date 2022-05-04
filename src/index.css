@@ -2,7 +2,7 @@
     src: local("Arial Narrow");
 }
 
-body {
+html, body {
     margin: 0;
     font-style: normal;
     font-family: "Arial Narrow", sans-serif;
@@ -102,6 +102,7 @@ h4 {
     display: flex;
     height: 2.5rem;
     align-items: center;
+    margin-top: 0.5rem;
 }
 
 .spaced-form-group {

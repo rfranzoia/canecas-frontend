@@ -4,6 +4,7 @@ import { ActionIconType, getActionIcon } from "../../ui/ActionIcon";
 import { BorderedRow } from "../../ui/BorderedRow";
 import { CustomButton } from "../../ui/CustomButton";
 import { imageHelper } from "../../ui/ImageHelper";
+import styles from "../../users/users.module.css";
 
 export const OrderWizardBackground = (props) => {
     const [formData, setFormData] = useState({
@@ -120,7 +121,7 @@ export const OrderWizardBackground = (props) => {
                                                 onChange={handleChange}/>
                                     <Form.Group className="spaced-form-group">
                                         <label htmlFor="description">Tell us your idea</label>
-                                        <textarea className="form-control bigger-input"
+                                        <textarea className={styles["fancy-input"]}
                                                   id="description"
                                                   name="backgroundDescription"
                                                   rows={3}
@@ -130,7 +131,7 @@ export const OrderWizardBackground = (props) => {
 
                                         <label htmlFor="image">Do you have a picture of your idea?</label>
                                         <div className="flex-control">
-                                            <input className="form-control bigger-input"
+                                            <input className={styles["fancy-input"]}
                                                    id="image"
                                                    name="backgroundImage"
                                                    required type="url"

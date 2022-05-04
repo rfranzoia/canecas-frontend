@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { AlertType, uiActions } from "../../store/uiSlice";
@@ -7,7 +7,13 @@ import { CustomButton } from "../ui/CustomButton";
 
 import styles from "./users.module.css"
 
-export const ChangeUserPasswordForm = (props) => {
+interface ChangeUserPasswordFormProps {
+    email: string,
+    onCancel: Function,
+    onChangePassword: Function,
+}
+
+export const ChangeUserPasswordForm: FC<ChangeUserPasswordFormProps> = (props) => {
     const dispatch = useDispatch();
     const [showAlert, setShowAlert] = useState(false);
     const [user, setUser] = useState({
@@ -82,7 +88,8 @@ export const ChangeUserPasswordForm = (props) => {
                                 <Form.Control
                                     type="email"
                                     name="email"
-                                    value={props.email}
+                                    value={user.email}
+                                    className={styles["fancy-input"]}
                                     disabled
                                     onChange={handleChange}/>
                             </Form.Group>
@@ -93,6 +100,7 @@ export const ChangeUserPasswordForm = (props) => {
                                     <span aria-hidden="true" className="required">*</span>
                                 </Form.Label>
                                 <Form.Control
+                                    className={styles["fancy-input"]}
                                     type="password"
                                     name="password"
                                     value={user.password}
@@ -107,6 +115,7 @@ export const ChangeUserPasswordForm = (props) => {
                                         <span aria-hidden="true" className="required">*</span>
                                     </Form.Label>
                                     <Form.Control
+                                        className={styles["fancy-input"]}
                                         type="password"
                                         name="newPassword"
                                         value={user.newPassword}
@@ -120,6 +129,7 @@ export const ChangeUserPasswordForm = (props) => {
                                         <span aria-hidden="true" className="required">*</span>
                                     </Form.Label>
                                     <Form.Control
+                                        className={styles["fancy-input"]}
                                         type="password"
                                         name="confirmNewPassword"
                                         value={user.confirmNewPassword}
