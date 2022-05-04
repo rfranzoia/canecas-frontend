@@ -56,7 +56,7 @@ export const UserSignInForm = (props) => {
                     <Form>
                         <Form.Group className="spaced-form-group">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control
+                            <input
                                 type="email"
                                 name="email"
                                 className={styles["fancy-input"]}
@@ -66,7 +66,7 @@ export const UserSignInForm = (props) => {
                         </Form.Group>
                         <Form.Group className="spaced-form-group">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control
+                            <input
                                 type="password"
                                 name="password"
                                 className={styles["fancy-input"]}

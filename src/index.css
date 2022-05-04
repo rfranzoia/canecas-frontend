@@ -89,7 +89,7 @@ input[type="date"] {
     margin: 0.5rem 0.5rem;
     display: flex;
     gap: 0.2rem;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .actions button {
@@ -98,7 +98,7 @@ input[type="date"] {
 }
 
 .action-justify-right {
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 .action-justify-center {
