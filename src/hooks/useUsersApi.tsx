@@ -115,12 +115,8 @@ const useUsersApi = (listAutoLoad: boolean = true) => {
                 message: result.description
             }));
         } else {
-            const user = {
-                userId: result.data._id,
-                name: result.data.name,
-                userEmail: result.data.email,
-                authToken: result.data.authToken,
-                role: result.data.role
+            const user: User = {
+                ...result.data,
             };
             dispatch(authActions.login(user));
         }
